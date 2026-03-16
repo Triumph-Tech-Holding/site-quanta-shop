@@ -23,7 +23,7 @@ Frontend Nuxt.js 3 da plataforma de cashback Quanta Shop.
 - `plugins/` — Plugins Nuxt (directives, filters, mask)
 - `assets/` — Estilos CSS/SCSS e fontes
 - `public/` — Assets estáticos (imagens, ícones)
-- `server/api/` — Nitro server-side API proxy
+- `server/routes/` — Nitro server-side API proxy (`api-proxy/[...path].ts`)
 
 ## Desenvolvimento
 
@@ -38,7 +38,7 @@ npm run generate  # Gerar site estático
 - Dev server: `0.0.0.0:5000` (configurado em `nuxt.config.ts`)
 - API base URL via variável de ambiente `NUXT_API_BASE_URL` (padrão: `/api-proxy`)
 - Env de desenvolvimento: `.env.development` (`NUXT_API_BASE_URL=/api-proxy`)
-- Env de produção: `.env.production` (`NUXT_API_BASE_URL=https://api.quantashop.com.br/api`)
+- Env de produção: `NUXT_API_BASE_URL=/api-proxy` (configurado via env vars do Replit)
 
 ## Arquitetura do Proxy API
 
@@ -50,6 +50,8 @@ O site original fazia chamadas diretas para `https://api.quantashop.com.br/api` 
 
 ## Deploy
 
-Configurado como site estático:
-- Build: `npm run generate`
-- Diretório de saída: `.output/public`
+Configurado como servidor Node.js (autoscale):
+- Build: `npm run build` (Nitro preset: `node-server`)
+- Run: `node .output/server/index.mjs`
+- O proxy API funciona em produção porque o Nitro roda como servidor
+- Variáveis de produção: `PORT=5000`, `HOST=0.0.0.0`, `NUXT_API_BASE_URL=/api-proxy`

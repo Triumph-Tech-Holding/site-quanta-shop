@@ -34,15 +34,25 @@ localPort = 5000
 externalPort = 80
 
 [[ports]]
+localPort = 5001
+externalPort = 3001
+
+[[ports]]
 localPort = 24678
 externalPort = 3000
 
 [deployment]
-deploymentTarget = "static"
-build = ["npm", "run", "generate"]
+deploymentTarget = "autoscale"
+build = ["npm", "run", "build"]
 publicDir = ".output/public"
+run = ["node", ".output/server/index.mjs"]
 
 [userenv]
 
 [userenv.development]
 NUXT_API_BASE_URL = "/api-proxy"
+
+[userenv.production]
+NUXT_API_BASE_URL = "/api-proxy"
+PORT = "5000"
+HOST = "0.0.0.0"

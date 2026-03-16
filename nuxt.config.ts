@@ -4,6 +4,9 @@ export default defineNuxtConfig({
     host: '0.0.0.0',
     port: 5000,
   },
+  nitro: {
+    preset: 'node-server',
+  },
   vite: {
     server: {
       allowedHosts: true,
