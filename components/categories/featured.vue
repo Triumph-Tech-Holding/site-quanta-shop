@@ -29,7 +29,13 @@
       </div>
       <div class="row">
         <div class="col-xl-12">
-          <div class="tp-product-arrival-slider fix">
+          <div v-if="featuredCategories.length === 0" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Carregando...</span>
+            </div>
+            <p class="mt-3 text-muted">Carregando categorias...</p>
+          </div>
+          <div v-else class="tp-product-arrival-slider fix">
             <Swiper
               :slidesPerView="5"
               :spaceBetween="10"

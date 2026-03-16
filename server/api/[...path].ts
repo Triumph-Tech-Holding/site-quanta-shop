@@ -1,8 +1,10 @@
+import type { HTTPMethod } from 'h3';
+
 export default defineEventHandler(async (event) => {
   const path = event.context.params?.path || '';
   const targetUrl = `https://api.quantashop.com.br/api/${path}`;
 
-  const method = event.method;
+  const method = event.method as HTTPMethod;
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
@@ -16,31 +18,32 @@ export default defineEventHandler(async (event) => {
   const queryString = getRequestURL(event).search;
   const fullUrl = queryString ? `${targetUrl}${queryString}` : targetUrl;
 
-  let body: any = undefined;
+  let body: string | undefined = undefined;
   if (['POST', 'PUT', 'PATCH'].includes(method)) {
-    body = await readBody(event);
+    const rawBody = await readBody(event);
+    body = typeof rawBody === 'string' ? rawBody : JSON.stringify(rawBody);
   }
 
   try {
     const response = await $fetch.raw(fullUrl, {
-      method: method as any,
+      method,
       headers,
-      body: body ? JSON.stringify(body) : undefined,
+      body,
       retry: 2,
       retryDelay: 500,
       timeout: 15000,
     });
 
-    const responseHeaders = response.headers;
-    const contentType = responseHeaders.get('content-type');
+    const contentType = response.headers.get('content-type');
     if (contentType) {
       setHeader(event, 'Content-Type', contentType);
     }
 
     return response._data;
-  } catch (error: any) {
-    const statusCode = error?.response?.status || 500;
-    const data = error?.response?._data || { message: 'Proxy error' };
+  } catch (error: unknown) {
+    const fetchError = error as { response?: { status?: number; _data?: unknown } };
+    const statusCode = fetchError?.response?.status || 500;
+    const data = fetchError?.response?._data || { message: 'Proxy error' };
 
     throw createError({
       statusCode,

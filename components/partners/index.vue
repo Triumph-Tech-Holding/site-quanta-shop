@@ -32,7 +32,13 @@
       </div>
       <div class="row">
         <div class="col-xl-12">
-          <div class="tp-product-tab-content">
+          <div v-if="filteredProducts.length === 0" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Carregando...</span>
+            </div>
+            <p class="mt-3 text-muted">Carregando parceiros...</p>
+          </div>
+          <div v-else class="tp-product-tab-content">
             <div class="row">
               <div
                 v-for="(item, i) in filteredProducts"
