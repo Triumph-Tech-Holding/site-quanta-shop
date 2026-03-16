@@ -54,4 +54,5 @@ Configurado como servidor Node.js (autoscale):
 - Build: `npm run build` (Nitro preset: `node-server`)
 - Run: `node .output/server/index.mjs`
 - O proxy API funciona em produção porque o Nitro roda como servidor
-- Variáveis de produção: `PORT=5000`, `HOST=0.0.0.0`, `NUXT_API_BASE_URL=/api-proxy`
+- Variáveis de produção (env vars Replit): `PORT=5000`, `HOST=0.0.0.0`, `NUXT_API_BASE_URL=/api-proxy`
+- Nota: Nitro lê `HOST`/`PORT` nativamente das env vars em runtime (não precisa configurar em nuxt.config.ts)
