@@ -45,4 +45,4 @@ publicDir = ".output/public"
 [userenv]
 
 [userenv.development]
-NUXT_API_BASE_URL = "/api"
+NUXT_API_BASE_URL = "/api-proxy"

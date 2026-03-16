@@ -4,12 +4,10 @@ let _apiClient: AxiosInstance | null = null;
 
 function getApiClient(): AxiosInstance {
     if (!_apiClient) {
-        let baseURL = '/api';
-        if (typeof useRuntimeConfig === 'function') {
-            const config = useRuntimeConfig();
-            if (config?.public?.apiBaseUrl) {
-                baseURL = config.public.apiBaseUrl as string;
-            }
+        let baseURL = '/api-proxy';
+        const config = useRuntimeConfig();
+        if (config?.public?.apiBaseUrl) {
+            baseURL = config.public.apiBaseUrl as string;
         }
         _apiClient = axios.create({
             baseURL,

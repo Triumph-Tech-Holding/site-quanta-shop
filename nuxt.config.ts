@@ -104,7 +104,7 @@ export default defineNuxtConfig({
   ],
   runtimeConfig: {
     public: {
-      apiBaseUrl: process.env.NUXT_API_BASE_URL || '/api'
+      apiBaseUrl: process.env.NUXT_API_BASE_URL || '/api-proxy'
     },
   },
   ssr: false,

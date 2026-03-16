@@ -33,12 +33,16 @@ useSeoMeta({
 import { useCategoryStore } from "@/pinia/useCategoryStore";
 import { useCarouselStore } from "@/pinia/useCarouselStore";
 import { usePartnerStore } from "@/pinia/usePartnerStore";
+import { useLoadingStore } from "@/pinia/useLoadingStore";
 
 const categoryStore = useCategoryStore();
 const carouselStore = useCarouselStore();
 const partnerStore = usePartnerStore();
+const loadingStore = useLoadingStore();
 
 onMounted(async () => {
+  loadingStore.setLoading(true);
+
   const tasks = [];
 
   if (!categoryStore.categories.length) tasks.push(categoryStore.fetchCategories());
@@ -53,5 +57,7 @@ onMounted(async () => {
   if (!partnerStore.topSellersLocalPartners.length) tasks.push(partnerStore.fetchTopSellersLocalPartners());
 
   await Promise.allSettled(tasks);
+
+  loadingStore.setLoading(false);
 });
 </script>
