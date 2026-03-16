@@ -39,22 +39,19 @@ const carouselStore = useCarouselStore();
 const partnerStore = usePartnerStore();
 
 onMounted(async () => {
-  // Categories
-  if (!categoryStore.categories.length) await categoryStore.fetchCategories();
-  if (!categoryStore.featuredCategories.length) await categoryStore.fetchFeaturedCategories();
-  
-  // Carousels
-  if (!carouselStore.carousels.length) await carouselStore.fetchCarousels();
+  const tasks = [];
 
-  // Partners
-  if (!partnerStore.newPartners.length) await partnerStore.fetchNewPartners();
-  if (!partnerStore.featuredPartners.length) await partnerStore.fetchFeaturedPartners();
-  if (!partnerStore.topSellersPartners.length) await partnerStore.fetchTopSellersPartners();
-  
-  // Local Partners
-  if (!partnerStore.localPartners.length) await partnerStore.fetchLocalPartners();
-  if (!partnerStore.bestDiscountsLocalPartners.length) await partnerStore.fetchBestDiscountsLocalPartners();
-  if (!partnerStore.featuredLocalPartners.length) await partnerStore.fetchFeaturedLocalPartners();
-  if (!partnerStore.topSellersLocalPartners.length) await partnerStore.fetchTopSellersLocalPartners();
+  if (!categoryStore.categories.length) tasks.push(categoryStore.fetchCategories());
+  if (!categoryStore.featuredCategories.length) tasks.push(categoryStore.fetchFeaturedCategories());
+  if (!carouselStore.carousels.length) tasks.push(carouselStore.fetchCarousels());
+  if (!partnerStore.newPartners.length) tasks.push(partnerStore.fetchNewPartners());
+  if (!partnerStore.featuredPartners.length) tasks.push(partnerStore.fetchFeaturedPartners());
+  if (!partnerStore.topSellersPartners.length) tasks.push(partnerStore.fetchTopSellersPartners());
+  if (!partnerStore.localPartners.length) tasks.push(partnerStore.fetchLocalPartners());
+  if (!partnerStore.bestDiscountsLocalPartners.length) tasks.push(partnerStore.fetchBestDiscountsLocalPartners());
+  if (!partnerStore.featuredLocalPartners.length) tasks.push(partnerStore.fetchFeaturedLocalPartners());
+  if (!partnerStore.topSellersLocalPartners.length) tasks.push(partnerStore.fetchTopSellersLocalPartners());
+
+  await Promise.allSettled(tasks);
 });
 </script>

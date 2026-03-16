@@ -1,5 +1,11 @@
 <template>
   <section class="tp-slider-area p-relative z-index-1">
+    <div v-if="sliderData.length === 0" class="tp-slider-height d-flex align-items-center justify-content-center" style="background-color: #1e5d68; min-height: 400px;">
+      <div class="text-center text-white">
+        <img src="/img/ui/loading.gif" alt="loading" style="width: 50px; height: 50px;" />
+        <p class="mt-3">Carregando...</p>
+      </div>
+    </div>
     <Swiper
       v-if="sliderData.length > 0"
       :slidesPerView="1"
@@ -126,21 +132,16 @@ const transformData = (): any => {
 };
 
 const sliderData = computed(() => {
-  const data = transformData();
-  console.log('sliderData computed:', data);
-  return data;
+  return transformData();
 });
 
 const handleActiveIndex = () => {
   if (swiperInstance.value && typeof swiperInstance.value.activeIndex === 'number') {
     isActive.value = swiperInstance.value.activeIndex === 0;
-  } else {
-    console.log('Swiper instance or activeIndex not available');
   }
 };
 
 const setInitialActiveIndex = (swiper) => {
-  console.log('setInitialActiveIndex called');
   swiperInstance.value = swiper;
   nextTick(() => {
     handleActiveIndex();
@@ -148,7 +149,6 @@ const setInitialActiveIndex = (swiper) => {
 };
 
 watch(sliderData, () => {
-  console.log('sliderData changed');
   nextTick(() => {
     if (swiperInstance.value) {
       swiperInstance.value.update();
@@ -158,7 +158,6 @@ watch(sliderData, () => {
 }, { deep: true });
 
 onMounted(() => {
-  console.log('Component mounted');
   nextTick(() => {
     handleActiveIndex();
   });

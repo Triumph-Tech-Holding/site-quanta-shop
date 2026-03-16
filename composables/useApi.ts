@@ -1,22 +1,31 @@
 import axios, { type AxiosInstance } from 'axios';
 
+let _apiClient: AxiosInstance | null = null;
+
+function getApiClient(): AxiosInstance {
+    if (!_apiClient) {
+        let baseURL = '/api';
+        try {
+            const config = useRuntimeConfig();
+            if (config?.public?.apiBaseUrl) {
+                baseURL = config.public.apiBaseUrl as string;
+            }
+        } catch {
+        }
+        _apiClient = axios.create({
+            baseURL,
+            headers: {}
+        });
+    }
+    return _apiClient;
+}
+
 export const useApi = () => {
-    const baseURL = 'https://api.quantashop.com.br/api';
-    // const baseURL = 'https://api-hlog.quantashop.com.br/api';
-    // const baseURL = 'https://localhost:44385/api';
-
-    const apiClient: AxiosInstance = axios.create({
-      baseURL,
-      headers: {
-        // Authorization: `Bearer ${storeUser.token}`
-      }
-    });
-
     return {
-        get: (url: string, config = {}) => apiClient.get(url, config),
-        post: (url: string, data: any, config = {}) => apiClient.post(url, data, config),
-        put: (url: string, data: any, config = {}) => apiClient.put(url, data, config),
-        delete: (url: string, config = {}) => apiClient.delete(url, config),
-        patch: (url: string, data: any, config = {}) => apiClient.patch(url, data, config),
+        get: (url: string, config = {}) => getApiClient().get(url, config),
+        post: (url: string, data: any, config = {}) => getApiClient().post(url, data, config),
+        put: (url: string, data: any, config = {}) => getApiClient().put(url, data, config),
+        delete: (url: string, config = {}) => getApiClient().delete(url, config),
+        patch: (url: string, data: any, config = {}) => getApiClient().patch(url, data, config),
     };
 };

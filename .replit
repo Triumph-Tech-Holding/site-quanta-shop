@@ -41,3 +41,8 @@ externalPort = 3000
 deploymentTarget = "static"
 build = ["npm", "run", "generate"]
 publicDir = ".output/public"
+
+[userenv]
+
+[userenv.development]
+NUXT_API_BASE_URL = "/api"
