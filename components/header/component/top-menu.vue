@@ -34,7 +34,7 @@
       <div class="d-flex align-items-center gap-2">
         <div class="px-3" style="border: 1px solid #1e5d68">
           <span
-            @click="redirectToOldDomain()"
+            @click="redirectToAgencia()"
             class="cursor-pointer"
             style="color: #1e5d68"
           >
@@ -68,7 +68,7 @@
             background-color: #1e5d68;
             color: #ffffff;
           "
-          @click="redirectToOldDomain()"
+          @click="redirectToAgencia()"
         >
           Acessar minha agência digital
         </div>
@@ -104,11 +104,12 @@ onBeforeMount(() => {
   userStore.loadUserFromStorage();
 });
 
-const redirectToOldDomain = () => {
-  if (userStore.token) {
-    window.location.href = `https://agencia.quantashop.com.br/auth/?token=${userStore.token}`;
+const redirectToAgencia = () => {
+  const agenciaUser = localStorage.getItem('agencia_user');
+  if (agenciaUser) {
+    navigateTo('/agencia/painel');
   } else {
-    console.error("Usuário não encontrado no localStorage.");
+    navigateTo('/agencia/login');
   }
 };
 

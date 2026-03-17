@@ -27,12 +27,12 @@
                 <h4 class="tp-footer-widget-title">Minha conta</h4>
                 <div class="tp-footer-widget-content">
                   <ul>
-                    <li><a target="_blank" href="https://agencia.quantashop.com.br/painel/minhas-compras">Minhas compras</a></li>
-                    <li><a target="_blank" href="https://agencia.quantashop.com.br/painel/financeiro">Meu extrato</a></li>
-                    <li><a target="_blank" href="https://agencia.quantashop.com.br/painel/minha-rede">Meus indicados</a></li>
-                    <li><a target="_blank" href="https://agencia.quantashop.com.br/painel/meus-dados">Minha conta</a></li>
-                    <li><a target="_blank" href="https://agencia.quantashop.com.br/painel/assinatura">Assinatura</a></li>
-                    <li><a target="_blank" href="https://agencia.quantashop.com.br/painel/assinatura">Assistente virtual</a></li>
+                    <li><nuxt-link to="/agencia/painel/minhas-compras">Minhas compras</nuxt-link></li>
+                    <li><nuxt-link to="/agencia/painel/financeiro">Meu extrato</nuxt-link></li>
+                    <li><nuxt-link to="/agencia/painel/minha-rede">Meus indicados</nuxt-link></li>
+                    <li><nuxt-link to="/agencia/painel/meus-dados">Minha conta</nuxt-link></li>
+                    <li><nuxt-link to="/agencia/painel/assinatura">Assinatura</nuxt-link></li>
+                    <li><nuxt-link to="/agencia/painel/assinatura">Assistente virtual</nuxt-link></li>
                   </ul>
                 </div>
               </div>
@@ -43,8 +43,8 @@
                 <div class="tp-footer-widget-content">
                   <ul>
                     <li><a href="about">Quem somos</a></li>
-                    <li><a href="https://agencia.quantashop.com.br/como-funciona">Como funciona</a></li>
-                    <li><a href="https://agencia.quantashop.com.br/credenciar">Credenciamento</a></li>
+                    <li><nuxt-link to="/agencia/como-funciona">Como funciona</nuxt-link></li>
+                    <li><nuxt-link to="/agencia/cadastro">Credenciamento</nuxt-link></li>
                     <li><a href="https://bigcash.blob.core.windows.net/documentos/QB%20-%20TERMOS%20DE%20USO%20E%20BONIFICA%C3%87%C3%83O%20ESPEC%C3%8DFICA%20v102023.pdf" target="_blank">Termos & condições</a></li>
                     <li><a href="blog">Últimas notícias</a></li>
                     <li><a href="contact">Contato</a></li>

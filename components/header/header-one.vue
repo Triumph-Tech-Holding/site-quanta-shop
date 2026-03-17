@@ -15,7 +15,7 @@
                   <svg-credit-card />
                 </span>
                 <p>
-                  <a href="https://agencia.quantashop.com.br/painel/assinatura">
+                  <a href="/agencia/painel/assinatura">
                   Assine o <strong>Quanta Plus</strong> e obtenha cashback em
                   dobro nas suas compras!
                 </a>

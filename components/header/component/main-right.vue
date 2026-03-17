@@ -23,7 +23,7 @@
             <span class="text-white">{{ userStore.user.username }}</span>
           </span>
           <div class="d-flex gap-1">
-            <h5 @click="redirectToOldDomain()" class="tp-header-login-title text-white cursor-pointer">Agência digital</h5>
+            <h5 @click="redirectToAgencia()" class="tp-header-login-title text-white cursor-pointer">Agência digital</h5>
             <div class="vr bg-white"></div>
             <h5 @click="userStore.logout()" class="tp-header-login-title text-white cursor-pointer">Sair</h5>                 
           </div>
@@ -65,11 +65,12 @@ onBeforeMount(() => {
   userStore.loadUserFromStorage();  
 });
 
-const redirectToOldDomain = () => {
-  if (userStore.token) {
-      window.location.href = `https://agencia.quantashop.com.br/auth/?token=${userStore.token}`;
+const redirectToAgencia = () => {
+  const agenciaUser = localStorage.getItem('agencia_user');
+  if (agenciaUser) {
+    navigateTo('/agencia/painel');
   } else {
-    console.error("Usuário não encontrado no localStorage.");
+    navigateTo('/agencia/login');
   }
 };
 

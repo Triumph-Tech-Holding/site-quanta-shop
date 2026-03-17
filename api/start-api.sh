@@ -33,6 +33,16 @@ else
   echo "[api] WARNING: SQL_CONNECTION_STRING is not set — running with in-memory database."
 fi
 
+# JWT Secret — override the appsettings.json placeholder with the real production key.
+# Set JWT_SECRET in Replit Secrets (Settings → Secrets) with the production JWT secret.
+# .NET Core reads AppSettings__secret as AppSettings.secret override.
+if [ -n "$JWT_SECRET" ]; then
+  export AppSettings__secret="$JWT_SECRET"
+  echo "[api] JWT secret loaded from environment."
+else
+  echo "[api] WARNING: JWT_SECRET not set — using appsettings.json placeholder (login will not work with production tokens)."
+fi
+
 echo "[api] Starting MMN.Api on port 8000 (this may take a moment to compile)..."
 
 cd /home/runner/workspace/api/MMN.Api
