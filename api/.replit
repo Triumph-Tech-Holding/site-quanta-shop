@@ -1,0 +1,47 @@
+modules = ["nodejs-20", "dotnet-8.0"]
+[agent]
+expertMode = true
+
+[nix]
+channel = "stable-25_05"
+packages = ["unzip", "libgdiplus"]
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Start application"
+
+[[workflows.workflow]]
+name = "Start application"
+author = "agent"
+
+[workflows.workflow.metadata]
+outputType = "webview"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "bash run.sh"
+waitForPort = 5000
+
+[[ports]]
+localPort = 5000
+externalPort = 80
+
+[deployment]
+deploymentTarget = "autoscale"
+run = ["bash", "start.sh"]
+build = ["bash", "build.sh"]
+
+[userenv]
+
+[userenv.shared]
+ASPNETCORE_ENVIRONMENT = "Development"
+ASAAS_BASE_URL = "https://api.asaas.com/"
+PAGARME_ID_PLAN = "plan_1eVK5JXUaAfBBRA3"

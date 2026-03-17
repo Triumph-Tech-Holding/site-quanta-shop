@@ -1,0 +1,243 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AssinaturaEletronicaAtualizada" xml:space="preserve">
+    <value>¡Firma electrónica actualizada con éxito!</value>
+  </data>
+  <data name="AssinaturaEletronoicaEnviadaPorEmail" xml:space="preserve">
+    <value>Por favor revise su casilla de correo electrónico</value>
+  </data>
+  <data name="Cadastro_EmailNaoConfirmado" xml:space="preserve">
+    <value>Su cuenta aún no está activa ya que el correo electrónico de verificación aún no se ha verificado. Haga clic en confirmar en su correo electrónico para activar su cuenta. Revisa tu bandeja de entrada y spam.</value>
+  </data>
+  <data name="Cadastro_LoginEmUso" xml:space="preserve">
+    <value>El nombre de usuario ya está en uso, ingrese otro inicio de sesión.</value>
+  </data>
+  <data name="Cadastro_LoginInvalidoCaracter" xml:space="preserve">
+    <value>Nombre de usuario (Login) con caracteres no válidos, solo letras y números permitidos.</value>
+  </data>
+  <data name="Cadastro_ReenviarEmailConfirmacao" xml:space="preserve">
+    <value>Se ha reenviado un correo electrónico de confirmación, haga clic para activar su cuenta. Revisa tu bandeja de entrada o carpeta de spam.</value>
+  </data>
+  <data name="Cadastro_UsuarioPaiNaoEncontrado" xml:space="preserve">
+    <value>Patrocinador no encontrado.</value>
+  </data>
+  <data name="Categoria_avancado" xml:space="preserve">
+    <value>Cursos semi-actuales de nivel avanzado</value>
+  </data>
+  <data name="Categoria_basico" xml:space="preserve">
+    <value>Cursos de nivel básico</value>
+  </data>
+  <data name="Categoria_intermediario" xml:space="preserve">
+    <value>Cursos de nivel intermedio</value>
+  </data>
+  <data name="CelularRequirido" xml:space="preserve">
+    <value>Ingrese el número de teléfono móvil</value>
+  </data>
+  <data name="Compra_ErroUpgradeProdutoMenor" xml:space="preserve">
+    <value>No é possible actualizar a un producto menor o igual que su producto activo.</value>
+  </data>
+  <data name="DadosUsuarioAtualizado" xml:space="preserve">
+    <value>¡Datos de usuario actualizados con éxito!</value>
+  </data>
+  <data name="DadosUsuarioSalvo" xml:space="preserve">
+    <value>¡Registro completado!</value>
+  </data>
+  <data name="DadosUsuariosSalvo" xml:space="preserve">
+    <value>Datos de usuario actualizados correctamente</value>
+  </data>
+  <data name="EditarEnderecoSalvo" xml:space="preserve">
+    <value>Dirección actualizada con éxito!</value>
+  </data>
+  <data name="EmailInvalido" xml:space="preserve">
+    <value>¡Email inválido!</value>
+  </data>
+  <data name="EnvioEmailEsqueciMinhaSenha" xml:space="preserve">
+    <value>Verifique su casilla de correo electrónico para restablecer su contraseña.</value>
+  </data>
+  <data name="ErroAlterarSenha" xml:space="preserve">
+    <value>¡Error al cambiar la contraseña!</value>
+  </data>
+  <data name="ErroAssinaturaEletronicaIncorreta" xml:space="preserve">
+    <value>Su contraseña electrónica es incorrecta Verifique y escriba nuevamente, o vaya al menú Mis datos y genere uno nuevo.</value>
+  </data>
+  <data name="ErroAtualizarAssinaturaEletronica" xml:space="preserve">
+    <value>¡Error al actualizar la firma electrónica!</value>
+  </data>
+  <data name="ErroAtualizarUsuario" xml:space="preserve">
+    <value>¡Error al actualizar usuario!</value>
+  </data>
+  <data name="ErroImageAtualizada" xml:space="preserve">
+    <value>¡Error al actualizar la imagen!</value>
+  </data>
+  <data name="ErroSalvarEndereco" xml:space="preserve">
+    <value>¡Error al actualizar la dirección!</value>
+  </data>
+  <data name="FormularioRequerido" xml:space="preserve">
+    <value>¡El formulario no es válido!</value>
+  </data>
+  <data name="ImageAtualizada" xml:space="preserve">
+    <value>Imagen actualizada con éxito!</value>
+  </data>
+  <data name="LoginIndisponivel" xml:space="preserve">
+    <value>¡El inicio de sesión está en uso!</value>
+  </data>
+  <data name="LoginNaoEncontrado" xml:space="preserve">
+    <value>Nombre de usuario o contraseña incorrectos</value>
+  </data>
+  <data name="NomeRequirido" xml:space="preserve">
+    <value>Nombre requerido</value>
+  </data>
+  <data name="PatrocinadorInvalido" xml:space="preserve">
+    <value>¡Patrocinador inválido!</value>
+  </data>
+  <data name="PatrocinadorRequirido" xml:space="preserve">
+    <value>Patrocinador requerido</value>
+  </data>
+  <data name="RequisitosSenha" xml:space="preserve">
+    <value>La contraseña debe contener al menos 8 caracteres con al menos 1 dígito y 1 letra.</value>
+  </data>
+  <data name="SemAssinaturaEletronica" xml:space="preserve">
+    <value>¡Se requiere firma electrónica!</value>
+  </data>
+  <data name="SemImagem" xml:space="preserve">
+    <value>¡Imagen requerida!</value>
+  </data>
+  <data name="SenhaInvalida" xml:space="preserve">
+    <value>Contraseña inválida!</value>
+  </data>
+  <data name="SenhasNaoConfere" xml:space="preserve">
+    <value>¡Las contraseñas no coinciden!</value>
+  </data>
+  <data name="SucessoAlterarSenha" xml:space="preserve">
+    <value>¡Contraseña alterada con éxito!</value>
+  </data>
+  <data name="TamanhoMinimoLogin" xml:space="preserve">
+    <value>El login debe contener al menos 5 caracteres.</value>
+  </data>
+  <data name="Teste" xml:space="preserve">
+    <value>Este es un teste.</value>
+  </data>
+  <data name="TokenInvalido" xml:space="preserve">
+    <value>La ficha ha expirado.</value>
+  </data>
+  <data name="UsuarioNaoEncontrado" xml:space="preserve">
+    <value>¡Usuario no encontrado!</value>
+  </data>
+</root>

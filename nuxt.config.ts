@@ -10,8 +10,12 @@ export default defineNuxtConfig({
   vite: {
     server: {
       allowedHosts: true,
+      watch: {
+        ignored: ['**/api/**', '**/api/bin/**', '**/api/obj/**'],
+      },
     },
   },
+  watch: ['!api/**'],
   modules: [[
     '@pinia/nuxt',
     {

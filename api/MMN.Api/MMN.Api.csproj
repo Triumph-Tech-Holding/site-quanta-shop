@@ -1,0 +1,63 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+        <PropertyGroup>
+                <TargetFramework>net8.0</TargetFramework>
+                <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+                <UserSecretsId>737cf1b2-809c-448b-935e-ed3dbe54df15</UserSecretsId>
+                <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Nullable>disable</Nullable>
+
+        </PropertyGroup>
+
+        <ItemGroup>
+                <RuntimeHostConfigurationOption Include="System.Drawing.EnableUnixSupport" Value="true" />
+        </ItemGroup>
+
+        <ItemGroup>
+                <Compile Remove="out\**" />
+                <Content Remove="out\**" />
+                <EmbeddedResource Remove="out\**" />
+                <None Remove="out\**" />
+        </ItemGroup>
+
+        <ItemGroup>
+                <PackageReference Include="CsvHelper" Version="33.0.1" />
+                <PackageReference Include="Dapper" Version="2.1.35" />
+                <PackageReference Include="Flurl" Version="4.0.0" />
+                <PackageReference Include="Flurl.Http" Version="4.0.2" />
+                <PackageReference Include="Mapster" Version="7.4.0" />
+                <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.22.0" />
+                <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.3.0" />
+                <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
+                <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.4" />
+                <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
+                <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.4" />
+                <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+                <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.7">
+                        <PrivateAssets>all</PrivateAssets>
+                        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+                </PackageReference>
+                <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="8.0.0" />
+                <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.8" />
+                <PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.4" />
+                <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
+                <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
+                <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+                <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.20.1" />
+                <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.3" />
+                <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="8.0.0" />
+                <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+                <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.0" />
+                <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.5.1" />
+                <PackageReference Include="UAParser" Version="3.1.47" />
+        </ItemGroup>
+
+        <ItemGroup>
+                <ProjectReference Include="..\MMN.INegocio\MMN.INegocio.csproj" />
+                <ProjectReference Include="..\MMN.Integracoes\MMN.Integracoes.csproj" />
+                <ProjectReference Include="..\MMN.Negocio\MMN.Negocio.csproj" />
+                <ProjectReference Include="..\MMN.Repositorio\MMN.Repositorio.csproj" />
+                <ProjectReference Include="..\MMN.Util\MMN.Util.csproj" />
+        </ItemGroup>
+</Project>

@@ -1,0 +1,19 @@
+node_modules/
+.env
+.env.local
+npm-debug.log*
+
+# .NET build outputs
+bin/
+obj/
+publish/
+*.user
+*.suo
+.vs/
+
+# Temporary files from Replit chat uploads
+attached_assets/
+
+# Config files with real credentials - copy appsettings.example.json to appsettings.json
+MMN.Api/appsettings.json
+MMN.Api/appsettings.Development.json

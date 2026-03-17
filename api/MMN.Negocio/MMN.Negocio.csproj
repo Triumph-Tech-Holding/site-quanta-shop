@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <RuntimeHostConfigurationOption Include="System.Drawing.EnableUnixSupport" Value="true" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Negocio\MatrizNegocio.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Mapster" Version="7.4.0" />
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MMN.Dominio\MMN.Dominio.csproj" />
+    <ProjectReference Include="..\MMN.INegocio\MMN.INegocio.csproj" />
+    <ProjectReference Include="..\MMN.Integracoes\MMN.Integracoes.csproj" />
+    <ProjectReference Include="..\MMN.IRepositorio\MMN.IRepositorio.csproj" />
+    <ProjectReference Include="..\MMN.Repositorio\MMN.Repositorio.csproj" />
+    <ProjectReference Include="..\MMN.Util\MMN.Util.csproj" />
+  </ItemGroup>
+
+</Project>

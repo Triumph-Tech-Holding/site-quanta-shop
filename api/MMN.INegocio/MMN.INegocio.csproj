@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Mapster" Version="7.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MMN.Dominio\MMN.Dominio.csproj" />
+    <ProjectReference Include="..\MMN.Integracoes\MMN.Integracoes.csproj" />
+    <ProjectReference Include="..\MMN.IRepositorio\MMN.IRepositorio.csproj" />
+  </ItemGroup>
+
+</Project>

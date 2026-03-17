@@ -1,0 +1,612 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="acao_requerida" xml:space="preserve">
+    <value>Ação não informada</value>
+  </data>
+  <data name="agencia_digito_requisito" xml:space="preserve">
+    <value>Digito da agência deve conter apenas um digito</value>
+  </data>
+  <data name="anunciante_categoria_mapeado" xml:space="preserve">
+    <value>Anunciante já mapeado para esta categoria</value>
+  </data>
+  <data name="anunciante_nao_encontrado" xml:space="preserve">
+    <value>Anunciante não encontrado</value>
+  </data>
+  <data name="assinatura_eletronica_incorreta" xml:space="preserve">
+    <value>Sua assinatura eletônica está incorreta. Verifique e digite novamente, ou vá no menu Meus Dados e gere uma nova</value>
+  </data>
+  <data name="bairro_requerido" xml:space="preserve">
+    <value>Bairro deve ser informado</value>
+  </data>
+  <data name="carrossel_anunciante_mapeado" xml:space="preserve">
+    <value>Esse anunciante já está mapeado neste carrossel</value>
+  </data>
+  <data name="carrossel_nao_encontrado" xml:space="preserve">
+    <value>Carrossel não encontrado</value>
+  </data>
+  <data name="cashback_percentual_maximo" xml:space="preserve">
+    <value>Percentual de cashback não pode ser maior que um</value>
+  </data>
+  <data name="cashback_percentual_minimo" xml:space="preserve">
+    <value>Percentual de cashback não pode ser menor ou igual a zero</value>
+  </data>
+  <data name="cashback_requerido" xml:space="preserve">
+    <value>Percentual de Cashback deve ser informado</value>
+  </data>
+  <data name="categoria_credenciamento_mapeado" xml:space="preserve">
+    <value>Não é possivel excluír esta categoria pois ela possui credenciamentos mapeados à ela</value>
+  </data>
+  <data name="categoria_em_uso" xml:space="preserve">
+    <value>Já existe uma categoria com este nome</value>
+  </data>
+  <data name="categoria_nao_encontrada" xml:space="preserve">
+    <value>Categoria não encontrada</value>
+  </data>
+  <data name="categoria_pai_inativa" xml:space="preserve">
+    <value>Categoria pai está inativa</value>
+  </data>
+  <data name="celular_requerido" xml:space="preserve">
+    <value>Informe o numero do celular</value>
+  </data>
+  <data name="cep_invalido" xml:space="preserve">
+    <value>Cep inválido</value>
+  </data>
+  <data name="cidade_nao_encontrada" xml:space="preserve">
+    <value>Cidade não encontrada</value>
+  </data>
+  <data name="comerciante_nao_aprovado" xml:space="preserve">
+    <value>Comerciante não aprovado</value>
+  </data>
+  <data name="comerciante_nao_encontrado" xml:space="preserve">
+    <value>Comerciante não encontrado</value>
+  </data>
+  <data name="comerciante_requerido" xml:space="preserve">
+    <value>Informe o comerciante</value>
+  </data>
+  <data name="compra_data_requerida" xml:space="preserve">
+    <value>Informe a data da compra</value>
+  </data>
+  <data name="compra_cadastre_dados" xml:space="preserve">
+    <value>Cadastre seu documento em meus dados antes de realizar a compra</value>
+  </data>
+  <data name="compra_descricao_requerida" xml:space="preserve">
+    <value>Informe a descrição da venda</value>
+  </data>
+  <data name="compra_numero_requerido" xml:space="preserve">
+    <value>Informe o número do pedido</value>
+  </data>
+  <data name="compra_saldo_valor_minimo" xml:space="preserve">
+    <value>As compras de saldo devem ter um valor mínimo de R$10,00</value>
+  </data>
+  <data name="compra_site_requerido" xml:space="preserve">
+    <value>Informe o site da compra</value>
+  </data>
+  <data name="compra_termos_requerido" xml:space="preserve">
+    <value>Aceite os termos para confirmar a compra!</value>
+  </data>
+  <data name="compra_upgrade_produto_menor" xml:space="preserve">
+    <value>Não é possível fazer upgrade para um produto menor ou igual ao produto ativo</value>
+  </data>
+  <data name="compra_valor_minimo" xml:space="preserve">
+    <value>Valor da venda deve ser maior que 0</value>
+  </data>
+  <data name="compra_valor_requerido" xml:space="preserve">
+    <value>Informe o valor do pedido</value>
+  </data>
+  <data name="comunicado_nao_encontrado" xml:space="preserve">
+    <value>Comunicado não encontrado</value>
+  </data>
+  <data name="contato_tipo_requerido" xml:space="preserve">
+    <value>Informe o tipo de contato</value>
+  </data>
+  <data name="conta_nao_encontrada" xml:space="preserve">
+    <value>Conta não encontrada</value>
+  </data>
+  <data name="conta_requerida" xml:space="preserve">
+    <value>Conta bancária deve ser selecionada</value>
+  </data>
+  <data name="cpf_cnpj_em_uso" xml:space="preserve">
+    <value>CPF/CNPJ já cadastrado</value>
+  </data>
+  <data name="cpf_cnpj_invalido" xml:space="preserve">
+    <value>Informe um CPF ou CNPJ válido</value>
+  </data>
+  <data name="credenciamento_cadastro_expirado" xml:space="preserve">
+    <value>Não é mais possível efetuar o cadastro para este credenciamento</value>
+  </data>
+  <data name="credenciamento_id_requerido" xml:space="preserve">
+    <value>Identificador do credencimento não informado</value>
+  </data>
+  <data name="credenciamento_nao_aprovado" xml:space="preserve">
+    <value>Seu credenciamento ainda não foi aprovado</value>
+  </data>
+  <data name="credenciamento_nao_encontrado" xml:space="preserve">
+    <value>Credenciamento não encontrado!</value>
+  </data>
+  <data name="credenciamento_nao_informado" xml:space="preserve">
+    <value>Credenciamento não informado</value>
+  </data>
+  <data name="credenciamento_recebido" xml:space="preserve">
+    <value>Credenciamento já recebido</value>
+  </data>
+  <data name="credenciamento_reprovado" xml:space="preserve">
+    <value>Seu credenciamento foi reprovado</value>
+  </data>
+  <data name="cupon_nao_comerciante" xml:space="preserve">
+    <value>Apenas comerciantes podem criar cupons</value>
+  </data>
+  <data name="cupon_token_digito_invalido" xml:space="preserve">
+    <value>Token com dígito verificador inválido</value>
+  </data>
+  <data name="cupon_token_requerido" xml:space="preserve">
+    <value>Token deve ser informado</value>
+  </data>
+  <data name="data_fim_requerida" xml:space="preserve">
+    <value>Data fim deve ser informada</value>
+  </data>
+  <data name="data_inicial_final" xml:space="preserve">
+    <value>Data inicial deve ser menor que data final</value>
+  </data>
+  <data name="data_inicio_requerida" xml:space="preserve">
+    <value>Data inicio deve ser informada</value>
+  </data>
+  <data name="email_com_br" xml:space="preserve">
+    <value>Utilize e-mail com: \".com\", \".com.br\"</value>
+  </data>
+  <data name="email_confirmacao_requerida" xml:space="preserve">
+    <value>Confirmação de email deve ser informada</value>
+  </data>
+  <data name="email_em_uso" xml:space="preserve">
+    <value>Email já em uso</value>
+  </data>
+  <data name="email_invalido" xml:space="preserve">
+    <value>Email Inválido</value>
+  </data>
+  <data name="email_nao_confere" xml:space="preserve">
+    <value>Email e confirmação de email não coincidem</value>
+  </data>
+  <data name="email_nao_confirmado" xml:space="preserve">
+    <value>Sua conta ainda não está ativa pois o email de validação ainda não foi confirmado. Clique em confirmar no seu email para ativar sua conta. Verifique sua caixa de entrada e spam</value>
+  </data>
+  <data name="email_nao_permitido" xml:space="preserve">
+    <value>E-mail inválido - Não são permitidos emails contendo: \".gov\", \".gov.br\", \"hotmail.com\", \"msn.com\", \"yahoo.com\", \"yahoo.com.br\", \"globo.com\", \"icloud.com\"</value>
+  </data>
+  <data name="email_requerido" xml:space="preserve">
+    <value>Email deve ser informado</value>
+  </data>
+  <data name="email_requisito" xml:space="preserve">
+    <value>E-mail inválido - E-mails devem conter '@' e terminarem com '.com' ou '.com.br'</value>
+  </data>
+  <data name="estabelecimento_em_uso" xml:space="preserve">
+    <value>Já existe um estabelecimento com este nome cadastrado com esta categoria</value>
+  </data>
+  <data name="estabelecimento_requerido" xml:space="preserve">
+    <value>Estabelecimento deve ser informado</value>
+  </data>
+  <data name="fatura_nao_encontrada" xml:space="preserve">
+    <value>Fatura não encontrada</value>
+  </data>
+  <data name="graduacao_requerida" xml:space="preserve">
+    <value>Pelo menos uma graduação deve ser adicionada</value>
+  </data>
+  <data name="idmensagem_requerida" xml:space="preserve">
+    <value>IdMensagem deve ser informada</value>
+  </data>
+  <data name="imagem_app_resolucao_maxima" xml:space="preserve">
+    <value>Imagem inválida, resolução permitida: 320x320</value>
+  </data>
+  <data name="imagem_requerida" xml:space="preserve">
+    <value>Imagem requirida!</value>
+  </data>
+  <data name="informe_plano_upgrade" xml:space="preserve">
+    <value>Informe para qual plano será feito o upgrade</value>
+  </data>
+  <data name="latitude_requerida" xml:space="preserve">
+    <value>Latitude deve ser informada</value>
+  </data>
+  <data name="login_bloqueado" xml:space="preserve">
+    <value>Login bloqueado</value>
+  </data>
+  <data name="login_caracteres_invalidos" xml:space="preserve">
+    <value>Login com caractéres inválidos, só são permitido letras e números</value>
+  </data>
+  <data name="login_em_uso" xml:space="preserve">
+    <value>Login já em uso</value>
+  </data>
+  <data name="login_incorreto" xml:space="preserve">
+    <value>Usuário ou Senha incorreto</value>
+  </data>
+  <data name="login_limite_tentativa" xml:space="preserve">
+    <value>Foi atingido o limite de tentativas de login incorretas</value>
+  </data>
+  <data name="login_nao_permitido" xml:space="preserve">
+    <value>Não são permitidos logins contendo: \"bigcash\", \"bigcashme\", \"cashme\", \"big\", \"cash\", \"admin\", \"admins\"</value>
+  </data>
+  <data name="login_requerido" xml:space="preserve">
+    <value>Login deve ser informado</value>
+  </data>
+  <data name="login_tamanho_minimo" xml:space="preserve">
+    <value>Login deve conter no mínimo 5 caracteres</value>
+  </data>
+  <data name="logo_requerida" xml:space="preserve">
+    <value>Logo deve ser informada</value>
+  </data>
+  <data name="logo_resolucao_maxima" xml:space="preserve">
+    <value>Logo inválida, resolução máxima permitida: 1024x1024</value>
+  </data>
+  <data name="longitude_requerida" xml:space="preserve">
+    <value>Longitude deve ser informada</value>
+  </data>
+  <data name="mensagem_imagem_nao_preenchida" xml:space="preserve">
+    <value>Mensagem ou imagem deve ser preenchida</value>
+  </data>
+  <data name="mensagem_nao_encontrada" xml:space="preserve">
+    <value>Mensagem não encontrada</value>
+  </data>
+  <data name="mensagem_requerida" xml:space="preserve">
+    <value>Informe a Mensagem</value>
+  </data>
+  <data name="nome_requerido" xml:space="preserve">
+    <value>Informe o Nome</value>
+  </data>
+  <data name="nota_fiscal_requerida" xml:space="preserve">
+    <value>Anexe a nota fiscal!</value>
+  </data>
+  <data name="numero_requerido" xml:space="preserve">
+    <value>Número deve ser informado</value>
+  </data>
+  <data name="observacao_requerida" xml:space="preserve">
+    <value>Informe a observação</value>
+  </data>
+  <data name="pagamanto_tipo_nao_implementado" xml:space="preserve">
+    <value>Forma de pagamento ainda não implementada</value>
+  </data>
+  <data name="pagamento_tipo_invalido" xml:space="preserve">
+    <value>Selecione um tipo de pagamento válido</value>
+  </data>
+  <data name="pagamento_tipo_requirido" xml:space="preserve">
+    <value>Selecione o tipo de pagamento</value>
+  </data>
+  <data name="pagamento_valor_insuficiente" xml:space="preserve">
+    <value>Valor pago insuficiente</value>
+  </data>
+  <data name="parceiro_nome_em_uso" xml:space="preserve">
+    <value>Já existe um parceiro cadastrado com este nome</value>
+  </data>
+  <data name="parceiro_numero_em_uso" xml:space="preserve">
+    <value>Já existe um parceiro cadastrado com este número</value>
+  </data>
+  <data name="parcela_inativa" xml:space="preserve">
+    <value>Parcela inativa</value>
+  </data>
+  <data name="parcela_nao_editavel" xml:space="preserve">
+    <value>Esta parcela não pode ser alterada</value>
+  </data>
+  <data name="parcela_paga" xml:space="preserve">
+    <value>Parcela já foi paga</value>
+  </data>
+  <data name="patrocinador_inativo" xml:space="preserve">
+    <value>Patrocinador inativo</value>
+  </data>
+  <data name="patrocinador_nao_encontrado" xml:space="preserve">
+    <value>Patrocinador não encontrado</value>
+  </data>
+  <data name="patrocinador_requerido" xml:space="preserve">
+    <value>Informe o Patrocinador</value>
+  </data>
+  <data name="pedido_inativo" xml:space="preserve">
+    <value>Pedido inativo</value>
+  </data>
+  <data name="pedido_nao_encontrado" xml:space="preserve">
+    <value>Pedido não encontrado</value>
+  </data>
+  <data name="pedido_pago" xml:space="preserve">
+    <value>Pedido está pago</value>
+  </data>
+  <data name="pedido_sem_pagamento" xml:space="preserve">
+    <value>Pedido não possui nenhum pagamento válido</value>
+  </data>
+  <data name="pedido_sem_transacao" xml:space="preserve">
+    <value>Pedido ainda não tem transação!</value>
+  </data>
+  <data name="pedido_unica_parcela_nao_paga" xml:space="preserve">
+    <value>Pedido possui apenas uma parcela ainda não paga</value>
+  </data>
+  <data name="pedido_unica_parcela_nao_paga_remover" xml:space="preserve">
+    <value>Só é possivel remover parcelas de pedidos que possuam pelo menos duas parcelas não pagas</value>
+  </data>
+  <data name="plano_invalido" xml:space="preserve">
+    <value>Plano inválido</value>
+  </data>
+  <data name="politica_escritorio_requerida" xml:space="preserve">
+    <value>Para continuar é necessário aceitar a politica de privacidade acessando seu 'Escritório Virtual'</value>
+  </data>
+  <data name="produto_requerido" xml:space="preserve">
+    <value>Produto deve ser fornecido</value>
+  </data>
+  <data name="recusa_motivo_requerido" xml:space="preserve">
+    <value>Motivo da recusa deve ser informado</value>
+  </data>
+  <data name="rua_requerida" xml:space="preserve">
+    <value>Rua deve ser informada</value>
+  </data>
+  <data name="saldo_insuficiente" xml:space="preserve">
+    <value>Saldo insuficiente</value>
+  </data>
+  <data name="saque_selecao_requerida" xml:space="preserve">
+    <value>Selecione os saques que deseja executar a ação</value>
+  </data>
+  <data name="saque_valor_minimo" xml:space="preserve">
+    <value>Valor deve ser maior que 100</value>
+  </data>
+  <data name="sem_permissao" xml:space="preserve">
+    <value>Sem permissão para efetuar esta ação</value>
+  </data>
+  <data name="senha_alterar_token_expirado" xml:space="preserve">
+    <value>O token para alterar a senha expirou</value>
+  </data>
+  <data name="senha_incorreta" xml:space="preserve">
+    <value>Senha incorreta</value>
+  </data>
+  <data name="senha_nao_confere" xml:space="preserve">
+    <value>Senhas não conferem!</value>
+  </data>
+  <data name="senha_requisitos" xml:space="preserve">
+    <value>Senha deve conter no mínimo 8 caracteres sendo pelo menos 1 número e 1 letra</value>
+  </data>
+  <data name="solicitacao_indisponivel" xml:space="preserve">
+    <value>Não é possível enviar solicitações deste tipo no momento</value>
+  </data>
+  <data name="solicitacao_pendente_existe" xml:space="preserve">
+    <value>Já existe uma solicitação pendente!</value>
+  </data>
+  <data name="status_novo_requerido" xml:space="preserve">
+    <value>Informe o novo status</value>
+  </data>
+  <data name="sub_categoria_nao_permitida" xml:space="preserve">
+    <value>Não é possivel criar esta sub categoria</value>
+  </data>
+  <data name="taxa_incorreta" xml:space="preserve">
+    <value>Taxa incorreta. Recarregue a página e tente novamente</value>
+  </data>
+  <data name="telefone_em_uso" xml:space="preserve">
+    <value>Número de telefone já em uso</value>
+  </data>
+  <data name="telefone_invalido" xml:space="preserve">
+    <value>Celular inválido</value>
+  </data>
+  <data name="telefone_requerido" xml:space="preserve">
+    <value>Telefone deve ser informado</value>
+  </data>
+  <data name="titulo_requerido" xml:space="preserve">
+    <value>Titulo deve ser preenchido</value>
+  </data>
+  <data name="token_erro" xml:space="preserve">
+    <value>Token com erro ou expirou. Faça o login novamente</value>
+  </data>
+  <data name="token_invalido" xml:space="preserve">
+    <value>O Token expirou</value>
+  </data>
+  <data name="token_venda_digito_invalido" xml:space="preserve">
+    <value>Token com dígito verificador inválido</value>
+  </data>
+  <data name="token_venda_duplicado" xml:space="preserve">
+    <value>Já existe um token com o código enviado</value>
+  </data>
+  <data name="token_venda_invalido" xml:space="preserve">
+    <value>Token invalido</value>
+  </data>
+  <data name="token_venda_nao_comerciante" xml:space="preserve">
+    <value>Apenas comerciantes podem criar vendas</value>
+  </data>
+  <data name="token_venda_nao_encontrado" xml:space="preserve">
+    <value>Token não encontrado</value>
+  </data>
+  <data name="token_venda_requerido" xml:space="preserve">
+    <value>Token deve ser informado</value>
+  </data>
+  <data name="token_venda_resgatado" xml:space="preserve">
+    <value>Este token de venda já foi resgatado</value>
+  </data>
+  <data name="usuario_bloqueado" xml:space="preserve">
+    <value>Usuário bloqueado</value>
+  </data>
+  <data name="usuario_inativo" xml:space="preserve">
+    <value>Usuário inativo</value>
+  </data>
+  <data name="usuario_invalido" xml:space="preserve">
+    <value>Usuário inválido</value>
+  </data>
+  <data name="usuario_nao_encontrado" xml:space="preserve">
+    <value>Usuário não encontrado!</value>
+  </data>
+  <data name="usuario_pedido_aberto" xml:space="preserve">
+    <value>Usuário já possui outro pedido em aberto</value>
+  </data>
+  <data name="usuario_remoto_email_confirmado" xml:space="preserve">
+    <value>Não é possivel acessar o usuário remotamente antes do e-mail ser cofirmado</value>
+  </data>
+  <data name="usuario_sem_endereco" xml:space="preserve">
+    <value>Usuário sem endereço cadastrado</value>
+  </data>
+  <data name="valor_final_minimo" xml:space="preserve">
+    <value>Valor final deve ser maior que zero</value>
+  </data>
+  <data name="valor_inicial_final" xml:space="preserve">
+    <value>Valor inicial deve ser menor que valor final</value>
+  </data>
+  <data name="valor_inicial_minimo" xml:space="preserve">
+    <value>Valor inicial deve ser maior que 0</value>
+  </data>
+  <data name="verifique_campos" xml:space="preserve">
+    <value>Verifique os campos e tente novamente</value>
+  </data>
+  <data name="venda_valor_minimo_1" xml:space="preserve">
+    <value>Valor da venda deve ser maior que R$1,00</value>
+  </data>
+  <data name="pedido_duplicado" xml:space="preserve">
+    <value>Pedido já efetuado</value>
+  </data>
+  <data name="fatura_em_pagamento" xml:space="preserve">
+    <value>Você já tem uma fatura aberta. Após seu pagamento será possível gerar uma nova</value>
+  </data>
+  <data name="confirmacao_requerida" xml:space="preserve">
+    <value>É preciso confirmar a operação</value>
+  </data>
+  <data name="remover_compra_status" xml:space="preserve">
+    <value>Não é possível remover uma compra processada ou finalizada</value>
+  </data>
+  <data name="remover_compra_tipo" xml:space="preserve">
+    <value>Este não é um pedido de compra</value>
+  </data>
+  <data name="ano_deve_ser_informado" xml:space="preserve">
+    <value>O ano deve ser informado</value>
+  </data>
+  <data name="ano_invalido" xml:space="preserve">
+    <value>Ano inválido</value>
+  </data>
+  <data name="mes_invalido" xml:space="preserve">
+    <value>Mês inválido</value>
+  </data>
+  <data name="data_expiracao_invalido" xml:space="preserve">
+    <value>Data de expiração é invalida</value>
+  </data>
+  <data name="card_number" xml:space="preserve">
+    <value>Por favor informe o número do cartão</value>
+  </data>
+  <data name="card_holder_name" xml:space="preserve">
+    <value>Por favor informe o nome que consta no cartão</value>
+  </data>
+  <data name="card_cvv" xml:space="preserve">
+    <value>Por favor insira o código de segurança</value>
+  </data>
+  <data name="cashback_menor_que_o_cadastrado" xml:space="preserve">
+    <value>O cashback não pode ser menor que o cadastrado no estabelecimento, por favor insira um valor igual ou maior</value>
+  </data>
+  <data name="login_alterado" xml:space="preserve">
+    <value>Não é permitido trocar o login mais de uma vez</value>
+  </data>
+  <data name="consumo_insuficiente" xml:space="preserve">
+    <value>Seu consumo mensal é insuficiente para solicitar o saque</value>
+  </data>
+  <data name="empreendedor_sem_endereco" xml:space="preserve">
+    <value>Preencha o endereço do empreendedor</value>
+  </data>
+</root>

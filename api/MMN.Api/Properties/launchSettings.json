@@ -1,0 +1,77 @@
+{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iis": {
+      "applicationUrl": "http://localhost/MMN.Api",
+      "sslPort": 0
+    },
+    "iisExpress": {
+      "applicationUrl": "http://localhost:56606",
+      "sslPort": 44385
+    }
+  },
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "MacOS": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DB_CONNECTION_STRING": "Server=191.235.240.126,14330;Initial Catalog=QuantaShop_03042024;Persist Security Info=False;User ID=QuantaDev;Password=P3985jmMqY**;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;MultipleActiveResultSets=True",
+        "SENDGRID_API_KEY": "",
+        "AWIN_TOKEN_1": "e49f95d3-b126-4a7a-82f5-6a0aa8ff20c2",
+        "PAGARME_ENCRYPTION_KEY": "ek_test_BTcSaxNbj8t6KUHcbtBXgzxg56uhAZ",
+        "PAGARME_API_KEY": "ak_test_sJCbNBONryTtphejMyVBZkdrvWfWzQ",
+        "PAGARME_V5_API_KEY": "sk_test_1c786871a893499a9403e5c372da695e",
+        "PAGARME_ID_PLAN": "plan_jJ0dAMPfNPig9d13",
+        "PAGARME_ID_PLAN_ANUAL_A_VISTA": "",
+        "PAGARME_ID_PLAN_ANUAL_PARCELADO": "plan_rl450adiPixOA7JL"
+      },
+      "applicationUrl": "https://localhost:44385"
+    },
+    "Development": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DB_CONNECTION_STRING": "Server=191.235.240.126\\MSSQLSERVER,14330;Initial Catalog=QuantaShop_03042024;Persist Security Info=False;User ID=QuantaDev;Password=P3985jmMqY**;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;MultipleActiveResultSets=True",
+        "SENDGRID_API_KEY": "",
+        "AWIN_TOKEN_1": "e49f95d3-b126-4a7a-82f5-6a0aa8ff20c2",
+        "PAGARME_ENCRYPTION_KEY": "ek_test_BTcSaxNbj8t6KUHcbtBXgzxg56uhAZ",
+        "PAGARME_API_KEY": "ak_test_sJCbNBONryTtphejMyVBZkdrvWfWzQ",
+        "PAGARME_V5_API_KEY": "sk_test_1c786871a893499a9403e5c372da695e",
+        "PAGARME_ID_PLAN": "plan_jJ0dAMPfNPig9d13",
+        "PAGARME_ID_PLAN_ANUAL_A_VISTA": "plan_Kzjpd1PToTR2Da4v",
+        "PAGARME_ID_PLAN_ANUAL_PARCELADO": "plan_rl450adiPixOA7JL"
+      },
+      "applicationUrl": "https://localhost:44385"
+    },
+    "Production": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Production",
+        "DB_CONNECTION_STRING": "Server=tcp:bigcash.database.windows.net,1433;Initial Catalog=Bigcash;Persist Security Info=False;User ID=bigcash;Password=Fendizola88;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;MultipleActiveResultSets=True",
+        "SENDGRID_API_KEY": "",
+        "AWIN_TOKEN_1": "e49f95d3-b126-4a7a-82f5-6a0aa8ff20c2",
+        "PAGARME_ENCRYPTION_KEY": "ek_live_Mf2VyLugtKFmh7ycjCZfXJIwkAVImI",
+        "PAGARME_API_KEY": "ak_live_Kjeo68EadGw4wXSoVFa3qlPYpNVbrZ",
+        "PAGARME_V5_API_KEY": "sk_25148da8278b455bad878daf5e5ea652",
+        "PAGARME_ID_PLAN": "plan_1eVK5JXUaAfBBRA3",
+        "PAGARME_ID_PLAN_ANUAL_A_VISTA": "plan_mX4BNxauDuYLv6kx",
+        "PAGARME_ID_PLAN_ANUAL_PARCELADO": "plan_rj6V7j4FXFVdwWY5",
+        "PAGARME_ID_PLAN_UM_REAL": "plan_z24Ow3AFyRI4OXgG"
+      },
+      "applicationUrl": "https://localhost:44385"
+    },
+    "WSL": {
+      "commandName": "WSL2",
+      "distributionName": ""
+    }
+  }
+}

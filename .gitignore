@@ -23,3 +23,11 @@ logs
 !.env.example
 
 sw.*
+
+# .NET build outputs
+api/*/bin/
+api/*/obj/
+api/publish/
+api/*.user
+api/.vs/
+api/**/*.user
