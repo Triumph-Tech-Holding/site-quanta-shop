@@ -1,0 +1,181 @@
+// Estilos do módulo primeira-compra (portados do ProBootstrap Landing theme)
+
+.pb_cover_v3 {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+
+  .heading {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.3;
+  }
+
+  .sub-heading p {
+    color: rgba(255,255,255,0.85);
+    font-size: 1rem;
+  }
+}
+
+.cover-bg-indigo {
+  background: #4e3188;
+}
+
+.cover-bg-opacity::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  opacity: 1;
+  z-index: 0;
+}
+
+.pb_gradient_v1::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: #1e5d68;
+  background: -moz-linear-gradient(45deg, #1e5d68 0%, #367884 100%);
+  background: -webkit-linear-gradient(45deg, #1e5d68 0%, #367884 100%);
+  background: linear-gradient(45deg, #1e5d68 0%, #367884 100%);
+  opacity: 0.85;
+  z-index: 0;
+}
+
+.pb_slant-light::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  background: #fff;
+  clip-path: polygon(0 100%, 100% 0, 100% 100%);
+  z-index: 1;
+}
+
+.pb_cover_v3 > .container {
+  position: relative;
+  z-index: 2;
+}
+
+// Navbar
+.pb_navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  padding: 0.5rem 1rem;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+  background: transparent;
+
+  .navbar-brand img {
+    transition: opacity 0.3s;
+  }
+
+  ul > li > a {
+    color: rgba(255,255,255,0.85);
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: color 0.2s;
+
+    &:hover {
+      color: #fff;
+    }
+  }
+
+  ul > li.cta-btn > a > span {
+    background: #665fee;
+    color: #fff;
+    border-radius: 30px;
+    padding: 0.4rem 1.2rem;
+    font-weight: 600;
+    transition: background 0.2s;
+
+    &:hover {
+      background: darken(#665fee, 10%);
+    }
+  }
+}
+
+.pb_navbar-scrolled {
+  background: #1a1a2e !important;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+}
+
+.pb_scrolled-light {
+  background: transparent;
+}
+
+// Form
+.pb_form_v1 {
+  padding: 50px;
+  box-shadow: 1px 11px 68px -20px rgba(0,0,0,0.75);
+
+  @media (max-width: 768px) {
+    padding: 30px;
+  }
+}
+
+.pb_height-50 {
+  height: 50px !important;
+}
+
+.fileUpload {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 50px;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: border-color 0.15s;
+
+  &:hover {
+    border-color: #665fee;
+  }
+
+  .upload {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    height: 100%;
+    width: 100%;
+  }
+}
+
+// Footer
+.pb_footer {
+  background: #1a1a2e;
+  padding: 2rem 0;
+  margin-top: 2rem;
+}
+
+// Utils
+.pb_rounded-4 {
+  border-radius: 4px;
+}
+
+.reverse {
+  background-color: #f7f7f7;
+  border: 1px solid #e0e0e0;
+
+  &:focus {
+    background-color: #fff;
+    border-color: #665fee;
+    box-shadow: 0 0 0 0.2rem rgba(102, 95, 238, 0.25);
+  }
+}

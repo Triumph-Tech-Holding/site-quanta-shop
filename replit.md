@@ -15,15 +15,35 @@ Frontend Nuxt.js 3 da plataforma de cashback Quanta Shop.
 
 - `pages/` — Páginas/rotas da aplicação
 - `components/` — Componentes Vue reutilizáveis
-- `layouts/` — Layouts de página (default, layout-one a layout-four)
+- `layouts/` — Layouts de página (default, layout-one a layout-four, primeira-compra)
 - `composables/` — Composables Vue (useApi, useMask, useSticky)
 - `pinia/` — Stores Pinia
 - `data/` — Dados estáticos (produtos, blogs, categorias etc.)
 - `services/` — Módulos de serviço de API
-- `plugins/` — Plugins Nuxt (directives, filters, mask)
+- `plugins/` — Plugins Nuxt (directives, filters, mask, vue3-toastify)
 - `assets/` — Estilos CSS/SCSS e fontes
 - `public/` — Assets estáticos (imagens, ícones)
 - `server/routes/` — Nitro server-side API proxy (`api-proxy/[...path].ts`)
+- `api/` — API .NET 8 (MMN.Api) rodando na porta 8000
+
+## Módulos Integrados
+
+### primeira-compra (migrado do React 18)
+Rota: `/primeira-compra/[cnpj]` (CNPJ opcional, também aceita `?cnpj=xxx`)
+- Página de cadastro de primeira compra com cashback
+- Layout dedicado sem header/footer do site principal (`layouts/primeira-compra.vue`)
+- Componentes em `components/primeira-compra/`
+- Estilos em `assets/scss/primeira-compra.scss`
+- Chamadas de API via proxy Nitro (`POST /api-proxy/user/primeiraCompra`)
+
+## API .NET 8
+
+- Repositório clonado em `api/` (MMN.Api)
+- Porta: 8000
+- Workflow: "Start API" (`bash api/start-api.sh`)
+- Banco de dados: Azure SQL (`bigcash.database.windows.net`)
+- Connection string: secret `SQL_CONNECTION_STRING` (pode ser só a senha — o script monta o resto)
+- O proxy Nitro (`/api-proxy`) encaminha para `localhost:8000` quando `USE_LOCAL_API=true`
 
 ## Desenvolvimento
 
