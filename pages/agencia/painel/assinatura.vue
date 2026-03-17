@@ -59,7 +59,8 @@ const agenciaStore = useAgenciaStore();
 const api = useApi();
 const loading = ref(true);
 const assinatura = ref<any>(null);
-const historico = ref<any[]>([]);
+import type { MovimentacaoFinanceira } from "~/types/agencia";
+const historico = ref<MovimentacaoFinanceira[]>([]);
 function authHeader() { return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } }; }
 function formatCurrency(v: number) { return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v || 0); }
 function formatDate(d: string) { return d ? new Date(d).toLocaleDateString('pt-BR') : '—'; }

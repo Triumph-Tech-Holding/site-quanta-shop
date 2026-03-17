@@ -1,8 +1,8 @@
 export default defineNuxtRouteMiddleware((to) => {
   if (import.meta.server) return;
 
-  const isPainelRoute = to.path.startsWith('/agencia/painel');
-  if (!isPainelRoute) return;
+  const isAdminRoute = to.path.startsWith('/agencia/painel/admin');
+  if (!isAdminRoute) return;
 
   const raw = localStorage.getItem('agencia_user');
   if (!raw) return navigateTo('/agencia');
@@ -16,8 +16,11 @@ export default defineNuxtRouteMiddleware((to) => {
       localStorage.removeItem('agencia_user');
       return navigateTo('/agencia');
     }
+
+    if (!user.admin) {
+      return navigateTo('/agencia/no-permission');
+    }
   } catch {
-    localStorage.removeItem('agencia_user');
     return navigateTo('/agencia');
   }
 });

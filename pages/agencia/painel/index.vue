@@ -130,8 +130,9 @@ const resumo = reactive({
   totalCompras: 0,
 });
 
-const ultimasCompras = ref<any[]>([]);
-const comunicados = ref<any[]>([]);
+import type { Compra, Comunicado } from "~/types/agencia";
+const ultimasCompras = ref<Compra[]>([]);
+const comunicados = ref<Comunicado[]>([]);
 
 const linkIndicacao = computed(() => {
   const login = user.value?.login || '';

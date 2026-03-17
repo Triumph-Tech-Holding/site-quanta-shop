@@ -94,11 +94,12 @@
 definePageMeta({ layout: 'agencia-painel', middleware: 'agencia-auth' });
 const agenciaStore = useAgenciaStore();
 const api = useApi();
-const { $toast } = useNuxtApp() as any;
+const { $toast } = useNuxtApp();
 const loading = ref(true);
 const salvando = ref(false);
 const showForm = ref(false);
-const contas = ref<any[]>([]);
+import type { ContaBancaria } from "~/types/agencia";
+const contas = ref<ContaBancaria[]>([]);
 const form = reactive({ banco: '', tipoConta: '', agencia: '', conta: '', tipoChavePix: '', chavePix: '' });
 const bancos = [
   { code: '001', name: 'Banco do Brasil' }, { code: '033', name: 'Santander' },

@@ -51,6 +51,8 @@
 </template>
 
 <script setup lang="ts">
+import { extractApiErrorMessage } from '~/types/agencia';
+
 definePageMeta({ layout: 'agencia-login' });
 
 const agenciaStore = useAgenciaStore();
@@ -89,11 +91,8 @@ async function handleLogin() {
     } else {
       errorMsg.value = 'Resposta inesperada do servidor. Tente novamente.';
     }
-  } catch (err: any) {
-    const msg = err?.response?.data?.message
-      || err?.response?.data
-      || 'Usuário ou senha inválidos. Tente novamente.';
-    errorMsg.value = typeof msg === 'string' ? msg : 'Erro ao fazer login.';
+  } catch (err: unknown) {
+    errorMsg.value = extractApiErrorMessage(err, 'Usuário ou senha inválidos. Tente novamente.');
   } finally {
     loading.value = false;
   }

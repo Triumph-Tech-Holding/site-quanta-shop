@@ -62,7 +62,10 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{ isOpen: boolean }>();
+import type { AgenciaMenuItem } from '~/types/agencia';
+import { extractApiErrorMessage } from '~/types/agencia';
+
+defineProps<{ isOpen: boolean }>();
 const emit = defineEmits(['close']);
 
 const agenciaStore = useAgenciaStore();
@@ -72,7 +75,7 @@ const user = computed(() => agenciaStore.dadosUser);
 const isAdmin = computed(() => agenciaStore.isAdmin);
 const isComerciante = computed(() => agenciaStore.isComerciante);
 
-const menus = ref<any[]>([]);
+const menus = ref<AgenciaMenuItem[]>([]);
 const openSubmenus = ref<Record<number, boolean>>({});
 const saldo = ref<number | null>(null);
 
@@ -114,31 +117,37 @@ async function loadMenu() {
   const cached = localStorage.getItem('agencia_menu');
   if (cached) {
     try {
-      const parsed = JSON.parse(cached);
-      menus.value = parsed.filter((m: any) => !m.rotaPublica);
+      const parsed: AgenciaMenuItem[] = JSON.parse(cached);
+      menus.value = parsed.filter((m) => !m.rotaPublica);
       return;
-    } catch { /**/ }
+    } catch {
+      localStorage.removeItem('agencia_menu');
+    }
   }
   try {
     const token = agenciaStore.getToken();
-    const { data } = await api.get(`/geral/obterMenu/${user.value.perfil}`, {
+    const { data } = await api.get<AgenciaMenuItem[]>(`/geral/obterMenu/${user.value.perfil}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     if (data) {
-      menus.value = data.filter((m: any) => !m.rotaPublica);
+      menus.value = data.filter((m) => !m.rotaPublica);
       localStorage.setItem('agencia_menu', JSON.stringify(data));
     }
-  } catch { /**/ }
+  } catch (err: unknown) {
+    console.error('Erro ao carregar menu:', extractApiErrorMessage(err));
+  }
 }
 
 async function loadSaldo() {
   try {
     const token = agenciaStore.getToken();
-    const { data } = await api.get('/financeiro/saldo', {
+    const { data } = await api.get<number | { saldo: number }>('/financeiro/saldo', {
       headers: { Authorization: `Bearer ${token}` },
     });
     saldo.value = typeof data === 'number' ? data : (data?.saldo ?? null);
-  } catch { /**/ }
+  } catch (err: unknown) {
+    console.error('Erro ao carregar saldo:', extractApiErrorMessage(err));
+  }
 }
 
 onMounted(async () => {

@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({ layout: 'agencia-painel', middleware: 'agencia-auth' });
+definePageMeta({ layout: 'agencia-painel', middleware: ['agencia-auth', 'agencia-admin'] });
 const agenciaStore = useAgenciaStore();
 const api = useApi();
 const loading = ref(true);

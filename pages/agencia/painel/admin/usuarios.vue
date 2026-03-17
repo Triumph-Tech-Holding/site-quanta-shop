@@ -35,11 +35,12 @@
   </div>
 </template>
 <script setup lang="ts">
-definePageMeta({ layout: 'agencia-painel', middleware: 'agencia-auth' });
+definePageMeta({ layout: 'agencia-painel', middleware: ['agencia-auth', 'agencia-admin'] });
 const agenciaStore = useAgenciaStore();
 const api = useApi();
 const loading = ref(true);
-const usuarios = ref<any[]>([]);
+import type { UsuarioAdmin } from "~/types/agencia";
+const usuarios = ref<UsuarioAdmin[]>([]);
 const filtro = reactive({ q: '', perfil: '' });
 const page = ref(1);
 const total = ref(0);
@@ -47,7 +48,7 @@ const pageSize = 20;
 const totalPages = computed(() => Math.max(1, Math.ceil(total.value / pageSize)));
 function authHeader() { return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } }; }
 function formatDate(d: string) { return d ? new Date(d).toLocaleDateString('pt-BR') : '—'; }
-function verUsuario(u: any) { navigateTo(`/agencia/painel/admin/alterar-dados-usuario?id=${u.id || u.idUsuario}`); }
+function verUsuario(u: UsuarioAdmin) { navigateTo(`/agencia/painel/admin/alterar-dados-usuario?id=${u.id || u.idUsuario}`); }
 async function buscar() { page.value = 1; await load(); }
 async function changePage(p: number) { page.value = p; await load(); }
 async function load() {

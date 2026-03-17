@@ -13,7 +13,7 @@ definePageMeta({ layout: 'agencia-login' });
 const route = useRoute();
 const api = useApi();
 const agenciaStore = useAgenciaStore();
-const { $toast } = useNuxtApp() as any;
+const { $toast } = useNuxtApp();
 
 onMounted(async () => {
   const code = route.query.code as string;

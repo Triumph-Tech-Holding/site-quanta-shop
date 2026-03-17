@@ -30,21 +30,23 @@
   </div>
 </template>
 <script setup lang="ts">
-definePageMeta({ layout: 'agencia-painel', middleware: 'agencia-auth' });
+definePageMeta({ layout: 'agencia-painel', middleware: ['agencia-auth', 'agencia-admin'] });
 const agenciaStore = useAgenciaStore();
 const api = useApi();
-const { $toast } = useNuxtApp() as any;
+const { $toast } = useNuxtApp();
 const tab = ref('saques');
 const loading = ref(true);
-const itens = ref<any[]>([]);
+import type { PagamentoAdmin } from "~/types/agencia";
+import { extractApiErrorMessage } from "~/types/agencia";
+const itens = ref<PagamentoAdmin[]>([]);
 function authHeader() { return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } }; }
 function formatDate(d: string) { return d ? new Date(d).toLocaleDateString('pt-BR') : '—'; }
 function formatCurrency(v: number) { return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v || 0); }
 function statusClass(s: string) { return {'Aprovado':'badge-ag-success','Pago':'badge-ag-success','Pendente':'badge-ag-warning','Recusado':'badge-ag-danger'}[s]||'badge-ag-secondary'; }
-async function loadSaques() { loading.value=true; try { const {data} = await api.get('/admin/pagamentos/saquesPendentes', authHeader()); itens.value=Array.isArray(data)?data:data?.items||[]; } catch{} finally{loading.value=false;} }
-async function loadAprovados() { loading.value=true; try { const {data} = await api.get('/admin/pagamentos/aprovados', authHeader()); itens.value=Array.isArray(data)?data:data?.items||[]; } catch{} finally{loading.value=false;} }
-async function loadAguardando() { loading.value=true; try { const {data} = await api.get('/admin/pagamentos/aguardandoPagamento', authHeader()); itens.value=Array.isArray(data)?data:data?.items||[]; } catch{} finally{loading.value=false;} }
-async function aprovar(p: any) { try { await api.post('/admin/pagamentos/aprovar', { id: p.id }, authHeader()); $toast?.success('Aprovado!'); await loadSaques(); } catch(e:any){ $toast?.error(e?.response?.data?.message||'Erro.'); } }
-async function recusar(p: any) { if(!confirm('Recusar?')) return; try { await api.post('/admin/pagamentos/recusar', { id: p.id }, authHeader()); $toast?.success('Recusado.'); await loadSaques(); } catch(e:any){ $toast?.error(e?.response?.data?.message||'Erro.'); } }
+async function loadSaques() { loading.value=true; try { const {data} = await api.get('/admin/pagamentos/saquesPendentes', authHeader()); itens.value=Array.isArray(data)?data:data?.items||[]; } catch(e: unknown) { console.error(e); } finally{loading.value=false;} }
+async function loadAprovados() { loading.value=true; try { const {data} = await api.get('/admin/pagamentos/aprovados', authHeader()); itens.value=Array.isArray(data)?data:data?.items||[]; } catch(e: unknown) { console.error(e); } finally{loading.value=false;} }
+async function loadAguardando() { loading.value=true; try { const {data} = await api.get('/admin/pagamentos/aguardandoPagamento', authHeader()); itens.value=Array.isArray(data)?data:data?.items||[]; } catch(e: unknown) { console.error(e); } finally{loading.value=false;} }
+async function aprovar(p: PagamentoAdmin) { try { await api.post('/admin/pagamentos/aprovar', { id: p.id }, authHeader()); $toast?.success('Aprovado!'); await loadSaques(); } catch(e: unknown){ $toast?.error(extractApiErrorMessage(e, 'Erro ao processar.')); } }
+async function recusar(p: PagamentoAdmin) { if(!confirm('Recusar?')) return; try { await api.post('/admin/pagamentos/recusar', { id: p.id }, authHeader()); $toast?.success('Recusado.'); await loadSaques(); } catch(e: unknown){ $toast?.error(extractApiErrorMessage(e, 'Erro ao processar.')); } }
 onMounted(async () => { agenciaStore.loadFromStorage(); if (!agenciaStore.isAdmin) { navigateTo('/agencia/painel'); return; } await loadSaques(); });
 </script>

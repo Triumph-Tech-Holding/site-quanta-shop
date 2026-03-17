@@ -37,7 +37,8 @@ definePageMeta({ layout: 'agencia-painel', middleware: 'agencia-auth' });
 const agenciaStore = useAgenciaStore();
 const api = useApi();
 const loading = ref(true);
-const diretos = ref<any[]>([]);
+import type { Direto } from "~/types/agencia";
+const diretos = ref<Direto[]>([]);
 const copiado = ref(false);
 const linkIndicacao = computed(() => `https://quantashop.com.br/register/${agenciaStore.dadosUser?.login || ''}`);
 function authHeader() { return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } }; }

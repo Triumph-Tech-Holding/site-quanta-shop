@@ -29,9 +29,10 @@
 definePageMeta({ layout: 'agencia-painel', middleware: 'agencia-auth' });
 const agenciaStore = useAgenciaStore();
 const api = useApi();
-const { $toast } = useNuxtApp() as any;
+const { $toast } = useNuxtApp();
 const enviando = ref(false);
-const lojas = ref<any[]>([]);
+import type { Loja } from "~/types/agencia";
+const lojas = ref<Loja[]>([]);
 const form = reactive({ chave: '', idLoja: '' });
 function authHeader() { return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } }; }
 async function inserir() {

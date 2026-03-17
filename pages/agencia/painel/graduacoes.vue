@@ -55,7 +55,8 @@ definePageMeta({ layout: 'agencia-painel', middleware: 'agencia-auth' });
 const agenciaStore = useAgenciaStore();
 const api = useApi();
 const loading = ref(true);
-const graduacoes = ref<any[]>([]);
+import type { Graduacao } from "~/types/agencia";
+const graduacoes = ref<Graduacao[]>([]);
 const atual = ref<any>(null);
 const progresso = ref<number | null>(null);
 function authHeader() { return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } }; }

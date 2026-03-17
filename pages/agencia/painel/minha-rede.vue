@@ -74,7 +74,8 @@ const agenciaStore = useAgenciaStore();
 const api = useApi();
 const loading = ref(true);
 const busca = ref('');
-const rede = ref<any[]>([]);
+import type { MembroRede } from "~/types/agencia";
+const rede = ref<MembroRede[]>([]);
 const resumo = reactive({ total: 0, ativos: 0, inativos: 0, ganhos: 0 });
 const redeFiltrada = computed(() =>
   rede.value.filter(m => {

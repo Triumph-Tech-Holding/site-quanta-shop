@@ -19,11 +19,12 @@
   </div>
 </template>
 <script setup lang="ts">
-definePageMeta({ layout: 'agencia-painel', middleware: 'agencia-auth' });
+definePageMeta({ layout: 'agencia-painel', middleware: ['agencia-auth', 'agencia-admin'] });
 const agenciaStore = useAgenciaStore();
 const api = useApi();
 const loading = ref(true);
-const itens = ref<any[]>([]);
+import type { CashbackAdmin } from "~/types/agencia";
+const itens = ref<CashbackAdmin[]>([]);
 const cols = [{ label: 'Nome', key: 'nome' }, { label: 'Status', key: 'status' }];
 function authHeader() { return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } }; }
 function ver(item: any) { console.log('ver', item); }

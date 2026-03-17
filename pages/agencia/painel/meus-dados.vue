@@ -156,7 +156,7 @@ definePageMeta({ layout: 'agencia-painel', middleware: 'agencia-auth' });
 
 const agenciaStore = useAgenciaStore();
 const api = useApi();
-const { $toast } = useNuxtApp() as any;
+const { $toast } = useNuxtApp();
 
 const user = computed(() => agenciaStore.dadosUser);
 const tab = ref('dados');

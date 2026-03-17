@@ -38,7 +38,7 @@
 definePageMeta({ layout: 'agencia-painel', middleware: 'agencia-auth' });
 const agenciaStore = useAgenciaStore();
 const api = useApi();
-const { $toast } = useNuxtApp() as any;
+const { $toast } = useNuxtApp();
 const enviando = ref(false);
 const form = reactive({ tipo: '', assunto: '', descricao: '' });
 function authHeader() { return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } }; }

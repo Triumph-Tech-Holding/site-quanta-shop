@@ -27,7 +27,7 @@
 definePageMeta({ layout: 'agencia-login' });
 const route = useRoute();
 const api = useApi();
-const { $toast } = useNuxtApp() as any;
+const { $toast } = useNuxtApp();
 const loading = ref(true);
 const finalizando = ref(false);
 const credenciamento = ref<any>(null);

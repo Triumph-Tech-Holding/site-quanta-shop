@@ -28,9 +28,10 @@
 definePageMeta({ layout: 'agencia-painel', middleware: 'agencia-auth' });
 const agenciaStore = useAgenciaStore();
 const api = useApi();
-const { $toast } = useNuxtApp() as any;
+const { $toast } = useNuxtApp();
 const loading = ref(true);
-const planos = ref<any[]>([]);
+import type { Plano } from "~/types/agencia";
+const planos = ref<Plano[]>([]);
 const assinando = ref<number | null>(null);
 function authHeader() { return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } }; }
 function formatCurrency(v: number) { return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v || 0); }

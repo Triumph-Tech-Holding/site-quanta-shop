@@ -142,15 +142,16 @@ definePageMeta({ layout: 'agencia-painel', middleware: 'agencia-auth' });
 
 const agenciaStore = useAgenciaStore();
 const api = useApi();
-const { $toast } = useNuxtApp() as any;
+const { $toast } = useNuxtApp();
 
 const tab = ref('extrato');
 const saldo = ref(0);
 const totalGanhos = ref(0);
 const totalSacado = ref(0);
-const movimentacoes = ref<any[]>([]);
-const historicoSaque = ref<any[]>([]);
-const contasBancarias = ref<any[]>([]);
+import type { MovimentacaoFinanceira, ContaBancaria } from "~/types/agencia";
+const movimentacoes = ref<MovimentacaoFinanceira[]>([]);
+const historicoSaque = ref<MovimentacaoFinanceira[]>([]);
+const contasBancarias = ref<ContaBancaria[]>([]);
 const loadingExtrato = ref(false);
 const loadingHistorico = ref(false);
 const solicitandoSaque = ref(false);

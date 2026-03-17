@@ -30,7 +30,8 @@ definePageMeta({ layout: 'agencia-painel', middleware: 'agencia-auth' });
 const agenciaStore = useAgenciaStore();
 const api = useApi();
 const loading = ref(true);
-const cupons = ref<any[]>([]);
+import type { Cupom } from "~/types/agencia";
+const cupons = ref<Cupom[]>([]);
 function authHeader() { return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } }; }
 function formatDate(d: string) { return d ? new Date(d).toLocaleDateString('pt-BR') : '—'; }
 function formatCurrency(v: number) { return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v); }

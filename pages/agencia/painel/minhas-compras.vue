@@ -83,7 +83,8 @@ definePageMeta({ layout: 'agencia-painel', middleware: 'agencia-auth' });
 const agenciaStore = useAgenciaStore();
 const api = useApi();
 
-const compras = ref<any[]>([]);
+import type { Compra } from "~/types/agencia";
+const compras = ref<Compra[]>([]);
 const loading = ref(true);
 const total = ref(0);
 const page = ref(1);

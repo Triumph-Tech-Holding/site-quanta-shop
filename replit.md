@@ -49,7 +49,10 @@ Rota raiz: `/agencia` (login), painel: `/agencia/painel/**`, admin: `/agencia/pa
 - Cores: primary `#2f7785`, secondary `#98c73a`, bg `#ecf2f7`
 - **Páginas painel:** index, meus-dados, minhas-compras, financeiro, minha-rede, contas-bancarias, assinatura, planos, meus-diretos, graduacoes, cupons, performance, suporte, solicitar-suporte, faq, material-apoio, meus-cupons, gerar-cupons, inserir-cupom, logout
 - **Páginas admin:** index + usuarios, pagamentos, compras, credenciamento, categorias, ecossistemas, carrosseis, comunicados, rede, suporte, lojas-credenciados, alterar-dados-usuario, relatorio-de-faturas, relatorio-de-anunciantes, relatorio-cashback, aniversariantes, acessos, lancamentos, material-apoio-admin, assinaturas, gerenciar-grupos
-- **Páginas públicas:** confirm-email/[token], reset-password/[token], mais-vendas/[[login]], finalizar-credenciamento/[id], login-social/google, no-permission
+- **Páginas públicas:** login (redirect para /agencia), cadastro, recuperar-senha, quem-somos, como-funciona, faq (público), privacidade, parceiro-direto/[slug], lojas-fisicas, confirm-email/[token], reset-password/[token], mais-vendas/[[login]], finalizar-credenciamento/[id], login-social/google, no-permission
+- **Middleware admin:** `middleware/agencia-admin.ts` — protege `/agencia/painel/admin/**`, exige `user.admin === true`; redireciona para `/agencia/no-permission` se não autorizado
+- **ApexCharts:** `vue3-apexcharts` instalado; plugin em `plugins/apexcharts.client.ts`; usado na página de performance com gráfico de área
+- **Tipos:** `types/agencia.ts` define todas as interfaces do domínio; `types/nuxt.d.ts` declara o tipo do plugin `$toast`; `composables/useAgenciaStore.ts` reexporta o store para auto-import do Nuxt
 
 ## API .NET 8
 

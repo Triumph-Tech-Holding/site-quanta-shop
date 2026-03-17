@@ -23,7 +23,8 @@ definePageMeta({ layout: 'agencia-painel', middleware: 'agencia-auth' });
 const agenciaStore = useAgenciaStore();
 const api = useApi();
 const loading = ref(true);
-const materiais = ref<any[]>([]);
+import type { MaterialApoio } from "~/types/agencia";
+const materiais = ref<MaterialApoio[]>([]);
 function authHeader() { return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } }; }
 onMounted(async () => {
   agenciaStore.loadFromStorage();

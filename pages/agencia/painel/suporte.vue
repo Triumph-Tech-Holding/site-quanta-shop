@@ -34,7 +34,8 @@ definePageMeta({ layout: 'agencia-painel', middleware: 'agencia-auth' });
 const agenciaStore = useAgenciaStore();
 const api = useApi();
 const loading = ref(true);
-const tickets = ref<any[]>([]);
+import type { TicketSuporte } from "~/types/agencia";
+const tickets = ref<TicketSuporte[]>([]);
 function authHeader() { return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } }; }
 function formatDate(d: string) { return d ? new Date(d).toLocaleDateString('pt-BR') : '—'; }
 function statusClass(s: string) { return { 'Aberto': 'badge-ag-info', 'Em andamento': 'badge-ag-warning', 'Resolvido': 'badge-ag-success', 'Fechado': 'badge-ag-secondary' }[s] || 'badge-ag-secondary'; }
