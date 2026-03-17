@@ -36,6 +36,21 @@ Rota: `/primeira-compra/[cnpj]` (CNPJ opcional, também aceita `?cnpj=xxx`)
 - Estilos em `assets/scss/primeira-compra.scss`
 - Chamadas de API via proxy Nitro (`POST /api-proxy/user/primeiraCompra`)
 
+### agencia (migrado do Vue 2)
+Rota raiz: `/agencia` (login), painel: `/agencia/painel/**`, admin: `/agencia/painel/admin/**`
+- Sistema completo de agência com login, painel do afiliado e área admin
+- Layout de login (`layouts/agencia-login.vue`) e layout do painel (`layouts/agencia-painel.vue`)
+- Auth store em `pinia/useAgenciaStore.ts`, exportado como composable em `composables/useAgenciaStore.ts`
+- Middleware de rota `middleware/agencia-auth.ts` — protege todas as rotas `/agencia/painel/**`
+- Menu lateral dinâmico em `components/agencia/AgenciaMenu.vue`
+- Estilos em `assets/scss/agencia.scss`
+- JWT armazenado em localStorage com chave `agencia_user`; perfil admin em `agencia_userAdmin`
+- Menu cacheado em localStorage com chave `agencia_menu`, carregado da API `/geral/obterMenu/{perfil}`
+- Cores: primary `#2f7785`, secondary `#98c73a`, bg `#ecf2f7`
+- **Páginas painel:** index, meus-dados, minhas-compras, financeiro, minha-rede, contas-bancarias, assinatura, planos, meus-diretos, graduacoes, cupons, performance, suporte, solicitar-suporte, faq, material-apoio, meus-cupons, gerar-cupons, inserir-cupom, logout
+- **Páginas admin:** index + usuarios, pagamentos, compras, credenciamento, categorias, ecossistemas, carrosseis, comunicados, rede, suporte, lojas-credenciados, alterar-dados-usuario, relatorio-de-faturas, relatorio-de-anunciantes, relatorio-cashback, aniversariantes, acessos, lancamentos, material-apoio-admin, assinaturas, gerenciar-grupos
+- **Páginas públicas:** confirm-email/[token], reset-password/[token], mais-vendas/[[login]], finalizar-credenciamento/[id], login-social/google, no-permission
+
 ## API .NET 8
 
 - Repositório clonado em `api/` (MMN.Api)

@@ -108,6 +108,7 @@ export default defineNuxtConfig({
     "@/assets/css/font-awesome-pro.css",
     "@/assets/css/flaticon_shofy.css",
     "@/assets/scss/main.scss",
+    "@/assets/scss/agencia.scss",
   ],
   runtimeConfig: {
     public: {
