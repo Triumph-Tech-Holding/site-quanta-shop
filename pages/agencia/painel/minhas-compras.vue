@@ -143,7 +143,7 @@ async function loadCompras() {
       compras.value = data?.items || data?.pedidos || [];
       total.value = data?.total || compras.value.length;
     }
-  } catch { compras.value = []; } finally {
+  } catch(e: unknown) { console.error('Erro ao carregar compras:', e); compras.value = []; } finally {
     loading.value = false;
   }
 }

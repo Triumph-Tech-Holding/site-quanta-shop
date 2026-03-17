@@ -114,7 +114,7 @@ async function loadContas() {
   try {
     const { data } = await api.get('/contasBancarias/listar', authHeader());
     contas.value = Array.isArray(data) ? data : [];
-  } catch { /**/ } finally { loading.value = false; }
+  } catch(e: unknown) { console.error("Erro ao carregar contas:", extractApiErrorMessage(e)); } finally { loading.value = false; }
 }
 async function salvarConta() {
   salvando.value = true;
@@ -134,7 +134,7 @@ async function excluirConta(id: number) {
     await api.delete(`/contasBancarias/excluir/${id}`, authHeader());
     $toast?.success('Conta removida.');
     await loadContas();
-  } catch { $toast?.error('Erro ao remover conta.'); }
+  } catch(e: unknown) { $toast?.error(extractApiErrorMessage(e, 'Erro ao remover conta.')); }
 }
 onMounted(async () => { agenciaStore.loadFromStorage(); await loadContas(); });
 </script>
