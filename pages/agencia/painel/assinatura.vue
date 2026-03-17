@@ -58,7 +58,19 @@ definePageMeta({ layout: 'agencia-painel', middleware: 'agencia-auth' });
 const agenciaStore = useAgenciaStore();
 const api = useApi();
 const loading = ref(true);
-const assinatura = ref<any>(null);
+
+interface AssinaturaUser {
+  nomePlano?: string;
+  plano?: string;
+  descricao?: string;
+  valor?: number;
+  mensalidade?: number;
+  vencimento?: string;
+  dataVencimento?: string;
+  ativo?: boolean;
+  [key: string]: unknown;
+}
+const assinatura = ref<AssinaturaUser | null>(null);
 import type { MovimentacaoFinanceira } from "~/types/agencia";
 const historico = ref<MovimentacaoFinanceira[]>([]);
 function authHeader() { return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } }; }

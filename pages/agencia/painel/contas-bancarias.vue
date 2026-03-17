@@ -91,6 +91,7 @@
 </template>
 
 <script setup lang="ts">
+import { extractApiErrorMessage } from '~/types/agencia';
 definePageMeta({ layout: 'agencia-painel', middleware: 'agencia-auth' });
 const agenciaStore = useAgenciaStore();
 const api = useApi();
@@ -123,8 +124,8 @@ async function salvarConta() {
     showForm.value = false;
     Object.assign(form, { banco: '', tipoConta: '', agencia: '', conta: '', tipoChavePix: '', chavePix: '' });
     await loadContas();
-  } catch (e: any) {
-    $toast?.error(e?.response?.data?.message || 'Erro ao salvar conta.');
+  } catch (e: unknown) {
+    $toast?.error(extractApiErrorMessage(e, 'Erro ao salvar conta.'));
   } finally { salvando.value = false; }
 }
 async function excluirConta(id: number) {

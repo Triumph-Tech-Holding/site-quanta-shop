@@ -25,6 +25,7 @@
 </template>
 
 <script setup lang="ts">
+import { extractApiErrorMessage } from '~/types/agencia';
 definePageMeta({ layout: 'agencia-painel', middleware: 'agencia-auth' });
 const agenciaStore = useAgenciaStore();
 const api = useApi();
@@ -41,8 +42,8 @@ async function assinar(plano: any) {
     await api.post('/assinatura/assinar', { idPlano: plano.id }, authHeader());
     $toast?.success(`Plano "${plano.nome}" assinado com sucesso!`);
     navigateTo('/agencia/painel/assinatura');
-  } catch (e: any) {
-    $toast?.error(e?.response?.data?.message || 'Erro ao assinar plano.');
+  } catch (e: unknown) {
+    $toast?.error(extractApiErrorMessage(e, 'Erro ao assinar plano.'));
   } finally { assinando.value = null; }
 }
 onMounted(async () => {

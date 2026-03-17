@@ -138,6 +138,7 @@
 </template>
 
 <script setup lang="ts">
+import { extractApiErrorMessage } from '~/types/agencia';
 definePageMeta({ layout: 'agencia-painel', middleware: 'agencia-auth' });
 
 const agenciaStore = useAgenciaStore();
@@ -194,8 +195,8 @@ async function solicitarSaque() {
     $toast?.success('Saque solicitado com sucesso!');
     saqueForm.valor = null; saqueForm.senha = ''; saqueForm.idContaBancaria = '';
     await loadSaldo();
-  } catch (e: any) {
-    $toast?.error(e?.response?.data?.message || 'Erro ao solicitar saque.');
+  } catch (e: unknown) {
+    $toast?.error(extractApiErrorMessage(e, 'Erro ao solicitar saque.'));
   } finally { solicitandoSaque.value = false; }
 }
 

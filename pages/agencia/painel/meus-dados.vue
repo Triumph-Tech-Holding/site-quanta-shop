@@ -152,6 +152,7 @@
 </template>
 
 <script setup lang="ts">
+import { extractApiErrorMessage } from '~/types/agencia';
 definePageMeta({ layout: 'agencia-painel', middleware: 'agencia-auth' });
 
 const agenciaStore = useAgenciaStore();
@@ -167,12 +168,14 @@ const salvandoSenha = ref(false);
 const salvandoFoto = ref(false);
 const buscandoCep = ref(false);
 
-const dados = reactive<any>({
+interface DadosUser { nome: string; email: string; cpf: string; celular: string; dataNascimento: string; sexo: string; preCadastro: boolean; [key: string]: unknown; }
+interface EnderecoUser { cep: string; logradouro: string; numero: string; complemento: string; bairro: string; cidade: string; uf: string; [key: string]: unknown; }
+const dados = reactive<DadosUser>({
   nome: '', email: '', cpf: '', celular: '',
   dataNascimento: '', sexo: '', preCadastro: false,
 });
 
-const endereco = reactive<any>({
+const endereco = reactive<EnderecoUser>({
   cep: '', logradouro: '', numero: '', complemento: '',
   bairro: '', cidade: '', uf: '',
 });
@@ -208,8 +211,8 @@ async function salvarDados() {
   try {
     await api.put('/user/atualizar', dados, authHeader());
     $toast?.success('Dados salvos com sucesso!');
-  } catch (e: any) {
-    $toast?.error(e?.response?.data?.message || 'Erro ao salvar dados.');
+  } catch (e: unknown) {
+    $toast?.error(extractApiErrorMessage(e, 'Erro ao salvar dados.'));
   } finally {
     salvando.value = false;
   }
@@ -220,8 +223,8 @@ async function salvarEndereco() {
   try {
     await api.put('/user/atualizarEndereco', endereco, authHeader());
     $toast?.success('Endereço salvo com sucesso!');
-  } catch (e: any) {
-    $toast?.error(e?.response?.data?.message || 'Erro ao salvar endereço.');
+  } catch (e: unknown) {
+    $toast?.error(extractApiErrorMessage(e, 'Erro ao salvar endereço.'));
   } finally {
     salvandoEndereco.value = false;
   }
@@ -237,8 +240,8 @@ async function alterarSenha() {
     await api.post('/user/alterarSenha', { senhaAtual: senhas.atual, novaSenha: senhas.nova }, authHeader());
     $toast?.success('Senha alterada com sucesso!');
     senhas.atual = ''; senhas.nova = ''; senhas.confirmar = '';
-  } catch (e: any) {
-    $toast?.error(e?.response?.data?.message || 'Erro ao alterar senha.');
+  } catch (e: unknown) {
+    $toast?.error(extractApiErrorMessage(e, 'Erro ao alterar senha.'));
   } finally {
     salvandoSenha.value = false;
   }
@@ -262,8 +265,8 @@ async function uploadFoto() {
       headers: { ...authHeader().headers, 'Content-Type': 'multipart/form-data' },
     });
     $toast?.success('Foto atualizada com sucesso!');
-  } catch (e: any) {
-    $toast?.error('Erro ao enviar foto.');
+  } catch (e: unknown) {
+    $toast?.error(extractApiErrorMessage(e, 'Erro ao enviar foto.'));
   } finally {
     salvandoFoto.value = false;
   }

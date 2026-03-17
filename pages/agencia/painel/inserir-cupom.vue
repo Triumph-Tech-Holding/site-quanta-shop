@@ -26,6 +26,7 @@
 </template>
 
 <script setup lang="ts">
+import { extractApiErrorMessage } from '~/types/agencia';
 definePageMeta({ layout: 'agencia-painel', middleware: 'agencia-auth' });
 const agenciaStore = useAgenciaStore();
 const api = useApi();
@@ -41,8 +42,8 @@ async function inserir() {
     await api.post('/cupomFiscal/inserir', form, authHeader());
     $toast?.success('Cupom registrado! Aguarde a aprovação.');
     form.chave = ''; form.idLoja = '';
-  } catch (e: any) {
-    $toast?.error(e?.response?.data?.message || 'Erro ao registrar cupom.');
+  } catch (e: unknown) {
+    $toast?.error(extractApiErrorMessage(e, 'Erro ao registrar cupom.'));
   } finally { enviando.value = false; }
 }
 onMounted(async () => {

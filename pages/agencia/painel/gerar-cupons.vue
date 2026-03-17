@@ -31,6 +31,7 @@
 </template>
 
 <script setup lang="ts">
+import { extractApiErrorMessage } from '~/types/agencia';
 definePageMeta({ layout: 'agencia-painel', middleware: 'agencia-auth' });
 const agenciaStore = useAgenciaStore();
 const api = useApi();
@@ -38,7 +39,8 @@ const { $toast } = useNuxtApp();
 const gerando = ref(false);
 import type { Loja } from "~/types/agencia";
 const lojas = ref<Loja[]>([]);
-const cupomGerado = ref<any>(null);
+interface CupomGerado { codigo: string; valorCashback?: number; [key: string]: unknown; }
+const cupomGerado = ref<CupomGerado | null>(null);
 const form = reactive({ idLoja: '', valor: null as number | null });
 function authHeader() { return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } }; }
 function formatCurrency(v: number) { return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v); }
@@ -48,8 +50,8 @@ async function gerarCupom() {
     const { data } = await api.post('/cuponCashback/gerar', form, authHeader());
     cupomGerado.value = data;
     $toast?.success('Cupom gerado com sucesso!');
-  } catch (e: any) {
-    $toast?.error(e?.response?.data?.message || 'Erro ao gerar cupom.');
+  } catch (e: unknown) {
+    $toast?.error(extractApiErrorMessage(e, 'Erro ao gerar cupom.'));
   } finally { gerando.value = false; }
 }
 onMounted(async () => {

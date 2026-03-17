@@ -35,6 +35,7 @@
 </template>
 
 <script setup lang="ts">
+import { extractApiErrorMessage } from '~/types/agencia';
 definePageMeta({ layout: 'agencia-painel', middleware: 'agencia-auth' });
 const agenciaStore = useAgenciaStore();
 const api = useApi();
@@ -48,8 +49,8 @@ async function enviar() {
     await api.post('/suporte/criar', form, authHeader());
     $toast?.success('Solicitação enviada com sucesso!');
     navigateTo('/agencia/painel/suporte');
-  } catch (e: any) {
-    $toast?.error(e?.response?.data?.message || 'Erro ao enviar solicitação.');
+  } catch (e: unknown) {
+    $toast?.error(extractApiErrorMessage(e, 'Erro ao enviar solicitação.'));
   } finally { enviando.value = false; }
 }
 onMounted(() => { agenciaStore.loadFromStorage(); });

@@ -9,6 +9,7 @@
 </template>
 
 <script setup lang="ts">
+import { extractApiErrorMessage } from '~/types/agencia';
 definePageMeta({ layout: 'agencia-login' });
 const route = useRoute();
 const api = useApi();
@@ -24,7 +25,7 @@ onMounted(async () => {
       agenciaStore.setUser(data);
       navigateTo('/agencia/painel');
     }
-  } catch (e: any) {
+  } catch (e: unknown) {
     $toast?.error('Erro ao autenticar com Google. Tente novamente.');
     navigateTo('/agencia');
   }

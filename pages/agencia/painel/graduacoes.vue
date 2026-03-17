@@ -57,7 +57,7 @@ const api = useApi();
 const loading = ref(true);
 import type { Graduacao } from "~/types/agencia";
 const graduacoes = ref<Graduacao[]>([]);
-const atual = ref<any>(null);
+const atual = ref<Graduacao | null>(null);
 const progresso = ref<number | null>(null);
 function authHeader() { return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } }; }
 onMounted(async () => {
