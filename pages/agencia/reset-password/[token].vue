@@ -6,7 +6,7 @@
       <div v-if="success" class="text-center">
         <div style="font-size:2.5rem">✅</div>
         <p class="mt-2 text-muted">Senha redefinida com sucesso!</p>
-        <NuxtLink to="/agencia" class="btn btn-ag-primary mt-2">Fazer login</NuxtLink>
+        <NuxtLink to="/agencia/login" class="btn btn-ag-primary mt-2">Fazer login</NuxtLink>
       </div>
       <form v-else @submit.prevent="redefinir">
         <div class="mb-3">
@@ -26,6 +26,7 @@
 </template>
 
 <script setup lang="ts">
+import { extractApiErrorMessage } from '~/types/agencia';
 definePageMeta({ layout: 'agencia-login' });
 const route = useRoute();
 const api = useApi();
@@ -41,8 +42,8 @@ async function redefinir() {
   try {
     await api.post('/UsuarioLogin/resetarSenha', { token: route.params.token, novaSenha: form.novaSenha });
     success.value = true;
-  } catch (e: any) {
-    errorMsg.value = e?.response?.data?.message || 'Erro ao redefinir senha.';
+  } catch (e: unknown) {
+    errorMsg.value = extractApiErrorMessage(e, 'Erro ao redefinir senha.');
   } finally { loading.value = false; }
 }
 </script>

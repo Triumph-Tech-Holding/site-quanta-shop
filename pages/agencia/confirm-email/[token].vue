@@ -10,19 +10,20 @@
         <div style="font-size:3rem">✅</div>
         <h5 class="mt-3">E-mail confirmado!</h5>
         <p class="text-muted">Sua conta foi ativada com sucesso.</p>
-        <NuxtLink to="/agencia" class="btn btn-ag-primary mt-2">Fazer login</NuxtLink>
+        <NuxtLink to="/agencia/login" class="btn btn-ag-primary mt-2">Fazer login</NuxtLink>
       </div>
       <div v-else>
         <div style="font-size:3rem">❌</div>
         <h5 class="mt-3">Link inválido</h5>
         <p class="text-muted">{{ errorMsg || 'Token de confirmação inválido ou expirado.' }}</p>
-        <NuxtLink to="/agencia" class="btn btn-ag-outline mt-2">Voltar ao login</NuxtLink>
+        <NuxtLink to="/agencia/login" class="btn btn-ag-outline mt-2">Voltar ao login</NuxtLink>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { extractApiErrorMessage } from '~/types/agencia';
 definePageMeta({ layout: 'agencia-login' });
 const route = useRoute();
 const api = useApi();
@@ -35,8 +36,8 @@ onMounted(async () => {
   try {
     await api.get(`/UsuarioLogin/confirmarEmail/${token}`);
     success.value = true;
-  } catch (e: any) {
-    errorMsg.value = e?.response?.data?.message || 'Erro ao confirmar e-mail.';
+  } catch (e: unknown) {
+    errorMsg.value = extractApiErrorMessage(e, 'Erro ao confirmar e-mail.');
   } finally {
     loading.value = false;
   }

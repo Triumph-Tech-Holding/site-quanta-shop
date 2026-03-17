@@ -18,7 +18,7 @@
         <p class="text-success mb-3">Link enviado! Verifique seu e-mail.</p>
       </div>
       <div class="text-center mt-4">
-        <NuxtLink to="/agencia" style="font-size:.85rem; color:#2f7785">← Voltar para login</NuxtLink>
+        <NuxtLink to="/agencia/login" style="font-size:.85rem; color:#2f7785">← Voltar para login</NuxtLink>
       </div>
     </div>
   </div>

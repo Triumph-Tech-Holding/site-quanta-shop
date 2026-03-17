@@ -22,7 +22,7 @@
   </div>
 </template>
 <script setup lang="ts">
-definePageMeta({ layout: 'agencia-login' });
+definePageMeta({ layout: 'agencia' });
 const steps = [
   { titulo: 'Cadastre-se gratuitamente', descricao: 'Crie sua conta em menos de 2 minutos e acesse o painel completo de empreendedor Quanta Shop.' },
   { titulo: 'Indique lojas e pessoas', descricao: 'Compartilhe seu link de indicação e ganhe comissões quando seus indicados realizarem compras.' },

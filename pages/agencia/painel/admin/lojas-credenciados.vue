@@ -27,7 +27,7 @@ import type { LojaCredenciadaAdmin } from "~/types/agencia";
 const itens = ref<LojaCredenciadaAdmin[]>([]);
 const cols = [{ label: 'Nome', key: 'nome' }, { label: 'Status', key: 'status' }];
 function authHeader() { return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } }; }
-function ver(item: any) { console.log('ver', item); }
+function ver(item: LojaCredenciadaAdmin) { console.log('ver', item); }
 onMounted(async () => {
   agenciaStore.loadFromStorage();
   if (!agenciaStore.isAdmin) { navigateTo('/agencia/painel'); return; }

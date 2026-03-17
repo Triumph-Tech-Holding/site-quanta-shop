@@ -21,7 +21,7 @@
   </div>
 </template>
 <script setup lang="ts">
-definePageMeta({ layout: 'agencia-login' });
+definePageMeta({ layout: 'agencia' });
 const open = ref<Record<number, boolean>>({});
 function toggle(i: number) { open.value[i] = !open.value[i]; }
 const faqs = [

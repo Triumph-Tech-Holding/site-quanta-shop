@@ -5,19 +5,19 @@ export default defineNuxtRouteMiddleware((to) => {
   if (!isPainelRoute) return;
 
   const raw = localStorage.getItem('agencia_user');
-  if (!raw) return navigateTo('/agencia');
+  if (!raw) return navigateTo('/agencia/login');
 
   try {
     const user = JSON.parse(raw) as { token?: string; admin?: boolean };
-    if (!user?.token) return navigateTo('/agencia');
+    if (!user?.token) return navigateTo('/agencia/login');
 
     const payload = JSON.parse(atob(user.token.split('.')[1])) as { exp?: number };
     if ((payload.exp ?? 0) * 1000 < Date.now()) {
       localStorage.removeItem('agencia_user');
-      return navigateTo('/agencia');
+      return navigateTo('/agencia/login');
     }
   } catch {
     localStorage.removeItem('agencia_user');
-    return navigateTo('/agencia');
+    return navigateTo('/agencia/login');
   }
 });

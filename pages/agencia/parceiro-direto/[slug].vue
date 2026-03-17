@@ -12,7 +12,7 @@
         </div>
         <NuxtLink :to="`/agencia/cadastro?indicador=${route.params.slug}`" class="btn-login d-block text-center text-decoration-none">Cadastrar com indicação de {{ parceiro.username || parceiro.nome }}</NuxtLink>
         <div class="text-center mt-3">
-          <NuxtLink to="/agencia" style="font-size:.85rem; color:#6c757d">Já tenho conta → Entrar</NuxtLink>
+          <NuxtLink to="/agencia/login" style="font-size:.85rem; color:#6c757d">Já tenho conta → Entrar</NuxtLink>
         </div>
       </template>
       <div v-else class="text-center mt-4">

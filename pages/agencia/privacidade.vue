@@ -22,5 +22,5 @@
   </div>
 </template>
 <script setup lang="ts">
-definePageMeta({ layout: 'agencia-login' });
+definePageMeta({ layout: 'agencia' });
 </script>

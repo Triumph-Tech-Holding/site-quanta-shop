@@ -24,18 +24,20 @@
   </div>
 </template>
 <script setup lang="ts">
+import { extractApiErrorMessage } from '~/types/agencia';
 definePageMeta({ layout: 'agencia-login' });
 const route = useRoute();
 const api = useApi();
 const { $toast } = useNuxtApp();
 const loading = ref(true);
 const finalizando = ref(false);
-const credenciamento = ref<any>(null);
+interface CredenciamentoItem { nome?: string; nomeEmpresa?: string; cnpj?: string; [key: string]: unknown; }
+const credenciamento = ref<CredenciamentoItem | null>(null);
 onMounted(async () => {
   try {
     const { data } = await api.get(`/credenciamento/obter/${route.params.id}`);
     credenciamento.value = data;
-  } catch { } finally { loading.value = false; }
+  } catch(e: unknown) { console.error("Erro ao carregar credenciamento:", extractApiErrorMessage(e)); } finally { loading.value = false; }
 });
 async function finalizar() {
   finalizando.value = true;
@@ -43,8 +45,8 @@ async function finalizar() {
     await api.post(`/credenciamento/finalizar/${route.params.id}`, {});
     $toast?.success('Credenciamento finalizado com sucesso!');
     navigateTo('/agencia');
-  } catch (e: any) {
-    $toast?.error(e?.response?.data?.message || 'Erro ao finalizar credenciamento.');
+  } catch (e: unknown) {
+    $toast?.error(extractApiErrorMessage(e, 'Erro ao finalizar credenciamento.'));
   } finally { finalizando.value = false; }
 }
 </script>

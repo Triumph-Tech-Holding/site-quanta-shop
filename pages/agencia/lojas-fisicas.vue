@@ -32,7 +32,7 @@
 </template>
 <script setup lang="ts">
 import { extractApiErrorMessage } from '~/types/agencia';
-definePageMeta({ layout: 'agencia-login' });
+definePageMeta({ layout: 'agencia' });
 const api = useApi();
 const loading = ref(false);
 interface LojaFisica { id: number; nomeFantasia?: string; nome?: string; endereco: string; cidade: string; estado: string; cashback: number; [key: string]: unknown; }
