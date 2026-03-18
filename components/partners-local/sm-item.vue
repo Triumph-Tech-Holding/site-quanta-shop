@@ -2,7 +2,8 @@
   <div class="tp-product-sm-item d-flex align-items-center">
     <div class="tp-product-thumb mr-25 fix d-flex align-items-center justify-content-center" style="width: 140px; height: 140px; background-color: #fff;">
       <nuxt-link
-        :href="`https://quantashop.com.br/anunciante?idAnunciante=${item.IdCredenciamento}`"
+        v-if="item.link"
+        :href="item.link"
         target="_blank"
       >
         <img
@@ -13,23 +14,35 @@
           style="max-width: 140px;"
         />
       </nuxt-link>
+      <img
+        v-else
+        :src="item.Imagem"
+        alt="product-img"
+        width="140"
+        height="140"
+        style="max-width: 140px;"
+      />
     </div>
     <div class="tp-product-sm-content w-100 text-center">
       <div class="tp-product-category text-lowercase mb-0">
         <nuxt-link
-          :href="`https://agencia.quantashop.com.br/anunciante?idAnunciante=${item.IdCredenciamento}`"
+          v-if="item.link"
+          :href="item.link"
           target="_blank"
         >
           {{ item.Categoria }}
         </nuxt-link>
+        <span v-else>{{ item.Categoria }}</span>
       </div>
 
       <h3 class="tp-product-title my-2">
         <nuxt-link
-          :href="`https://agencia.quantashop.com.br/anunciante?idAnunciante=${item.IdCredenciamento}`"
+          v-if="item.link"
+          :href="item.link"
           target="_blank"
           >{{ item.Estabelecimento }}</nuxt-link
         >
+        <span v-else>{{ item.Estabelecimento }}</span>
       </h3>
 
       <div class="tp-product-price-wrapper">
@@ -38,7 +51,7 @@
         >
       </div>
 
-      <div class="tp-product-list-add-to-cart mt-3 w-100" v-if="userStore.isLoggedIn && item.link != null">
+      <div class="tp-product-list-add-to-cart mt-3 w-100" v-if="item.link">
         <nuxt-link
           :to="item.link"
           target="_blank"
@@ -52,10 +65,7 @@
 </template>
 
 <script setup lang="ts">
-import { useUserStore } from "@/pinia/useUserStore";
-
 const props = defineProps<{ item: any }>();
-const userStore = useUserStore();
 const isMobile = ref(false);
 
 const checkScreenWidth = () => {

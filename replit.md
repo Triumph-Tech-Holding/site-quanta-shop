@@ -86,6 +86,16 @@ O site original fazia chamadas diretas para `https://api.quantashop.com.br/api` 
 2. **useApi composable** (`composables/useApi.ts`): Cria instância Axios com `baseURL: /api-proxy`, direcionando tudo pelo proxy. Usa lazy singleton para funcionar quando chamado no nível do módulo pelos services
 3. **Layout paralelo** (`layouts/layout-one.vue`): Todas as chamadas de API (categorias, carrosséis, parceiros) são feitas em paralelo via `Promise.allSettled` para evitar bloqueio
 
+## Parceiros Locais (components/partners-local/)
+
+- `item.client.vue` e `sm-item.vue`: links usam `item.link` (vindo da API) — não mais hardcoded para `agencia.quantashop.com.br`
+- `pinia/usePartnerStore.ts`: funções `fetchLocalPartners`, `fetchBestDiscountsLocalPartners`, `fetchFeaturedLocalPartners`, `fetchTopSellersLocalPartners` — só substituem `{userId}` no link se o placeholder estiver presente; links diretos (sem `{userId}`) são preservados para qualquer estado de login
+- Links dos parceiros locais apontam para `escritorio.quantashop.com.br` (retornado pela API)
+
+## Bugs Conhecidos (Não Resolvidos)
+
+- **EF Core 1-to-1 CredenciamentoMapping**: Carrega credenciamento errado para usuários com múltiplas linhas na tabela
+
 ## Deploy
 
 Configurado como servidor Node.js (autoscale):

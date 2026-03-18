@@ -146,13 +146,15 @@ export const usePartnerStore = defineStore('partners', () => {
                 await userStore.loadUserFromStorage();
 
                 localPartners.value.forEach(partner => {
-                    partner.link = userStore.isLoggedIn ? partner.link.replace('{userId}', userStore.userId) : null;
+                    if (partner.link && partner.link.includes('{userId}')) {
+                        partner.link = userStore.isLoggedIn ? partner.link.replace('{userId}', userStore.userId) : null;
+                    }
                 });
 
                 isLocalPartnersLoaded.value = true;
             }
         } catch (error) {
-            console.error('Erro ao buscar parceiros locais que mais vendem:', error);
+            console.error('Erro ao buscar parceiros locais:', error);
         }
         finally {
             loadingStore.setLoading(false);
@@ -173,13 +175,15 @@ export const usePartnerStore = defineStore('partners', () => {
                 await userStore.loadUserFromStorage();
 
                 bestDiscountsLocalPartners.value.forEach(partner => {
-                    partner.link = userStore.isLoggedIn ? partner.link.replace('{userId}', userStore.userId) : null;
+                    if (partner.link && partner.link.includes('{userId}')) {
+                        partner.link = userStore.isLoggedIn ? partner.link.replace('{userId}', userStore.userId) : null;
+                    }
                 });
 
                 isBestDiscountsLocalPartnersLoaded.value = true;
             }
         } catch (error) {
-            console.error('Erro ao buscar parceiros locais que mais vendem:', error);
+            console.error('Erro ao buscar melhores descontos de parceiros locais:', error);
         }
         finally {
             loadingStore.setLoading(false);
@@ -200,7 +204,9 @@ export const usePartnerStore = defineStore('partners', () => {
                 await userStore.loadUserFromStorage();
 
                 featuredLocalPartners.value.forEach(partner => {
-                    partner.link = userStore.isLoggedIn ? partner.link.replace('{userId}', userStore.userId) : null;
+                    if (partner.link && partner.link.includes('{userId}')) {
+                        partner.link = userStore.isLoggedIn ? partner.link.replace('{userId}', userStore.userId) : null;
+                    }
                 });
 
                 isFeaturedLocalPartnersLoaded.value = true;
@@ -227,13 +233,15 @@ export const usePartnerStore = defineStore('partners', () => {
                 await userStore.loadUserFromStorage();
 
                 topSellersLocalPartners.value.forEach(partner => {
-                    partner.link = userStore.isLoggedIn ? partner.link.replace('{userId}', userStore.userId) : null;
+                    if (partner.link && partner.link.includes('{userId}')) {
+                        partner.link = userStore.isLoggedIn ? partner.link.replace('{userId}', userStore.userId) : null;
+                    }
                 });
 
                 isTopSellersLocalPartnersLoaded.value = true;
             }
         } catch (error) {
-            console.error('Erro ao buscar parceiros locais que mais vendem:', error);
+            console.error('Erro ao buscar parceiros locais mais vendidos:', error);
         }
         finally {
             loadingStore.setLoading(false);

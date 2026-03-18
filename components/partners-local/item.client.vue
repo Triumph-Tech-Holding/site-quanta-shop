@@ -6,40 +6,43 @@
   >
     <div class="tp-product-thumb p-relative fix m-img d-flex align-items-center justify-content-center" style="height: 200px; background-color: #ffffff;">
       <nuxt-link
-        :href="`https://agencia.quantashop.com.br/anunciante?idAnunciante=${item.IdCredenciamento}`"
+        v-if="partnerLink"
+        :href="partnerLink"
         target="_blank"
       >
-        <!-- <img
-          src="/img/category/main/category-main.png"
-          alt="product-electronic"
-        /> -->
         <img
           :src="item.Imagem"
           alt="product-img"
           style="max-height: 140px;"
         />
       </nuxt-link>
-      <!-- product badge -->
-      <!-- <div class="tp-product-badge">
-        <span v-if="item.status === 'out-of-stock'" class="product-hot">out-of-stock</span>
-      </div> -->
+      <img
+        v-else
+        :src="item.Imagem"
+        alt="product-img"
+        style="max-height: 140px;"
+      />
     </div>
     <!-- product content -->
     <div class="tp-product-content text-center">
       <div class="tp-product-category">
         <nuxt-link
-          :href="`https://agencia.quantashop.com.br/anunciante?idAnunciante=${item.IdCredenciamento}`"
+          v-if="partnerLink"
+          :href="partnerLink"
           target="_blank"
           >{{ item.Categoria }}</nuxt-link
         >
+        <span v-else>{{ item.Categoria }}</span>
       </div>
       <h3 class="tp-product-title" :title="item.Estabelecimento">
         <nuxt-link
-          :href="`https://agencia.quantashop.com.br/anunciante?idAnunciante=${item.IdCredenciamento}`"
+          v-if="partnerLink"
+          :href="partnerLink"
           target="_blank"
         >
           {{ truncateText(item.Estabelecimento) }}
         </nuxt-link>
+        <span v-else>{{ truncateText(item.Estabelecimento) }}</span>
       </h3>
 
       <div class="tp-product-price-wrapper">
@@ -48,9 +51,9 @@
         >
       </div>
 
-      <div class="tp-product-list-add-to-cart mt-3 w-100" v-if="userStore.isLoggedIn && item.link != null">
+      <div class="tp-product-list-add-to-cart mt-3 w-100" v-if="partnerLink">
         <nuxt-link
-          :to="item.link"
+          :to="partnerLink"
           target="_blank"
           class="tp-product-list-add-to-cart-btn w-100 text-center"
         >
@@ -62,11 +65,12 @@
 </template>
 
 <script setup lang="ts">
-import { useUserStore } from "@/pinia/useUserStore";
-
 const props = defineProps<{ item: any; offer_style?: boolean }>();
-const userStore = useUserStore();
 const isMobile = ref(false);
+
+const partnerLink = computed(() => {
+  return props.item.link || null;
+});
 
 const checkScreenWidth = () => {
   isMobile.value = window.innerWidth <= 768;
