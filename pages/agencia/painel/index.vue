@@ -166,11 +166,11 @@ const stats = ref([
 
 const metaMinuto = ref<{ valorPorMinuto?: number } | null>(null);
 
-const videos = [
-  { label: 'Bem-vindo', url: 'https://www.youtube.com/watch?v=bem-vindo' },
-  { label: 'Como funciona', url: 'https://www.youtube.com/watch?v=como-funciona' },
-  { label: 'Como ganhar', url: 'https://www.youtube.com/watch?v=como-ganhar' },
-];
+const videos = ref([
+  { label: 'Bem-vindo à Quanta Shop', url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' },
+  { label: 'Como funciona o cashback', url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' },
+  { label: 'Como ganhar mais', url: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ' },
+]);
 
 const linkIndicacao = computed(() => {
   const login = user.value?.login || '';
@@ -237,7 +237,7 @@ onMounted(async () => {
     api.get('/Tutorial/obterTutoriais', authHeader()).then(r => {
       const d = r.data;
       if (Array.isArray(d) && d.length > 0) {
-        videos.splice(0, videos.length, ...d.slice(0, 3).map((v: Record<string, unknown>) => ({
+        videos.value.splice(0, videos.value.length, ...d.slice(0, 3).map((v: Record<string, unknown>) => ({
           label: (v.nome ?? v.titulo ?? v.Titulo ?? 'Tutorial') as string,
           url: (v.url ?? v.Url ?? '#') as string,
         })));
