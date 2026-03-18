@@ -11,7 +11,10 @@
 
         <div class="bar-info-account">
           <div class="box-acesso">
-            <div>
+            <div class="d-flex align-items-center gap-2">
+              <button class="hamburger-btn" @click="sidebarOpen = !sidebarOpen" aria-label="Menu">
+                <span></span><span></span><span></span>
+              </button>
               <div class="flex-acesso" v-if="isComerciante && user?.perfil == 'C'">
                 <span class="txt-acesso">Acessando como <b>Credenciado</b></span>
               </div>
@@ -45,6 +48,12 @@
 
               <div class="flex-remot">
                 <div class="box-button">
+                  <div class="bt-default">
+                    <NuxtLink to="/agencia/painel/assistente-virtual">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="mr-1" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
+                      Assistente virtual
+                    </NuxtLink>
+                  </div>
                   <div class="bt-default bt-border">
                     <NuxtLink to="/agencia/painel/meus-dados">
                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="mr-1" viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
@@ -65,10 +74,12 @@
       </div>
     </div>
 
+    <div v-if="sidebarOpen" class="sidebar-overlay" @click="sidebarOpen = false"></div>
+
     <section class="conteudo-geral-admin">
       <div class="flex-geral">
-        <div class="p-0 box-menu-lateral">
-          <AgenciaMenu />
+        <div class="p-0 box-menu-lateral" :class="{ 'sidebar-mobile-open': sidebarOpen }">
+          <AgenciaMenu :open="sidebarOpen" />
         </div>
         <div class="box-conteudo conteudo-logado">
           <slot />
@@ -87,6 +98,7 @@ const user = computed(() => agenciaStore.dadosUser);
 const isAcessoRemoto = computed(() => agenciaStore.isAcessoRemoto);
 const isComerciante = computed(() => agenciaStore.isComerciante);
 const saldo = ref<number | null>(null);
+const sidebarOpen = ref(false);
 
 const saldoFormatado = computed(() => {
   if (saldo.value === null) return '';

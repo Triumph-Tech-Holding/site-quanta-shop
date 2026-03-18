@@ -1,5 +1,11 @@
 <template>
-  <div class="bg-menu">
+  <div class="bg-menu" :class="{ 'sidebar-open': open }">
+    <div class="sidebar-logo-block">
+      <NuxtLink :to="dashboardRoute">
+        <img src="/agencia/imgs/quanta-shop.png" alt="Quanta Shop" />
+      </NuxtLink>
+    </div>
+
     <div class="navbar-nav-vertical" id="nav-collapse">
       <a href="https://quantashop.com.br" class="listMenu" target="_blank">
         Lojas
@@ -46,6 +52,8 @@
 <script setup lang="ts">
 import type { AgenciaMenuItem } from '~/types/agencia';
 import { extractApiErrorMessage } from '~/types/agencia';
+
+defineProps<{ open?: boolean }>();
 
 const agenciaStore = useAgenciaStore();
 const api = useApi();
