@@ -12,7 +12,7 @@ function getApiClient(): AxiosInstance {
         _apiClient = axios.create({
             baseURL,
             headers: {},
-            timeout: 10000,
+            timeout: 30000,
         });
 
         // Interceptador de requisição: injetar token

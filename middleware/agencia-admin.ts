@@ -4,23 +4,17 @@ export default defineNuxtRouteMiddleware((to) => {
   const isAdminRoute = to.path.startsWith('/agencia/painel/admin');
   if (!isAdminRoute) return;
 
-  const raw = localStorage.getItem('agencia_user');
-  if (!raw) return navigateTo('/agencia/login');
+  const agenciaStore = useAgenciaStore();
 
-  try {
-    const user = JSON.parse(raw) as { token?: string; admin?: boolean };
-    if (!user?.token) return navigateTo('/agencia/login');
-
-    const payload = JSON.parse(atob((user.token.split('.')[1] + '==').replace(/-/g, '+').replace(/_/g, '/'))) as { exp?: number };
-    if ((payload.exp ?? 0) * 1000 < Date.now()) {
-      localStorage.removeItem('agencia_user');
-      return navigateTo('/agencia/login');
-    }
-
-    if (!user.admin) {
-      return navigateTo('/agencia/no-permission');
-    }
-  } catch {
+  if (!agenciaStore.getToken()) {
     return navigateTo('/agencia/login');
+  }
+
+  if (!agenciaStore.checkTokenExpiry()) {
+    return navigateTo('/agencia/login');
+  }
+
+  if (!agenciaStore.isAdmin) {
+    return navigateTo('/agencia/no-permission');
   }
 });

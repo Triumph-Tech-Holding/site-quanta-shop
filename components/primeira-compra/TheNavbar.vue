@@ -6,7 +6,7 @@
     <div class="container">
       <nuxt-link class="navbar-brand m-3 mr-5" to="/">
         <img
-          src="/img/logo.png"
+          :src="'/primeira-compra/img/logo.png'"
           alt="Quanta Shop"
           style="width: 8rem"
         />

@@ -50,9 +50,11 @@ Rota raiz: `/agencia` (login), painel: `/agencia/painel/**`, admin: `/agencia/pa
 - **Páginas painel:** index, meus-dados, minhas-compras, financeiro, minha-rede, contas-bancarias, assinatura, planos, meus-diretos, graduacoes, cupons, performance, suporte, solicitar-suporte, faq, material-apoio, meus-cupons, gerar-cupons, inserir-cupom, logout
 - **Páginas admin:** index + usuarios, pagamentos, compras, credenciamento, categorias, ecossistemas, carrosseis, comunicados, rede, suporte, lojas-credenciados, alterar-dados-usuario, relatorio-de-faturas, relatorio-de-anunciantes, relatorio-cashback, aniversariantes, acessos, lancamentos, material-apoio-admin, assinaturas, gerenciar-grupos
 - **Páginas públicas:** login (redirect para /agencia), cadastro, recuperar-senha, quem-somos, como-funciona, faq (público), privacidade, parceiro-direto/[slug], lojas-fisicas, confirm-email/[token], reset-password/[token], mais-vendas/[[login]], finalizar-credenciamento/[id], login-social/google, no-permission
-- **Middleware admin:** `middleware/agencia-admin.ts` — protege `/agencia/painel/admin/**`, exige `user.admin === true`; redireciona para `/agencia/no-permission` se não autorizado
+- **Middleware admin:** `middleware/agencia-admin.ts` — protege `/agencia/painel/admin/**`, usa `useAgenciaStore()` para validar token e perfil admin; redireciona para `/agencia/no-permission` se não autorizado
 - **ApexCharts:** `vue3-apexcharts` instalado; plugin em `plugins/apexcharts.client.ts`; usado na página de performance com gráfico de área
 - **Tipos:** `types/agencia.ts` define todas as interfaces do domínio; `types/nuxt.d.ts` declara o tipo do plugin `$toast`; `composables/useAgenciaStore.ts` reexporta o store para auto-import do Nuxt
+- **Axios timeout:** 30s (suficiente para cargas pesadas de produto via proxy com fallback remoto)
+- **Build validado:** `npm run build:nuxt` passa sem erros; avisos de fontes/imagens externas são `WARN` ignoráveis
 
 ## API .NET 8
 
