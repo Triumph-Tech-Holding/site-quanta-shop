@@ -30,6 +30,7 @@ export default defineNuxtConfig({
     id: 'G-3YM68FHXJW'
   },
   pwa: {
+    selfDestroying: true,
     manifest: {
       name: "Quanta Shop",
       short_name: "Quanta Shop",
