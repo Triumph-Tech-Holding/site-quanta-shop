@@ -18,9 +18,10 @@
       </nuxt-link>
 
       <nuxt-link
-        :href="`/partners/${item.id}`"
+        :href="item.link || '#'"
         class="w-100 h-100"
         v-if="item.type === 'LOCAL'"
+        target="_blank"
       >
         <img :src="item.img" alt="product-img" @error="onImageError" />
       </nuxt-link>
@@ -147,9 +148,10 @@
         </nuxt-link>
 
         <nuxt-link
-          :href="`/partners/${item.id}`"
+          :href="item.link || '#'"
           :title="item.title"
           v-if="item.type === 'LOCAL'"
+          target="_blank"
         >
           {{ item.title }}
         </nuxt-link>
@@ -236,9 +238,10 @@
         </nuxt-link>
 
         <nuxt-link
-          :href="`/partners/${item.id}`"
+          :href="item.link || '#'"
           class="tp-product-list-add-to-cart-btn w-100 text-center"
           v-if="item.type === 'LOCAL'"
+          target="_blank"
         >
           {{ getButtonText(item.type ?? "") }}
         </nuxt-link>

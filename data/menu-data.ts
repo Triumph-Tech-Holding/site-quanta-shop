@@ -15,9 +15,9 @@ export const menu_data: IMenuItem[] = [
   },
   {
     id: 3,
-    link: 'https://agencia.quantashop.com.br/credenciar',
+    link: '/agencia/cadastro',
     title: 'Crendenciamento',
-    target: '_blank'
+    target: '_self'
   },
   {
     id: 4,
@@ -49,9 +49,9 @@ export const mobile_menu: IMobileType[] = [
   },
   {
     id: 3,
-    link: 'https://agencia.quantashop.com.br/credenciar',
+    link: '/agencia/cadastro',
     title: 'Crendenciamento',
-    target: '_blank'
+    target: '_self'
   },
   {
     id: 4,
