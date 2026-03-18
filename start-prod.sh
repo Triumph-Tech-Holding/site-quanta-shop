@@ -28,16 +28,14 @@ fi
 
 API_BINARY="/home/runner/workspace/api/publish/MMN.Api"
 
-if [ -f "$API_BINARY" ]; then
-  echo "[start-prod] Iniciando API via binario publicado..."
-  "$API_BINARY" &
-else
-  echo "[start-prod] Binario publicado nao encontrado — iniciando via dotnet run (modo fallback)..."
-  cd /home/runner/workspace/api/MMN.Api
-  dotnet run --no-launch-profile -p:NuGetAudit=false &
-  cd /home/runner/workspace
+if [ ! -f "$API_BINARY" ]; then
+  echo "[start-prod] ERRO: Binario publicado nao encontrado em $API_BINARY"
+  echo "[start-prod] Execute build-prod.sh para compilar a API antes de iniciar."
+  exit 1
 fi
 
+echo "[start-prod] Iniciando API via binario publicado..."
+"$API_BINARY" &
 API_PID=$!
 echo "[start-prod] API PID: $API_PID. Aguardando ficar saudavel na porta 8000..."
 
@@ -55,7 +53,9 @@ while [ $ELAPSED -lt $MAX_WAIT ]; do
 done
 
 if [ $ELAPSED -ge $MAX_WAIT ]; then
-  echo "[start-prod] AVISO: API nao respondeu em ${MAX_WAIT}s — iniciando Nuxt assim mesmo."
+  echo "[start-prod] ERRO: API nao ficou saudavel em ${MAX_WAIT}s. Abortando."
+  kill $API_PID 2>/dev/null
+  exit 1
 fi
 
 echo "[start-prod] Iniciando servidor Nuxt na porta 5000..."

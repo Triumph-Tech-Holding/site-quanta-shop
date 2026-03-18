@@ -35,9 +35,9 @@ export default defineEventHandler(async (event) => {
       method,
       headers,
       body,
-      retry: useLocalApi ? 0 : 2,
+      retry: useLocalApi ? 3 : 2,
       retryDelay: 500,
-      timeout: 15000,
+      timeout: 20000,
     });
 
     const contentType = response.headers.get('content-type');
@@ -47,30 +47,17 @@ export default defineEventHandler(async (event) => {
 
     return response._data;
   } catch (error: unknown) {
-    if (useLocalApi) {
-      console.warn(`[api-proxy] Local API failed for ${path}, falling back to remote API`);
-      const remoteUrl = `${REMOTE_API}/${path}${queryString || ''}`;
-      try {
-        const fallback = await $fetch.raw(remoteUrl, {
-          method,
-          headers,
-          body,
-          retry: 2,
-          retryDelay: 500,
-          timeout: 15000,
-        });
-        const contentType = fallback.headers.get('content-type');
-        if (contentType) setHeader(event, 'Content-Type', contentType);
-        return fallback._data;
-      } catch (fallbackError: unknown) {
-        const fe = fallbackError as { response?: { status?: number; _data?: unknown } };
-        throw createError({ statusCode: fe?.response?.status || 500, data: fe?.response?._data || { message: 'Proxy error' } });
-      }
+    if (!useLocalApi) {
+      const fetchError = error as { response?: { status?: number; _data?: unknown } };
+      const statusCode = fetchError?.response?.status || 500;
+      const data = fetchError?.response?._data || { message: 'Proxy error' };
+      throw createError({ statusCode, data });
     }
 
     const fetchError = error as { response?: { status?: number; _data?: unknown } };
-    const statusCode = fetchError?.response?.status || 500;
-    const data = fetchError?.response?._data || { message: 'Proxy error' };
+    const statusCode = fetchError?.response?.status || 502;
+    const data = fetchError?.response?._data || { message: `API local indisponível em ${path}` };
+    console.error(`[api-proxy] Local API failed after retries for ${path}: ${statusCode}`);
     throw createError({ statusCode, data });
   }
 });
