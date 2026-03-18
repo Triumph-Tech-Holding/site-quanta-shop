@@ -120,4 +120,4 @@ curl https://seudominio.replit.app/
 ### Observações
 - O proxy Nitro (`server/routes/api-proxy/[...path].ts`) rota todas as chamadas para `localhost:8000` em produção
 - O `start-prod.sh` aguarda até 120 segundos para a API iniciar antes de subir o Nuxt
-- Fallback: se o binário publicado não existir em `api/publish/`, o script usa `dotnet run` diretamente
+- Sem fallback: se o binário publicado não existir em `api/publish/`, o script aborta com erro claro (exit 1)
