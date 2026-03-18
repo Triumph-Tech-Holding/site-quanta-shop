@@ -111,6 +111,7 @@ export default defineNuxtConfig({
     "@/assets/scss/agencia.scss",
   ],
   runtimeConfig: {
+    jwtSecret: process.env.NUXT_JWT_SECRET || 'dev-secret-key-change-in-production',
     useLocalApi: true,
     public: {
       apiBaseUrl: process.env.NUXT_API_BASE_URL || '/api-proxy'

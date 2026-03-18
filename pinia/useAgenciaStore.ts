@@ -67,6 +67,8 @@ export const useAgenciaStore = defineStore('agencia', () => {
     return user.value?.token || null;
   }
 
+  const currentToken = computed(() => user.value?.token || null);
+
   function isTokenExpired(token: string): boolean {
     try {
       const b64url = token.split('.')[1];
@@ -97,6 +99,7 @@ export const useAgenciaStore = defineStore('agencia', () => {
     isComerciante,
     isAcessoRemoto,
     dadosUser,
+    currentToken,
     loadFromStorage,
     setUser,
     setUserAdmin,

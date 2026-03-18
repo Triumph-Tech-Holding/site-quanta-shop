@@ -1,4 +1,4 @@
-import axios, { type AxiosInstance, type AxiosRequestConfig } from 'axios';
+import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosError } from 'axios';
 
 let _apiClient: AxiosInstance | null = null;
 
@@ -11,8 +11,51 @@ function getApiClient(): AxiosInstance {
         }
         _apiClient = axios.create({
             baseURL,
-            headers: {}
+            headers: {},
+            timeout: 10000,
         });
+
+        // Interceptador de requisição: injetar token
+        _apiClient.interceptors.request.use(
+            (config) => {
+                const agenciaStore = useAgenciaStore();
+                const token = agenciaStore.getToken();
+                
+                if (token) {
+                    config.headers.Authorization = `Bearer ${token}`;
+                }
+                return config;
+            },
+            (error) => Promise.reject(error)
+        );
+
+        // Interceptador de resposta: tratar erros
+        _apiClient.interceptors.response.use(
+            (response) => response,
+            (error: AxiosError) => {
+                const statusCode = error.response?.status;
+                const router = useRouter();
+                const agenciaStore = useAgenciaStore();
+
+                if (statusCode === 401) {
+                    agenciaStore.logout();
+                    
+                    const route = useRoute();
+                    if (route.path.startsWith('/agencia')) {
+                        router.push('/agencia/login');
+                    } else {
+                        router.push('/login');
+                    }
+                } else if (statusCode === 403) {
+                    console.error('[API] Acesso negado:', error.config?.url);
+                    router.push('/acesso-negado');
+                } else if (statusCode && statusCode >= 500) {
+                    console.error('[API] Erro do servidor:', error.response?.statusText);
+                }
+
+                return Promise.reject(error);
+            }
+        );
     }
     return _apiClient;
 }

@@ -1,0 +1,269 @@
+CONTEXTO
+Você está trabalhando na migração da Quanta Shop para o Replit. A estrutura Nuxt 3 unificada foi consolidada com sucesso, mas identificamos 3 pontos críticos que precisam ser corrigidos na FASE 4:
+1.	Cliente HTTP Não Centralizado — 56 componentes usam $fetch direto sem interceptadores
+2.	Secrets Incompletos — Apenas NUXT_API_BASE_URL configurado
+3.	Validação JWT Sem Assinatura — Validação apenas no cliente, sem verificação no servidor
+OBJETIVO
+Implementar as 5 correções abaixo para garantir segurança, manutenibilidade e escalabilidade da aplicação.
+________________________________________
+✅ TAREFA 1: EVOLUIR composables/useApi.ts
+Arquivo: composables/useApi.ts
+O que fazer:
+•	Manter Axios (não quebra 56 componentes)
+•	Adicionar interceptador de requisição para injetar token automaticamente
+•	Adicionar interceptador de resposta para tratamento de erro 401/403/500
+•	Implementar fallback inteligente: agência → usuário principal
+•	Redirecionar para login correto: /login ou /agencia/login
+Código a implementar:
+typescript import axios, { AxiosInstance, AxiosError } from 'axios'; import { useAuthStore } from '~/stores/auth'; import { useRuntimeConfig, navigateTo, useRoute } from '#app';
+let apiInstance: AxiosInstance | null = null;
+export const useApi = (): AxiosInstance => { const config = useRuntimeConfig(); const authStore = useAuthStore(); const route = useRoute();
+if (!apiInstance) { apiInstance = axios.create({ baseURL: config.public.apiBaseUrl || '/api-proxy',
+timeout: 10000,
+headers: {
+'Content-Type': 'application/json', }, });
+// ✅ NOVO: Interceptador de requisição (injetar token)
+apiInstance.interceptors.request.use((config) => {
+  const token = authStore.currentToken;
+  
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+}, (error) => {
+  return Promise.reject(error);
+});
+
+// ✅ NOVO: Interceptador de resposta (tratamento de erro)
+apiInstance.interceptors.response.use(
+  (response) => response,
+  (error: AxiosError) => {
+    const statusCode = error.response?.status;
+
+    if (statusCode === 401) {
+      authStore.logout();
+      
+      if (route.path.startsWith('/agencia')) {
+        navigateTo('/agencia/login');
+      } else {
+        navigateTo('/login');
+      }
+    } else if (statusCode === 403) {
+      console.error('[API] Acesso negado:', error.config?.url);
+      navigateTo('/acesso-negado');
+    } else if (statusCode && statusCode >= 500) {
+      console.error('[API] Erro do servidor:', error.response?.statusText);
+    }
+    return Promise.reject(error);
+  }
+);
+}
+return apiInstance; };
+________________________________________
+✅ TAREFA 2: CRIAR stores/auth.ts
+Arquivo: stores/auth.ts
+O que fazer:
+•	Criar store unificada com Pinia
+•	Gerenciar autenticação do site principal E da agência
+•	Implementar getters para currentUser e currentToken (com fallback)
+•	Implementar actions: setUser, setAgenciaUser, logout, hydrate
+•	Integrar com localStorage
+Código a implementar:
+import { defineStore } from 'pinia';
+
+interface User {
+  id: string;<br/>
+  name: string;<br/>
+  email: string;<br/>
+  admin?: boolean;
+}
+
+export const useAuthStore = defineStore('auth', {
+  state: () => ({<br/>
+    user: null as User | null,<br/>
+    token: null as string | null,<br/>
+    agenciaUser: null as User | null,<br/>
+    agenciaToken: null as string | null,
+  }),
+
+  getters: {<br/>
+    isAuthenticated: (state) => !!state.token,<br/>
+    isAgenciaAuthenticated: (state) => !!state.agenciaToken,<br/>
+    currentUser: (state) => state.agenciaUser || state.user,<br/>
+    currentToken: (state) => state.agenciaToken || state.token,
+  },
+
+  actions: {<br/>
+    setUser(user: User, token: string) {
+      this.user = user;
+      this.token = token;
+      localStorage.setItem('auth_token', token);
+      localStorage.setItem('user', JSON.stringify(user));
+    },
+
+    setAgenciaUser(user: User, token: string) {
+      this.agenciaUser = user;
+      this.agenciaToken = token;
+      localStorage.setItem('agencia_token', token);
+      localStorage.setItem('agencia_user', JSON.stringify(user));
+    },
+
+    logout() {
+      this.user = null;
+      this.token = null;
+      this.agenciaUser = null;
+      this.agenciaToken = null;
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('agencia_token');
+      localStorage.removeItem('agencia_user');
+    },
+
+    hydrate() {
+      const token = localStorage.getItem('auth_token');
+      const user = localStorage.getItem('user');
+      const agenciaToken = localStorage.getItem('agencia_token');
+      const agenciaUser = localStorage.getItem('agencia_user');
+
+      if (token && user) {
+        try {
+          this.token = token;
+          this.user = JSON.parse(user);
+        } catch (e) {
+          console.error('Erro ao parsear user:', e);
+          this.logout();
+        }
+      }
+
+      if (agenciaToken && agenciaUser) {
+        try {
+          this.agenciaToken = agenciaToken;
+          this.agenciaUser = JSON.parse(agenciaUser);
+        } catch (e) {
+          console.error('Erro ao parsear agenciaUser:', e);
+          this.logout();
+        }
+      }
+    },
+  },
+});
+
+---
+
+## ✅ TAREFA 3: ATUALIZAR middleware/agencia-auth.ts
+
+**Arquivo:** `middleware/agencia-auth.ts`
+
+**O que fazer:**
+- Usar a nova store unificada
+- Verificar se há token (agência ou usuário principal)
+- Proteger rotas `/agencia/painel/*`
+- Verificar permissão de admin para `/agencia/painel/admin/*`
+- Redirecionar inteligentemente
+
+**Código a implementar:**
+```typescript
+import { defineNuxtRouteMiddleware, navigateTo } from '#app';
+import { useAuthStore } from '~/stores/auth';
+
+export default defineNuxtRouteMiddleware((to, from) => {
+  const authStore = useAuthStore();
+
+  if (to.path.startsWith('/agencia/painel')) {
+    if (!authStore.currentToken) {
+      return navigateTo('/agencia/login');
+    }
+
+    if (to.path.startsWith('/agencia/painel/admin')) {
+      const isAdmin = authStore.currentUser?.admin === true;
+      if (!isAdmin) {
+        return navigateTo('/agencia/painel');
+      }
+    }
+  }
+});
+TAREFA 4: COMPLETAR .env.development E .env.production
+Arquivo: .env.development
+NUXT_API_BASE_URL=http://localhost:5000
+NUXT_JWT_SECRET=dev-secret-key-change-in-production
+NUXT_DATABASE_URL=postgresql://user:password@localhost:5432/quanta_shop_dev<br/>
+NUXT_REDIS_URL=redis://localhost:6379
+NUXT_MAIL_FROM=noreply@quantashop.local
+NUXT_MAIL_HOST=localhost
+NUXT_MAIL_PORT=1025
+NUXT_WHATSAPP_API_KEY=your-whatsapp-api-key
+NUXT_STRIPE_PUBLIC_KEY=pk_test_your_key
+TAREFA 5: IMPLEMENTAR VALIDAÇÃO JWT NO SERVIDOR
+Arquivo: server/middleware/verify-jwt.ts
+O que fazer:
+•	Verificar assinatura JWT no servidor
+•	Armazenar usuário no contexto do evento
+•	Tratar erro 401 (token inválido ou expirado)
+Código a implementar:
+import jwt from 'jsonwebtoken';
+import { defineEventHandler, getCookie, createError, useRuntimeConfig } from 'h3';
+
+declare module 'h3' {
+  interface H3EventContext {
+    user?: { id: string; email: string; admin?: boolean; };
+  }
+}
+
+export default defineEventHandler(async (event) => {
+  const token = getCookie(event, 'auth_token') || getCookie(event, 'agencia_token');
+  
+  if (!token) {
+    return;
+  }
+
+  try {
+    const config = useRuntimeConfig();
+    const jwtSecret = config.jwtSecret || process.env.NUXT_JWT_SECRET;
+
+    if (!jwtSecret) {
+      throw createError({
+        statusCode: 500,<br/>
+        statusMessage: 'Configuração de segurança inválida.'
+      });
+    }
+
+    const decoded = jwt.verify(token, jwtSecret) as { id: string; email: string; admin?: boolean; };
+    event.context.user = decoded;
+
+  } catch (error) {
+    console.warn('Token JWT inválido ou expirado:', error);
+    throw createError({
+      statusCode: 401,<br/>
+      statusMessage: 'Não autorizado: Token inválido ou expirado.'
+    });
+  }
+});
+Arquivo: server/api/auth/logout.ts
+O que fazer:
+•	Limpar cookies de autenticação no servidor
+•	Retornar resposta de sucesso
+Código a implementar:
+import { defineEventHandler, deleteCookie } from 'h3';
+
+export default defineEventHandler(async (event) => {
+  deleteCookie(event, 'auth_token', { path: '/' });<br/>
+  deleteCookie(event, 'agencia_token', { path: '/' });
+
+  return {
+    success: true,<br/>
+    message: 'Logout realizado com sucesso.'
+  };
+});
+CHECKLIST DE IMPLEMENTAÇÃO
+•	Evoluir composables/useApi.ts com interceptadores
+•	Criar store unificada stores/auth.ts
+•	Atualizar middleware middleware/agencia-auth.ts
+•	Completar .env.development e .env.production
+•	Implementar server/middleware/verify-jwt.ts
+•	Implementar server/api/auth/logout.ts
+•	Testar login da agência (token deve ser injetado automaticamente)
+•	Testar erro 401 (deve redirecionar para /agencia/login)
+•	Testar erro 403 (deve redirecionar para /acesso-negado)
+•	Verificar que 56 componentes continuam funcionando
+•	Validar injeção de token em todas as requisições
+
