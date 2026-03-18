@@ -77,8 +77,7 @@ onMounted(() => {
   agenciaStore.loadFromStorage();
   if (agenciaStore.isLoggedIn && agenciaStore.checkTokenExpiry()) {
     const u = agenciaStore.dadosUser;
-    if (u?.admin) navigateTo('/agencia/painel/admin');
-    else navigateTo('/agencia/painel');
+    window.location.href = u?.admin ? '/agencia/painel/admin' : '/agencia/painel';
   }
 });
 
@@ -96,7 +95,7 @@ async function handleLogin() {
       localStorage.setItem('agencia_showComunicado', 'true');
       localStorage.removeItem('agencia_menu');
 
-      await navigateTo(data.admin ? '/agencia/painel/admin' : '/agencia/painel');
+      window.location.href = data.admin ? '/agencia/painel/admin' : '/agencia/painel';
     } else {
       errorMsg.value = 'Resposta inesperada do servidor. Tente novamente.';
     }

@@ -91,9 +91,9 @@ const redirectToAgencia = () => {
   }
 
   if (agenciaRaw) {
-    navigateTo('/agencia/painel');
+    window.location.href = '/agencia/painel';
   } else {
-    navigateTo('/agencia/login');
+    window.location.href = '/agencia/login';
   }
 };
 
