@@ -102,7 +102,7 @@ Configurado como servidor Node.js (autoscale) com Nuxt + .NET API rodando juntos
 
 ### Scripts de produção
 - **`build-prod.sh`** — Compila a API .NET (`dotnet publish -c Release -o api/publish/`) e depois o Nuxt (`npm run build`)
-- **`start-prod.sh`** — Inicia a API em background (binário publicado ou fallback via `dotnet run`), aguarda a API ficar saudável na porta 8000 (health check em `/api/v2/carousels`), então inicia o servidor Nuxt em foreground (`node .output/server/index.mjs`)
+- **`start-prod.sh`** — Inicia a API em background (requer binário publicado em `api/publish/`, falha com exit 1 se ausente), aguarda a API ficar saudável na porta 8000 (health check em `/api/v2/carousels`), então inicia o servidor Nuxt em foreground (`node .output/server/index.mjs`)
 
 ### Variáveis de ambiente necessárias
 - `SQL_CONNECTION_STRING` (secret Replit) — pode ser só a senha, o script monta a connection string completa
