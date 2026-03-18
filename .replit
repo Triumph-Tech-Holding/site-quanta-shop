@@ -66,9 +66,9 @@ externalPort = 3000
 
 [deployment]
 deploymentTarget = "autoscale"
-build = ["npm", "run", "build"]
+build = ["bash", "build-prod.sh"]
 publicDir = ".output/public"
-run = ["node", ".output/server/index.mjs"]
+run = ["bash", "start-prod.sh"]
 
 [userenv]
 
