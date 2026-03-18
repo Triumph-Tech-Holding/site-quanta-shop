@@ -23,9 +23,11 @@ export const useUserStore = defineStore('user', () => {
   }
 
   async function loginUser(loginData: any) { 
-    isLoggedIn.value = false;
-    
+    if (!loginData?.login || !loginData?.senha) return;
+
     if (isUserLoaded.value) return;
+
+    isLoggedIn.value = false;
 
     try {
       const response = await loginService(loginData);      
@@ -38,13 +40,12 @@ export const useUserStore = defineStore('user', () => {
         isUserLoaded.value = true;
       }
     } catch (error : any) {
-      // Verifica se o erro possui o array 'erros'
       if (error.response && error.response.data && error.response.data.erros) {
         error.response.data.erros.forEach((err: any) => {
-          toast.error(err.mensagem || 'Erro ao recuperar senha');
+          toast.error(err.mensagem || 'Erro ao realizar login');
         });
       } else {
-        toast.error('Erro desconhecido');
+        toast.error('Erro ao realizar login. Tente novamente.');
       }
     }
   }
