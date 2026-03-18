@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-menu" :class="{ 'sidebar-open': open }">
+  <div class="bg-menu">
     <div class="sidebar-logo-block">
       <NuxtLink :to="dashboardRoute">
         <img src="/agencia/imgs/quanta-shop.png" alt="Quanta Shop" />
