@@ -1,38 +1,50 @@
 <template>
-  <div>
-    <div class="ag-page-header">
-      <h1>Tutoriais</h1>
-      <p>Aprenda a usar a plataforma com nossos vídeos</p>
-    </div>
+  <div class="p-0">
+    <div class="general-content">
+      <div class="page-content">
+        <div class="header-page">
+          <h2 class="title-page">Tutoriais</h2>
+        </div>
 
-    <div v-if="loading" class="ag-loading"><div class="spinner-border" /></div>
+        <div class="px-3 pb-3">
+          <div v-if="loading" class="ag-loading"><div class="spinner-border" /></div>
 
-    <template v-else-if="tutoriais.length === 0">
-      <div class="ag-empty-state">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 3H3c-1.11 0-2 .89-2 2v12c0 1.1.89 2 2 2h5v2h8v-2h5c1.1 0 1.99-.9 1.99-2L23 5c0-1.11-.9-2-2-2zm0 14H3V5h18v12zm-5-6l-7 4V7l7 4z"/></svg>
-        <h5>Nenhum tutorial disponível</h5>
-        <p>Em breve teremos vídeos para ajudar você a aproveitar ao máximo a plataforma.</p>
-      </div>
-    </template>
+          <template v-else>
+            <div v-if="tutoriais.length === 0" class="ag-empty-state">
+              <h5>Nenhum tutorial disponível</h5>
+            </div>
 
-    <template v-else>
-      <div class="row g-3">
-        <div v-for="(t, i) in tutoriais" :key="i" class="col-12 col-sm-6 col-lg-4">
-          <a :href="t.url" target="_blank" rel="noopener" class="ag-tutorial-card d-block text-decoration-none">
-            <div class="ag-tutorial-thumb">
-              <img v-if="t.thumb" :src="t.thumb" :alt="t.nome" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0" />
-              <div class="play-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <div v-for="(item, i) in tutoriais" :key="i" class="ag-card" style="margin-bottom:1rem;">
+              <div
+                style="cursor:pointer;display:flex;justify-content:space-between;align-items:center;"
+                @click="item._open = !item._open"
+              >
+                <span style="font-weight:600;color:#225f6b;">{{ item.nome }}</span>
+                <svg :style="item._open ? 'transform:rotate(180deg);' : ''" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width:20px;height:20px;transition:.2s;color:#2f7785;"><path d="M7 10l5 5 5-5z"/></svg>
+              </div>
+
+              <div v-if="item._open" style="margin-top:1rem;">
+                <div style="display:flex;flex-wrap:wrap;gap:1rem;">
+                  <div style="flex:1;min-width:200px;">
+                    <div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:8px;">
+                      <iframe
+                        :src="embedUrl(String(item.url))"
+                        style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;"
+                        allowfullscreen
+                      ></iframe>
+                    </div>
+                  </div>
+                  <div style="flex:1;min-width:180px;">
+                    <strong style="display:block;margin-bottom:.5rem;color:#225f6b;">Descrição</strong>
+                    <p style="font-size:.875rem;color:#555;">{{ item.descricao }}</p>
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="ag-tutorial-body">
-              <div class="ag-tutorial-title">{{ t.nome }}</div>
-              <div v-if="t.descricao" class="ag-tutorial-desc">{{ t.descricao }}</div>
-            </div>
-          </a>
+          </template>
         </div>
       </div>
-    </template>
+    </div>
   </div>
 </template>
 
@@ -41,46 +53,27 @@ definePageMeta({ layout: 'agencia-painel', middleware: 'agencia-auth' });
 
 const agenciaStore = useAgenciaStore();
 const api = useApi();
-
 const loading = ref(true);
+const tutoriais = ref<Array<Record<string, unknown>>>([]);
 
-interface Tutorial {
-  idTutorial?: number;
-  nome: string;
-  descricao?: string;
-  url: string;
-  thumb?: string;
-  ativo?: boolean;
+function authHeader() {
+  return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } };
 }
 
-const tutoriais = ref<Tutorial[]>([]);
-
-function getYouTubeThumb(url: string): string | null {
-  const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
-  if (match) return `https://img.youtube.com/vi/${match[1]}/mqdefault.jpg`;
-  return null;
+function embedUrl(url: string): string {
+  if (!url) return '';
+  const yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&?]+)/);
+  if (yt) return `https://www.youtube.com/embed/${yt[1]}`;
+  return url;
 }
 
 onMounted(async () => {
   agenciaStore.loadFromStorage();
   try {
-    const token = agenciaStore.getToken();
-    const { data } = await api.get('/Tutorial/ObterTutoriais', {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    const list = Array.isArray(data) ? data : [];
-    tutoriais.value = list
-      .filter((t: Record<string, unknown>) => t.Ativo !== false && t.ativo !== false)
-      .map((t: Record<string, unknown>) => ({
-        idTutorial: (t.IdTutorial ?? t.idTutorial) as number,
-        nome: (t.Nome ?? t.nome ?? 'Tutorial') as string,
-        descricao: (t.Descricao ?? t.descricao ?? '') as string,
-        url: (t.URL ?? t.url ?? '#') as string,
-        thumb: getYouTubeThumb((t.URL ?? t.url ?? '') as string) || undefined,
-        ativo: (t.Ativo ?? t.ativo ?? true) as boolean,
-      }));
-  } catch (e) {
-    console.error('Erro ao carregar tutoriais:', e);
+    const { data } = await api.get('/Tutorial/obterTutoriais', authHeader());
+    const list = Array.isArray(data) ? data : (data?.items ?? []);
+    tutoriais.value = list.filter((t: Record<string, unknown>) => t.ativo !== false).map((t: Record<string, unknown>) => ({ ...t, _open: false }));
+  } catch {
     tutoriais.value = [];
   } finally {
     loading.value = false;

@@ -1,78 +1,78 @@
 <template>
-  <div>
-    <div class="ag-page-header">
-      <h1>Minhas Compras</h1>
-      <p>CCR | Conta de Consumo Remunerada</p>
-    </div>
-
-    <div class="ag-card mb-3">
-      <form @submit.prevent="buscar" class="row g-3 align-items-end">
-        <div class="col-12 col-md-4 ag-form-group mb-0">
-          <label>Descrição</label>
-          <input v-model="filtro.descricao" type="text" class="form-control" placeholder="Nome da loja..." />
-        </div>
-        <div class="col-12 col-md-3 ag-form-group mb-0">
-          <label>Data início</label>
-          <input v-model="filtro.dataInicio" type="date" class="form-control" />
-        </div>
-        <div class="col-12 col-md-3 ag-form-group mb-0">
-          <label>Data fim</label>
-          <input v-model="filtro.dataFim" type="date" class="form-control" />
-        </div>
-        <div class="col-12 col-md-2">
-          <button type="submit" class="btn btn-ag-primary w-100">Filtrar</button>
-        </div>
-      </form>
-    </div>
-
-    <div class="ag-card">
-      <div v-if="loading" class="ag-loading"><div class="spinner-border" /></div>
-
-      <div v-else-if="compras.length === 0" class="ag-empty-state">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>
-        <h5>Nenhuma compra encontrada</h5>
-        <p>Ainda não há compras registradas no período selecionado.</p>
-      </div>
-
-      <template v-else>
-        <div class="table-responsive">
-          <table class="table ag-table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Loja / Descrição</th>
-                <th>Data</th>
-                <th>Valor</th>
-                <th>Cashback</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(c, i) in compras" :key="i">
-                <td>{{ c.idPedido || c.id || i + 1 }}</td>
-                <td>{{ c.nomeLoja || c.descricao || '—' }}</td>
-                <td>{{ formatDate(c.dataPedido || c.data) }}</td>
-                <td>{{ formatCurrency(c.valorCompra || c.valor || 0) }}</td>
-                <td class="fw-bold text-ag-secondary">{{ formatCurrency(c.cashback || c.valorCashback || 0) }}</td>
-                <td>
-                  <span class="badge-ag" :class="statusClass(c.status)">{{ c.status || 'Pendente' }}</span>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+  <div class="p-0">
+    <div class="general-content">
+      <div class="page-content">
+        <div class="header-page">
+          <h2 class="title-page">Minhas Compras</h2>
         </div>
 
-        <div class="d-flex align-items-center justify-content-between mt-3 flex-wrap gap-2">
-          <span class="text-muted" style="font-size:.85rem">
-            Total: {{ total }} compras
-          </span>
-          <div class="d-flex gap-2">
-            <button class="btn btn-ag-outline btn-sm" :disabled="page <= 1" @click="changePage(page - 1)">← Anterior</button>
-            <span class="align-self-center" style="font-size:.85rem">{{ page }}/{{ totalPages }}</span>
-            <button class="btn btn-ag-outline btn-sm" :disabled="page >= totalPages" @click="changePage(page + 1)">Próxima →</button>
+        <div class="px-3 pb-3">
+          <div class="box-filter">
+            <h2>Filtros</h2>
+            <form @submit.prevent="buscarPedidos">
+              <div style="display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:1rem;">
+                <div style="flex:1;min-width:180px;">
+                  <label>Descrição</label>
+                  <input type="text" v-model="filtro.descricao" class="form-control" placeholder="Descrição" />
+                </div>
+                <div style="flex:1;min-width:150px;">
+                  <label>Data inicial</label>
+                  <input type="date" v-model="filtro.dataInicio" class="form-control" />
+                </div>
+                <div style="flex:1;min-width:150px;">
+                  <label>Data final</label>
+                  <input type="date" v-model="filtro.dataFim" class="form-control" />
+                </div>
+                <div style="display:flex;align-items:flex-end;">
+                  <button type="submit" class="btn-filtrar">Filtrar</button>
+                </div>
+              </div>
+            </form>
           </div>
+
+          <div v-if="loading" class="ag-loading"><div class="spinner-border" /></div>
+
+          <template v-else>
+            <div style="background:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.06);overflow:hidden;">
+              <div style="padding:1rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee;">
+                <span style="font-weight:700;color:#225f6b;">Minhas Compras</span>
+                <span style="font-size:.8rem;color:#6c757d;">{{ items.length }} registro(s)</span>
+              </div>
+
+              <div v-if="items.length === 0" class="ag-empty-state">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 7h-1V6c0-2.76-2.24-5-5-5S8 3.24 8 6v1H7c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zm-7 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM10 7V6c0-1.1.9-2 2-2s2 .9 2 2v1h-4z"/></svg>
+                <h5>Nenhuma compra encontrada</h5>
+                <p>Tente ajustar os filtros de busca</p>
+              </div>
+
+              <div v-else style="overflow-x:auto;">
+                <table class="table-custom" style="width:100%;">
+                  <thead>
+                    <tr>
+                      <th>Descrição</th>
+                      <th style="text-align:center;">Valor da compra</th>
+                      <th style="text-align:center;">Cashback a receber</th>
+                      <th style="text-align:center;">Data Compra</th>
+                      <th style="text-align:center;">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(item, i) in items" :key="i">
+                      <td>{{ item.produto || '—' }}</td>
+                      <td style="text-align:center;">{{ formatCurrency(Number(item.valor)) }}</td>
+                      <td style="text-align:center;color:#98c73a;font-weight:600;">{{ item.cashbackReceber }}</td>
+                      <td style="text-align:center;">{{ formatDate(String(item.data)) }}</td>
+                      <td style="text-align:center;">
+                        <span class="status-badge" :class="statusClass(String(item.status))">{{ item.status }}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </template>
         </div>
-      </template>
+      </div>
     </div>
   </div>
 </template>
@@ -82,16 +82,19 @@ definePageMeta({ layout: 'agencia-painel', middleware: 'agencia-auth' });
 
 const agenciaStore = useAgenciaStore();
 const api = useApi();
+const loading = ref(false);
+const items = ref<Record<string, unknown>[]>([]);
 
-import type { Compra } from "~/types/agencia";
-const compras = ref<Compra[]>([]);
-const loading = ref(true);
-const total = ref(0);
-const page = ref(1);
-const pageSize = 20;
-const totalPages = computed(() => Math.max(1, Math.ceil(total.value / pageSize)));
+const now = new Date();
+const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 
-const filtro = reactive({ descricao: '', dataInicio: '', dataFim: '' });
+const filtro = reactive({
+  descricao: '',
+  dataInicio: firstDay.toISOString().split('T')[0],
+  dataFim: lastDay.toISOString().split('T')[0],
+  idStatus: 0,
+});
 
 function authHeader() {
   return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } };
@@ -107,49 +110,57 @@ function formatDate(d: string): string {
 }
 
 function statusClass(s: string): string {
-  const m: Record<string, string> = {
-    'Aprovado': 'badge-ag-success', 'Pago': 'badge-ag-success',
-    'Pendente': 'badge-ag-warning', 'Em análise': 'badge-ag-info',
-    'Cancelado': 'badge-ag-danger', 'Recusado': 'badge-ag-danger',
-  };
-  return m[s] || 'badge-ag-secondary';
+  const lower = (s || '').toLowerCase();
+  if (lower.includes('aprov') || lower.includes('pago')) return 'aprovado';
+  if (lower.includes('recus') || lower.includes('cancel')) return 'recusado';
+  return 'pendente';
 }
 
-async function buscar() {
+async function buscarPedidos() {
   loading.value = true;
-  page.value = 1;
-  await loadCompras();
-}
-
-async function changePage(p: number) {
-  page.value = p;
-  await loadCompras();
-}
-
-async function loadCompras() {
+  items.value = [];
   try {
-    const params = new URLSearchParams({
-      page: String(page.value),
-      pageSize: String(pageSize),
-      ...(filtro.descricao && { descricao: filtro.descricao }),
-      ...(filtro.dataInicio && { dataInicio: filtro.dataInicio }),
-      ...(filtro.dataFim && { dataFim: filtro.dataFim }),
+    const body = {
+      descricao: filtro.descricao || null,
+      dataInicio: filtro.dataInicio ? new Date(filtro.dataInicio).toISOString() : null,
+      dataFim: filtro.dataFim ? new Date(filtro.dataFim + 'T23:59:59').toISOString() : null,
+      idStatus: filtro.idStatus || 0,
+    };
+    const { data } = await api.post('/Pedidos/listaPedidosAfiliados', body, authHeader());
+    const list: Record<string, unknown>[] = Array.isArray(data) ? data : [];
+    items.value = list.map((item) => {
+      let descricao = '';
+      const pd = (item.pedidoDetalhe as Record<string, unknown>[] | undefined) ?? [];
+      const tx = item.transacao as Record<string, unknown> | undefined;
+      if (item.idUsuarioComerciante && tx) {
+        descricao = String(tx.descricao ?? '');
+      } else if (pd[0]) {
+        descricao = String((pd[0] as Record<string, unknown>).descricao ?? '');
+      }
+
+      let status = 'Pendente';
+      if (item.idUsuarioComerciante && tx) {
+        const sv = tx.statusViewModel as Record<string, unknown> | undefined;
+        status = sv?.idStatus === 7 ? 'Pendente' : String(sv?.nome ?? 'Pendente');
+      } else if (pd.length > 0) {
+        const lastPd = pd[pd.length - 1] as Record<string, unknown>;
+        status = String((lastPd.status as Record<string, unknown>)?.nome ?? 'Pendente');
+      }
+
+      const cb = item.cashbackReceber as number;
+      const cashbackReceber = cb ? formatCurrency(cb) : '----';
+
+      return { produto: descricao, data: item.dataPedido, valor: item.valorPedido, status, cashbackReceber };
     });
-    const { data } = await api.get(`/pedido/listar?${params}`, authHeader());
-    if (Array.isArray(data)) {
-      compras.value = data;
-      total.value = data.length;
-    } else {
-      compras.value = data?.items || data?.pedidos || [];
-      total.value = data?.total || compras.value.length;
-    }
-  } catch(e: unknown) { console.error('Erro ao carregar compras:', e); compras.value = []; } finally {
+  } catch {
+    items.value = [];
+  } finally {
     loading.value = false;
   }
 }
 
-onMounted(async () => {
+onMounted(() => {
   agenciaStore.loadFromStorage();
-  await loadCompras();
+  buscarPedidos();
 });
 </script>

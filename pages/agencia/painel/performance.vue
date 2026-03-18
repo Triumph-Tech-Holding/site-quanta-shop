@@ -1,83 +1,113 @@
 <template>
-  <div>
-    <div class="ag-page-header"><h1>Performance</h1><p>Acompanhe seu desempenho na plataforma</p></div>
-    <div v-if="loading" class="ag-loading"><div class="spinner-border" /></div>
-    <template v-else>
-      <div class="row g-3 mb-4">
-        <div class="col-6 col-md-3" v-for="(stat, i) in statsCards" :key="i">
-          <div class="ag-stat-card flex-column text-center p-3">
-            <div class="stat-value" style="font-size:1.8rem">{{ stat.valor }}</div>
-            <div class="stat-label mt-1">{{ stat.label }}</div>
+  <div class="p-0">
+    <div class="general-content">
+      <div class="page-content">
+        <div class="header-page">
+          <h2 class="title-page">Performance</h2>
+        </div>
+
+        <div class="px-3 pb-3">
+          <div class="box-filter">
+            <h2>Filtro</h2>
+            <form @submit.prevent="listarDados">
+              <div style="display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:1rem;align-items:flex-end;">
+                <div style="display:flex;gap:1rem;align-items:center;flex-wrap:wrap;flex:1;">
+                  <label style="display:flex;align-items:center;gap:.4rem;font-size:.875rem;cursor:pointer;">
+                    <input type="radio" v-model="filtro.ordenacao" value="DESC" />
+                    10 primeiros por consumo
+                  </label>
+                  <label style="display:flex;align-items:center;gap:.4rem;font-size:.875rem;cursor:pointer;">
+                    <input type="radio" v-model="filtro.ordenacao" value="ASC" />
+                    10 últimos por consumo
+                  </label>
+                  <input v-model="filtro.login" type="text" class="form-control" placeholder="Login" style="max-width:200px;" />
+                </div>
+                <button type="submit" class="btn-filtrar" style="white-space:nowrap;">Filtrar</button>
+              </div>
+            </form>
           </div>
+
+          <div v-if="loading" class="ag-loading"><div class="spinner-border" /></div>
+
+          <template v-else>
+            <div style="background:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.06);overflow:hidden;">
+              <div style="padding:1rem;border-bottom:1px solid #eee;">
+                <span style="font-weight:700;color:#225f6b;">Listagem da equipe</span>
+              </div>
+
+              <div v-if="items.length === 0" class="ag-empty-state">
+                <h5>Nenhum dado encontrado</h5>
+              </div>
+
+              <div v-else style="overflow-x:auto;">
+                <table class="table-custom" style="width:100%;">
+                  <thead>
+                    <tr>
+                      <th>Login</th>
+                      <th>Nome</th>
+                      <th style="text-align:center;">Graduação</th>
+                      <th style="text-align:center;">Consumo</th>
+                      <th style="text-align:center;">Nível</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(item, i) in items" :key="i">
+                      <td>{{ item.login }}</td>
+                      <td>{{ item.nome || item.nomeUsuario || '—' }}</td>
+                      <td style="text-align:center;">{{ item.graduacao || '—' }}</td>
+                      <td style="text-align:center;">{{ formatCurrency(Number(item.consumo || 0)) }}</td>
+                      <td style="text-align:center;">{{ item.nivel || item.nivel || '—' }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </template>
         </div>
       </div>
-
-      <div class="ag-card mb-4" v-if="chartSeries[0].data.length > 0">
-        <div class="ag-card-title">Cashback mensal (R$)</div>
-        <ClientOnly>
-          <apexchart type="area" height="260" :options="chartOptions" :series="chartSeries" />
-        </ClientOnly>
-      </div>
-
-      <div class="ag-card">
-        <div class="ag-card-title">Histórico mensal</div>
-        <div v-if="historico.length === 0" class="ag-empty-state"><h5>Sem dados disponíveis</h5></div>
-        <div v-else class="table-responsive">
-          <table class="table ag-table">
-            <thead><tr><th>Período</th><th>Compras</th><th>Cashback</th></tr></thead>
-            <tbody>
-              <tr v-for="(h, i) in historico" :key="i">
-                <td>{{ h.mes }}</td>
-                <td>{{ h.compras ?? 0 }}</td>
-                <td class="text-ag-secondary fw-bold">{{ formatCurrency(Number(h.cashback ?? 0)) }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </template>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { PerformancePeriodo } from '~/types/agencia';
-import { extractApiErrorMessage } from '~/types/agencia';
-
 definePageMeta({ layout: 'agencia-painel', middleware: 'agencia-auth' });
 
 const agenciaStore = useAgenciaStore();
 const api = useApi();
-const loading = ref(true);
-const historico = ref<PerformancePeriodo[]>([]);
-const statsCards = ref<Array<{ label: string; valor: string | number }>>([]);
+const loading = ref(false);
+const items = ref<Record<string, unknown>[]>([]);
 
-function authHeader() { return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } }; }
-function formatCurrency(v: number) { return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v); }
+const filtro = reactive({ ordenacao: 'DESC', login: '' });
 
-const chartOptions = computed(() => ({
-  chart: { id: 'perf-chart', toolbar: { show: false }, fontFamily: 'inherit' },
-  colors: ['#2f7785'],
-  fill: { type: 'gradient', gradient: { opacityFrom: 0.4, opacityTo: 0.05, stops: [0, 100] } },
-  stroke: { curve: 'smooth', width: 2 },
-  xaxis: { categories: historico.value.map((h) => String(h.mes ?? '')) },
-  yaxis: { labels: { formatter: (v: number) => 'R$ ' + v.toFixed(0) } },
-  tooltip: { y: { formatter: (v: number) => formatCurrency(v) } },
-  dataLabels: { enabled: false },
-  grid: { borderColor: '#ecf2f7' },
-}));
+function authHeader() {
+  return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } };
+}
 
-const chartSeries = computed(() => [{ name: 'Cashback', data: historico.value.map((h) => Number(h.cashback ?? 0)) }]);
+function formatCurrency(v: number): string {
+  return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v || 0);
+}
 
-onMounted(async () => {
-  agenciaStore.loadFromStorage();
+async function listarDados() {
+  loading.value = true;
   try {
-    const { data } = await api.get<{ stats?: Array<{ label: string; valor: string | number }>; historico?: PerformancePeriodo[] }>('/performance/resumo', authHeader());
-    if (data?.stats) statsCards.value = data.stats;
-    if (data?.historico) historico.value = data.historico;
-  } catch (err: unknown) {
-    console.error('Erro ao carregar performance:', extractApiErrorMessage(err));
+    const body: Record<string, unknown> = { ordenacao: filtro.ordenacao };
+    if (filtro.login) body.login = filtro.login;
+    const { data } = await api.post('/Dashboard/obterPerformance', body, authHeader());
+    items.value = Array.isArray(data) ? data : [];
+  } catch {
+    try {
+      const { data } = await api.get('/Dashboard/obterPerformance', authHeader());
+      items.value = Array.isArray(data) ? data : [];
+    } catch {
+      items.value = [];
+    }
   } finally {
     loading.value = false;
   }
+}
+
+onMounted(() => {
+  agenciaStore.loadFromStorage();
+  listarDados();
 });
 </script>
