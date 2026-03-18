@@ -2,7 +2,8 @@
   "name": "nuxt-app",
   "private": true,
   "scripts": {
-    "build": "nuxt build",
+    "build": "bash api/build.sh && nuxt build",
+    "build:nuxt": "nuxt build",
     "dev": "nuxt dev --dotenv .env.development",
     "staging": "nuxt build --dotenv .env.staging",
     "generate": "nuxt generate",

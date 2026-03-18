@@ -13,6 +13,6 @@ cd /home/runner/workspace
 echo "[build-prod] Build da API concluido. Publicado em: api/publish/"
 
 echo "[build-prod] Build do Nuxt..."
-npm run build
+npm run build:nuxt
 
 echo "[build-prod] === Build concluido com sucesso ==="
