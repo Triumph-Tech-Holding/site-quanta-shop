@@ -37,7 +37,8 @@ export default defineEventHandler(async (event) => {
     body = typeof rawBody === 'string' ? rawBody : JSON.stringify(rawBody);
   }
 
-  const useLocalApi = process.env.USE_LOCAL_API === 'true';
+  const config = useRuntimeConfig();
+  const useLocalApi = config.useLocalApi === true;
 
   const buildUrl = (base: string) => {
     const target = `${base}/${path}`;
