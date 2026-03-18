@@ -12,8 +12,9 @@ export default defineNuxtRouteMiddleware((to) => {
     if (!user?.token) return navigateTo('/agencia/login');
 
     const b64url = user.token.split('.')[1];
-    const b64 = (b64url + '==').replace(/-/g, '+').replace(/_/g, '/');
-    const payload = JSON.parse(atob(b64)) as { exp?: number };
+    const b64 = b64url.replace(/-/g, '+').replace(/_/g, '/');
+    const padded = b64 + '='.repeat((4 - (b64.length % 4)) % 4);
+    const payload = JSON.parse(atob(padded)) as { exp?: number };
     if ((payload.exp ?? 0) * 1000 < Date.now()) {
       localStorage.removeItem('agencia_user');
       return navigateTo('/agencia/login');

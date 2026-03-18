@@ -67,7 +67,10 @@ onBeforeMount(() => {
 
 function isTokenExpiredLocal(token: string): boolean {
   try {
-    const payload = JSON.parse(atob((token.split('.')[1] + '==').replace(/-/g, '+').replace(/_/g, '/')));
+    const b64url = token.split('.')[1];
+    const b64 = b64url.replace(/-/g, '+').replace(/_/g, '/');
+    const padded = b64 + '='.repeat((4 - (b64.length % 4)) % 4);
+    const payload = JSON.parse(atob(padded));
     return (payload.exp ?? 0) * 1000 < Date.now();
   } catch {
     return true;
