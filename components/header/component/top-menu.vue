@@ -117,46 +117,39 @@ function isTokenExpiredLocal(token: string): boolean {
 }
 
 const redirectToAgencia = () => {
-  let agenciaRaw = localStorage.getItem('agencia_user');
+  const mainRaw = localStorage.getItem('user');
+  let mainUser: any = null;
+  if (mainRaw) {
+    try { mainUser = JSON.parse(mainRaw); } catch {}
+  }
 
-  if (agenciaRaw) {
-    try {
-      const existing = JSON.parse(agenciaRaw);
-      const isCompatible = existing?.comerciante === true || existing?.admin === true;
-      if (!existing?.token || !isCompatible || isTokenExpiredLocal(existing.token)) {
-        localStorage.removeItem('agencia_user');
-        agenciaRaw = null;
-      }
-    } catch {
+  if (mainUser) {
+    const mainIsCompatible = mainUser?.comerciante === true || mainUser?.admin === true;
+    if (!mainIsCompatible || !mainUser?.token || isTokenExpiredLocal(mainUser.token)) {
       localStorage.removeItem('agencia_user');
-      agenciaRaw = null;
+      window.location.href = '/agencia/login';
+      return;
     }
+    localStorage.setItem('agencia_user', mainRaw);
+    const dest = mainUser.admin === true ? '/agencia/painel/admin' : '/agencia/painel';
+    window.location.href = dest;
+    return;
   }
 
-  if (!agenciaRaw) {
-    const mainRaw = localStorage.getItem('user');
-    if (mainRaw) {
-      try {
-        const parsed = JSON.parse(mainRaw);
-        const isAgenciaCompatible = parsed?.comerciante === true || parsed?.admin === true;
-        if (parsed?.token && isAgenciaCompatible && !isTokenExpiredLocal(parsed.token)) {
-          localStorage.setItem('agencia_user', mainRaw);
-          agenciaRaw = mainRaw;
-        }
-      } catch {}
-    }
-  }
-
+  const agenciaRaw = localStorage.getItem('agencia_user');
   if (agenciaRaw) {
     try {
-      const dest = JSON.parse(agenciaRaw)?.admin === true ? '/agencia/painel/admin' : '/agencia/painel';
-      window.location.href = dest;
-    } catch {
-      window.location.href = '/agencia/painel';
-    }
-  } else {
-    window.location.href = '/agencia/login';
+      const agUser = JSON.parse(agenciaRaw);
+      if (agUser?.token && !isTokenExpiredLocal(agUser.token)) {
+        const dest = agUser.admin === true ? '/agencia/painel/admin' : '/agencia/painel';
+        window.location.href = dest;
+        return;
+      }
+    } catch {}
+    localStorage.removeItem('agencia_user');
   }
+
+  window.location.href = '/agencia/login';
 };
 
 let isActive = ref<string>("");
