@@ -20,10 +20,7 @@ export const useUserStore = defineStore('user', () => {
     userId.value = loggedUser.id;
     
     localStorage.setItem('user', JSON.stringify(loggedUser));
-    localStorage.removeItem('agencia_user');
-    if (loggedUser.comerciante === true || loggedUser.admin === true) {
-      localStorage.setItem('agencia_user', JSON.stringify(loggedUser));
-    }
+    localStorage.setItem('agencia_user', JSON.stringify(loggedUser));
   }
 
   async function loginUser(loginData: any) { 

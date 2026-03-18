@@ -118,22 +118,16 @@ function isTokenExpiredLocal(token: string): boolean {
 
 const redirectToAgencia = () => {
   const mainRaw = localStorage.getItem('user');
-  let mainUser: any = null;
   if (mainRaw) {
-    try { mainUser = JSON.parse(mainRaw); } catch {}
-  }
-
-  if (mainUser) {
-    const mainIsCompatible = mainUser?.comerciante === true || mainUser?.admin === true;
-    if (!mainIsCompatible || !mainUser?.token || isTokenExpiredLocal(mainUser.token)) {
-      localStorage.removeItem('agencia_user');
-      window.location.href = '/agencia/login';
-      return;
-    }
-    localStorage.setItem('agencia_user', mainRaw);
-    const dest = mainUser.admin === true ? '/agencia/painel/admin' : '/agencia/painel';
-    window.location.href = dest;
-    return;
+    try {
+      const mainUser = JSON.parse(mainRaw);
+      if (mainUser?.token && !isTokenExpiredLocal(mainUser.token)) {
+        localStorage.setItem('agencia_user', mainRaw);
+        const dest = mainUser.admin === true ? '/agencia/painel/admin' : '/agencia/painel';
+        window.location.href = dest;
+        return;
+      }
+    } catch {}
   }
 
   const agenciaRaw = localStorage.getItem('agencia_user');
