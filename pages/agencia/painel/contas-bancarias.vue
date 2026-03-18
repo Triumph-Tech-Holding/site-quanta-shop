@@ -112,14 +112,30 @@ const bancos = [
 function authHeader() { return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } }; }
 async function loadContas() {
   try {
-    const { data } = await api.get('/contasBancarias/listar', authHeader());
-    contas.value = Array.isArray(data) ? data : [];
+    const { data } = await api.get('/UsuarioBanco/listarContasCadastradas', authHeader());
+    const lista = Array.isArray(data) ? data : [];
+    contas.value = lista.map((c: Record<string, unknown>) => ({
+      id: c.IdUsuarioBanco ?? c.idUsuarioBanco,
+      banco: (c.Banco as Record<string, unknown>)?.Nome ?? (c.banco as Record<string, unknown>)?.nome ?? c.banco ?? '—',
+      agencia: c.Agencia ?? c.agencia ?? '',
+      conta: `${c.Conta ?? c.conta ?? ''}${c.DigitoConta ? '-' + c.DigitoConta : ''}`,
+      tipoConta: c.TipoConta ?? c.tipoConta ?? 'CC',
+      chavePix: c.ChavePix ?? c.chavePix ?? '',
+      tipoChavePix: c.TipoChavePix ?? c.tipoChavePix ?? '',
+      principal: c.NomeConta === 'Conta Principal' || c.principal,
+    }));
   } catch(e: unknown) { console.error("Erro ao carregar contas:", extractApiErrorMessage(e)); } finally { loading.value = false; }
 }
 async function salvarConta() {
   salvando.value = true;
   try {
-    await api.post('/contasBancarias/cadastrar', form, authHeader());
+    const bancoEncontrado = bancos.find(b => b.name === form.banco);
+    await api.post('/UsuarioBanco/cadastrarUsuarioBanco', {
+      Agencia: form.agencia,
+      Conta: form.conta,
+      NomeConta: form.banco,
+      Banco: bancoEncontrado ? { Nome: bancoEncontrado.name, Febraban: parseInt(bancoEncontrado.code) } : { Nome: form.banco },
+    }, authHeader());
     $toast?.success('Conta cadastrada com sucesso!');
     showForm.value = false;
     Object.assign(form, { banco: '', tipoConta: '', agencia: '', conta: '', tipoChavePix: '', chavePix: '' });
@@ -131,7 +147,7 @@ async function salvarConta() {
 async function excluirConta(id: number) {
   if (!confirm('Remover esta conta?')) return;
   try {
-    await api.delete(`/contasBancarias/excluir/${id}`, authHeader());
+    await api.delete(`/UsuarioBanco/ExcluirContaBancaria/${id}`, authHeader());
     $toast?.success('Conta removida.');
     await loadContas();
   } catch(e: unknown) { $toast?.error(extractApiErrorMessage(e, 'Erro ao remover conta.')); }

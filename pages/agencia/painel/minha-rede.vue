@@ -88,14 +88,21 @@ function formatCurrency(v: number) { return new Intl.NumberFormat('pt-BR', { sty
 function formatDate(d: string) { return d ? new Date(d).toLocaleDateString('pt-BR') : '—'; }
 onMounted(async () => {
   agenciaStore.loadFromStorage();
+  const user = agenciaStore.dadosUser as Record<string, unknown> | null;
+  const userId = user?.Id ?? user?.id ?? user?.IdUsuario ?? user?.idUsuario ?? '';
   try {
-    const { data } = await api.get('/minhaRede/listar', authHeader());
-    rede.value = Array.isArray(data) ? data : (data?.items || data?.rede || []);
+    const { data } = await api.get(`/Rede/obterDiretos/${userId}`, authHeader());
+    const lista = Array.isArray(data) ? data : [];
+    rede.value = lista.map((m: Record<string, unknown>) => ({
+      nome: (m.Nome ?? m.nome ?? '') as string,
+      login: (m.Login ?? m.login ?? m.Email ?? m.email ?? '') as string,
+      nivel: 1,
+      dataCadastro: (m.DataCadastro ?? m.dataCadastro ?? '') as string,
+      ativo: !!(m.AssinaturaHabilitada ?? m.ativo ?? m.Ativo),
+    }));
     resumo.total = rede.value.length;
     resumo.ativos = rede.value.filter(m => m.ativo).length;
     resumo.inativos = resumo.total - resumo.ativos;
-    if (data?.ganhos) resumo.ganhos = data.ganhos;
-    if (data?.totalGanhos) resumo.ganhos = data.totalGanhos;
   } catch { /**/ } finally { loading.value = false; }
 });
 </script>

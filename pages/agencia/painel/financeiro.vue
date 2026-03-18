@@ -175,23 +175,38 @@ function statusClass(s: string): string {
 async function loadExtrato() {
   loadingExtrato.value = true;
   try {
-    const { data } = await api.get('/financeiro/movimentacoes', authHeader());
-    movimentacoes.value = Array.isArray(data) ? data : (data?.items || []);
+    const { data } = await api.post('/Extrato/buscarExtrato', {}, authHeader());
+    const lista = Array.isArray(data) ? data : [];
+    movimentacoes.value = lista.map((l: Record<string, unknown>) => ({
+      data: l.DataLancamento ?? l.dataLancamento ?? '',
+      descricao: l.Descricao ?? l.descricao ?? l.Tipo?.Nome ?? '—',
+      valor: Math.abs((l.Valor ?? l.valor ?? 0) as number),
+      tipo: ((l.Valor ?? l.valor ?? 0) as number) >= 0 ? 'E' : 'S',
+    }));
   } catch { /**/ } finally { loadingExtrato.value = false; }
 }
 
 async function loadHistoricoSaque() {
   loadingHistorico.value = true;
   try {
-    const { data } = await api.get('/financeiro/historicoSaque', authHeader());
-    historicoSaque.value = Array.isArray(data) ? data : (data?.items || []);
+    const { data } = await api.get('/Saque/saquesSolicitados', authHeader());
+    const lista = Array.isArray(data) ? data : [];
+    historicoSaque.value = lista.map((s: Record<string, unknown>) => ({
+      data: s.DataSolicitacao ?? s.dataSolicitacao ?? '',
+      valor: (s.Valor ?? s.valor ?? 0) as number,
+      banco: s.NomeConta ?? s.nomeConta ?? '—',
+      status: s.Status ?? s.status ?? 'Pendente',
+    }));
   } catch { /**/ } finally { loadingHistorico.value = false; }
 }
 
 async function solicitarSaque() {
   solicitandoSaque.value = true;
   try {
-    await api.post('/financeiro/solicitarSaque', saqueForm, authHeader());
+    await api.post('/Saque/solicitarSaque', {
+      Valor: saqueForm.valor,
+      IdUsuarioBanco: saqueForm.idContaBancaria ? Number(saqueForm.idContaBancaria) : null,
+    }, authHeader());
     $toast?.success('Saque solicitado com sucesso!');
     saqueForm.valor = null; saqueForm.senha = ''; saqueForm.idContaBancaria = '';
     await loadSaldo();
@@ -202,17 +217,25 @@ async function solicitarSaque() {
 
 async function loadSaldo() {
   try {
-    const { data } = await api.get('/financeiro/saldo', authHeader());
-    saldo.value = typeof data === 'number' ? data : (data?.saldo ?? 0);
-    totalGanhos.value = data?.totalGanhos ?? 0;
-    totalSacado.value = data?.totalSacado ?? 0;
+    const { data } = await api.get('/Extrato/obterSaldoPorTipo', authHeader());
+    const entradas = (data?.totalEntradas ?? 0) as number;
+    const saidas = (data?.totalSaidas ?? 0) as number;
+    saldo.value = entradas + saidas;
+    totalGanhos.value = entradas;
+    totalSacado.value = Math.abs((data?.valorSaque ?? 0) as number);
   } catch { /**/ }
 }
 
 async function loadContasBancarias() {
   try {
-    const { data } = await api.get('/contasBancarias/listar', authHeader());
-    contasBancarias.value = Array.isArray(data) ? data : [];
+    const { data } = await api.get('/UsuarioBanco/listarContasCadastradas', authHeader());
+    const lista = Array.isArray(data) ? data : [];
+    contasBancarias.value = lista.map((c: Record<string, unknown>) => ({
+      id: c.IdUsuarioBanco ?? c.idUsuarioBanco,
+      banco: (c.Banco as Record<string, unknown>)?.Nome ?? (c.banco as Record<string, unknown>)?.nome ?? '—',
+      agencia: c.Agencia ?? c.agencia ?? '—',
+      conta: c.Conta ?? c.conta ?? '—',
+    }));
   } catch { /**/ }
 }
 

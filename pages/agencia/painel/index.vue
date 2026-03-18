@@ -75,22 +75,24 @@
 
         <div class="col-12 col-lg-6">
           <div class="ag-card">
-            <div class="ag-card-title">Últimas compras</div>
+            <div class="ag-card-title">Últimas movimentações</div>
             <div v-if="ultimasCompras.length === 0" class="text-muted text-center py-3" style="font-size:.875rem">
-              Nenhuma compra encontrada
+              Nenhuma movimentação encontrada
             </div>
             <table v-else class="table ag-table table-sm mb-0">
-              <thead><tr><th>Loja</th><th>Data</th><th>Cashback</th></tr></thead>
+              <thead><tr><th>Descrição</th><th>Data</th><th>Valor</th></tr></thead>
               <tbody>
                 <tr v-for="(c, i) in ultimasCompras" :key="i">
                   <td>{{ c.nomeLoja || c.descricao || '—' }}</td>
                   <td>{{ formatDate(c.dataPedido || c.data) }}</td>
-                  <td class="text-ag-secondary fw-bold">{{ formatCurrency(c.cashback || c.valorCashback || 0) }}</td>
+                  <td :class="(c.cashback || c.valorCashback || 0) >= 0 ? 'text-ag-secondary fw-bold' : 'text-danger fw-bold'">
+                    {{ formatCurrency(c.cashback || c.valorCashback || 0) }}
+                  </td>
                 </tr>
               </tbody>
             </table>
             <div class="text-end mt-2">
-              <NuxtLink to="/agencia/painel/minhas-compras" class="text-ag-primary" style="font-size:.85rem">
+              <NuxtLink to="/agencia/painel/financeiro" class="text-ag-primary" style="font-size:.85rem">
                 Ver todas →
               </NuxtLink>
             </div>
@@ -103,8 +105,8 @@
           <div class="ag-card">
             <div class="ag-card-title">Comunicados</div>
             <div v-for="(com, i) in comunicados" :key="i" class="mb-3 p-3 border-start border-3 border-ag-secondary bg-light rounded">
-              <div class="fw-bold mb-1">{{ com.titulo }}</div>
-              <div style="font-size:.875rem" v-html="com.mensagem" />
+              <div class="fw-bold mb-1">{{ com.titulo || com.Titulo }}</div>
+              <div style="font-size:.875rem" v-html="com.mensagem || com.Texto" />
             </div>
           </div>
         </div>
@@ -169,26 +171,34 @@ onMounted(async () => {
   }
 
   await Promise.allSettled([
-    api.get('/financeiro/saldo', authHeader()).then(r => {
+    api.get('/Extrato/obterSaldoPorTipo', authHeader()).then(r => {
       const d = r.data;
-      resumo.saldo = typeof d === 'number' ? d : (d?.saldo ?? 0);
+      const entradas = d?.totalEntradas ?? 0;
+      const saidas = d?.totalSaidas ?? 0;
+      resumo.saldo = entradas + saidas;
+      resumo.totalGanhos = entradas;
     }),
-    api.get('/financeiro/resumo', authHeader()).then(r => {
+    api.get('/Dashboard/obterBarraStatus', authHeader()).then(r => {
       const d = r.data;
-      if (d?.totalGanhos != null) resumo.totalGanhos = d.totalGanhos;
+      resumo.totalRede = d?.Total ?? d?.total ?? 0;
     }),
-    api.get('/minhaRede/resumo', authHeader()).then(r => {
+    api.post('/Extrato/buscarExtrato', {}, authHeader()).then(r => {
       const d = r.data;
-      resumo.totalRede = d?.total ?? d ?? 0;
+      const lancamentos = Array.isArray(d) ? d : [];
+      const positivos = lancamentos.filter((l: Record<string, unknown>) => (l.Valor ?? l.valor ?? 0) > 0);
+      resumo.totalCompras = positivos.length;
+      ultimasCompras.value = positivos.slice(0, 5).map((l: Record<string, unknown>) => ({
+        nomeLoja: (l.Descricao ?? l.descricao ?? l.Tipo?.Nome ?? l.tipo?.nome ?? '—') as string,
+        dataPedido: (l.DataLancamento ?? l.dataLancamento ?? '') as string,
+        cashback: (l.Valor ?? l.valor ?? 0) as number,
+      }));
     }),
-    api.get('/pedido/listar?pageSize=5', authHeader()).then(r => {
+    api.get('/Comunicado/ObterComunicadosPorGraduacao', authHeader()).then(r => {
       const d = r.data;
-      ultimasCompras.value = Array.isArray(d) ? d.slice(0, 5) : (d?.items?.slice(0, 5) || []);
-      resumo.totalCompras = d?.total || ultimasCompras.value.length;
-    }),
-    api.get('/comunicados/listar', authHeader()).then(r => {
-      const d = r.data;
-      comunicados.value = Array.isArray(d) ? d.slice(0, 3) : [];
+      comunicados.value = Array.isArray(d) ? d.slice(0, 3).map((c: Record<string, unknown>) => ({
+        titulo: (c.Titulo ?? c.titulo ?? '') as string,
+        mensagem: (c.Texto ?? c.texto ?? c.mensagem ?? '') as string,
+      })) : [];
     }),
   ]);
 

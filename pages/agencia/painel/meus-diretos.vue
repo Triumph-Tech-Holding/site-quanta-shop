@@ -50,8 +50,17 @@ async function copiar() {
 onMounted(async () => {
   agenciaStore.loadFromStorage();
   try {
-    const { data } = await api.get('/parceiroDireto/listar', authHeader());
-    diretos.value = Array.isArray(data) ? data : (data?.items || []);
+    const { data } = await api.get('/user/diretosUsaurioLogado', authHeader());
+    const lista = Array.isArray(data) ? data : [];
+    diretos.value = lista.map((u: Record<string, unknown>) => ({
+      id: u.IdUsuario ?? u.idUsuario ?? 0,
+      nome: (u.Nome ?? u.nome ?? '') as string,
+      login: (u.Login ?? u.login ?? '') as string,
+      status: (u.produtoAtivo ?? '') as string,
+      dataCadastro: (u.DataCadastro ?? u.dataCadastro ?? '') as string,
+      ativo: true,
+      cashbackGerado: 0,
+    }));
   } catch { /**/ } finally { loading.value = false; }
 });
 </script>
