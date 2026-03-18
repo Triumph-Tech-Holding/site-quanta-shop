@@ -104,9 +104,32 @@ onBeforeMount(() => {
   userStore.loadUserFromStorage();
 });
 
+function isTokenExpiredLocal(token: string): boolean {
+  try {
+    const payload = JSON.parse(atob((token.split('.')[1] + '==').replace(/-/g, '+').replace(/_/g, '/')));
+    return (payload.exp ?? 0) * 1000 < Date.now();
+  } catch {
+    return true;
+  }
+}
+
 const redirectToAgencia = () => {
-  const agenciaUser = localStorage.getItem('agencia_user');
-  if (agenciaUser) {
+  let agenciaRaw = localStorage.getItem('agencia_user');
+
+  if (!agenciaRaw) {
+    const mainRaw = localStorage.getItem('user');
+    if (mainRaw) {
+      try {
+        const parsed = JSON.parse(mainRaw);
+        if (parsed?.token && !isTokenExpiredLocal(parsed.token)) {
+          localStorage.setItem('agencia_user', mainRaw);
+          agenciaRaw = mainRaw;
+        }
+      } catch {}
+    }
+  }
+
+  if (agenciaRaw) {
     navigateTo('/agencia/painel');
   } else {
     navigateTo('/agencia/login');
