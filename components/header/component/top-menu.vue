@@ -119,6 +119,20 @@ function isTokenExpiredLocal(token: string): boolean {
 const redirectToAgencia = () => {
   let agenciaRaw = localStorage.getItem('agencia_user');
 
+  if (agenciaRaw) {
+    try {
+      const existing = JSON.parse(agenciaRaw);
+      const isCompatible = existing?.comerciante === true || existing?.admin === true;
+      if (!existing?.token || !isCompatible || isTokenExpiredLocal(existing.token)) {
+        localStorage.removeItem('agencia_user');
+        agenciaRaw = null;
+      }
+    } catch {
+      localStorage.removeItem('agencia_user');
+      agenciaRaw = null;
+    }
+  }
+
   if (!agenciaRaw) {
     const mainRaw = localStorage.getItem('user');
     if (mainRaw) {
