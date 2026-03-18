@@ -85,7 +85,8 @@ const redirectToAgencia = () => {
     if (mainRaw) {
       try {
         const parsed = JSON.parse(mainRaw);
-        if (parsed?.token && !isTokenExpiredLocal(parsed.token)) {
+        const isAgenciaCompatible = parsed?.comerciante === true || parsed?.admin === true;
+        if (parsed?.token && isAgenciaCompatible && !isTokenExpiredLocal(parsed.token)) {
           localStorage.setItem('agencia_user', mainRaw);
           agenciaRaw = mainRaw;
         }
