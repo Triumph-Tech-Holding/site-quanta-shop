@@ -1,0 +1,31 @@
+FASE 5 — BUILD E EXECUÇÃOO prompt fornecido é completo, claro e altamente executável, cobrindo todos os aspectos necessários para validar o build e a execução da aplicação.Pontos Fortes do Prompt:
+Contexto Claro (What & Why): Define o propósito da fase e os objetivos a serem alcançados, conectando-a com as fases anteriores.
+Critérios de Sucesso (Done looks like): Apresenta uma lista objetiva e verificável dos resultados esperados, facilitando a validação.
+Escopo Bem Definido (Out of scope): Delimita claramente o que não faz parte desta fase, evitando desvios.
+Tarefas Detalhadas (Tasks): Cada tarefa é um passo acionável, com:
+
+Instruções Claras: "O que fazer" para cada etapa.
+Comandos Exatos: Scripts bash prontos para execução, incluindo limpeza, build, inicialização e testes.
+Validações Específicas: Checklists detalhados para cada tarefa, garantindo a verificação dos resultados.
+Testes Abrangentes: Inclui testes para rotas, autenticação JWT (com e sem token), middleware de proteção, logs de erro e redirecionamentos.
+
+
+Recursos Adicionais (Relevant files e Notes):
+
+Lista os arquivos relevantes para consulta.
+Fornece "Instruções Importantes" para a execução.
+Inclui um guia de "Troubleshooting" para possíveis problemas.
+Define os "Próximos Passos Após FASE 5", delineando o roadmap futuro.
+
+
+Resumo Final: Consolida os objetivos da fase de forma concisa.
+🚀 PRÓXIMO PASSO: EXECUÇÃO DA FASE 5O prompt está perfeito para ser entregue ao agente Replit.
+Copie o prompt completo que você acabou de me fornecer.
+Cole-o no Replit como uma nova instrução para o agente.
+O agente executará todas as tarefas detalhadas, incluindo o build, a inicialização em modo preview e os testes de validação.
+Acompanhe as validações e o checklist final para confirmar o sucesso da FASE 5.
+💡 APÓS A EXECUÇÃO BEM-SUCEDIDA DA FASE 5Com a FASE 5 concluída, a aplicação terá:
+✅ Uma estrutura consolidada e funcional (Nuxt 3 unificado).
+✅ Segurança robusta implementada (JWT, interceptadores, validação no servidor).
+✅ Um build validado e executável em ambiente de pré-produção.
+✅ A aplicação pronta para as próximas etapas de otimização, testes automatizados, documentação e, finalmente, o deployment em produção.
