@@ -28,21 +28,22 @@ fi
 
 API_BINARY="/home/runner/workspace/api/publish/MMN.Api"
 
-if [ ! -f "$API_BINARY" ]; then
-  echo "[start-prod] ERRO: Binario da API nao encontrado em $API_BINARY"
-  echo "[start-prod] Execute build-prod.sh primeiro para compilar."
-  exit 1
+if [ -f "$API_BINARY" ]; then
+  echo "[start-prod] Iniciando API via binario publicado..."
+  "$API_BINARY" &
+else
+  echo "[start-prod] Binario publicado nao encontrado — iniciando via dotnet run (modo fallback)..."
+  cd /home/runner/workspace/api/MMN.Api
+  dotnet run --no-launch-profile -p:NuGetAudit=false &
+  cd /home/runner/workspace
 fi
 
-echo "[start-prod] Iniciando MMN.Api em background..."
-"$API_BINARY" &
 API_PID=$!
-
 echo "[start-prod] API PID: $API_PID. Aguardando ficar saudavel na porta 8000..."
 
-MAX_WAIT=60
+MAX_WAIT=120
 ELAPSED=0
-INTERVAL=2
+INTERVAL=3
 
 while [ $ELAPSED -lt $MAX_WAIT ]; do
   if curl -sf "http://localhost:8000/api/v2/carousels" -o /dev/null 2>/dev/null; then

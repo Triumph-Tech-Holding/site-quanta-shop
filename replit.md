@@ -98,9 +98,26 @@ O site original fazia chamadas diretas para `https://api.quantashop.com.br/api` 
 
 ## Deploy
 
-Configurado como servidor Node.js (autoscale):
-- Build: `npm run build` (Nitro preset: `node-server`)
-- Run: `node .output/server/index.mjs`
-- O proxy API funciona em produção porque o Nitro roda como servidor
-- Variáveis de produção (env vars Replit): `PORT=5000`, `HOST=0.0.0.0`, `NUXT_API_BASE_URL=/api-proxy`
-- Nota: Nitro lê `HOST`/`PORT` nativamente das env vars em runtime (não precisa configurar em nuxt.config.ts)
+Configurado como servidor Node.js (autoscale) com Nuxt + .NET API rodando juntos:
+
+### Scripts de produção
+- **`build-prod.sh`** — Compila a API .NET (`dotnet publish -c Release -o api/publish/`) e depois o Nuxt (`npm run build`)
+- **`start-prod.sh`** — Inicia a API em background (binário publicado ou fallback via `dotnet run`), aguarda a API ficar saudável na porta 8000 (health check em `/api/v2/carousels`), então inicia o servidor Nuxt em foreground (`node .output/server/index.mjs`)
+
+### Variáveis de ambiente necessárias
+- `SQL_CONNECTION_STRING` (secret Replit) — pode ser só a senha, o script monta a connection string completa
+- `USE_LOCAL_API=true` (configurado em `[userenv.shared]` do `.replit`) — garante que o proxy Nitro use `localhost:8000`
+- `NUXT_API_BASE_URL=/api-proxy` (configurado em `[userenv.production]`) — URL base das chamadas de API
+
+### Como verificar em produção
+```bash
+# A API está respondendo?
+curl https://seudominio.replit.app/api-proxy/v2/carousels
+# O Nuxt está servindo?
+curl https://seudominio.replit.app/
+```
+
+### Observações
+- O proxy Nitro (`server/routes/api-proxy/[...path].ts`) rota todas as chamadas para `localhost:8000` em produção
+- O `start-prod.sh` aguarda até 120 segundos para a API iniciar antes de subir o Nuxt
+- Fallback: se o binário publicado não existir em `api/publish/`, o script usa `dotnet run` diretamente
