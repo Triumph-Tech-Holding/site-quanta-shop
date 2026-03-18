@@ -148,7 +148,12 @@ const redirectToAgencia = () => {
   }
 
   if (agenciaRaw) {
-    window.location.href = '/agencia/painel';
+    try {
+      const dest = JSON.parse(agenciaRaw)?.admin === true ? '/agencia/painel/admin' : '/agencia/painel';
+      window.location.href = dest;
+    } catch {
+      window.location.href = '/agencia/painel';
+    }
   } else {
     window.location.href = '/agencia/login';
   }

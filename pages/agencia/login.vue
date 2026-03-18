@@ -91,15 +91,11 @@ async function handleLogin() {
     });
 
     if (data?.token) {
-      console.log('[agencia/login] login OK — admin:', data.admin, 'comerciante:', data.comerciante, 'perfil:', data.perfil);
       agenciaStore.setUser(data);
-      console.log('[agencia/login] agencia_user saved, redirecting to painel');
       localStorage.setItem('agencia_showComunicado', 'true');
       localStorage.removeItem('agencia_menu');
 
-      const dest = data.admin ? '/agencia/painel/admin' : '/agencia/painel';
-      console.log('[agencia/login] window.location.href =', dest);
-      window.location.href = dest;
+      window.location.href = data.admin ? '/agencia/painel/admin' : '/agencia/painel';
     } else {
       errorMsg.value = 'Resposta inesperada do servidor. Tente novamente.';
     }
