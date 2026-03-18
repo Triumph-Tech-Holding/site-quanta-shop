@@ -5,6 +5,7 @@ export default defineNuxtRouteMiddleware((to) => {
   if (!isAdminRoute) return;
 
   const agenciaStore = useAgenciaStore();
+  agenciaStore.loadFromStorage();
 
   if (!agenciaStore.getToken()) {
     return navigateTo('/agencia/login');

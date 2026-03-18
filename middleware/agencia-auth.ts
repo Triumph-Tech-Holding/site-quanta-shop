@@ -2,6 +2,7 @@ export default defineNuxtRouteMiddleware((to) => {
   if (import.meta.server) return;
 
   const agenciaStore = useAgenciaStore();
+  agenciaStore.loadFromStorage();
 
   // Proteger rotas do painel
   const isPainelRoute = to.path.startsWith('/agencia/painel');
