@@ -62,13 +62,6 @@
               <div class="flex-remot">
                 <div class="box-button">
                   <div class="bt-default bt-border">
-                    <a href="javascript:void(0)" @click.prevent="openAssistenteVirtual">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="mr-1" viewBox="0 0 24 24"><path d="M12 2a9 9 0 0 1 9 9c0 3.87-2.44 7.17-5.93 8.46L12 22l-3.07-2.54C5.44 18.17 3 14.87 3 11a9 9 0 0 1 9-9zm0 2a7 7 0 0 0-7 7c0 3.13 1.98 5.85 4.94 7l.06.02L12 19.5l2-.02.06-.02C17.02 18.85 19 16.13 19 13a7 7 0 0 0-7-7zm0 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm0 9c-2.67 0-8 1.34-8 4v1h16v-1c0-2.66-5.33-4-8-4z"/></svg>
-                      Assistente virtual
-                    </a>
-                  </div>
-
-                  <div class="bt-default bt-border">
                     <NuxtLink :to="isComerciante && user?.perfil == 'C' ? '/agencia/painel/comerciante/dados-credenciamento' : '/agencia/painel/meus-dados'">
                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="mr-1" viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
                       Meus dados
@@ -120,10 +113,6 @@ const saldoFormatado = computed(() => {
   if (saldo.value === null) return '';
   return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(saldo.value);
 });
-
-function openAssistenteVirtual() {
-  // placeholder for assistente virtual modal
-}
 
 async function loadSaldo() {
   try {
