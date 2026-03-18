@@ -44,7 +44,7 @@ async function finalizar() {
   try {
     await api.post(`/credenciamento/finalizar/${route.params.id}`, {});
     $toast?.success('Credenciamento finalizado com sucesso!');
-    navigateTo('/agencia');
+    navigateTo('/agencia/painel');
   } catch (e: unknown) {
     $toast?.error(extractApiErrorMessage(e, 'Erro ao finalizar credenciamento.'));
   } finally { finalizando.value = false; }

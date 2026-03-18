@@ -70,7 +70,6 @@ export default defineNuxtConfig({
       ],
     },
     workbox: {
-      navigateFallback: "/",
       globDirectory: ".nuxt/dev-sw-dist",
       globPatterns: [
         "**/*.js",   // Incluir arquivos .js

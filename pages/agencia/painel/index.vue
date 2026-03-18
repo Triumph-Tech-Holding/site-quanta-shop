@@ -166,7 +166,7 @@ function authHeader() {
 onMounted(async () => {
   agenciaStore.loadFromStorage();
   if (!agenciaStore.checkTokenExpiry()) {
-    navigateTo('/agencia');
+    navigateTo('/agencia/login');
     return;
   }
 

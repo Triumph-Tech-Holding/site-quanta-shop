@@ -18,7 +18,7 @@
       </nuxt-link>
 
       <nuxt-link
-        :href="`https://agencia.quantashop.com.br/anunciante?idAnunciante=${item.id}`"
+        :href="`/partners/${item.id}`"
         class="w-100 h-100"
         v-if="item.type === 'LOCAL'"
       >
@@ -147,7 +147,7 @@
         </nuxt-link>
 
         <nuxt-link
-          :href="`https://agencia.quantashop.com.br/anunciante?idAnunciante=${item.id}`"
+          :href="`/partners/${item.id}`"
           :title="item.title"
           v-if="item.type === 'LOCAL'"
         >
@@ -236,7 +236,7 @@
         </nuxt-link>
 
         <nuxt-link
-          :href="`https://agencia.quantashop.com.br/anunciante?idAnunciante=${item.id}`"
+          :href="`/partners/${item.id}`"
           class="tp-product-list-add-to-cart-btn w-100 text-center"
           v-if="item.type === 'LOCAL'"
         >

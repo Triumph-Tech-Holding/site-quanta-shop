@@ -42,9 +42,9 @@
       </form>
 
       <div class="text-center mt-4">
-        <a href="https://quantashop.com.br" style="font-size:.8rem; color:#6c757d">
+        <NuxtLink to="/" style="font-size:.8rem; color:#6c757d">
           ← Ir para página inicial
-        </a>
+        </NuxtLink>
       </div>
     </div>
   </div>
@@ -57,18 +57,28 @@ definePageMeta({ layout: 'agencia-login' });
 
 const agenciaStore = useAgenciaStore();
 const api = useApi();
-const router = useRouter();
 
 const loginForm = reactive({ login: '', senha: '' });
 const loading = ref(false);
 const errorMsg = ref('');
 
 onMounted(() => {
+  try {
+    const raw = localStorage.getItem('agencia_user');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (!parsed?.token) {
+        localStorage.removeItem('agencia_user');
+      }
+    }
+  } catch {
+    localStorage.removeItem('agencia_user');
+  }
   agenciaStore.loadFromStorage();
-  if (agenciaStore.isLoggedIn) {
+  if (agenciaStore.isLoggedIn && agenciaStore.checkTokenExpiry()) {
     const u = agenciaStore.dadosUser;
-    if (u?.admin) router.push('/agencia/painel/admin');
-    else router.push('/agencia/painel');
+    if (u?.admin) navigateTo('/agencia/painel/admin');
+    else navigateTo('/agencia/painel');
   }
 });
 
@@ -86,8 +96,7 @@ async function handleLogin() {
       localStorage.setItem('agencia_showComunicado', 'true');
       localStorage.removeItem('agencia_menu');
 
-      if (data.admin) router.push('/agencia/painel/admin');
-      else router.push('/agencia/painel');
+      await navigateTo(data.admin ? '/agencia/painel/admin' : '/agencia/painel');
     } else {
       errorMsg.value = 'Resposta inesperada do servidor. Tente novamente.';
     }

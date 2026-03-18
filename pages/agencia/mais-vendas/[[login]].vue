@@ -7,9 +7,9 @@
         Cadastre-se como parceiro Quanta Shop e comece a ganhar cashback nas suas vendas.
       </p>
       <div class="text-center">
-        <a href="https://quantashop.com.br/mais-vendas" class="btn btn-ag-primary w-100 mb-2">
+        <NuxtLink to="/mais-vendas" class="btn btn-ag-primary w-100 mb-2">
           Quero ser parceiro →
-        </a>
+        </NuxtLink>
         <NuxtLink to="/agencia" class="btn btn-ag-outline w-100">Já tenho conta — Entrar</NuxtLink>
       </div>
     </div>
