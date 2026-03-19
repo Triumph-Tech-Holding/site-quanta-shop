@@ -81,6 +81,19 @@
           <AgenciaMenu :open="sidebarOpen" />
         </div>
         <div class="box-conteudo conteudo-logado">
+          <div style="padding:0 1rem;">
+            <div class="referral-link" style="padding:10px 0;">
+              <div class="global-box" style="background:#fff;border-radius:8px;padding:.6rem 1rem;box-shadow:0 1px 4px rgba(0,0,0,.08);">
+                <small>Link de indicação da rede</small>
+                <div class="flex-referral" style="display:flex;gap:.5rem;align-items:center;margin-top:.3rem;">
+                  <input type="text" :value="linkIndicacao" disabled class="form-control" style="font-size:.8rem;flex:1;border:1px solid #d8d8d8;border-radius:6px;padding:.4rem .75rem;background:#f8f9fa;" />
+                  <div class="bt-default" style="margin-left:.5rem;">
+                    <button @click="copiarLink">{{ copiado ? '✓ Copiado!' : 'Copiar link' }}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <slot />
         </div>
       </div>
@@ -99,10 +112,25 @@ const isComerciante = computed(() => agenciaStore.isComerciante);
 const saldo = ref<number | null>(null);
 const sidebarOpen = ref(false);
 
+const copiado = ref(false);
+
 const saldoFormatado = computed(() => {
   if (saldo.value === null) return '';
   return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(saldo.value);
 });
+
+const linkIndicacao = computed(() => {
+  const login = user.value?.login || '';
+  return `https://quantashop.com.br/register/${login}`;
+});
+
+async function copiarLink() {
+  try {
+    await navigator.clipboard.writeText(linkIndicacao.value);
+    copiado.value = true;
+    setTimeout(() => { copiado.value = false; }, 2000);
+  } catch { /**/ }
+}
 
 async function loadSaldo() {
   try {

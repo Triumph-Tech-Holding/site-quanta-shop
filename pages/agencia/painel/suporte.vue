@@ -74,11 +74,11 @@
                     <tr v-for="(item, i) in items" :key="i">
                       <td>{{ item.idSuporte }}</td>
                       <td>{{ item.titulo || item.assunto || '—' }}</td>
-                      <td>{{ item.tipo || '—' }}</td>
+                      <td>{{ tipoLabel(Number(item.tipo)) }}</td>
                       <td style="text-align:center;">{{ formatDate(String(item.dataAbertura || item.dataCriacao || '')) }}</td>
                       <td style="text-align:center;">
-                        <span class="status-badge" :class="statusClass(String(item.status || item.statusNome || ''))">
-                          {{ item.status || item.statusNome }}
+                        <span class="status-badge" :class="statusBadgeClass(Number(item.status))">
+                          {{ statusLabel(Number(item.status)) }}
                         </span>
                       </td>
                       <td style="text-align:center;">
@@ -107,18 +107,19 @@ const loading = ref(false);
 const items = ref<Record<string, unknown>[]>([]);
 
 const statusOptions = [
-  { value: 1, text: 'Aberto' },
-  { value: 2, text: 'Em andamento' },
-  { value: 3, text: 'Fechado' },
-  { value: 4, text: 'Cancelado' },
+  { value: 1, text: 'Em processamento' },
+  { value: 2, text: 'Finalizado' },
+  { value: 3, text: 'Cancelado' },
+  { value: 4, text: 'Em aprovação' },
+  { value: 5, text: 'Recusado' },
+  { value: 6, text: 'Aprovado' },
+  { value: 7, text: 'Aguardando pagamento de fatura' },
 ];
 const tipoOptions = [
-  { value: 1, text: 'Cashback' },
-  { value: 2, text: 'Saque' },
-  { value: 3, text: 'Cadastro' },
-  { value: 4, text: 'Indicação' },
-  { value: 5, text: 'Loja' },
-  { value: 6, text: 'Outros' },
+  { value: 1, text: 'Contato' },
+  { value: 2, text: 'Cashback não pago' },
+  { value: 3, text: 'Cancelamento do parcelamento' },
+  { value: 4, text: 'Reabertura do parcelamento' },
 ];
 
 const filtro = reactive({
@@ -137,12 +138,32 @@ function formatDate(d: string): string {
   return new Date(d).toLocaleDateString('pt-BR');
 }
 
-function statusClass(s: string): string {
-  const lower = (s || '').toLowerCase();
-  if (lower.includes('fechado') || lower.includes('resolvido')) return 'aprovado';
-  if (lower.includes('cancel')) return 'recusado';
-  if (lower.includes('andamento')) return 'pago';
-  return 'pendente';
+const TIPO_MAP: Record<number, string> = {
+  1: 'Contato',
+  2: 'Cashback não pago',
+  3: 'Cancelamento do parcelamento',
+  4: 'Reabertura do parcelamento',
+};
+
+function tipoLabel(code: number): string {
+  return TIPO_MAP[code] ?? String(code || '—');
+}
+
+const STATUS_MAP: Record<number, { label: string; cls: string }> = {
+  1: { label: 'Em processamento', cls: 'pendente' },
+  2: { label: 'Finalizado', cls: 'aprovado' },
+  3: { label: 'Cancelado', cls: 'recusado' },
+  4: { label: 'Em aprovação', cls: 'pendente' },
+  5: { label: 'Recusado', cls: 'recusado' },
+  6: { label: 'Aprovado', cls: 'aprovado' },
+  7: { label: 'Aguardando pagamento', cls: 'pendente' },
+};
+
+function statusLabel(code: number): string {
+  return STATUS_MAP[code]?.label ?? String(code || '—');
+}
+function statusBadgeClass(code: number): string {
+  return STATUS_MAP[code]?.cls ?? 'pendente';
 }
 
 async function buscarSuporte() {

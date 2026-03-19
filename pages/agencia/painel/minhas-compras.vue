@@ -52,18 +52,25 @@
                       <th>Descrição</th>
                       <th style="text-align:center;">Valor da compra</th>
                       <th style="text-align:center;">Cashback a receber</th>
-                      <th style="text-align:center;">Data Compra</th>
+                      <th style="text-align:center;">Data da compra</th>
                       <th style="text-align:center;">Status</th>
+                      <th style="text-align:center;">Detalhes</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr v-for="(item, i) in items" :key="i">
                       <td>{{ item.produto || '—' }}</td>
-                      <td style="text-align:center;">{{ formatCurrency(Number(item.valor)) }}</td>
-                      <td style="text-align:center;color:#98c73a;font-weight:600;">{{ item.cashbackReceber }}</td>
+                      <td style="text-align:right;">{{ formatCurrency(Number(item.valor)) }}</td>
+                      <td style="text-align:right;color:#98c73a;font-weight:600;">{{ item.cashbackReceber }}</td>
                       <td style="text-align:center;">{{ formatDate(String(item.data)) }}</td>
                       <td style="text-align:center;">
                         <span class="status-badge" :class="statusClass(String(item.status))">{{ item.status }}</span>
+                      </td>
+                      <td style="text-align:center;">
+                        <a v-if="item.transacao || (item.detalhes && (item.detalhes as unknown[]).length)"
+                           href="javascript:void(0)" @click="abrirDetalhes(item)"
+                           style="color:#2f7785;font-weight:600;font-size:.8rem;">Mais detalhes</a>
+                        <span v-else style="color:#aaa;font-size:.8rem;">—</span>
                       </td>
                     </tr>
                   </tbody>
@@ -75,6 +82,75 @@
       </div>
     </div>
   </div>
+
+  <!-- Modal Detalhes -->
+  <teleport to="body">
+    <div v-if="showModal" class="ag-modal-overlay" @click.self="showModal = false">
+      <div class="ag-modal" style="max-width:750px;">
+        <div class="ag-modal-header">
+          <h2>Movimentação detalhada da compra</h2>
+          <button @click="showModal = false" style="background:none;border:none;font-size:1.25rem;cursor:pointer;color:#6c757d;line-height:1;" title="Fechar">✕</button>
+        </div>
+        <div class="ag-modal-body">
+          <template v-if="detalhesSelecionado.length">
+            <h3 style="font-size:1rem;font-weight:700;color:#2f7785;margin-bottom:.75rem;">Movimentação detalhada da compra</h3>
+            <div style="overflow-x:auto;margin-bottom:1.5rem;">
+              <table class="table-custom" style="width:100%;">
+                <thead>
+                  <tr>
+                    <th>Descrição</th>
+                    <th style="text-align:center;">Data</th>
+                    <th style="text-align:center;">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(d, i) in detalhesSelecionado" :key="i">
+                    <td>{{ (d as Record<string,unknown>).descricao || '—' }}</td>
+                    <td style="text-align:center;">{{ formatDate(String((d as Record<string,unknown>).dataAtualizacao || '')) }}</td>
+                    <td style="text-align:center;">
+                      <span class="status-badge" :class="statusClass(String(((d as Record<string,unknown>).status as Record<string,unknown>)?.nome || ''))">
+                        {{ ((d as Record<string,unknown>).status as Record<string,unknown>)?.nome || '—' }}
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </template>
+
+          <template v-if="listaDistribuicao.length">
+            <h3 style="font-size:1rem;font-weight:700;color:#2f7785;margin-bottom:.75rem;">Distribuição do cashback</h3>
+            <div style="overflow-x:auto;">
+              <table class="table-custom" style="width:100%;">
+                <thead>
+                  <tr>
+                    <th>Descrição</th>
+                    <th style="text-align:center;">Data</th>
+                    <th style="text-align:center;">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(d, i) in listaDistribuicao" :key="i">
+                    <td>{{ (d as Record<string,unknown>).descricao || '—' }}</td>
+                    <td style="text-align:center;">{{ formatDate(String((d as Record<string,unknown>).dataAtualizacao || '')) }}</td>
+                    <td style="text-align:center;">
+                      <span class="status-badge" :class="statusClass(String(((d as Record<string,unknown>).status as Record<string,unknown>)?.nome || ''))">
+                        {{ ((d as Record<string,unknown>).status as Record<string,unknown>)?.nome || '—' }}
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </template>
+
+          <p v-if="!detalhesSelecionado.length && !listaDistribuicao.length" style="text-align:center;color:#aaa;">
+            Nenhum detalhe disponível.
+          </p>
+        </div>
+      </div>
+    </div>
+  </teleport>
 </template>
 
 <script setup lang="ts">
@@ -84,6 +160,17 @@ const agenciaStore = useAgenciaStore();
 const api = useApi();
 const loading = ref(false);
 const items = ref<Record<string, unknown>[]>([]);
+const showModal = ref(false);
+const detalhesSelecionado = ref<unknown[]>([]);
+const listaDistribuicao = ref<unknown[]>([]);
+
+function abrirDetalhes(item: Record<string, unknown>) {
+  const pd = (item.pedidoDetalhe as unknown[] | undefined) ?? (item.detalhes as unknown[] | undefined) ?? [];
+  const tx = item.transacao as Record<string, unknown> | undefined;
+  detalhesSelecionado.value = Array.isArray(pd) ? pd : [];
+  listaDistribuicao.value = tx?.distribuicao ? (tx.distribuicao as unknown[]) : [];
+  showModal.value = true;
+}
 
 const now = new Date();
 const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
