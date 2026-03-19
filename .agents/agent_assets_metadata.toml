@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "FhM_dR1fE8TazshjrdTy_"
+uri = "file://docs/quanta-shop-technical-spec.pdf"
+type = "pdf"
+title = "Quanta Shop — Especificação Técnica Completa"

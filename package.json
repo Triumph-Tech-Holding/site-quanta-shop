@@ -16,7 +16,8 @@
     "@types/node": "^18.17.0",
     "@vite-pwa/nuxt": "^0.10.5",
     "nuxt": "^3.8.1",
-    "nuxt-gtag": "^3.0.1"
+    "nuxt-gtag": "^3.0.1",
+    "puppeteer": "^24.40.0"
   },
   "dependencies": {
     "@nuxt/types": "^2.17.4",
