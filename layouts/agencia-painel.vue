@@ -11,16 +11,11 @@
 
         <div class="bar-info-account">
           <div class="box-acesso">
-            <div class="d-flex align-items-center gap-2">
-              <button class="hamburger-btn" @click="sidebarOpen = !sidebarOpen" aria-label="Menu">
-                <span></span><span></span><span></span>
-              </button>
-              <div class="flex-acesso" v-if="isComerciante && user?.perfil == 'C'">
-                <span class="txt-acesso">Acessando como <b>Credenciado</b></span>
-              </div>
-              <div class="flex-acesso" v-else>
-                <span class="txt-acesso">Acessando como <b>Empreendedor</b></span>
-              </div>
+            <div class="flex-acesso" v-if="isComerciante && user?.perfil == 'C'">
+              <span class="txt-acesso">Acessando como <b>Credenciado</b></span>
+            </div>
+            <div class="flex-acesso" v-else>
+              <span class="txt-acesso">Acessando como <b>Empreendedor</b></span>
             </div>
             <div v-if="isAcessoRemoto">
               <span class="acesso-remoto-badge">Acesso remoto</span>
@@ -46,13 +41,17 @@
                 </div>
               </div>
 
+              <button class="hamburger-btn" @click="sidebarOpen = !sidebarOpen" aria-label="Menu">
+                <span></span><span></span><span></span>
+              </button>
+
               <div class="flex-remot">
                 <div class="box-button">
                   <div class="bt-default">
-                    <NuxtLink to="/agencia/painel/assistente-virtual">
+                    <a href="https://quantashop.com.br/assistente-virtual" target="_blank">
                       <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="mr-1" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>
                       Assistente virtual
-                    </NuxtLink>
+                    </a>
                   </div>
                   <div class="bt-default bt-border">
                     <NuxtLink to="/agencia/painel/meus-dados">

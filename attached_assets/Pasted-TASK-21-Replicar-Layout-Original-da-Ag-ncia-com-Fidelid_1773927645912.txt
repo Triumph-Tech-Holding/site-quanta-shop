@@ -1,0 +1,638 @@
+TASK #21: Replicar Layout Original da Agência com Fidelidade Total### What & WhyO layout da agência no Replit foi implementado na TASK #20, mas não está 100% fiel ao original em produção. Você já tentou várias vezes e sempre sai diferente. Este prompt fornece as especificações exatas do layout original para que você replique com precisão absoluta, sem interpretações.### Done looks like
+✅ Layout da agência idêntico ao original em produção
+✅ Header com logo verde 250px à esquerda (exatamente como original)
+✅ Barra do usuário à direita com "Acessando como..." (exatamente como original)
+✅ Variação dourada para assinantes (exatamente como original)
+✅ Botões: Assistente Virtual, Meus dados, Logout (exatamente como original)
+✅ Sidebar com menu isolado (exatamente como original)
+✅ Hamburger mobile com drawer deslizante (exatamente como original)
+✅ Estilos SCSS encapsulados (exatamente como original)
+✅ Sem quebras de compatibilidade com 56 componentes
+✅ App compilando sem erros
+### Out of scope
+Alterar fluxo de login
+Implementar novas funcionalidades
+Mudar estrutura de rotas
+Refatorar componentes existentes (apenas layout)
+### ESPECIFICAÇÕES EXATAS DO LAYOUT ORIGINAL#### 1. ESTRUTURA HTML/VUE (layouts/agencia-painel.vue)vue
+  <!-- Barra do usuário à direita -->
+  <div class="header-user-section">
+    <!-- "Acessando como..." -->
+    <div class="accessing-as">
+      <span class="label">Acessando como:</span>
+      <span class="user-name">{{ agenciaStore.user?.name || 'Usuário' }}</span>
+    </div>
+
+    <!-- Variação dourada para assinantes -->
+    <div v-if="agenciaStore.user?.isSubscriber" class="subscriber-badge">
+      <span class="badge-text">Assinante Premium</span>
+    </div>
+
+    <!-- Botões -->
+    <div class="header-buttons">
+      <button class="btn-assistant" @click="openAssistant">
+        <i class="icon-assistant"></i>
+        Assistente Virtual
+      </button>
+      <button class="btn-my-data" @click="openMyData">
+        <i class="icon-data"></i>
+        Meus dados
+      </button>
+      <button class="btn-logout" @click="logout">
+        <i class="icon-logout"></i>
+        Logout
+      </button>
+    </div>
+  </div>
+
+  <!-- Hamburger mobile -->
+  <button v-if="isMobile" class="hamburger-btn" @click="toggleSidebar">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+</header>
+
+<!-- SIDEBAR + OVERLAY -->
+<div v-if="isMobile && sidebarOpen" class="sidebar-overlay" @click="toggleSidebar"></div>
+
+<aside class="agencia-sidebar" :class="{ 'sidebar-open': sidebarOpen }">
+  <!-- Logo no topo (apenas mobile) -->
+  <div v-if="isMobile" class="sidebar-logo-block">
+    <img src="@/assets/images/logo-agencia-verde.png" alt="Quanta Shop" />
+  </div>
+
+  <!-- Menu -->
+  <nav class="sidebar-menu">
+    <AgenciaMenu @close-sidebar="sidebarOpen = false" />
+  </nav>
+</aside>
+
+<!-- CONTEÚDO PRINCIPAL -->
+<main class="agencia-main-content">
+  <slot />
+</main>  
+
+import { ref, computed } from 'vue';
+import { useAgenciaStore } from '@/stores/useAgenciaStore';
+import AgenciaMenu from '@/components/agencia/AgenciaMenu.vue';
+
+const agenciaStore = useAgenciaStore();
+const sidebarOpen = ref(false);
+
+const isMobile = computed(() => {
+  if (process.client) {
+    return window.innerWidth <= 768;
+  }
+  return false;
+});
+
+const toggleSidebar = () => {
+  sidebarOpen.value = !sidebarOpen.value;
+};
+
+const openAssistant = () => {
+  // Implementar lógica do assistente virtual
+  console.log('Abrir assistente virtual');
+};
+
+const openMyData = () => {
+  // Implementar lógica de meus dados
+  navigateTo('/agencia/painel/meus-dados');
+};
+
+const logout = async () => {
+  await agenciaStore.logout();
+  navigateTo('/agencia/login');
+};
+
+// Importar variáveis e mixins
+@import '@/assets/scss/variables.scss';
+@import '@/assets/scss/mixins.scss';
+
+.agencia-painel-layout {
+  display: flex;<br/>
+  flex-direction: column;<br/>
+  min-height: 100vh;<br/>
+  background-color: $color-bg-light;
+}
+
+// ============ HEADER ============
+.agencia-header {
+  display: flex;<br/>
+  align-items: center;<br/>
+  justify-content: space-between;<br/>
+  height: 80px;<br/>
+  background-color: $color-white;<br/>
+  border-bottom: 1px solid $color-border-light;<br/>
+  padding: 0 20px;<br/>
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);<br/>
+  position: relative;<br/>
+  z-index: 100;
+
+  @media (max-width: 768px) {<br/>
+    height: 60px;<br/>
+    padding: 0 15px;
+  }
+}
+
+.header-logo-section {
+  display: flex;<br/>
+  align-items: center;<br/>
+  width: 250px;<br/>
+  flex-shrink: 0;
+
+  @media (max-width: 768px) {<br/>
+    display: none;
+  }
+
+  .logo-agencia {
+    height: 50px;<br/>
+    width: auto;
+  }
+}
+
+.header-user-section {
+  display: flex;<br/>
+  align-items: center;<br/>
+  gap: 20px;<br/>
+  flex: 1;<br/>
+  justify-content: flex-end;
+
+  @media (max-width: 768px) {<br/>
+    gap: 10px;
+  }
+}
+
+.accessing-as {
+  display: flex;<br/>
+  align-items: center;<br/>
+  gap: 8px;<br/>
+  font-size: 14px;
+
+  .label {
+    color: $color-text-secondary;<br/>
+    font-weight: 500;
+  }
+
+  .user-name {
+    color: $color-text-primary;<br/>
+    font-weight: 600;
+  }
+
+  @media (max-width: 768px) {<br/>
+    display: none;
+  }
+}
+
+.subscriber-badge {
+  display: flex;<br/>
+  align-items: center;<br/>
+  padding: 6px 12px;<br/>
+  background: linear-gradient(135deg, #ffd700, #ffed4e);<br/>
+  border-radius: 20px;<br/>
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+
+  .badge-text {
+    font-size: 12px;<br/>
+    font-weight: 600;<br/>
+    color: #333;
+  }
+
+  @media (max-width: 768px) {<br/>
+    display: none;
+  }
+}
+
+.header-buttons {
+  display: flex;<br/>
+  gap: 10px;<br/>
+  align-items: center;
+
+  @media (max-width: 768px) {<br/>
+    gap: 5px;
+  }
+
+  button {
+    display: flex;<br/>
+    align-items: center;<br/>
+    gap: 6px;<br/>
+    padding: 8px 16px;<br/>
+    background-color: $color-primary;<br/>
+    color: $color-white;<br/>
+    border: none;<br/>
+    border-radius: 6px;<br/>
+    font-size: 14px;<br/>
+    font-weight: 500;<br/>
+    cursor: pointer;<br/>
+    transition: all 0.3s ease;
+
+    &:hover {<br/>
+      background-color: darken($color-primary, 10%);<br/>
+      transform: translateY(-2px);<br/>
+      box-shadow: 0 4px 12px rgba($color-primary, 0.3);
+    }
+
+    &:active {<br/>
+      transform: translateY(0);
+    }
+
+    @media (max-width: 768px) {<br/>
+      padding: 6px 12px;<br/>
+      font-size: 12px;<br/>
+      gap: 4px;
+
+      i {
+        display: none;
+      }
+    }
+  }
+}
+
+// ============ HAMBURGER (Mobile) ============
+.hamburger-btn {
+  display: none;<br/>
+  flex-direction: column;<br/>
+  gap: 5px;<br/>
+  background: none;<br/>
+  border: none;<br/>
+  cursor: pointer;<br/>
+  padding: 8px;
+
+  @media (max-width: 768px) {<br/>
+    display: flex;
+  }
+
+  span {
+    width: 24px;<br/>
+    height: 3px;<br/>
+    background-color: $color-text-primary;<br/>
+    border-radius: 2px;<br/>
+    transition: all 0.3s ease;
+  }
+
+  &.active {
+    span:nth-child(1) {<br/>
+      transform: rotate(45deg) translate(10px, 10px);
+    }
+
+    span:nth-child(2) {<br/>
+      opacity: 0;
+    }
+
+    span:nth-child(3) {<br/>
+      transform: rotate(-45deg) translate(7px, -7px);
+    }
+  }
+}
+
+// ============ SIDEBAR ============
+.agencia-sidebar {
+  display: flex;<br/>
+  flex-direction: column;<br/>
+  width: 250px;<br/>
+  background-color: $color-white;<br/>
+  border-right: 1px solid $color-border-light;<br/>
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);<br/>
+  position: relative;<br/>
+  z-index: 99;
+
+  @media (max-width: 768px) {<br/>
+    position: fixed;<br/>
+    left: 0;<br/>
+    top: 60px;<br/>
+    height: calc(100vh - 60px);<br/>
+    transform: translateX(-100%);<br/>
+    transition: transform 0.3s ease;<br/>
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+
+    &.sidebar-open {
+      transform: translateX(0);
+    }
+  }
+}
+
+.sidebar-logo-block {
+  display: none;<br/>
+  align-items: center;<br/>
+  justify-content: center;<br/>
+  padding: 20px;<br/>
+  border-bottom: 1px solid $color-border-light;
+
+  @media (max-width: 768px) {<br/>
+    display: flex;
+  }
+
+  img {
+    height: 40px;<br/>
+    width: auto;
+  }
+}
+
+.sidebar-menu {
+  flex: 1;<br/>
+  overflow-y: auto;<br/>
+  padding: 20px 0;
+
+  @media (max-width: 768px) {<br/>
+    padding: 10px 0;
+  }
+}
+
+// ============ OVERLAY (Mobile) ============
+.sidebar-overlay {
+  display: none;<br/>
+  position: fixed;<br/>
+  top: 0;<br/>
+  left: 0;<br/>
+  right: 0;<br/>
+  bottom: 0;<br/>
+  background-color: rgba(0, 0, 0, 0.5);<br/>
+  z-index: 98;
+
+  @media (max-width: 768px) {<br/>
+    display: block;
+  }
+}
+
+// ============ MAIN CONTENT ============
+.agencia-main-content {
+  flex: 1;<br/>
+  padding: 30px;<br/>
+  overflow-y: auto;
+
+  @media (max-width: 768px) {<br/>
+    padding: 20px;
+  }
+}
+
+// ============ LAYOUT FLEX ============
+.agencia-painel-layout {
+  display: grid;<br/>
+  grid-template-columns: 250px 1fr;<br/>
+  grid-template-rows: 80px 1fr;
+
+  @media (max-width: 768px) {<br/>
+    grid-template-columns: 1fr;<br/>
+    grid-template-rows: 60px 1fr;
+  }
+}
+
+.agencia-header {
+  grid-column: 1 / -1;<br/>
+  grid-row: 1;
+}
+
+.agencia-sidebar {
+  grid-column: 1;<br/>
+  grid-row: 2;
+
+  @media (max-width: 768px) {<br/>
+    grid-column: 1 / -1;
+  }
+}
+
+.agencia-main-content {
+  grid-column: 2;<br/>
+  grid-row: 2;
+
+  @media (max-width: 768px) {<br/>
+    grid-column: 1;
+  }
+}
+#### 2. COMPONENTE DO MENU (components/agencia/AgenciaMenu.vue)vue
+<!-- Logout (apenas mobile) -->
+<div v-if="isMobile" class="menu-logout-mobile">
+  <button @click="logout" class="btn-logout-mobile">
+    <i class="icon-logout"></i>
+    Logout
+  </button>
+</div>  
+
+import { ref, computed } from 'vue';
+import { useRoute } from 'vue-router';
+import { useAgenciaStore } from '@/stores/useAgenciaStore';
+
+const route = useRoute();
+const agenciaStore = useAgenciaStore();
+
+const isMobile = computed(() => {
+  if (process.client) {
+    return window.innerWidth <= 768;
+  }
+  return false;
+});
+
+const menuItems = ref([
+  { id: 1, label: 'Dashboard', path: '/agencia/painel', icon: 'icon-dashboard' },<br/>
+  { id: 2, label: 'Financeiro', path: '/agencia/painel/financeiro', icon: 'icon-finance' },<br/>
+  { id: 3, label: 'Cupons', path: '/agencia/painel/cupons', icon: 'icon-coupons' },<br/>
+  { id: 4, label: 'Rede', path: '/agencia/painel/rede', icon: 'icon-network' },<br/>
+  { id: 5, label: 'Graduações', path: '/agencia/painel/graduacoes', icon: 'icon-levels' },
+  // Adicionar mais itens conforme necessário
+]);
+
+const isActive = (path: string) => {
+  return route.path === path || route.path.startsWith(path + '/');
+};
+
+const logout = async () => {
+  await agenciaStore.logout();
+  navigateTo('/agencia/login');
+};
+
+defineEmits(['close-sidebar']);
+
+@import '@/assets/scss/variables.scss';
+@import '@/assets/scss/mixins.scss';
+
+.agencia-menu {
+  display: flex;<br/>
+  flex-direction: column;<br/>
+  height: 100%;
+}
+
+.menu-items {
+  flex: 1;<br/>
+  display: flex;<br/>
+  flex-direction: column;<br/>
+  gap: 0;
+}
+
+.menu-item {
+  display: flex;<br/>
+  align-items: center;<br/>
+  gap: 12px;<br/>
+  padding: 12px 20px;<br/>
+  color: $color-text-secondary;<br/>
+  text-decoration: none;<br/>
+  font-size: 14px;<br/>
+  font-weight: 500;<br/>
+  transition: all 0.3s ease;<br/>
+  border-left: 3px solid transparent;
+
+  &:hover {<br/>
+    background-color: $color-bg-light;<br/>
+    color: $color-primary;<br/>
+    border-left-color: $color-primary;
+  }
+
+  &.active {
+    background-color: $color-bg-light;<br/>
+    color: $color-primary;<br/>
+    border-left-color: $color-primary;<br/>
+    font-weight: 600;
+  }
+
+  i {
+    font-size: 18px;
+  }
+
+  @media (max-width: 768px) {<br/>
+    padding: 10px 15px;<br/>
+    font-size: 13px;
+  }
+}
+
+.menu-logout-mobile {
+  padding: 20px;<br/>
+  border-top: 1px solid $color-border-light;
+
+  .btn-logout-mobile {
+    width: 100%;<br/>
+    padding: 10px;<br/>
+    background-color: $color-danger;<br/>
+    color: $color-white;<br/>
+    border: none;<br/>
+    border-radius: 6px;<br/>
+    font-size: 14px;<br/>
+    font-weight: 500;<br/>
+    cursor: pointer;<br/>
+    transition: all 0.3s ease;
+
+    &:hover {<br/>
+      background-color: darken($color-danger, 10%);
+    }
+  }
+}
+#### 3. VARIÁVEIS SCSS (assets/scss/variables.scss)scss12345678910111213141516171819202122232425262728293031323334353637383940414243444546// Cores
+$color-primary: #22c55e; // Verde agência<br/>
+$color-primary-dark: #16a34a;<br/>
+$color-primary-light: #dcfce7;
+
+$color-secondary: #ffd700; // Dourado para assinantes<br/>
+$color-secondary-light: #ffed4e;
+
+$color-white: #ffffff;<br/>
+$color-black: #000000;
+
+$color-text-primary: #1f2937;<br/>
+$color-text-secondary: #6b7280;<br/>
+$color-text-light: #9ca3af;
+
+$color-bg-light: #f9fafb;<br/>
+$color-bg-lighter: #f3f4f6;
+
+$color-border-light: #e5e7eb;<br/>
+$color-border-dark: #d1d5db;
+
+$color-danger: #ef4444;<br/>
+$color-warning: #f59e0b;<br/>
+$color-success: #10b981;<br/>
+$color-info: #3b82f6;
+
+// Tamanhos
+$header-height: 80px;<br/>
+$header-height-mobile: 60px;<br/>
+$sidebar-width: 250px;
+
+// Breakpoints
+$breakpoint-mobile: 768px;<br/>
+$breakpoint-tablet: 1024px;<br/>
+$breakpoint-desktop: 1440px;
+
+// Sombras
+$shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);<br/>
+$shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);<br/>
+$shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);<br/>
+$shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+
+// Transições
+$transition-fast: 0.15s ease;<br/>
+$transition-base: 0.3s ease;<br/>
+$transition-slow: 0.5s ease;// Cores
+$color-primary: #22c55e; // Verde agência<br/>
+$color-primary-dark: #16a34a;<br/>
+$color-primary-light: #dcfce7;
+
+$color-secondary: #ffd700; // Dourado para assinantes<br/>
+$color-secondary-light: #ffed4e;
+
+$color-white: #ffffff;<br/>
+$color-black: #000000;
+
+$color-text-primary: #1f2937;<br/>
+$color-text-secondary: #6b7280;<br/>
+$color-text-light: #9ca3af;
+
+$color-bg-light: #f9fafb;<br/>
+$color-bg-lighter: #f3f4f6;
+
+$color-border-light: #e5e7eb;<br/>
+$color-border-dark: #d1d5db;
+
+$color-danger: #ef4444;<br/>
+$color-warning: #f59e0b;<br/>
+$color-success: #10b981;<br/>
+$color-info: #3b82f6;
+
+// Tamanhos
+$header-height: 80px;<br/>
+$header-height-mobile: 60px;<br/>
+$sidebar-width: 250px;
+
+// Breakpoints
+$breakpoint-mobile: 768px;<br/>
+$breakpoint-tablet: 1024px;<br/>
+$breakpoint-desktop: 1440px;
+
+// Sombras
+$shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);<br/>
+$shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);<br/>
+$shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);<br/>
+$shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+
+// Transições
+$transition-fast: 0.15s ease;<br/>
+$transition-base: 0.3s ease;<br/>
+$transition-slow: 0.5s ease;#### 4. CHECKLIST DE VALIDAÇÃO
+ Header com altura exata de 80px (60px mobile)
+ Logo à esquerda com largura exata de 250px
+ "Acessando como..." com nome do usuário
+ Variação dourada para assinantes (gradient #ffd700 → #ffed4e)
+ Botões: Assistente Virtual, Meus dados, Logout
+ Sidebar com largura exata de 250px
+ Menu com itens isolados
+ Hamburger mobile com 3 linhas
+ Overlay escuro ao abrir sidebar mobile
+ Sidebar desliza da esquerda (transform: translateX)
+ Logo no topo da sidebar (apenas mobile)
+ Conteúdo principal com padding 30px (20px mobile)
+ Sem quebras de compatibilidade
+ Build compilando sem erros
+### Notes1. Cores exatas: Use as cores especificadas (verde #22c55e, dourado #ffd700)
+2. Dimensões exatas: Header 80px, sidebar 250px, logo 250px
+3. Responsividade: Breakpoint em 768px para mobile
+4. Transições: Use 0.3s ease para todas as transições
+5. Sem mudanças estruturais: Apenas layout, sem alterar componentes existentes
+6. Validar com original: Compare pixel por pixel com o layout original em produção### Relevant files
+layouts/agencia-painel.vue
+components/agencia/AgenciaMenu.vue
+assets/scss/variables.scss
+assets/scss/agencia.scss
+nuxt.config.ts (verificar imports de SCSS)
+### Success Criteria✅ Layout idêntico ao original
+✅ Sem erros de compilação
+✅ Responsivo em mobile
+✅ Sem quebras de compatibilidade
+✅ App rodando em http://0.0.0.0:5000/
