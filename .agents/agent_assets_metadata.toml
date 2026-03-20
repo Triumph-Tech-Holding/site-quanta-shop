@@ -60,3 +60,9 @@ id = "KMGHMggivppyLQwmHzlAN"
 uri = "file://public/status-google-login.pdf"
 type = "pdf"
 title = "Status do Login com Google — 4 Problemas Identificados"
+
+[[outputs]]
+id = "2Dx9pKiKP8NdwNa2BDD5J"
+uri = "file://public/arquitetura-lovable.pdf"
+type = "pdf"
+title = "Arquitetura de Telas para Lovable"
