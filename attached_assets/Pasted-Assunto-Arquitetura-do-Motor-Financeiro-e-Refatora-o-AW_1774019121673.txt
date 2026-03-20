@@ -1,0 +1,23 @@
+Assunto: Arquitetura do Motor Financeiro e Refatoração AWIN (Fase 1)
+
+"Atue como o Arquiteto de Software Principal da Quanta Shop. Vamos iniciar a Refatoração do módulo AWIN (correção do bug do ClickRef e padronização de banco de dados).
+
+Antes de escrever o código, você precisa entender o contexto completo da nossa plataforma. A Quanta Shop não é um site de cashback comum. Nós operamos um Motor de Distribuição de Riqueza Omnichannel. Isso significa que as entradas de comissão vêm de múltiplas fontes:
+
+Vendas Online (Postbacks da AWIN e futuros parceiros).
+
+Vendas em Negócios Locais (Lojas Físicas).
+
+Lançamentos Manuais de comissionamento.
+
+Todo esse dinheiro que entra é submetido a um motor de regras complexo: retenção de 10%, compressão dinâmica de 60 dias, e múltiplos bônus pagos em diferentes contextos para a rede de indicação (Upline).
+
+Para que o módulo da AWIN não se torne um 'Frankenstein' isolado, me responda detalhadamente como você planeja estruturar essa fundação:
+
+1. Padronização de Entradas (Unified Ledger): Como você sugere modelar o banco de dados para que o Postback da AWIN, a venda da padaria local e o lançamento manual converjam para a mesma tabela de 'Transações Brutas', permitindo que o Motor de Bônus processe todos de forma idêntica?
+
+2. Desacoplamento da Regra de Negócio: Quando o Webhook da AWIN confirmar uma comissão, o código deve calcular e pagar os múltiplos bônus da rede imediatamente naquele mesmo processo (arriscando um gargalo de performance), ou deve apenas registrar o evento bruto e deixar que um 'Serviço de Distribuição' (Worker/Cron) faça os cálculos pesados de rede em background?
+
+3. Rastreabilidade (ClickRef vs. Rede): Como o parâmetro clickref enviado para a AWIN deve ser estruturado para garantir que, na volta da transação, o sistema saiba exatamente qual matriz de bônus aplicar para aquele usuário específico e sua respectiva linha ascendente?
+
+Aguardo sua análise arquitetural sobre esses 3 pontos antes de aprovarmos qualquer alteração de código ou banco de dados."

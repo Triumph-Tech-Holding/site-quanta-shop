@@ -24,3 +24,9 @@ id = "5VL6BC16dmV1GjO-uHnFj"
 uri = "file://public/auditoria-arquitetura-quanta-shop.pdf"
 type = "pdf"
 title = "Auditoria Crítica de Arquitetura — Quanta Shop"
+
+[[outputs]]
+id = "d3-2iG-JdOeS1z7lZqsnt"
+uri = "file://public/analise-arquitetura-motor-financeiro.pdf"
+type = "pdf"
+title = "Análise Arquitetural — Motor Financeiro & Módulo AWIN"
