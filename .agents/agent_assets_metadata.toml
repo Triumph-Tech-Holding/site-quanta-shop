@@ -54,3 +54,9 @@ id = "Hml6ixhps35g11-hiNtNR"
 uri = "file://public/auditoria-api-quanta-shop.pdf"
 type = "pdf"
 title = "Auditoria da Camada de API — .NET Core"
+
+[[outputs]]
+id = "KMGHMggivppyLQwmHzlAN"
+uri = "file://public/status-google-login.pdf"
+type = "pdf"
+title = "Status do Login com Google — 4 Problemas Identificados"
