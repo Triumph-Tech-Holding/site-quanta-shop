@@ -48,3 +48,9 @@ id = "KI-4b0O2cP6LYo6SYbq8l"
 uri = "file://public/auditoria-agencia-quanta-shop.pdf"
 type = "pdf"
 title = "Auditoria da Agência — Escritório Virtual"
+
+[[outputs]]
+id = "Hml6ixhps35g11-hiNtNR"
+uri = "file://public/auditoria-api-quanta-shop.pdf"
+type = "pdf"
+title = "Auditoria da Camada de API — .NET Core"
