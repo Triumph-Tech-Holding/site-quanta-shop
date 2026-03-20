@@ -12,3 +12,9 @@ id = "grPI3U2EJgUBfH_64rMIf"
 uri = "file://GUIA_LOVABLE_QUANTA_SHOP.pdf"
 type = "pdf"
 title = "Guia Lovable — Quanta Shop"
+
+[[outputs]]
+id = "5qESM2EZY61Bl-Idm6hqP"
+uri = "file://public/auditoria-awin-quanta-shop.pdf"
+type = "pdf"
+title = "Auditoria Técnica AWIN — Quanta Shop"
