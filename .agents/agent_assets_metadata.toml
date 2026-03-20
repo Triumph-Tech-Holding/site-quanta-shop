@@ -36,3 +36,15 @@ id = "3ZfIE_MNTgq2GLDi9dYJy"
 uri = "file://public/auditoria-sistema-bonus-quanta-shop.pdf"
 type = "pdf"
 title = "Auditoria do Sistema de Bônus — 12 Níveis & Motor de Distribuição"
+
+[[outputs]]
+id = "g9D84DwDRplsPK3vCf__V"
+uri = "file://public/auditoria-homepage-quanta-shop.pdf"
+type = "pdf"
+title = "Auditoria da HOME — Padrão Mundial"
+
+[[outputs]]
+id = "KI-4b0O2cP6LYo6SYbq8l"
+uri = "file://public/auditoria-agencia-quanta-shop.pdf"
+type = "pdf"
+title = "Auditoria da Agência — Escritório Virtual"
