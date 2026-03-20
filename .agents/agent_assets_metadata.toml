@@ -30,3 +30,9 @@ id = "d3-2iG-JdOeS1z7lZqsnt"
 uri = "file://public/analise-arquitetura-motor-financeiro.pdf"
 type = "pdf"
 title = "Análise Arquitetural — Motor Financeiro & Módulo AWIN"
+
+[[outputs]]
+id = "3ZfIE_MNTgq2GLDi9dYJy"
+uri = "file://public/auditoria-sistema-bonus-quanta-shop.pdf"
+type = "pdf"
+title = "Auditoria do Sistema de Bônus — 12 Níveis & Motor de Distribuição"
