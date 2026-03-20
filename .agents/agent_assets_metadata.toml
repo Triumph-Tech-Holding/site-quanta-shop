@@ -18,3 +18,9 @@ id = "5qESM2EZY61Bl-Idm6hqP"
 uri = "file://public/auditoria-awin-quanta-shop.pdf"
 type = "pdf"
 title = "Auditoria Técnica AWIN — Quanta Shop"
+
+[[outputs]]
+id = "5VL6BC16dmV1GjO-uHnFj"
+uri = "file://public/auditoria-arquitetura-quanta-shop.pdf"
+type = "pdf"
+title = "Auditoria Crítica de Arquitetura — Quanta Shop"
