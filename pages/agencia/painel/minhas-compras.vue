@@ -244,7 +244,7 @@ async function buscarPedidos() {
       const cb = item.cashbackReceber as number;
       const cashbackReceber = cb ? formatCurrency(cb) : '----';
 
-      return { produto: descricao, data: item.dataPedido, valor: item.valorPedido, status, cashbackReceber };
+      return { ...item, produto: descricao, data: item.dataPedido, valor: item.valorPedido, status, cashbackReceber };
     });
   } catch {
     items.value = [];

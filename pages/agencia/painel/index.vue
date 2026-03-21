@@ -359,7 +359,7 @@ onMounted(async () => {
       const d = r.data;
       if (d) {
         const val = d.valorPorMinuto ?? d.ValorPorMinuto ?? 0;
-        targetValue.value = Math.abs(val) * -1;
+        targetValue.value = Math.abs(val);
         const meta = metaTabValue.value;
         const acumulado = Math.abs(val) * (d.minutos ?? 1);
         progressValue.value = Math.min(100, (acumulado / meta) * 100);
