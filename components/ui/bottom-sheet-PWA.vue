@@ -65,47 +65,50 @@ const isAndroid = () => {
 };
 
 onMounted(() => {
-  const lastClosedDate = localStorage.getItem("pwaBottomSheetClosed");
-  const currentDate = new Date().toISOString().split("T")[0];
-
   isIosDevice.value = isIos();
   isAndroidDevice.value = isAndroid();
 
+  // Se já está instalado como PWA, não mostra
   if (window.matchMedia("(display-mode: standalone)").matches) {
-    // Se o app já estiver instalado, não mostra o Bottom Sheet
     showBottomSheet.value = false;
-
     return;
   }
 
-  // Mostra o Bottom Sheet se não houver registro ou se a data for diferente
-  if (
-    !lastClosedDate ||
-    currentDate - new Date(lastClosedDate) > 90 * 24 * 60 * 60 * 1000
-  ) {
-    showBottomSheet.value = true;
-
-    window.addEventListener("beforeinstallprompt", (e) => {
-      e.preventDefault(); // Impedir que o navegador exiba o prompt automaticamente
-      installPromptEvent.value = e; // Armazenar o evento para ser usado mais tarde
-      showBottomSheet.value = true; // Mostrar o Bottom Sheet para o usuário
-    });
+  // Verifica se foi fechado nesta sessão (aba atual)
+  if (sessionStorage.getItem("pwaBottomSheetDismissed")) {
+    showBottomSheet.value = false;
+    return;
   }
+
+  // Verifica se foi fechado nos últimos 90 dias
+  const lastClosedDate = localStorage.getItem("pwaBottomSheetClosed");
+  if (lastClosedDate) {
+    const daysSinceClosed = (Date.now() - new Date(lastClosedDate).getTime()) / (1000 * 60 * 60 * 24);
+    if (daysSinceClosed < 90) {
+      showBottomSheet.value = false;
+      return;
+    }
+  }
+
+  // Mostra o popup (mas só para dispositivos móveis ou se recebeu o evento beforeinstallprompt)
+  if (isIosDevice.value || isAndroidDevice.value) {
+    showBottomSheet.value = true;
+  }
+
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    installPromptEvent.value = e;
+    showBottomSheet.value = true;
+  });
 });
 
-// Função para instalar o PWA
 const installPWA = async () => {
   if (isIosDevice.value) {
-    alert(
-      "Para instalar no iOS, adicione à tela inicial pelo botão de compartilhar."
-    );
+    alert("Para instalar no iOS, adicione à tela inicial pelo botão de compartilhar.");
   } else if (isAndroidDevice.value) {
-    alert(
-      "Para instalar no Android, clique no botão de opções no Chrome, em seguida 'Adicionar à tela inicial' e selecione 'Instalar'."
-    );
+    alert("Para instalar no Android, clique no botão de opções no Chrome, em seguida 'Adicionar à tela inicial' e selecione 'Instalar'.");
   } else if (installPromptEvent.value) {
-    installPromptEvent.value.prompt(); // Mostrar o prompt de instalação nativo
-
+    installPromptEvent.value.prompt();
     const choiceResult = await installPromptEvent.value.userChoice;
     if (choiceResult.outcome === "accepted") {
       console.log("Usuário aceitou a instalação do PWA");
@@ -113,15 +116,15 @@ const installPWA = async () => {
       console.log("Usuário recusou a instalação do PWA");
     }
     installPromptEvent.value = null;
-    showBottomSheet.value = false; // Esconder o Bottom Sheet após o resultado
+    showBottomSheet.value = false;
   }
 };
 
-// Função para fechar o Bottom Sheet sem instalar
 const closeBottomSheet = () => {
-  const currentDate = new Date().toISOString().split("T")[0]; // Armazena a data atual (YYYY-MM-DD)
+  const currentDate = new Date().toISOString();
   localStorage.setItem("pwaBottomSheetClosed", currentDate);
-  showBottomSheet.value = false; // Esconde o Bottom Sheet
+  sessionStorage.setItem("pwaBottomSheetDismissed", "1");
+  showBottomSheet.value = false;
 };
 </script>
 
