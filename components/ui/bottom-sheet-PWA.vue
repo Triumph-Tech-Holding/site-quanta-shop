@@ -65,6 +65,9 @@ const isAndroid = () => {
 };
 
 onMounted(() => {
+  // Não mostra quando rodando dentro de um iframe (ex: preview do Replit)
+  if (window !== window.top) return;
+
   isIosDevice.value = isIos();
   isAndroidDevice.value = isAndroid();
 
