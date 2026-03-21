@@ -45,11 +45,11 @@
   justify-content: center;
   width: 64px;
   height: 64px;
-  background: linear-gradient(135deg, #0d3d47 0%, #1e5d68 50%, #2a8a9a 100%);
+  background: linear-gradient(135deg, #225F6B 0%, #2F7785 100%);
   border-radius: 50%;
   color: #fff;
   font-size: 24px;
-  box-shadow: 0 4px 20px rgba(30, 93, 104, 0.30);
+  box-shadow: 0 4px 20px rgba(47, 119, 133, 0.30);
 }
 
 .qs-login-subtitle {

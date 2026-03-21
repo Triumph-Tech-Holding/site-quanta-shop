@@ -7,29 +7,30 @@
 /* ─── 1. GOOGLE FONTS — Inter ─────────────────────────────── */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
-/* ─── 2. DESIGN TOKENS ────────────────────────────────────── */
+/* ─── 2. DESIGN TOKENS — Cores oficiais da marca Quanta ────── */
 :root {
-  /* Brand palette */
-  --qs-primary:       #1e5d68;
-  --qs-primary-dark:  #0d3d47;
-  --qs-primary-mid:   #2a8a9a;
-  --qs-lime:          #98c73a;
-  --qs-lime-dark:     #7aad1f;
+  /* Brand palette — valores exatos do brand guide */
+  --qs-primary:       #2F7785;   /* teal principal  R:47  G:119 B:133 */
+  --qs-primary-dark:  #225F6B;   /* teal escuro     R:34  G:95  B:107 */
+  --qs-primary-mid:   #3A9AAD;   /* teal médio (derivado) */
+  --qs-lime:          #98C73A;   /* lime verde      R:152 G:199 B:58  */
+  --qs-lime-dark:     #7aad1f;   /* lime escuro */
+  --qs-bg-brand:      #F4F4F5;   /* cinza claro     R:244 G:244 B:245 */
   --qs-gold:          #FFB342;
-  --qs-near-black:    #0d1117;
+  --qs-near-black:    #1a2332;
 
-  /* Gradients */
-  --qs-gradient-primary: linear-gradient(135deg, #0d3d47 0%, #1e5d68 50%, #2a8a9a 100%);
-  --qs-gradient-lime:    linear-gradient(135deg, #7aad1f 0%, #98c73a 100%);
-  --qs-gradient-btn:     linear-gradient(135deg, #1e5d68 0%, #2a8a9a 100%);
-  --qs-gradient-hero:    linear-gradient(135deg, #0d3d47 0%, #1e5d68 60%, #2a7a88 100%);
+  /* Gradients — usando cores oficiais */
+  --qs-gradient-primary: linear-gradient(135deg, #225F6B 0%, #2F7785 50%, #3A9AAD 100%);
+  --qs-gradient-lime:    linear-gradient(135deg, #7aad1f 0%, #98C73A 100%);
+  --qs-gradient-btn:     linear-gradient(135deg, #225F6B 0%, #2F7785 100%);
+  --qs-gradient-hero:    linear-gradient(135deg, #1a4a54 0%, #225F6B 40%, #2F7785 100%);
 
   /* Shadows */
   --qs-shadow-xs: 0 1px 3px rgba(1, 15, 28, 0.06);
   --qs-shadow-sm: 0 2px 8px rgba(1, 15, 28, 0.08);
   --qs-shadow-md: 0 4px 20px rgba(1, 15, 28, 0.12);
   --qs-shadow-lg: 0 8px 40px rgba(1, 15, 28, 0.16);
-  --qs-shadow-green: 0 4px 20px rgba(30, 93, 104, 0.30);
+  --qs-shadow-green: 0 4px 20px rgba(47, 119, 133, 0.30);
 
   /* Border radius */
   --qs-radius-sm: 6px;
@@ -85,8 +86,8 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: 0.01em;
 
   &:hover {
-    background: linear-gradient(135deg, #0d3d47 0%, #1e5d68 100%) !important;
-    box-shadow: 0 6px 24px rgba(30, 93, 104, 0.40) !important;
+    background: linear-gradient(135deg, #1a4a54 0%, #225F6B 100%) !important;
+    box-shadow: 0 6px 24px rgba(47, 119, 133, 0.40) !important;
     transform: translateY(-1px);
     color: #fff !important;
   }
@@ -110,7 +111,7 @@ h1, h2, h3, h4, h5, h6 {
   border: none !important;
 
   &:hover {
-    background: linear-gradient(135deg, #0d3d47 0%, #1e5d68 100%) !important;
+    background: linear-gradient(135deg, #1a4a54 0%, #225F6B 100%) !important;
     color: #fff !important;
     transform: translateY(-1px);
   }
@@ -232,7 +233,7 @@ h1, h2, h3, h4, h5, h6 {
 
   &:focus-within {
     border-color: var(--qs-primary-mid) !important;
-    box-shadow: 0 0 0 4px rgba(30, 93, 104, 0.12) !important;
+    box-shadow: 0 0 0 4px rgba(47, 119, 133, 0.12) !important;
   }
 }
 
@@ -513,7 +514,7 @@ section.tp-feature-area {
 .qs-divider {
   width: 100%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(30, 93, 104, 0.2), transparent);
+  background: linear-gradient(90deg, transparent, rgba(47, 119, 133, 0.2), transparent);
   border: none;
   margin: 0;
 }
