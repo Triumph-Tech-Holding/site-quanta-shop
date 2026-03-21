@@ -94,6 +94,14 @@ O site original fazia chamadas diretas para `https://api.quantashop.com.br/api` 
 - `pinia/usePartnerStore.ts`: funções `fetchLocalPartners`, `fetchBestDiscountsLocalPartners`, `fetchFeaturedLocalPartners`, `fetchTopSellersLocalPartners` — só substituem `{userId}` no link se o placeholder estiver presente; links diretos (sem `{userId}`) são preservados para qualquer estado de login
 - Links dos parceiros locais apontam para `escritorio.quantashop.com.br` (retornado pela API)
 
+## Segurança da API (.NET)
+
+- **JWT access token**: expira em 60 minutos (`AddMinutes(60)` em `UsuarioNegocio.cs`)
+- **Refresh token**: expira em 30 dias (`AddDays(30)` em `UsuarioNegocio.cs`)
+- **CORS**: restrito a domínios Quanta via `WithOrigins(...)` em `Startup.cs`; lê variável de ambiente `ALLOWED_ORIGINS` (vírgula-separada); fallback para `quantashop.com.br`, `www.quantashop.com.br`, `escritorio.quantashop.com.br`, `app.quantashop.com.br`
+- **Rate limiting**: `FixedWindowRateLimiter` nos endpoints de autenticação — 10 req/60s por IP, retorna HTTP 429; configurado em `Startup.cs`, aplicado com `[EnableRateLimiting("auth-limit")]` em `UsuarioLoginController.cs`
+- **Cookie de debug removido**: bloco `oh_vida_oh_ceus` removido de `ExceptionHandler.cs` — erros internos são logados no stderr, nunca expostos na resposta HTTP
+
 ## Bugs Conhecidos (Não Resolvidos)
 
 - **EF Core 1-to-1 CredenciamentoMapping**: Carrega credenciamento errado para usuários com múltiplas linhas na tabela

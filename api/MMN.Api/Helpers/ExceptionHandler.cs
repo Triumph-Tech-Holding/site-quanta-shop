@@ -89,39 +89,10 @@ namespace SimplesmenteSou.Configuration
                             Mensagem = mensagem
                         });
 
-#if !DEBUG
-                    if (context.Request.Cookies["debug"] == "oh_vida_oh_ceus")
-#endif
+                    Console.Error.WriteLine($"[{DateTime.UtcNow:O}] ERRO INTERNO: {error?.Message}\n{error?.StackTrace}");
+                    foreach (var internalError in internalErrors)
                     {
-                        if (error is AggregateException)
-                        {
-                            mensagensErro.Add(
-                                new MensagemErroViewModel
-                                {
-                                    ErrorCode = "erro_interno",
-                                    Mensagem = $"{error.Message}<br/>\n--------<br/>\n{error.StackTrace}"
-                                });
-                        }
-
-                        foreach (var internalError in internalErrors)
-                        {
-                            mensagensErro.Add(
-                                new MensagemErroViewModel
-                                {
-                                    ErrorCode = "erro_interno",
-                                    Mensagem = $"{internalError.Message}<br/>\n--------<br/>\n{internalError.StackTrace}"
-                                });
-
-                            if (internalError.InnerException != null)
-                            {
-                                mensagensErro.Add(
-                                    new MensagemErroViewModel
-                                    {
-                                        ErrorCode = "erro_interno",
-                                        Mensagem = $"{internalError.InnerException.Message}<br/>\n--------<br/>\n{internalError.InnerException.StackTrace}"
-                                    });
-                            }
-                        }
+                        Console.Error.WriteLine($"[{DateTime.UtcNow:O}] DETALHE: {internalError.Message}\n{internalError.StackTrace}");
                     }
                 }
 

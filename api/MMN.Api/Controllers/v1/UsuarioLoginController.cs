@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.Options;
 using MMN.Api.Helpers;
 using MMN.Dominio.Excecao;
@@ -154,6 +155,7 @@ namespace MMN.Api.Controllers.v1
 
         [HttpPost]
         [Route("autenticacao")]
+        [EnableRateLimiting("auth-limit")]
         public async Task<IActionResult> Autenticacao([FromBody] Logar login)
         {
             var usuario = _negocio.Autenticacao(login.Login, login.Senha, out var parceiro, !IsDev);
@@ -163,6 +165,7 @@ namespace MMN.Api.Controllers.v1
 
         [HttpPost]
         [Route("autenticacaoGoogle")]
+        [EnableRateLimiting("auth-limit")]
         public async Task<IActionResult> AutenticacaoGoogle([FromBody] LogarGoogleViewModel logar)
         {
             var usuario = _negocio.AutenticacaoGoogle(logar.Code, logar.RedirectUri, out Parceiro parceiro);
@@ -172,6 +175,7 @@ namespace MMN.Api.Controllers.v1
 
         [HttpPost]
         [Route("autenticacaoGoogleCredential")]
+        [EnableRateLimiting("auth-limit")]
         public async Task<IActionResult> AutenticacaoGoogleCredential([FromBody] LogarGoogleCredentialViewModel logar)
         {
             var (usuario, parceiro) = await _negocio.AutenticacaoGoogleCredentialAsync(logar.Credential);

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Threading.RateLimiting;
 using MMN.Api.Controllers.v1;
 using MMN.Api.Helpers;
 using MMN.Api.Hubs;
@@ -56,15 +58,41 @@ namespace MMN.Api
 
             services.AddHealthChecks();
 
+            var allowedOrigins = (Environment.GetEnvironmentVariable("ALLOWED_ORIGINS") ?? "")
+                .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+            if (allowedOrigins.Length == 0)
+            {
+                allowedOrigins = new[]
+                {
+                    "https://quantashop.com.br",
+                    "https://www.quantashop.com.br",
+                    "https://escritorio.quantashop.com.br",
+                    "https://app.quantashop.com.br"
+                };
+            }
+
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowMyOrigin",
                 builder =>
                     builder.AllowAnyHeader()
                     .AllowAnyMethod()
-                    .SetIsOriginAllowed(host => true)
+                    .WithOrigins(allowedOrigins)
                     .AllowCredentials()
                     .WithExposedHeaders("token-expired"));
+            });
+
+            services.AddRateLimiter(options =>
+            {
+                options.AddFixedWindowLimiter("auth-limit", limiterOptions =>
+                {
+                    limiterOptions.PermitLimit = 10;
+                    limiterOptions.Window = TimeSpan.FromSeconds(60);
+                    limiterOptions.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+                    limiterOptions.QueueLimit = 0;
+                });
+                options.RejectionStatusCode = 429;
             });
 
             services.AddMemoryCache();
@@ -358,6 +386,8 @@ namespace MMN.Api
             app.UseExceptionHandler(ExceptionHandler.GlobalExceptionHandler);
 
             app.UseAuthentication();
+
+            app.UseRateLimiter();
 
             app.UseSwagger();
             app.UseSwaggerUI(opt =>

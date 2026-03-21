@@ -1144,7 +1144,7 @@ namespace MMN.Negocio.Negocio
                     new Claim("Cultura", usuario.Cultura),
                     new Claim("Comerciante", comerciante.ToString())
                 }),
-                Expires = DateTime.UtcNow.AddYears(1),
+                Expires = DateTime.UtcNow.AddMinutes(60),
                 SigningCredentials =
                     new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
@@ -1156,7 +1156,7 @@ namespace MMN.Negocio.Negocio
                 JwtId = token.Id,
                 IdUsuario = usuario.IdUsuario,
                 CreationDate = DateTime.UtcNow,
-                ExpiryDate = DateTime.UtcNow.AddYears(1),
+                ExpiryDate = DateTime.UtcNow.AddDays(30),
                 Used = false,
                 Invalidated = false
             };
