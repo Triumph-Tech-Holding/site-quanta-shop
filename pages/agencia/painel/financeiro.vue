@@ -209,14 +209,18 @@ onMounted(async () => {
         ];
       }
     }).catch(() => {}),
-    api.post('/financeiro/movimentacoes', {}, authHeader()).then(r => {
+    api.post('/Extrato/buscarExtrato', {}, authHeader()).then(r => {
       movimentacoes.value = Array.isArray(r.data) ? r.data : (r.data?.items ?? []);
-    }).catch(async () => {
-      try {
-        const { data } = await api.get('/financeiro/movimentacoes', authHeader());
-        movimentacoes.value = Array.isArray(data) ? data : (data?.items ?? []);
-      } catch { movimentacoes.value = []; }
-    }),
+    }).catch(() =>
+      api.post('/financeiro/movimentacoes', {}, authHeader()).then(r => {
+        movimentacoes.value = Array.isArray(r.data) ? r.data : (r.data?.items ?? []);
+      }).catch(async () => {
+        try {
+          const { data } = await api.get('/financeiro/movimentacoes', authHeader());
+          movimentacoes.value = Array.isArray(data) ? data : (data?.items ?? []);
+        } catch { movimentacoes.value = []; }
+      })
+    ),
     carregarHistorico(),
   ]);
   loading.value = false;

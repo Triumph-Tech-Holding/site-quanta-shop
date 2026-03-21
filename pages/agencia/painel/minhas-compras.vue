@@ -213,8 +213,15 @@ async function buscarPedidos() {
       dataFim: filtro.dataFim ? new Date(filtro.dataFim + 'T23:59:59').toISOString() : null,
       idStatus: filtro.idStatus || 0,
     };
-    const { data } = await api.post('/Pedidos/listaPedidosAfiliados', body, authHeader());
-    const list: Record<string, unknown>[] = Array.isArray(data) ? data : [];
+    let rawData: unknown;
+    try {
+      const r = await api.post('/MinhasCompras/buscarPedidos', body, authHeader());
+      rawData = r.data;
+    } catch {
+      const r = await api.post('/Pedidos/listaPedidosAfiliados', body, authHeader());
+      rawData = r.data;
+    }
+    const list: Record<string, unknown>[] = Array.isArray(rawData) ? rawData : [];
     items.value = list.map((item) => {
       let descricao = '';
       const pd = (item.pedidoDetalhe as Record<string, unknown>[] | undefined) ?? [];

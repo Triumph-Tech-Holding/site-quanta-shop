@@ -346,10 +346,15 @@ onMounted(async () => {
   startTimer();
 
   await Promise.allSettled([
-    api.get('/v2/dashboard/get-totalizers-user', authHeader()).then(r => {
+    api.get('/Dashboard/obterBarraStatus', authHeader()).then(r => {
       const d = r.data?.data ?? r.data;
       if (d) totalizadores.value = { rede: d.rede ?? 0, saldo: d.saldo ?? 0, ecossistemas: d.ecossistemas ?? 0, pontos: d.pontos ?? 0 };
-    }).catch(() => {}),
+    }).catch(() =>
+      api.get('/v2/dashboard/get-totalizers-user', authHeader()).then(r => {
+        const d = r.data?.data ?? r.data;
+        if (d) totalizadores.value = { rede: d.rede ?? 0, saldo: d.saldo ?? 0, ecossistemas: d.ecossistemas ?? 0, pontos: d.pontos ?? 0 };
+      }).catch(() => {})
+    ),
     api.get('/MetaMinuto/obterMetaMinuto', authHeader()).then(r => {
       const d = r.data;
       if (d) {
