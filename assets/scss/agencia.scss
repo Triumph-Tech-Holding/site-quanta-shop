@@ -445,11 +445,11 @@ $ag-text: #272222;
    ================================================================ */
 @media (max-width: 768px) {
   .hamburger-btn {
-    display: flex;
+    display: none;
   }
 
   .sidebar-overlay {
-    display: block;
+    display: none;
   }
 
   .box-header-panel {
@@ -477,35 +477,32 @@ $ag-text: #272222;
   }
 
   .box-menu-lateral {
-    position: fixed;
-    top: 0;
-    left: -260px;
-    height: 100vh;
-    z-index: 1000;
-    transition: left .25s ease;
+    position: relative;
+    left: 0;
+    height: auto;
+    z-index: auto;
     width: 250px;
     min-width: 250px;
-
-    &.sidebar-mobile-open {
-      left: 0;
-    }
+    flex-shrink: 0;
 
     .bg-menu {
       height: 100%;
       overflow-y: auto;
 
       .sidebar-logo-block {
-        display: flex;
+        display: none;
       }
     }
   }
 
-  .box-conteudo.conteudo-logado {
-    padding: 1rem;
-  }
-
   .flex-geral {
     min-height: calc(100vh - 90px);
+    overflow-x: auto;
+  }
+
+  .box-conteudo.conteudo-logado {
+    padding: 1rem;
+    min-width: 320px;
   }
 }
 
