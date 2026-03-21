@@ -1,32 +1,26 @@
 <template>
   <section class="tp-login-area pb-140 p-relative z-index-1 fix">
-    <div class="tp-login-shape">
-      <img class="tp-login-shape-1" src="/img/login/login-shape-1.png" alt="shape" />
-      <img class="tp-login-shape-2" src="/img/login/login-shape-2.png" alt="shape" />
-      <img class="tp-login-shape-3" src="/img/login/login-shape-3.png" alt="shape" />
-      <img class="tp-login-shape-4" src="/img/login/login-shape-4.png" alt="shape" />
-    </div>
     <div class="container">
       <div class="row justify-content-center">
-        <div class="col-xl-6 col-lg-8">
+        <div class="col-xl-5 col-lg-7 col-md-9">
           <div class="tp-login-wrapper">
             <div class="tp-login-top text-center mb-30">
-              <h3 class="tp-login-title">Sou cliente Quanta Shop</h3>
-              <!-- <p>
-                Não possui cadastro?
-                <span><nuxt-link href="/register">Clique aqui</nuxt-link></span>
-              </p> -->
+              <div class="qs-login-icon mb-16">
+                <span class="qs-login-icon-ring">
+                  <i class="fa-solid fa-user"></i>
+                </span>
+              </div>
+              <h3 class="tp-login-title">Bem-vindo de volta!</h3>
+              <p class="qs-login-subtitle">Entre na sua conta e ative seu cashback</p>
             </div>
             <div class="tp-login-option">
-              <!-- social login start -->
-              <!-- <login-social /> -->
-              <!-- social login end -->
-              <!-- <div class="tp-login-mail text-center mb-40">
-                <p>ou entro com o seu <a href="#">Email</a></p>
-              </div> -->
-              <!-- form start -->
               <forms-login-form />
-              <!-- form end -->
+            </div>
+            <div class="qs-login-footer text-center mt-24">
+              <p>
+                Não tem conta?
+                <nuxt-link href="/register" class="qs-link">Cadastre-se grátis</nuxt-link>
+              </p>
             </div>
           </div>
         </div>
@@ -37,3 +31,58 @@
 
 <script setup lang="ts">
 </script>
+
+<style scoped>
+.qs-login-icon {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.qs-login-icon-ring {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, #0d3d47 0%, #1e5d68 50%, #2a8a9a 100%);
+  border-radius: 50%;
+  color: #fff;
+  font-size: 24px;
+  box-shadow: 0 4px 20px rgba(30, 93, 104, 0.30);
+}
+
+.qs-login-subtitle {
+  font-family: 'Inter', 'Jost', sans-serif;
+  color: #718096;
+  font-size: 15px;
+  margin-top: 4px;
+  margin-bottom: 0;
+}
+
+.qs-login-footer p {
+  font-family: 'Inter', 'Jost', sans-serif;
+  color: #718096;
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+.qs-link {
+  color: #1e5d68;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.qs-link:hover {
+  color: #2a8a9a;
+}
+
+.mb-16 {
+  margin-bottom: 16px;
+}
+
+.mt-24 {
+  margin-top: 24px;
+}
+</style>

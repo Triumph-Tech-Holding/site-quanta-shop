@@ -102,6 +102,28 @@ O site original fazia chamadas diretas para `https://api.quantashop.com.br/api` 
 - **Rate limiting**: `FixedWindowRateLimiter` nos endpoints de autenticação — 10 req/60s por IP, retorna HTTP 429; configurado em `Startup.cs`, aplicado com `[EnableRateLimiting("auth-limit")]` em `UsuarioLoginController.cs`
 - **Cookie de debug removido**: bloco `oh_vida_oh_ceus` removido de `ExceptionHandler.cs` — erros internos são logados no stderr, nunca expostos na resposta HTTP
 
+## Sistema de Design Premium (Task #33)
+
+Arquivo: `assets/scss/quanta-premium.scss` — importado por último em `nuxt.config.ts` css array.
+
+### Tokens (CSS vars `--qs-*`)
+- **Cores**: `--qs-primary` `#1e5d68`, `--qs-primary-dark` `#0d3d47`, `--qs-lime` `#98c73a`
+- **Gradientes**: `--qs-gradient-primary`, `--qs-gradient-btn`, `--qs-gradient-hero`
+- **Sombras**: `--qs-shadow-xs/sm/md/lg`
+- **Border-radius**: `--qs-radius-sm/md/lg/pill`
+
+### Melhorias Visuais
+- **Tipografia**: fonte Inter 300–800, anti-aliasing, letter-spacing negativo nos títulos
+- **Botões**: `.tp-btn-2` usa gradiente teal, hover lift, box-shadow verde
+- **Cards parceiros**: border-radius 12px, hover elevation + translate(-4px), cashback badge pill no canto superior esquerdo
+- **Header sticky**: backdrop-blur(12px), search bar com border-radius pill + focus ring
+- **Breadcrumb**: fundo `--qs-gradient-primary` (teal escuro → mid)
+- **Login**: card branco com sombra lg, ícone circular degradê, campo de senha com focus ring
+- **Footer**: fundo near-black `#0d1117`, texto `#a0aec0`, hover em lime `#98c73a`
+- **Scrollbar**: 6px, thumb teal, border-radius pill
+- **Seções**: padding 80px desktop / 48px mobile
+- **Skeleton**: animação `qs-skeleton-wave` disponível via classe `.qs-skeleton`
+
 ## Bugs Conhecidos (Não Resolvidos)
 
 - **EF Core 1-to-1 CredenciamentoMapping**: Carrega credenciamento errado para usuários com múltiplas linhas na tabela

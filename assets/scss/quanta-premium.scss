@@ -1,0 +1,596 @@
+/*============================================================
+  QUANTA SHOP — Premium Design System
+  Importado ao final de main.scss para sobrescrever o tema base.
+  Todas as variáveis usam o prefixo --qs- para evitar conflito.
+==============================================================*/
+
+/* ─── 1. GOOGLE FONTS — Inter ─────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* ─── 2. DESIGN TOKENS ────────────────────────────────────── */
+:root {
+  /* Brand palette */
+  --qs-primary:       #1e5d68;
+  --qs-primary-dark:  #0d3d47;
+  --qs-primary-mid:   #2a8a9a;
+  --qs-lime:          #98c73a;
+  --qs-lime-dark:     #7aad1f;
+  --qs-gold:          #FFB342;
+  --qs-near-black:    #0d1117;
+
+  /* Gradients */
+  --qs-gradient-primary: linear-gradient(135deg, #0d3d47 0%, #1e5d68 50%, #2a8a9a 100%);
+  --qs-gradient-lime:    linear-gradient(135deg, #7aad1f 0%, #98c73a 100%);
+  --qs-gradient-btn:     linear-gradient(135deg, #1e5d68 0%, #2a8a9a 100%);
+  --qs-gradient-hero:    linear-gradient(135deg, #0d3d47 0%, #1e5d68 60%, #2a7a88 100%);
+
+  /* Shadows */
+  --qs-shadow-xs: 0 1px 3px rgba(1, 15, 28, 0.06);
+  --qs-shadow-sm: 0 2px 8px rgba(1, 15, 28, 0.08);
+  --qs-shadow-md: 0 4px 20px rgba(1, 15, 28, 0.12);
+  --qs-shadow-lg: 0 8px 40px rgba(1, 15, 28, 0.16);
+  --qs-shadow-green: 0 4px 20px rgba(30, 93, 104, 0.30);
+
+  /* Border radius */
+  --qs-radius-sm: 6px;
+  --qs-radius-md: 12px;
+  --qs-radius-lg: 20px;
+  --qs-radius-pill: 999px;
+
+  /* Transitions */
+  --qs-transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --qs-transition-fast: all 0.15s ease;
+
+  /* Typography */
+  --qs-font: 'Inter', 'Jost', sans-serif;
+
+  /* Surfaces */
+  --qs-bg-surface: #f6f8fa;
+  --qs-bg-section-alt: #f0f4f6;
+}
+
+/* ─── 3. GLOBAL BODY & FONT ───────────────────────────────── */
+body {
+  font-family: var(--qs-font) !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--qs-font) !important;
+  letter-spacing: -0.02em;
+}
+
+/* ─── 4. CUSTOM SCROLLBAR ─────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb {
+  background: var(--qs-primary);
+  border-radius: var(--qs-radius-pill);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--qs-primary-dark); }
+
+/* ─── 5. BUTTONS PREMIUM ──────────────────────────────────── */
+.tp-btn-2 {
+  background: var(--qs-gradient-btn) !important;
+  border: none !important;
+  border-radius: var(--qs-radius-sm) !important;
+  font-family: var(--qs-font) !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  padding: 10px 28px 10px !important;
+  color: #fff !important;
+  box-shadow: var(--qs-shadow-green) !important;
+  transition: var(--qs-transition) !important;
+  letter-spacing: 0.01em;
+
+  &:hover {
+    background: linear-gradient(135deg, #0d3d47 0%, #1e5d68 100%) !important;
+    box-shadow: 0 6px 24px rgba(30, 93, 104, 0.40) !important;
+    transform: translateY(-1px);
+    color: #fff !important;
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: var(--qs-shadow-sm) !important;
+  }
+}
+
+/* CTA cashback button */
+.tp-product-list-add-to-cart-btn {
+  background: var(--qs-gradient-btn) !important;
+  border-radius: var(--qs-radius-sm) !important;
+  font-family: var(--qs-font) !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  color: #fff !important;
+  padding: 8px 16px !important;
+  transition: var(--qs-transition) !important;
+  border: none !important;
+
+  &:hover {
+    background: linear-gradient(135deg, #0d3d47 0%, #1e5d68 100%) !important;
+    color: #fff !important;
+    transform: translateY(-1px);
+  }
+}
+
+/* Gold variant button */
+.qs-btn-gold {
+  display: inline-block;
+  background: linear-gradient(135deg, #e8950a 0%, #FFB342 100%);
+  border-radius: var(--qs-radius-sm);
+  font-family: var(--qs-font);
+  font-weight: 600;
+  font-size: 14px;
+  color: #fff;
+  padding: 10px 28px;
+  box-shadow: 0 4px 16px rgba(255, 179, 66, 0.35);
+  transition: var(--qs-transition);
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    background: linear-gradient(135deg, #c97e00 0%, #e8950a 100%);
+    color: #fff;
+    transform: translateY(-1px);
+  }
+}
+
+/* ─── 6. PARTNER CARDS PREMIUM ────────────────────────────── */
+.tp-product-item {
+  border-radius: var(--qs-radius-md) !important;
+  box-shadow: var(--qs-shadow-sm) !important;
+  border: 1px solid rgba(202, 212, 219, 0.5) !important;
+  transition: var(--qs-transition) !important;
+  overflow: hidden;
+  background: #fff;
+
+  &:hover {
+    box-shadow: var(--qs-shadow-md) !important;
+    transform: translateY(-4px);
+    border-color: transparent !important;
+  }
+}
+
+/* Partner card thumb */
+.tp-product-thumb {
+  border-bottom: 1px solid rgba(202, 212, 219, 0.4) !important;
+  background: #fff;
+  border-top-left-radius: var(--qs-radius-md) !important;
+  border-top-right-radius: var(--qs-radius-md) !important;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+/* Cashback badge on partner cards */
+.tp-product-price-wrapper {
+  margin: 8px 0 4px;
+}
+
+.tp-product-price.new-price {
+  background: var(--qs-gradient-btn);
+  color: #fff !important;
+  font-family: var(--qs-font) !important;
+  font-weight: 700 !important;
+  font-size: 13px !important;
+  padding: 4px 12px;
+  border-radius: var(--qs-radius-pill) !important;
+  display: inline-block;
+  letter-spacing: 0.01em;
+}
+
+/* Card content */
+.tp-product-content {
+  padding: 12px 16px 16px !important;
+}
+
+.tp-product-title {
+  font-family: var(--qs-font) !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+  color: #010F1C !important;
+  margin-bottom: 4px !important;
+}
+
+.tp-product-category > a,
+.tp-product-category > span {
+  font-family: var(--qs-font) !important;
+  font-weight: 500 !important;
+  font-size: 11px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--qs-primary) !important;
+}
+
+/* ─── 7. HEADER PREMIUM ───────────────────────────────────── */
+/* Sticky header — backdrop blur */
+.tp-header-sticky.header-sticky {
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  box-shadow: 0 2px 20px rgba(1, 15, 28, 0.10) !important;
+}
+
+/* Header top bar */
+.tp-header-top.qs-green-bg {
+  background: var(--qs-gradient-primary) !important;
+}
+
+/* Search bar */
+.tp-header-search-wrapper {
+  border-radius: var(--qs-radius-pill) !important;
+  border: 2px solid var(--qs-primary) !important;
+  overflow: hidden;
+  transition: var(--qs-transition) !important;
+  box-shadow: var(--qs-shadow-xs) !important;
+
+  &:focus-within {
+    border-color: var(--qs-primary-mid) !important;
+    box-shadow: 0 0 0 4px rgba(30, 93, 104, 0.12) !important;
+  }
+}
+
+.tp-header-search-box input {
+  font-family: var(--qs-font) !important;
+  font-size: 14px !important;
+}
+
+/* Search button */
+.tp-header-search-btn,
+button.tp-header-search-btn {
+  background: var(--qs-gradient-btn) !important;
+  border-radius: 0 var(--qs-radius-pill) var(--qs-radius-pill) 0 !important;
+  transition: var(--qs-transition) !important;
+  font-family: var(--qs-font) !important;
+  font-weight: 600;
+}
+
+/* ─── 8. HERO BANNER PREMIUM ──────────────────────────────── */
+.tp-slider-area {
+  .swiper-slide.green-dark-bg {
+    background: var(--qs-gradient-hero) !important;
+  }
+
+  /* Slide content typography */
+  .tp-slider-title {
+    font-family: var(--qs-font) !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.03em !important;
+    line-height: 1.1 !important;
+  }
+
+  /* Pagination dots */
+  .swiper-pagination-bullet {
+    width: 8px !important;
+    height: 8px !important;
+    background: rgba(255, 255, 255, 0.4) !important;
+    opacity: 1 !important;
+    transition: var(--qs-transition) !important;
+
+    &.swiper-pagination-bullet-active {
+      background: var(--qs-lime) !important;
+      width: 24px !important;
+      border-radius: var(--qs-radius-pill) !important;
+    }
+  }
+}
+
+/* ─── 9. SECTION TITLES & SPACING ────────────────────────── */
+.tp-section-title-wrapper {
+  margin-bottom: 36px;
+}
+
+.tp-section-title {
+  font-family: var(--qs-font) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.03em !important;
+  line-height: 1.15 !important;
+}
+
+/* Section overline label */
+.tp-section-title-pre {
+  font-family: var(--qs-font) !important;
+  font-weight: 600 !important;
+  font-size: 12px !important;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--qs-primary) !important;
+}
+
+/* Alternating section backgrounds */
+section.tp-product-area,
+section.tp-banner-area,
+section.tp-categories-area {
+  background: var(--qs-bg-surface);
+}
+
+/* Partners / feature sections */
+section.tp-partners-area,
+section.tp-feature-area {
+  background: #fff;
+}
+
+/* ─── 10. FOOTER PREMIUM ──────────────────────────────────── */
+.tp-footer-area {
+  background: var(--qs-near-black) !important;
+  color: #a0aec0 !important;
+
+  .tp-footer-widget-title {
+    color: #fff !important;
+    font-family: var(--qs-font) !important;
+    font-weight: 700 !important;
+    font-size: 15px !important;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 16px !important;
+  }
+
+  .tp-footer-widget-content ul li a {
+    color: #a0aec0 !important;
+    font-family: var(--qs-font) !important;
+    font-size: 14px !important;
+    transition: var(--qs-transition) !important;
+
+    &:hover {
+      color: var(--qs-lime) !important;
+    }
+
+    &::after {
+      background-color: var(--qs-lime) !important;
+    }
+  }
+
+  .tp-footer-desc {
+    color: #a0aec0 !important;
+    font-family: var(--qs-font) !important;
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+  }
+
+  .tp-footer-social a {
+    background: rgba(255,255,255,0.08) !important;
+    border: 1px solid rgba(255,255,255,0.12) !important;
+    color: #a0aec0 !important;
+    transition: var(--qs-transition) !important;
+    border-radius: var(--qs-radius-sm) !important;
+
+    &:hover {
+      background: var(--qs-primary) !important;
+      border-color: var(--qs-primary) !important;
+      color: #fff !important;
+    }
+  }
+}
+
+/* Footer bottom bar */
+.tp-footer-bottom-area {
+  background: rgba(0, 0, 0, 0.25) !important;
+  border-top: 1px solid rgba(255,255,255,0.08) !important;
+
+  & p, & span, & a {
+    color: #718096 !important;
+    font-family: var(--qs-font) !important;
+    font-size: 13px !important;
+  }
+
+  & a:hover {
+    color: var(--qs-lime) !important;
+  }
+}
+
+/* ─── 11. LOGIN PAGE PREMIUM ──────────────────────────────── */
+.tp-login-area {
+  background: var(--qs-bg-surface);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -20%;
+    left: -10%;
+    width: 60%;
+    height: 140%;
+    background: var(--qs-gradient-primary);
+    border-radius: 0 50% 50% 0;
+    opacity: 0.06;
+    pointer-events: none;
+  }
+}
+
+.tp-login-wrapper {
+  background: #fff !important;
+  border-radius: var(--qs-radius-lg) !important;
+  box-shadow: var(--qs-shadow-lg) !important;
+  padding: 48px 40px !important;
+  border: 1px solid rgba(202, 212, 219, 0.4);
+}
+
+.tp-login-title {
+  font-family: var(--qs-font) !important;
+  font-weight: 800 !important;
+  font-size: 28px !important;
+  letter-spacing: -0.03em !important;
+  color: var(--qs-near-black) !important;
+  margin-bottom: 8px !important;
+}
+
+.tp-login-top p {
+  font-family: var(--qs-font) !important;
+  color: #718096 !important;
+  font-size: 15px !important;
+}
+
+/* Login form inputs */
+.tp-login-input,
+.tp-login-area input[type="text"],
+.tp-login-area input[type="email"],
+.tp-login-area input[type="password"] {
+  font-family: var(--qs-font) !important;
+  border-radius: var(--qs-radius-sm) !important;
+  border: 1.5px solid #d1d9e0 !important;
+  font-size: 14px !important;
+  transition: var(--qs-transition) !important;
+  height: 48px !important;
+
+  &:focus {
+    border-color: var(--qs-primary) !important;
+    box-shadow: 0 0 0 4px rgba(30, 93, 104, 0.1) !important;
+    outline: none !important;
+  }
+}
+
+/* Login submit button */
+.tp-login-area button[type="submit"],
+.tp-login-area .tp-login-btn {
+  background: var(--qs-gradient-btn) !important;
+  border-radius: var(--qs-radius-sm) !important;
+  font-family: var(--qs-font) !important;
+  font-weight: 700 !important;
+  font-size: 15px !important;
+  color: #fff !important;
+  border: none !important;
+  padding: 13px 32px !important;
+  box-shadow: var(--qs-shadow-green) !important;
+  transition: var(--qs-transition) !important;
+  width: 100%;
+
+  &:hover {
+    background: linear-gradient(135deg, #0d3d47 0%, #1e5d68 100%) !important;
+    box-shadow: 0 6px 24px rgba(30, 93, 104, 0.40) !important;
+    transform: translateY(-1px);
+  }
+}
+
+/* ─── 12. BREADCRUMB PREMIUM ──────────────────────────────── */
+.tp-breadcrumb-area {
+  background: var(--qs-gradient-primary) !important;
+
+  .tp-breadcrumb-title {
+    font-family: var(--qs-font) !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.03em !important;
+    color: #fff !important;
+  }
+
+  .tp-breadcrumb-list li,
+  .tp-breadcrumb-list li a,
+  .tp-breadcrumb-list li span {
+    font-family: var(--qs-font) !important;
+    color: rgba(255,255,255,0.75) !important;
+  }
+
+  .tp-breadcrumb-list li.active {
+    color: var(--qs-lime) !important;
+  }
+}
+
+/* ─── 13. SKELETON LOADING ────────────────────────────────── */
+@keyframes qs-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.qs-skeleton {
+  background: linear-gradient(90deg, #e8edf0 25%, #f5f8fa 50%, #e8edf0 75%);
+  background-size: 200% 100%;
+  animation: qs-skeleton-wave 1.5s infinite;
+  border-radius: var(--qs-radius-sm);
+}
+
+@keyframes qs-skeleton-wave {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ─── 14. SECTION DIVIDERS ────────────────────────────────── */
+.qs-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(30, 93, 104, 0.2), transparent);
+  border: none;
+  margin: 0;
+}
+
+/* ─── 15. CASHBACK BADGE (standalone) ─────────────────────── */
+.qs-cashback-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--qs-gradient-btn);
+  color: #fff;
+  font-family: var(--qs-font);
+  font-weight: 700;
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: var(--qs-radius-pill);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+/* ─── 16. GENERAL LINK HOVER ──────────────────────────────── */
+a:focus-visible {
+  outline: 2px solid var(--qs-primary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* ─── 17. QUANTA HEADER GREEN BG ──────────────────────────── */
+.qs-green-bg {
+  background: var(--qs-gradient-primary) !important;
+}
+
+/* ─── 18. FEATURE CARDS ───────────────────────────────────── */
+.tp-feature-item {
+  border-radius: var(--qs-radius-md) !important;
+  box-shadow: var(--qs-shadow-sm) !important;
+  transition: var(--qs-transition) !important;
+  background: #fff;
+
+  &:hover {
+    box-shadow: var(--qs-shadow-md) !important;
+    transform: translateY(-2px);
+  }
+}
+
+/* ─── 19. OFFCANVAS CART/MENU PREMIUM ─────────────────────── */
+.tp-offcanvas-area {
+  font-family: var(--qs-font) !important;
+}
+
+/* ─── 20. RESPONSIVE — section padding ───────────────────── */
+@media (min-width: 992px) {
+  section {
+    &.tp-partners-area,
+    &.tp-feature-area,
+    &.tp-product-area,
+    &.tp-categories-area,
+    &.tp-subscribe-area {
+      padding-top: 80px !important;
+      padding-bottom: 80px !important;
+    }
+  }
+}
+
+@media (max-width: 991px) {
+  section {
+    &.tp-partners-area,
+    &.tp-feature-area,
+    &.tp-product-area,
+    &.tp-categories-area,
+    &.tp-subscribe-area {
+      padding-top: 48px !important;
+      padding-bottom: 48px !important;
+    }
+  }
+
+  .tp-login-wrapper {
+    padding: 32px 24px !important;
+  }
+}

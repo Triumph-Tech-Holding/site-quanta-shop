@@ -8,8 +8,12 @@
       <nuxt-link href="/login?redirect=/" v-else>
         <img :src="item.Icone" alt="product-electronic" />
       </nuxt-link>
+
+      <div class="qs-cashback-badge qs-card-badge">
+        <i class="fa-solid fa-tag" style="font-size: 9px;"></i>
+        Até {{ formatToPercentage(item.MaxCashback, 0) }}
+      </div>
     </div>
-    <!-- product content -->
     <div class="tp-product-content">
       <div class="tp-product-category">
         <nuxt-link :href="item.link" v-if="isAuthenticated" target="_blank">
@@ -29,21 +33,10 @@
           {{ item.Nome }}
         </nuxt-link>
       </h3>
-      <!-- <div class="tp-product-rating d-flex align-items-center">
-        <div class="tp-product-rating-icon">
-          <span><i class="fa-solid fa-star"></i></span>
-          <span><i class="fa-solid fa-star"></i></span>
-          <span><i class="fa-solid fa-star"></i></span>
-          <span><i class="fa-solid fa-star"></i></span>
-          <span><i class="fa-solid fa-star-half-stroke"></i></span>
-        </div>
-        <div class="tp-product-rating-text">
-          <span>({{item.reviews?.length}} Review)</span>
-        </div>
-      </div> -->
+
       <div class="tp-product-price-wrapper">
         <span class="tp-product-price new-price">
-          Até {{ formatToPercentage(item.MaxCashback, 0) }} de cashback
+          Cashback de até {{ formatToPercentage(item.MaxCashback, 0) }}
         </span>
       </div>
 
@@ -55,7 +48,7 @@
           :to="item.link"
           class="tp-product-list-add-to-cart-btn w-100 text-center"
           target="_blank"
-          >Ativar meu cashback</nuxt-link
+          >Ativar cashback</nuxt-link
         >
       </div>
       <div class="tp-product-list-add-to-cart mt-3 w-100" v-else>
@@ -63,7 +56,7 @@
           to="/login?redirect=/"
           class="tp-product-list-add-to-cart-btn w-100 text-center"
           style="font-size: 0.8rem"
-          >Faça login para ativar seu cashback</nuxt-link
+          >Entrar para ativar cashback</nuxt-link
         >
       </div>
     </div>
@@ -77,22 +70,41 @@ const props = defineProps<{ item: any }>();
 const userStore = useUserStore();
 const isAuthenticated = computed(() => userStore.isLoggedIn);
 
-onMounted(() => {
-  
-});
+onMounted(() => {});
 </script>
 
 <style lang="scss" scoped>
 .tp-product-thumb {
   width: 100%;
-  height: 200px;
+  height: 180px;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  padding: 16px;
+
+  img {
+    max-height: 120px;
+    object-fit: contain;
+    transition: transform 0.25s ease;
+  }
+}
+
+.tp-product-item:hover .tp-product-thumb img {
+  transform: scale(1.06);
+}
+
+.qs-card-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 10px !important;
+  padding: 3px 8px !important;
+  z-index: 2;
 }
 
 .tp-product-title {
-  max-height: 60px;
+  max-height: 44px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

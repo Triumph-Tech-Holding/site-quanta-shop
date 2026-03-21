@@ -109,6 +109,7 @@ export default defineNuxtConfig({
     "@/assets/css/flaticon_shofy.css",
     "@/assets/scss/main.scss",
     "@/assets/scss/agencia.scss",
+    "@/assets/scss/quanta-premium.scss",
   ],
   runtimeConfig: {
     jwtSecret: process.env.NUXT_JWT_SECRET || 'dev-secret-key-change-in-production',

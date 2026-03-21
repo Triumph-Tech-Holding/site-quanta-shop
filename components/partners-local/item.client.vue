@@ -4,7 +4,7 @@
       offer_style ? 'tp-product-offer-item' : 'mb-25'
     } tp-product-item transition-3`"
   >
-    <div class="tp-product-thumb p-relative fix m-img d-flex align-items-center justify-content-center" style="height: 200px; background-color: #ffffff;">
+    <div class="qs-partner-thumb">
       <nuxt-link
         v-if="partnerLink"
         :href="partnerLink"
@@ -13,17 +13,20 @@
         <img
           :src="item.Imagem"
           alt="product-img"
-          style="max-height: 140px;"
         />
       </nuxt-link>
       <img
         v-else
         :src="item.Imagem"
         alt="product-img"
-        style="max-height: 140px;"
       />
+
+      <div class="qs-cashback-badge qs-card-badge">
+        <i class="fa-solid fa-tag" style="font-size: 9px;"></i>
+        {{ item.PercentualCashback }}% cashback
+      </div>
     </div>
-    <!-- product content -->
+
     <div class="tp-product-content text-center">
       <div class="tp-product-category">
         <nuxt-link
@@ -47,7 +50,7 @@
 
       <div class="tp-product-price-wrapper">
         <span class="tp-product-price new-price"
-          >Até {{ item.PercentualCashback }}% de cashback</span
+          >Cashback de até {{ item.PercentualCashback }}%</span
         >
       </div>
 
@@ -57,7 +60,7 @@
           target="_blank"
           class="tp-product-list-add-to-cart-btn w-100 text-center"
         >
-          Ver mais
+          Ver oferta
         </nuxt-link>
       </div>
     </div>
@@ -78,23 +81,55 @@ const checkScreenWidth = () => {
 
 onMounted(() => {
   checkScreenWidth();
-
   window.addEventListener('resize', checkScreenWidth);
 });
 
 const truncateText = (text: string) => {
   if (!text) return "";
-
   if (isMobile.value) return text;
-
   if (text.length > 28) {
-    return text.substring(0, 20) + "...";
+    return text.substring(0, 22) + "...";
   }
   return text;
 };
 </script>
 
 <style scoped>
+.qs-partner-thumb {
+  width: 100%;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  border-bottom: 1px solid rgba(202, 212, 219, 0.4);
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  padding: 16px;
+}
+
+.qs-partner-thumb img {
+  max-height: 120px;
+  max-width: 100%;
+  object-fit: contain;
+  transition: transform 0.25s ease;
+}
+
+.tp-product-item:hover .qs-partner-thumb img {
+  transform: scale(1.06);
+}
+
+.qs-card-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 10px !important;
+  padding: 3px 8px !important;
+  z-index: 2;
+}
+
 .tp-product-title {
   width: 100%;
   overflow: hidden;
