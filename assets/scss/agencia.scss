@@ -441,69 +441,36 @@ $ag-text: #272222;
 }
 
 /* ================================================================
-   RESPONSIVO — mobile / tablet
+   LAYOUT — desktop-only (sidebar always visible, no collapse)
    ================================================================ */
-@media (max-width: 768px) {
-  .hamburger-btn {
-    display: none;
+.hamburger-btn {
+  display: none !important;
+}
+
+.sidebar-overlay {
+  display: none !important;
+}
+
+.box-menu-lateral {
+  position: relative !important;
+  left: 0 !important;
+  height: auto !important;
+  z-index: auto !important;
+  width: 250px !important;
+  min-width: 250px !important;
+  flex-shrink: 0 !important;
+
+  .sidebar-logo-block {
+    display: none !important;
   }
+}
 
-  .sidebar-overlay {
-    display: none;
-  }
+.flex-geral {
+  overflow-x: auto;
+}
 
-  .box-header-panel {
-    .flex-header {
-      .logo { display: none; }
-
-      .bar-info-account {
-        flex: 1;
-
-        .info-account,
-        .info-account-subscriber {
-          padding: 10px 16px;
-
-          .flex-remot .box-button {
-            gap: 6px;
-
-            .bt-default {
-              width: auto;
-              a, button, .botao { padding: 0 10px; font-size: 12px; }
-            }
-          }
-        }
-      }
-    }
-  }
-
-  .box-menu-lateral {
-    position: relative;
-    left: 0;
-    height: auto;
-    z-index: auto;
-    width: 250px;
-    min-width: 250px;
-    flex-shrink: 0;
-
-    .bg-menu {
-      height: 100%;
-      overflow-y: auto;
-
-      .sidebar-logo-block {
-        display: none;
-      }
-    }
-  }
-
-  .flex-geral {
-    min-height: calc(100vh - 90px);
-    overflow-x: auto;
-  }
-
-  .box-conteudo.conteudo-logado {
-    padding: 1rem;
-    min-width: 320px;
-  }
+.box-conteudo.conteudo-logado {
+  min-width: 320px;
 }
 
 /* ================================================================

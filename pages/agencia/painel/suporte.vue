@@ -3,10 +3,15 @@
     <div class="general-content">
       <div class="page-content">
         <div class="header-page" style="display:flex;justify-content:space-between;align-items:center;">
-          <h2 class="title-page">Solicitações de suporte</h2>
+          <h2 class="title-page">Suporte</h2>
           <NuxtLink to="/agencia/painel/solicitar-suporte" class="btn-abrir-chamado">
             + Abrir chamado
           </NuxtLink>
+        </div>
+
+        <div style="background:linear-gradient(135deg,#2f7785,#1a5c3a);padding:2rem;margin:0 1rem 1.5rem;border-radius:8px;color:#fff;">
+          <h1 style="font-size:1.4rem;font-weight:700;text-transform:uppercase;margin-bottom:.5rem;">Central de Suporte</h1>
+          <h2 style="font-size:1rem;font-weight:400;margin:0;">Registre e acompanhe suas solicitações de atendimento</h2>
         </div>
 
         <div class="px-3 pb-3">

@@ -33,7 +33,30 @@
               </div>
 
               <div v-if="activeTab === 'movimentacoes'">
-                <div v-if="movimentacoes.length === 0" class="ag-empty-state" style="min-height:100px;">
+                <div class="box-filter" style="margin-bottom:1rem;">
+                  <h2>Filtros</h2>
+                  <form @submit.prevent="carregarMovimentacoes" style="display:flex;flex-wrap:wrap;gap:1rem;align-items:flex-end;">
+                    <div style="flex:1;min-width:140px;">
+                      <label>Data inicial</label>
+                      <input type="date" v-model="filtroExtrato.dataInicio" class="form-control" />
+                    </div>
+                    <div style="flex:1;min-width:140px;">
+                      <label>Data final</label>
+                      <input type="date" v-model="filtroExtrato.dataFim" class="form-control" />
+                    </div>
+                    <div style="flex:1;min-width:120px;">
+                      <label>Tipo</label>
+                      <select v-model="filtroExtrato.tipo" class="form-control">
+                        <option value="">Todos</option>
+                        <option value="credito">Crédito</option>
+                        <option value="debito">Débito</option>
+                      </select>
+                    </div>
+                    <button type="submit" class="btn-filtrar">Filtrar</button>
+                  </form>
+                </div>
+
+                <div v-if="movimentacoesFiltradas.length === 0" class="ag-empty-state" style="min-height:100px;">
                   <h5>Nenhuma movimentação encontrada</h5>
                 </div>
                 <div v-else style="overflow-x:auto;">
@@ -47,7 +70,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="(m, i) in movimentacoes" :key="i">
+                      <tr v-for="(m, i) in movimentacoesFiltradas" :key="i">
                         <td>{{ m.descricao || '—' }}</td>
                         <td style="text-align:center;">{{ formatDate(String(m.data || m.dataCriacao || '')) }}</td>
                         <td style="text-align:right;" :style="Number(m.valor) >= 0 ? 'color:#98c73a;font-weight:600;' : 'color:#dc3545;font-weight:600;'">
@@ -136,6 +159,26 @@ const saqueSucesso = ref(false);
 
 const saque = reactive({ valor: '' });
 
+const now = new Date();
+const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0];
+const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).toISOString().split('T')[0];
+const filtroExtrato = reactive({ dataInicio: firstDayOfMonth, dataFim: lastDayOfMonth, tipo: '' });
+
+const movimentacoesFiltradas = computed(() => {
+  let list = movimentacoes.value;
+  if (filtroExtrato.dataInicio) {
+    const from = new Date(filtroExtrato.dataInicio);
+    list = list.filter(m => new Date(String(m.data || m.dataCriacao || '')) >= from);
+  }
+  if (filtroExtrato.dataFim) {
+    const to = new Date(filtroExtrato.dataFim + 'T23:59:59');
+    list = list.filter(m => new Date(String(m.data || m.dataCriacao || '')) <= to);
+  }
+  if (filtroExtrato.tipo === 'credito') list = list.filter(m => Number(m.valor) >= 0);
+  if (filtroExtrato.tipo === 'debito') list = list.filter(m => Number(m.valor) < 0);
+  return list;
+});
+
 const summary = ref([
   { label: 'Saldo disponível', value: '—' },
   { label: 'Total recebido', value: '—' },
@@ -187,6 +230,23 @@ async function solicitarSaque() {
   }
 }
 
+async function carregarMovimentacoes() {
+  try {
+    const body: Record<string, unknown> = {};
+    if (filtroExtrato.dataInicio) body.dataInicio = new Date(filtroExtrato.dataInicio).toISOString();
+    if (filtroExtrato.dataFim) body.dataFim = new Date(filtroExtrato.dataFim + 'T23:59:59').toISOString();
+    try {
+      const r = await api.post('/Extrato/buscarExtrato', body, authHeader());
+      movimentacoes.value = Array.isArray(r.data) ? r.data : (r.data?.items ?? []);
+    } catch {
+      const r = await api.post('/financeiro/movimentacoes', body, authHeader());
+      movimentacoes.value = Array.isArray(r.data) ? r.data : (r.data?.items ?? []);
+    }
+  } catch {
+    movimentacoes.value = [];
+  }
+}
+
 async function carregarHistorico() {
   try {
     const { data } = await api.get('/Saque/historicoSaque', authHeader());
@@ -209,18 +269,7 @@ onMounted(async () => {
         ];
       }
     }).catch(() => {}),
-    api.post('/Extrato/buscarExtrato', {}, authHeader()).then(r => {
-      movimentacoes.value = Array.isArray(r.data) ? r.data : (r.data?.items ?? []);
-    }).catch(() =>
-      api.post('/financeiro/movimentacoes', {}, authHeader()).then(r => {
-        movimentacoes.value = Array.isArray(r.data) ? r.data : (r.data?.items ?? []);
-      }).catch(async () => {
-        try {
-          const { data } = await api.get('/financeiro/movimentacoes', authHeader());
-          movimentacoes.value = Array.isArray(data) ? data : (data?.items ?? []);
-        } catch { movimentacoes.value = []; }
-      })
-    ),
+    carregarMovimentacoes(),
     carregarHistorico(),
   ]);
   loading.value = false;

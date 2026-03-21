@@ -132,7 +132,7 @@
                       </div>
                       <div class="col d-flex align-items-center justify-content-center indicador">
                         <img src="https://cdn3.iconfinder.com/data/icons/digital-marketing-27/64/Human-people-teamwork-network-communication-man-256.png" alt="" style="width:40px;height:40px;margin-bottom:.25rem;" />
-                        <span class="font-weight-bold" style="font-size:.75rem;text-align:center;">Ecossistemas</span>
+                        <span class="font-weight-bold" style="font-size:.75rem;text-align:center;">Encaminhamentos</span>
                         <span class="mt-1 font-weight-bold" style="font-size:.9rem;">{{ totalizadores.ecossistemas }}</span>
                       </div>
                       <div class="col d-flex align-items-center justify-content-center indicador">

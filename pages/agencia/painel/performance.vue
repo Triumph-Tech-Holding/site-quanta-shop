@@ -6,6 +6,11 @@
           <h2 class="title-page">Performance</h2>
         </div>
 
+        <div style="background:linear-gradient(135deg,#2f7785,#1a5c3a);padding:2rem;margin:0 1rem 1.5rem;border-radius:8px;color:#fff;">
+          <h1 style="font-size:1.4rem;font-weight:700;text-transform:uppercase;margin-bottom:.5rem;">Performance da sua equipe</h1>
+          <h2 style="font-size:1rem;font-weight:400;margin:0;">Visualize o consumo e desempenho dos membros da sua rede</h2>
+        </div>
+
         <div class="px-3 pb-3">
           <div class="box-filter">
             <h2>Filtro</h2>

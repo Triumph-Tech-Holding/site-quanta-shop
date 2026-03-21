@@ -6,6 +6,11 @@
           <h2 class="title-page">Tutoriais</h2>
         </div>
 
+        <div style="background:linear-gradient(135deg,#2f7785,#1a5c3a);padding:2rem;margin:0 1rem 1.5rem;border-radius:8px;color:#fff;">
+          <h1 style="font-size:1.4rem;font-weight:700;text-transform:uppercase;margin-bottom:.5rem;">Tutoriais</h1>
+          <h2 style="font-size:1rem;font-weight:400;margin:0;">Aprenda a usar a plataforma e maximize seus ganhos</h2>
+        </div>
+
         <div class="px-3 pb-3">
           <div v-if="loading" class="ag-loading"><div class="spinner-border" /></div>
 
