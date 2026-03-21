@@ -41,10 +41,6 @@
                 </div>
               </div>
 
-              <button class="hamburger-btn" @click="sidebarOpen = !sidebarOpen" aria-label="Menu">
-                <span></span><span></span><span></span>
-              </button>
-
               <div class="flex-remot">
                 <div class="box-button">
                   <div class="bt-default">
@@ -73,12 +69,10 @@
       </div>
     </div>
 
-    <div v-if="sidebarOpen" class="sidebar-overlay" @click="sidebarOpen = false"></div>
-
     <section class="conteudo-geral-admin">
       <div class="flex-geral">
-        <div class="p-0 box-menu-lateral" :class="{ 'sidebar-mobile-open': sidebarOpen }">
-          <AgenciaMenu :open="sidebarOpen" />
+        <div class="p-0 box-menu-lateral">
+          <AgenciaMenu />
         </div>
         <div class="box-conteudo conteudo-logado">
           <div style="padding:0 1rem;">
@@ -110,8 +104,6 @@ const user = computed(() => agenciaStore.dadosUser);
 const isAcessoRemoto = computed(() => agenciaStore.isAcessoRemoto);
 const isComerciante = computed(() => agenciaStore.isComerciante);
 const saldo = ref<number | null>(null);
-const sidebarOpen = ref(false);
-
 const copiado = ref(false);
 
 const saldoFormatado = computed(() => {
