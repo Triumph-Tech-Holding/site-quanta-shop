@@ -149,7 +149,7 @@ namespace MMN.Api.Controllers.v1
                 habilitacao = produtoAtivo.Produto.Nome,
                 usuario.PreCadastro,
                 usuario.LinkAssistenteVirtual
-			});
+                        });
         }
 
         [HttpPost]
@@ -166,6 +166,15 @@ namespace MMN.Api.Controllers.v1
         public async Task<IActionResult> AutenticacaoGoogle([FromBody] LogarGoogleViewModel logar)
         {
             var usuario = _negocio.AutenticacaoGoogle(logar.Code, logar.RedirectUri, out Parceiro parceiro);
+
+            return await RetornoAutenticacao(usuario, parceiro, logar.Origem);
+        }
+
+        [HttpPost]
+        [Route("autenticacaoGoogleCredential")]
+        public async Task<IActionResult> AutenticacaoGoogleCredential([FromBody] LogarGoogleCredentialViewModel logar)
+        {
+            var (usuario, parceiro) = await _negocio.AutenticacaoGoogleCredentialAsync(logar.Credential);
 
             return await RetornoAutenticacao(usuario, parceiro, logar.Origem);
         }
@@ -269,8 +278,8 @@ namespace MMN.Api.Controllers.v1
                 usuario.Credenciamentos.FirstOrDefault(c => c.IdUsuario == usuario.IdUsuario)?.LogoUrl,
                 produtoAtivo.AssinaturaHabilitada,
                 usuario.PreCadastro,
-				usuario.LinkAssistenteVirtual
-			});            
+                                usuario.LinkAssistenteVirtual
+                        });            
         }
 
         [HttpPost]

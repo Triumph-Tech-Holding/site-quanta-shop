@@ -26,6 +26,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection.Metadata;
 using System.Security.Claims;
 using System.Text;
@@ -562,6 +563,74 @@ namespace MMN.Negocio.Negocio
 
 
             return Autenticacao(usuario, null, out parceiro, false);
+        }
+
+        public async Task<(UsuarioViewModel usuario, Parceiro parceiro)> AutenticacaoGoogleCredentialAsync(string credential)
+        {
+            if (string.IsNullOrEmpty(credential))
+                throw new UnauthorizedException("login_incorreto");
+
+            string googleId;
+            string email;
+
+            using (var client = new HttpClient())
+            {
+                var tokenInfoUrl = $"https://oauth2.googleapis.com/tokeninfo?id_token={Uri.EscapeDataString(credential)}";
+                var response = await client.GetAsync(tokenInfoUrl);
+                if (!response.IsSuccessStatusCode)
+                    throw new UnauthorizedException("login_incorreto");
+
+                var json = await response.Content.ReadAsStringAsync();
+                var tokenInfo = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+
+                if (tokenInfo == null ||
+                    !tokenInfo.TryGetValue("sub", out googleId) ||
+                    !tokenInfo.TryGetValue("email", out email) ||
+                    string.IsNullOrEmpty(googleId) ||
+                    string.IsNullOrEmpty(email))
+                    throw new UnauthorizedException("login_incorreto");
+            }
+
+            var usuario = _autenticacaoExternaRepositorio
+                .Get(u => u.IdExterno.Equals(googleId) && u.Ativo)
+                .Include(i => i.Usuario)
+                    .ThenInclude(t => t.Grupo)
+                .Include(i => i.Usuario)
+                    .ThenInclude(t => t.UsuarioEndereco)
+                .Include(i => i.Usuario)
+                    .ThenInclude(t => t.Credenciamento)
+                .Select(s => s.Usuario)
+                .FirstOrDefault();
+
+            if (usuario == null)
+            {
+                usuario = _repositorio.Get(u => u.Email.Equals(email) && u.Ativo)
+                    .Include(t => t.Grupo)
+                    .Include(t => t.UsuarioEndereco)
+                    .Include(t => t.Credenciamentos)
+                    .SingleOrDefault();
+
+                if (usuario == null)
+                    throw new UnauthorizedException("usuario_nao_encontrado");
+
+                var provedorAutenticacao = await _provedorAutenticacaoNegocio
+                    .FirstNoTrackingAsync(g =>
+                        g.Protocolo == (int)IdentityProviderProtocol.Oauth2 &&
+                        g.Provedor == (int)IdentityProvider.Google);
+
+                var autenticacaoExterna = new AutenticacaoExterna
+                {
+                    IdExterno = googleId,
+                    Ativo = true,
+                    IdProvedorAutenticacao = provedorAutenticacao.IdProvedorAutenticacao,
+                    IdUsuario = usuario.IdUsuario
+                };
+                _autenticacaoExternaRepositorio.Insert(autenticacaoExterna);
+                _autenticacaoExternaRepositorio.SaveChanges();
+            }
+
+            var usuarioViewModel = Autenticacao(usuario, null, out Parceiro parceiro, false);
+            return (usuarioViewModel, parceiro);
         }
 
         private UsuarioViewModel Autenticacao(Usuario usuario, string senha, out Parceiro parceiro, bool verificarSenha = true)

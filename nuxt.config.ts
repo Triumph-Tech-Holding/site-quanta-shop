@@ -114,7 +114,8 @@ export default defineNuxtConfig({
     jwtSecret: process.env.NUXT_JWT_SECRET || 'dev-secret-key-change-in-production',
     useLocalApi: true,
     public: {
-      apiBaseUrl: process.env.NUXT_API_BASE_URL || '/api-proxy'
+      apiBaseUrl: process.env.NUXT_API_BASE_URL || '/api-proxy',
+      googleClientId: process.env.GOOGLE_CLIENT_ID || '372294010028-ff1frn14fg81mn0ujhv215lk9rd5t80r.apps.googleusercontent.com',
     },
   },
   ssr: false,

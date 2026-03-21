@@ -17,6 +17,12 @@ namespace MMN.Repositorio.Seed
                         UrlApi = "https://oauth2.googleapis.com/token",
                         EndpointCadastro = "api/user/registrarGoogle",
                         EndpointLogin = "api/UsuarioLogin/autenticacaoGoogle",
+                        // ATENÇÃO: Este registro é para o fluxo OAuth2 Authorization Code (legado).
+                        // O novo fluxo One Tap usa o endpoint autenticacaoGoogleCredential e valida
+                        // o ID token diretamente via Google tokeninfo API.
+                        // TODO: Atualizar Login e Senha diretamente no banco de dados para usar as
+                        // credenciais corretas do Google Cloud Console (não alterar aqui por ser seed de migração).
+                        // O Client Secret (Senha) não deve ficar em código — mover para tabela de configuração protegida.
                         Login = "123493812146-gdjfhkeguuon50kjhhd6i3hgf4v172el.apps.googleusercontent.com",
                         ParametrosLogin = "{" +
                             "\"scope\":\"https://www.googleapis.com/auth/userinfo.email\"," +

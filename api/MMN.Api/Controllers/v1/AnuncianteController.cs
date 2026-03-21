@@ -71,6 +71,8 @@ namespace MMN.Api.Controllers.v1
                 throw new Exception();
             }
 
+            url = url.Replace("[IdUsuario]", IdUsuarioLogado.ToString());
+
             return Ok(url);
         }
 
@@ -140,6 +142,13 @@ namespace MMN.Api.Controllers.v1
             {
                 foreach (var anuncio in anuncios)
                     anuncio.UrlAnuncio = null;
+            }
+            else
+            {
+                var userId = IdUsuarioLogado.ToString();
+                foreach (var anuncio in anuncios)
+                    if (anuncio.UrlAnuncio != null)
+                        anuncio.UrlAnuncio = anuncio.UrlAnuncio.Replace("[IdUsuario]", userId);
             }
 
             return Ok(new

@@ -21,6 +21,12 @@ namespace MMN.Dominio.ViewModel
             public string RedirectUri { get; set; }
         }
 
+        public class LogarGoogleCredentialViewModel
+        {
+            public string Credential { get; set; }
+            public OrigemLoginEnum? Origem { get; set; }
+        }
+
         public class EsqueciMinhaSenha
         {
             public string Senha { get; set; }
