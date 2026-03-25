@@ -1,27 +1,20 @@
 export default defineNuxtRouteMiddleware((to) => {
+  // Middleware roda somente no cliente (Pinia + localStorage)
   if (import.meta.server) return;
 
-  const agenciaStore = useAgenciaStore();
-  agenciaStore.loadFromStorage();
+  const store = useAgenciaStore();
+  store.loadFromStorage();
 
-  // Proteger rotas do painel
-  const isPainelRoute = to.path.startsWith('/agencia/painel');
-  if (!isPainelRoute) return;
+  // Apenas rotas do painel são protegidas
+  if (!to.path.startsWith('/agencia/painel')) return;
 
-  // Verificar token
-  if (!agenciaStore.getToken()) {
+  // Verificar se o token existe e não expirou (logout automático em caso de expiração)
+  if (!store.checkTokenExpiry()) {
     return navigateTo('/agencia/login');
   }
 
-  // Verificar expiração
-  if (!agenciaStore.checkTokenExpiry()) {
-    return navigateTo('/agencia/login');
-  }
-
-  // Proteger rotas admin
-  if (to.path.startsWith('/agencia/painel/admin')) {
-    if (!agenciaStore.isAdmin) {
-      return navigateTo('/agencia/painel');
-    }
+  // Rotas de admin exigem flag `admin`
+  if (to.path.startsWith('/agencia/painel/admin') && !store.isAdmin) {
+    return navigateTo('/agencia/painel');
   }
 });

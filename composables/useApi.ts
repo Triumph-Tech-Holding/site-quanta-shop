@@ -1,73 +1,78 @@
-import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosError } from 'axios';
+import axios, { type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios';
 
 let _apiClient: AxiosInstance | null = null;
 
 function getApiClient(): AxiosInstance {
-    if (!_apiClient) {
-        let baseURL = '/api-proxy';
-        const config = useRuntimeConfig();
-        if (config?.public?.apiBaseUrl) {
-            baseURL = config.public.apiBaseUrl as string;
+  if (!_apiClient) {
+    const config = useRuntimeConfig();
+    const baseURL = (config?.public?.apiBaseUrl as string | undefined) ?? '/api-proxy';
+
+    _apiClient = axios.create({
+      baseURL,
+      timeout: 30000,
+    });
+
+    // ── Interceptador de requisição: injetar Bearer token ──────────────────────
+    _apiClient.interceptors.request.use(
+      (req) => {
+        const store = useAgenciaStore();
+        const token = store.getToken();
+        if (token) {
+          req.headers.Authorization = `Bearer ${token}`;
         }
-        _apiClient = axios.create({
-            baseURL,
-            headers: {},
-            // 30s: alinhado com o timeout do proxy Nitro (20s) + margem de rede.
-            // O proxy remoto pode levar até 20s em cargas pesadas de produto.
-            timeout: 30000,
-        });
+        return req;
+      },
+      (error: unknown) => Promise.reject(error),
+    );
 
-        // Interceptador de requisição: injetar token
-        _apiClient.interceptors.request.use(
-            (config) => {
-                const agenciaStore = useAgenciaStore();
-                const token = agenciaStore.getToken();
-                
-                if (token) {
-                    config.headers.Authorization = `Bearer ${token}`;
-                }
-                return config;
-            },
-            (error) => Promise.reject(error)
-        );
+    // ── Interceptador de resposta: tratar 401 / 403 / 5xx ─────────────────────
+    _apiClient.interceptors.response.use(
+      (response: AxiosResponse) => response,
+      (error: unknown) => {
+        if (axios.isAxiosError(error)) {
+          const status = error.response?.status;
+          const router = useRouter();
+          const route = useRoute();
+          const store = useAgenciaStore();
 
-        // Interceptador de resposta: tratar erros
-        _apiClient.interceptors.response.use(
-            (response) => response,
-            (error: AxiosError) => {
-                const statusCode = error.response?.status;
-                const router = useRouter();
-                const agenciaStore = useAgenciaStore();
+          if (status === 401) {
+            store.logout();
+            const target = route.path.startsWith('/agencia') ? '/agencia/login' : '/login';
+            router.push(target);
+          } else if (status === 403) {
+            console.error('[API] Acesso negado:', error.config?.url);
+            router.push('/acesso-negado');
+          } else if (status !== undefined && status >= 500) {
+            console.error('[API] Erro interno do servidor:', status, error.config?.url);
+          }
+        }
 
-                if (statusCode === 401) {
-                    agenciaStore.logout();
-                    
-                    const route = useRoute();
-                    if (route.path.startsWith('/agencia')) {
-                        router.push('/agencia/login');
-                    } else {
-                        router.push('/login');
-                    }
-                } else if (statusCode === 403) {
-                    console.error('[API] Acesso negado:', error.config?.url);
-                    router.push('/acesso-negado');
-                } else if (statusCode && statusCode >= 500) {
-                    console.error('[API] Erro do servidor:', error.response?.statusText);
-                }
+        return Promise.reject(error);
+      },
+    );
+  }
 
-                return Promise.reject(error);
-            }
-        );
-    }
-    return _apiClient;
+  return _apiClient;
 }
 
-export const useApi = () => {
-    return {
-        get: (url: string, config: AxiosRequestConfig = {}) => getApiClient().get(url, config),
-        post: (url: string, data: unknown, config: AxiosRequestConfig = {}) => getApiClient().post(url, data, config),
-        put: (url: string, data: unknown, config: AxiosRequestConfig = {}) => getApiClient().put(url, data, config),
-        delete: (url: string, config: AxiosRequestConfig = {}) => getApiClient().delete(url, config),
-        patch: (url: string, data: unknown, config: AxiosRequestConfig = {}) => getApiClient().patch(url, data, config),
-    };
-};
+/** Reinicia o cliente axios (útil após logout para limpar estado de auth). */
+export function resetApiClient(): void {
+  _apiClient = null;
+}
+
+export const useApi = () => ({
+  get: <T = unknown>(url: string, config?: AxiosRequestConfig) =>
+    getApiClient().get<T>(url, config),
+
+  post: <T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig) =>
+    getApiClient().post<T>(url, data, config),
+
+  put: <T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig) =>
+    getApiClient().put<T>(url, data, config),
+
+  patch: <T = unknown>(url: string, data?: unknown, config?: AxiosRequestConfig) =>
+    getApiClient().patch<T>(url, data, config),
+
+  delete: <T = unknown>(url: string, config?: AxiosRequestConfig) =>
+    getApiClient().delete<T>(url, config),
+});

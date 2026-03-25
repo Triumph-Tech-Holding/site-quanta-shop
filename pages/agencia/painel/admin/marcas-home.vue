@@ -26,7 +26,7 @@
         <tbody>
           <tr v-for="marca in marcas" :key="marca.id">
             <td>
-              <img :src="marca.logo" :alt="marca.nome" style="max-height: 40px; max-width: 100px; object-fit: contain;" @error="(e: any) => e.target.style.display='none'" />
+              <img :src="marca.logo" :alt="marca.nome" style="max-height: 40px; max-width: 100px; object-fit: contain;" @error="hideBrokenImage" />
             </td>
             <td>{{ marca.nome }}</td>
             <td><small>{{ marca.url }}</small></td>
@@ -110,13 +110,18 @@ const editando = ref<Marca>({ nome: '', logo: '', url: '', ativo: true, ordem: 1
 
 onMounted(async () => {
   try {
-    marcas.value = await $fetch('/data/brands.json');
+    marcas.value = await $fetch<Marca[]>('/data/brands.json');
   } catch (error) {
     console.error('[Marcas] Erro ao carregar:', error);
   } finally {
     loading.value = false;
   }
 });
+
+function hideBrokenImage(event: Event) {
+  const img = event.target as HTMLImageElement;
+  img.style.display = 'none';
+}
 
 function editarMarca(marca: Marca) {
   editando.value = { ...marca };
