@@ -1,0 +1,18 @@
+[
+  { "id": 1, "nome": "Nike", "logo": "https://logo.clearbit.com/nike.com", "url": "https://nike.com.br", "ativo": true, "ordem": 1 },
+  { "id": 2, "nome": "Renner", "logo": "https://logo.clearbit.com/lojasrenner.com.br", "url": "https://lojasrenner.com.br", "ativo": true, "ordem": 2 },
+  { "id": 3, "nome": "Puma", "logo": "https://logo.clearbit.com/puma.com", "url": "https://puma.com.br", "ativo": true, "ordem": 3 },
+  { "id": 4, "nome": "Casas Bahia", "logo": "https://logo.clearbit.com/casasbahia.com.br", "url": "https://casasbahia.com.br", "ativo": true, "ordem": 4 },
+  { "id": 5, "nome": "Cobasi", "logo": "https://logo.clearbit.com/cobasi.com.br", "url": "https://cobasi.com.br", "ativo": true, "ordem": 5 },
+  { "id": 6, "nome": "Magazine Luiza", "logo": "https://logo.clearbit.com/magazineluiza.com.br", "url": "https://magazineluiza.com.br", "ativo": true, "ordem": 6 },
+  { "id": 7, "nome": "Dafiti", "logo": "https://logo.clearbit.com/dafiti.com.br", "url": "https://dafiti.com.br", "ativo": true, "ordem": 7 },
+  { "id": 8, "nome": "Vivara", "logo": "https://logo.clearbit.com/vivara.com.br", "url": "https://vivara.com.br", "ativo": true, "ordem": 8 },
+  { "id": 9, "nome": "LG", "logo": "https://logo.clearbit.com/lg.com", "url": "https://lg.com.br", "ativo": true, "ordem": 9 },
+  { "id": 10, "nome": "Motorola", "logo": "https://logo.clearbit.com/motorola.com.br", "url": "https://motorola.com.br", "ativo": true, "ordem": 10 },
+  { "id": 11, "nome": "Pernambucanas", "logo": "https://logo.clearbit.com/pernambucanas.com.br", "url": "https://pernambucanas.com.br", "ativo": true, "ordem": 11 },
+  { "id": 12, "nome": "Tok&Stok", "logo": "https://logo.clearbit.com/tokstok.com.br", "url": "https://tokstok.com.br", "ativo": true, "ordem": 12 },
+  { "id": 13, "nome": "Olympikus", "logo": "https://logo.clearbit.com/olympikus.com.br", "url": "https://olympikus.com.br", "ativo": true, "ordem": 13 },
+  { "id": 14, "nome": "Under Armour", "logo": "https://logo.clearbit.com/underarmour.com", "url": "https://underarmour.com.br", "ativo": true, "ordem": 14 },
+  { "id": 15, "nome": "Shoptime", "logo": "https://logo.clearbit.com/shoptime.com.br", "url": "https://shoptime.com.br", "ativo": true, "ordem": 15 },
+  { "id": 16, "nome": "Mizuno", "logo": "https://logo.clearbit.com/mizuno.com.br", "url": "https://mizuno.com.br", "ativo": true, "ordem": 16 }
+]

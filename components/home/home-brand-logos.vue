@@ -1,106 +1,108 @@
 <template>
-  <section class="qs-brand-logos" v-if="logos.length > 0">
+  <section class="qs-brands">
     <div class="container">
-      <p class="qs-brand-logos__title">As maiores marcas confiam na Quanta</p>
-      <div class="qs-brand-logos__track-wrap">
-        <div class="qs-brand-logos__track">
-          <div v-for="(logo, i) in [...logos, ...logos]" :key="i" class="qs-brand-logos__item">
-            <img
-              :src="logo.imagemPequena || logo.imagem"
-              :alt="logo.nome"
-              @error="(e: any) => e.target.style.display='none'"
-            />
-          </div>
-        </div>
+      <p class="qs-brands__label">AS MAIORES MARCAS CONFIAM NA QUANTA</p>
+      <div class="qs-brands__grid">
+        <a
+          v-for="brand in activeBrands"
+          :key="brand.id"
+          :href="brand.url"
+          target="_blank"
+          rel="noopener"
+          class="qs-brands__item"
+          :title="brand.nome"
+        >
+          <img :src="brand.logo" :alt="brand.nome" loading="lazy" />
+        </a>
       </div>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
-import { usePartnerStore } from "@/pinia/usePartnerStore";
+import { ref, computed, onMounted } from 'vue';
 
-const partnerStore = usePartnerStore();
+interface Brand {
+  id: number;
+  nome: string;
+  logo: string;
+  url: string;
+  ativo: boolean;
+  ordem: number;
+}
 
-const logos = computed(() => {
-  const all = [
-    ...(partnerStore.featuredPartners || []),
-    ...(partnerStore.newPartners || []),
-  ];
-  const seen = new Set<string>();
-  return all.filter(p => {
-    const img = p.imagemPequena || p.imagem;
-    if (!img || seen.has(img)) return false;
-    seen.add(img);
-    return true;
-  }).slice(0, 12);
+const brands = ref<Brand[]>([]);
+
+const activeBrands = computed(() => 
+  brands.value.filter(b => b.ativo).sort((a, b) => a.ordem - b.ordem)
+);
+
+onMounted(async () => {
+  try {
+    brands.value = await $fetch('/data/brands.json');
+  } catch (error) {
+    console.error('[Brands] Erro ao carregar:', error);
+  }
 });
 </script>
 
 <style scoped>
-.qs-brand-logos {
-  padding: 32px 0;
+.qs-brands {
+  padding: 36px 0;
   background: #fff;
   border-top: 1px solid #f0f0f0;
   border-bottom: 1px solid #f0f0f0;
-  overflow: hidden;
 }
 
-.qs-brand-logos__title {
+.qs-brands__label {
   text-align: center;
   font-family: 'Inter', 'Jost', sans-serif;
   font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  font-weight: 700;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: #9ca3af;
   margin-bottom: 24px;
 }
 
-.qs-brand-logos__track-wrap {
-  overflow: hidden;
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
-  mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
-}
-
-.qs-brand-logos__track {
-  display: flex;
-  gap: 40px;
+.qs-brands__grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 20px;
   align-items: center;
-  animation: qs-logos-scroll 28s linear infinite;
-  width: max-content;
 }
 
-.qs-brand-logos__track:hover {
-  animation-play-state: paused;
+@media (max-width: 991px) {
+  .qs-brands__grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
-.qs-brand-logos__item {
-  flex-shrink: 0;
-  opacity: 0.60;
-  transition: opacity 0.2s;
+@media (max-width: 575px) {
+  .qs-brands__grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
 }
 
-.qs-brand-logos__item:hover {
-  opacity: 1;
+.qs-brands__item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  filter: grayscale(1) opacity(0.65);
 }
 
-.qs-brand-logos__item img {
-  height: 32px;
-  width: auto;
-  max-width: 100px;
+.qs-brands__item:hover {
+  filter: grayscale(0) opacity(1);
+  transform: scale(1.05);
+}
+
+.qs-brands__item img {
+  max-width: 100%;
+  max-height: 100%;
   object-fit: contain;
-  filter: grayscale(0.6);
-  transition: filter 0.2s;
-}
-
-.qs-brand-logos__item:hover img {
-  filter: none;
-}
-
-@keyframes qs-logos-scroll {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
 }
 </style>
