@@ -60,6 +60,8 @@ const adminLinks = [
   { to: '/agencia/painel/admin/suporte', label: 'Suporte', desc: 'Gerenciar tickets de suporte' },
   { to: '/agencia/painel/admin/lojas-credenciados', label: 'Lojas Físicas', desc: 'Lojas físicas credenciadas' },
   { to: '/agencia/painel/admin/relatorio-de-faturas', label: 'Relatório de Faturas', desc: 'Relatórios financeiros' },
+  { to: '/agencia/painel/admin/home-cms', label: 'CMS da Home', desc: 'Editar textos e seções da página inicial' },
+  { to: '/agencia/painel/admin/marcas-home', label: 'Marcas da Home', desc: 'Gerenciar logos do carrossel de marcas' },
 ];
 function authHeader() { return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } }; }
 onMounted(async () => {
