@@ -1,0 +1,159 @@
+<template>
+  <section class="qs-testimonials">
+    <div class="container">
+      <div class="qs-section-header">
+        <h2 class="qs-section-title">Testemunhos de Usuários Reais</h2>
+        <p class="qs-section-sub">Veja quanto nossos usuários já economizaram.</p>
+      </div>
+
+      <div class="qs-testimonials__grid">
+        <div v-for="t in testimonials" :key="t.name" class="qs-testimonial-card">
+          <div class="qs-testimonial-card__stars">
+            <svg v-for="n in 5" :key="n" width="14" height="14" viewBox="0 0 24 24" fill="#FFB342"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          </div>
+          <p class="qs-testimonial-card__text">
+            <span class="qs-testimonial-card__highlight">{{ t.highlight }}</span>
+            {{ t.text }}
+          </p>
+          <div class="qs-testimonial-card__author">
+            <div class="qs-testimonial-card__avatar">{{ t.initials }}</div>
+            <div>
+              <div class="qs-testimonial-card__name">{{ t.name }}</div>
+              <div class="qs-testimonial-card__role">{{ t.role }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</template>
+
+<script setup lang="ts">
+const testimonials = [
+  {
+    name: 'Marina Costa',
+    initials: 'MC',
+    role: 'Usuária há 8 meses',
+    stars: 5,
+    highlight: 'Já recebi mais de R$ 1.240 de cashback',
+    text: ' em apenas 6 meses. Nunca mais compro sem a Quanta!',
+  },
+  {
+    name: 'Rafael Oliveira',
+    initials: 'RO',
+    role: 'Usuário há 1 ano',
+    stars: 5,
+    highlight: 'A cada compra, o dinheiro volta.',
+    text: ' Já acumulei R$ 890 sem nenhum esforço extra. Recomendo demais.',
+  },
+  {
+    name: 'Juliana Santos',
+    initials: 'JS',
+    role: 'Usuária há 1 ano',
+    stars: 5,
+    highlight: 'Minha família economizou R$ 2.100 no último ano.',
+    text: ' É dinheiro de verdade voltando pro bolso.',
+  },
+];
+</script>
+
+<style scoped>
+.qs-testimonials {
+  padding: 72px 0;
+  background: #f7f8fa;
+}
+
+.qs-section-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.qs-section-title {
+  font-family: 'Inter', 'Jost', sans-serif;
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 800;
+  color: #111827;
+  letter-spacing: -0.03em;
+  margin-bottom: 8px;
+}
+
+.qs-section-sub {
+  font-family: 'Inter', 'Jost', sans-serif;
+  font-size: 15px;
+  color: #6b7280;
+}
+
+.qs-testimonials__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 991px) { .qs-testimonials__grid { grid-template-columns: 1fr; } }
+
+.qs-testimonial-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 24px;
+  transition: all 0.25s ease;
+}
+
+.qs-testimonial-card:hover {
+  box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+  transform: translateY(-2px);
+}
+
+.qs-testimonial-card__stars {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 14px;
+}
+
+.qs-testimonial-card__text {
+  font-family: 'Inter', 'Jost', sans-serif;
+  font-size: 14px;
+  color: #374151;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.qs-testimonial-card__highlight {
+  color: #2F7785;
+  font-weight: 700;
+}
+
+.qs-testimonial-card__author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.qs-testimonial-card__avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #225F6B, #2F7785);
+  color: #fff;
+  font-family: 'Inter', 'Jost', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.qs-testimonial-card__name {
+  font-family: 'Inter', 'Jost', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.qs-testimonial-card__role {
+  font-family: 'Inter', 'Jost', sans-serif;
+  font-size: 12px;
+  color: #9ca3af;
+}
+</style>

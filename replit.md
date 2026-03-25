@@ -88,6 +88,28 @@ O site original fazia chamadas diretas para `https://api.quantashop.com.br/api` 
 2. **useApi composable** (`composables/useApi.ts`): Cria instância Axios com `baseURL: /api-proxy`, direcionando tudo pelo proxy. Usa lazy singleton para funcionar quando chamado no nível do módulo pelos services
 3. **Layout paralelo** (`layouts/layout-one.vue`): Todas as chamadas de API (categorias, carrosséis, parceiros) são feitas em paralelo via `Promise.allSettled` para evitar bloqueio
 
+## Home Page Redesign (Nova Home — Task #33)
+
+Nova home page implementada a partir do mockup PDF do Lovable (design de referência visual apenas — código reimplementado em Vue 3).
+
+**Layout:** `layouts/layout-home.vue` — usado exclusivamente pela `pages/index.vue`
+- Carrega: carousels, newPartners, featuredPartners, localPartners via Pinia stores
+
+**Seções da nova home:**
+1. `header/header-home.vue` — Novo header limpo: logo + nav (Para Você, Para sua Empresa, Seja um Agente, Quanta Amizade, Blog, Fale Conosco) + botões Login/Cadastre-se + search bar
+2. `home/home-hero.vue` — Hero com overlay escuro no banner da API + floating UI cards ("Ativação rápida: 1 clique", "Seu saldo: R$ 127,50") + CTA "Começar Agora"
+3. `home/home-brand-logos.vue` — Strip animado de logos de parceiros da API
+4. `home/home-ofertas-dia.vue` — Grid 4-col com featuredPartners como "Ofertas do Dia"
+5. `home/home-parceiros-online.vue` — Grid 4-col de newPartners com botão "Ative seu cashback"
+6. `home/home-parceiros-locais.vue` — Grid 3-col de localPartners com badge WhatsApp
+7. `home/home-testimonials.vue` — Testemunhos (Marina Costa, Rafael Oliveira, Juliana Santos)
+8. `home/home-blog.vue` — Grid 3-col de artigos estáticos com imagens Unsplash
+9. `home/home-ceo.vue` — Seção Mauro Triumph com botão WhatsApp e badges ("Em até 24h", "+200 fechadas")
+10. `home/home-footer-cta.vue` — CTA pre-footer "Pronto para começar a economizar?"
+11. `footer/footer-home.vue` — Footer escuro (#111827) com 4 colunas de links + redes sociais
+
+**Cores da nova home:** Primary teal `#2F7785`, lime `#98C73A`, dark footer `#111827`
+
 ## Parceiros Locais (components/partners-local/)
 
 - `item.client.vue` e `sm-item.vue`: links usam `item.link` (vindo da API) — não mais hardcoded para `agencia.quantashop.com.br`

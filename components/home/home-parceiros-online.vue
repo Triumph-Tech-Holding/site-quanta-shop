@@ -1,0 +1,207 @@
+<template>
+  <section class="qs-parceiros-online">
+    <div class="container">
+      <div class="qs-section-header">
+        <span class="qs-section-label">Parceiros Online</span>
+        <h2 class="qs-section-title">Compre online e receba cashback</h2>
+        <p class="qs-section-sub">Centenas de marcas com cashback garantido. Ative e compre normalmente.</p>
+      </div>
+
+      <div v-if="loading" class="qs-parceiros-online__grid">
+        <div v-for="n in 8" :key="n" class="qs-partner-card qs-partner-card--skeleton">
+          <div class="qs-skeleton" style="height:64px;width:80px;border-radius:8px;margin:0 auto 12px;"></div>
+          <div class="qs-skeleton" style="height:14px;width:80%;border-radius:4px;margin:0 auto 6px;"></div>
+          <div class="qs-skeleton" style="height:12px;width:60%;border-radius:4px;margin:0 auto 16px;"></div>
+          <div class="qs-skeleton" style="height:36px;width:100%;border-radius:8px;"></div>
+        </div>
+      </div>
+
+      <div v-else class="qs-parceiros-online__grid">
+        <div
+          v-for="item in displayedPartners"
+          :key="item.id"
+          class="qs-partner-card"
+        >
+          <div class="qs-partner-card__logo">
+            <img :src="item.imagemPequena || item.imagem || '/img/placeholder.png'" :alt="item.nome" />
+          </div>
+          <h3 class="qs-partner-card__name">{{ item.nome }}</h3>
+          <p class="qs-partner-card__cashback">Até {{ item.percentualCashback || '?' }}% de cashback</p>
+          <a :href="item.link || `/partners`" target="_blank" rel="noopener" class="qs-partner-card__btn">
+            Ative seu cashback
+          </a>
+        </div>
+      </div>
+
+      <div v-if="!loading && hasMore" class="qs-parceiros-online__more">
+        <nuxt-link href="/partners" class="qs-btn-outline-primary">
+          Ver todos os parceiros
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </nuxt-link>
+      </div>
+    </div>
+  </section>
+</template>
+
+<script setup lang="ts">
+import { computed } from 'vue';
+import { usePartnerStore } from "@/pinia/usePartnerStore";
+
+const partnerStore = usePartnerStore();
+
+const loading = computed(() => !partnerStore.newPartners || partnerStore.newPartners.length === 0);
+const displayedPartners = computed(() => (partnerStore.newPartners || []).slice(0, 8));
+const hasMore = computed(() => (partnerStore.newPartners || []).length > 8);
+</script>
+
+<style scoped>
+.qs-parceiros-online {
+  padding: 72px 0;
+  background: #f7f8fa;
+}
+
+.qs-section-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.qs-section-label {
+  display: inline-block;
+  font-family: 'Inter', 'Jost', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #98C73A;
+  margin-bottom: 10px;
+}
+
+.qs-section-title {
+  font-family: 'Inter', 'Jost', sans-serif;
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 800;
+  color: #111827;
+  letter-spacing: -0.03em;
+  margin-bottom: 8px;
+}
+
+.qs-section-sub {
+  font-family: 'Inter', 'Jost', sans-serif;
+  font-size: 15px;
+  color: #6b7280;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.qs-parceiros-online__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 36px;
+}
+
+@media (max-width: 991px) { .qs-parceiros-online__grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 575px) { .qs-parceiros-online__grid { grid-template-columns: 1fr; } }
+
+.qs-partner-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px 16px;
+  text-align: center;
+  transition: all 0.25s ease;
+}
+
+.qs-partner-card:hover {
+  box-shadow: 0 6px 24px rgba(0,0,0,0.10);
+  transform: translateY(-2px);
+  border-color: transparent;
+}
+
+.qs-partner-card--skeleton {
+  pointer-events: none;
+}
+
+.qs-partner-card__logo {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.qs-partner-card__logo img {
+  max-height: 56px;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.qs-partner-card__name {
+  font-family: 'Inter', 'Jost', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 4px;
+}
+
+.qs-partner-card__cashback {
+  font-family: 'Inter', 'Jost', sans-serif;
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 14px;
+}
+
+.qs-partner-card__btn {
+  display: block;
+  border: 1.5px solid #98C73A;
+  color: #2F7785;
+  font-family: 'Inter', 'Jost', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.qs-partner-card__btn:hover {
+  background: #98C73A;
+  border-color: #98C73A;
+  color: #fff;
+}
+
+.qs-parceiros-online__more {
+  text-align: center;
+}
+
+.qs-btn-outline-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 2px solid #2F7785;
+  color: #2F7785;
+  font-family: 'Inter', 'Jost', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px 28px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.qs-btn-outline-primary:hover {
+  background: #2F7785;
+  color: #fff;
+}
+
+.qs-skeleton {
+  background: linear-gradient(90deg, #e8edf0 25%, #f5f8fa 50%, #e8edf0 75%);
+  background-size: 200% 100%;
+  animation: qs-skeleton-wave 1.5s infinite;
+}
+
+@keyframes qs-skeleton-wave {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+</style>
