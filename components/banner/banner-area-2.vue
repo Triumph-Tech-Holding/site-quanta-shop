@@ -105,7 +105,7 @@ const transformData = (): any => {
 };
 
 onMounted(() => {
-}),
+});
 
 </script>
 
