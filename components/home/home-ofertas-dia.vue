@@ -107,7 +107,8 @@ function formatPrice(price: any): string {
   gap: 20px;
 }
 
-@media (max-width: 1199px) { .qs-ofertas__grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 1199px) { .qs-ofertas__grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 767px) { .qs-ofertas__grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 575px) { .qs-ofertas__grid { grid-template-columns: 1fr; } }
 
 .qs-ofertas__card {

@@ -20,7 +20,7 @@
         <div class="qs-hero__overlay"></div>
 
         <div class="container qs-hero__content-wrap">
-          <div class="row align-items-center" style="min-height: 480px;">
+          <div class="row align-items-center qs-hero__row">
             <div class="col-xl-6 col-lg-7">
               <div class="qs-hero__content">
                 <span class="qs-hero__badge">
@@ -435,10 +435,43 @@ const sliderData = computed(() => {
   font-weight: 500;
 }
 
+.qs-hero__row {
+  min-height: 480px;
+}
+
 @media (max-width: 991px) {
   .qs-hero__content-wrap {
     padding-top: 40px;
     padding-bottom: 60px;
+  }
+  .qs-hero__row {
+    min-height: 380px;
+  }
+}
+
+@media (max-width: 575px) {
+  .qs-hero__row {
+    min-height: 0;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+  .qs-hero__content-wrap {
+    padding-top: 24px;
+    padding-bottom: 40px;
+  }
+  .qs-hero__title {
+    font-size: clamp(26px, 8vw, 36px);
+  }
+  .qs-hero__subtitle {
+    font-size: 14px;
+  }
+  .qs-hero__cta {
+    font-size: 14px;
+    padding: 12px 20px;
+  }
+  .qs-hero__social-proof {
+    flex-wrap: wrap;
+    gap: 8px;
   }
 }
 </style>

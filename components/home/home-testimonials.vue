@@ -96,7 +96,8 @@ const testimonials = [
   gap: 20px;
 }
 
-@media (max-width: 991px) { .qs-testimonials__grid { grid-template-columns: 1fr; } }
+@media (max-width: 991px) { .qs-testimonials__grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 575px) { .qs-testimonials__grid { grid-template-columns: 1fr; } }
 
 .qs-testimonial-card {
   background: #fff;

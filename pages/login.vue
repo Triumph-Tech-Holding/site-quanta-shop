@@ -11,31 +11,18 @@
 </template>
 
 <script setup lang="ts">
-import { useUserStore } from "@/pinia/useUserStore";
+import { useAgenciaStore } from "@/pinia/useAgenciaStore";
 
 useSeoMeta({ title: "Entrar | Quanta Shop" });
 
-const userStore = useUserStore();
+const agenciaStore = useAgenciaStore();
+const router = useRouter();
 
 onBeforeMount(() => {
-  console.log("Login page mounted");
+  agenciaStore.loadFromStorage();
 
-  const userFromLocalStorage = localStorage.getItem("user");
-
-  if (userFromLocalStorage) {
-    console.log("User from local storage:", userFromLocalStorage);
-
-    const user = JSON.parse(userFromLocalStorage);
-
-    if (user) {
-      console.log("User:", user);
-    }
-
-    // logout user
-    userStore.logout();
-
-    // clear session storage
-    //sessionStorage.clear();
+  if (agenciaStore.user && agenciaStore.checkTokenExpiry()) {
+    router.replace('/agencia/painel');
   }
 });
 </script>

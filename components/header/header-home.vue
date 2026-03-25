@@ -9,7 +9,7 @@
             </nuxt-link>
           </div>
 
-          <nav class="qs-home-header__nav d-none d-md-flex">
+          <nav class="qs-home-header__nav d-none d-xl-flex">
             <nuxt-link href="/">Para Você</nuxt-link>
             <nuxt-link href="/para-sua-empresa">Para sua Empresa</nuxt-link>
             <nuxt-link href="/seja-um-agente">Seja um Agente</nuxt-link>
@@ -27,7 +27,7 @@
           <div class="qs-home-header__actions">
             <nuxt-link href="/login" class="qs-btn-login">Login</nuxt-link>
             <nuxt-link href="/register" class="qs-btn-cadastro">Cadastro</nuxt-link>
-            <button class="qs-mobile-menu-btn d-md-none" @click="toggleMobile">
+            <button class="qs-mobile-menu-btn d-xl-none" @click="toggleMobile">
               <span></span><span></span><span></span>
             </button>
           </div>
@@ -60,7 +60,7 @@
       </div>
     </div>
 
-    <div v-if="mobileOpen" class="qs-mobile-menu d-md-none">
+    <div v-if="mobileOpen" class="qs-mobile-menu d-xl-none">
       <nav>
         <nuxt-link href="/" @click="mobileOpen = false">Para Você</nuxt-link>
         <nuxt-link href="/para-sua-empresa" @click="mobileOpen = false">Para sua Empresa</nuxt-link>
@@ -315,5 +315,25 @@ function handleSearch() {
   display: flex;
   gap: 12px;
   padding: 16px 24px;
+}
+
+@media (max-width: 575px) {
+  .qs-home-header__logo img {
+    height: 30px;
+  }
+  .qs-btn-login,
+  .qs-btn-cadastro {
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+  .qs-home-header__actions {
+    gap: 6px;
+  }
+}
+
+@media (max-width: 767px) {
+  .qs-home-header__main {
+    padding: 10px 0;
+  }
 }
 </style>
