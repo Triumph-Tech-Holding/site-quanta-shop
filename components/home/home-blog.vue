@@ -30,7 +30,7 @@
           </div>
           <div class="qs-feed-card__body">
             <h3 class="qs-feed-card__title">{{ item.title }}</h3>
-            <p class="qs-feed-card__date">{{ item.date }}</p>
+            <p v-if="item.date" class="qs-feed-card__date">{{ item.date }}</p>
             <span class="qs-feed-card__link">Ler mais →</span>
           </div>
         </a>
@@ -42,8 +42,10 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 
+type FeedType = 'blog' | 'instagram' | 'youtube';
+
 interface FeedItem {
-  type: 'blog' | 'instagram' | 'youtube';
+  type: FeedType;
   badgeLabel: string;
   title: string;
   img: string;
@@ -51,8 +53,30 @@ interface FeedItem {
   url: string;
 }
 
-const blogPosts = ref<any[]>([]);
-const socialFeed = ref<any[]>([]);
+interface BlogPost {
+  slug: string;
+  title: string;
+  excerpt: string;
+  tag: string;
+  date: string;
+  readTime: number;
+  img: string;
+}
+
+interface SocialItem {
+  id: number;
+  rede: string;
+  legenda: string;
+  thumb: string;
+}
+
+interface MockData {
+  blog: BlogPost[];
+  social: SocialItem[];
+}
+
+const blogPosts = ref<BlogPost[]>([]);
+const socialFeed = ref<SocialItem[]>([]);
 
 const feedItems = computed<FeedItem[]>(() => {
   const items: FeedItem[] = [];
@@ -69,7 +93,7 @@ const feedItems = computed<FeedItem[]>(() => {
   }
 
   for (const social of socialFeed.value) {
-    const rede = (social.rede || '').toLowerCase();
+    const rede = (social.rede ?? '').toLowerCase();
     items.push({
       type: rede === 'youtube' ? 'youtube' : 'instagram',
       badgeLabel: social.rede,
@@ -85,9 +109,9 @@ const feedItems = computed<FeedItem[]>(() => {
 
 onMounted(async () => {
   try {
-    const data = await $fetch<any>('/data/mock-data.json');
-    blogPosts.value = data.blog || [];
-    socialFeed.value = data.social || [];
+    const data = await $fetch<MockData>('/data/mock-data.json');
+    blogPosts.value = data.blog ?? [];
+    socialFeed.value = data.social ?? [];
   } catch (e) {
     console.warn('[Blog] Failed to load mock-data.json');
   }

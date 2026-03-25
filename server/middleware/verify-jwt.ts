@@ -1,78 +1,79 @@
 import jwt from 'jsonwebtoken';
 import { defineEventHandler, getCookie, createError } from 'h3';
 
+interface JwtPayload {
+  id: string;
+  email: string;
+  admin?: boolean;
+  perfil?: string;
+  idUsuario?: number;
+  iat?: number;
+  exp?: number;
+}
+
 declare module 'h3' {
   interface H3EventContext {
-    user?: {
-      id: string;
-      email: string;
-      admin?: boolean;
-      [key: string]: any;
-    };
+    user?: JwtPayload;
   }
 }
 
+const PUBLIC_PATH_PREFIXES = [
+  '/agencia/login',
+  '/agencia/cadastro',
+  '/agencia/recuperar-senha',
+  '/agencia/reset-password',
+  '/agencia/confirm-email',
+  '/api-proxy',
+  '/api/auth/logout',
+  '/_nuxt',
+  '/data',
+] as const;
+
 export default defineEventHandler(async (event) => {
-  const publicPaths = [
-    '/agencia/login',
-    '/agencia/cadastro',
-    '/agencia/recuperar-senha',
-    '/agencia/reset-password',
-    '/agencia/confirm-email',
-    '/api-proxy',
-    '/auth/logout',
-  ];
+  const url = event.node.req.url ?? '';
 
-  const isPublicPath = publicPaths.some((path) =>
-    event.node.req.url?.startsWith(path)
-  );
+  const isPublicPath = PUBLIC_PATH_PREFIXES.some((prefix) => url.startsWith(prefix));
+  if (isPublicPath) return;
 
-  if (isPublicPath) {
+  // Aceitar token via cookie (SSR) ou header Authorization (SPA/API calls)
+  const cookieToken = getCookie(event, 'agencia_token') ?? getCookie(event, 'auth_token');
+  const headerAuth = event.node.req.headers.authorization;
+  const bearerToken = headerAuth?.startsWith('Bearer ') ? headerAuth.slice(7) : undefined;
+  const token = cookieToken ?? bearerToken;
+
+  // Rotas de admin de dados exigem token; rotas públicas de leitura passam sem token
+  const requiresAuth = url.startsWith('/api/admin');
+  if (!token) {
+    if (requiresAuth) {
+      throw createError({ statusCode: 401, statusMessage: 'Não autorizado: token ausente.' });
+    }
     return;
   }
 
-  const token =
-    getCookie(event, 'agencia_token') ||
-    getCookie(event, 'auth_token') ||
-    event.node.req.headers.authorization?.replace('Bearer ', '');
-
-  if (!token) {
-    return;
+  const jwtSecret = process.env.NUXT_JWT_SECRET;
+  if (!jwtSecret) {
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Configuração de segurança inválida: NUXT_JWT_SECRET não configurado.',
+    });
   }
 
   try {
-    const jwtSecret = process.env.NUXT_JWT_SECRET;
-
-    if (!jwtSecret) {
-      throw createError({
-        statusCode: 500,
-        statusMessage: 'Configuração de segurança inválida: NUXT_JWT_SECRET não está configurado.',
-      });
-    }
-
-    const decoded = jwt.verify(token, jwtSecret) as {
-      id: string;
-      email: string;
-      admin?: boolean;
-      [key: string]: any;
-    };
-
+    const decoded = jwt.verify(token, jwtSecret) as JwtPayload;
     event.context.user = decoded;
-  } catch (error: any) {
-    if (error.name === 'TokenExpiredError') {
-      throw createError({
-        statusCode: 401,
-        statusMessage: 'Não autorizado: Token expirado.',
-      });
+  } catch (err: unknown) {
+    const isJwtError = err instanceof Error && (
+      err.name === 'TokenExpiredError' || err.name === 'JsonWebTokenError'
+    );
+
+    if (err instanceof Error && err.name === 'TokenExpiredError') {
+      throw createError({ statusCode: 401, statusMessage: 'Não autorizado: token expirado.' });
     }
 
-    if (error.name === 'JsonWebTokenError') {
-      throw createError({
-        statusCode: 401,
-        statusMessage: 'Não autorizado: Token inválido.',
-      });
+    if (isJwtError) {
+      throw createError({ statusCode: 401, statusMessage: 'Não autorizado: token inválido.' });
     }
 
-    throw error;
+    throw err;
   }
 });
