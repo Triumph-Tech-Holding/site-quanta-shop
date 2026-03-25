@@ -1,0 +1,122 @@
+{
+  "ofertas": [
+    {
+      "id": 1,
+      "nome": "Fone de Ouvido Bluetooth Premium",
+      "preco": 149.90,
+      "percentualCashback": 8,
+      "imagem": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&q=80&auto=format&fit=crop",
+      "parceiro": "Amazon",
+      "link": "https://amazon.com.br"
+    },
+    {
+      "id": 2,
+      "nome": "Relógio Inteligente Smartwatch",
+      "preco": 299.00,
+      "percentualCashback": 12,
+      "imagem": "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&q=80&auto=format&fit=crop",
+      "parceiro": "Magalu",
+      "link": "https://magalu.com.br"
+    },
+    {
+      "id": 3,
+      "nome": "Carregador USB-C Rápido",
+      "preco": 79.90,
+      "percentualCashback": 15,
+      "imagem": "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=500&q=80&auto=format&fit=crop",
+      "parceiro": "Shopee",
+      "link": "https://shopee.com.br"
+    },
+    {
+      "id": 4,
+      "nome": "Livro 'Hábitos Atômicos'",
+      "preco": 59.90,
+      "percentualCashback": 6,
+      "imagem": "https://images.unsplash.com/photo-1543002588-d4d28bde5205?w=500&q=80&auto=format&fit=crop",
+      "parceiro": "Skoob",
+      "link": "https://skoob.com.br"
+    },
+    {
+      "id": 5,
+      "nome": "Mochila Viagem Premium",
+      "preco": 189.90,
+      "percentualCashback": 10,
+      "imagem": "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500&q=80&auto=format&fit=crop",
+      "parceiro": "Centauro",
+      "link": "https://centauro.com.br"
+    },
+    {
+      "id": 6,
+      "nome": "Espelho Inteligente com LED",
+      "preco": 249.90,
+      "percentualCashback": 7,
+      "imagem": "https://images.unsplash.com/photo-1520394196351-d09fc1d7b313?w=500&q=80&auto=format&fit=crop",
+      "parceiro": "Magazine Luiza",
+      "link": "https://magazineluiza.com.br"
+    }
+  ],
+  "blog": [
+    {
+      "slug": "como-maximizar-cashback",
+      "title": "Como maximizar seu cashback em compras online",
+      "excerpt": "Estratégias simples para multiplicar o dinheiro que volta para o seu bolso a cada compra.",
+      "tag": "Finanças",
+      "date": "15 Mar 2026",
+      "readTime": 4,
+      "img": "https://images.unsplash.com/photo-1556740049-0cfed4f6a45d?w=600&q=80&auto=format&fit=crop"
+    },
+    {
+      "slug": "parceiros-locais-quanta",
+      "title": "Parceiros locais: cashback na sua cidade",
+      "excerpt": "Descubra como ganhar cashback em estabelecimentos perto de você com o programa Quanta.",
+      "tag": "Comunidade",
+      "date": "12 Mar 2026",
+      "readTime": 5,
+      "img": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&q=80&auto=format&fit=crop"
+    },
+    {
+      "slug": "guia-completo-indicacoes",
+      "title": "Guia completo: como ganhar com indicações",
+      "excerpt": "Aprenda a construir sua rede de afiliados e multiplique seus ganhos mensais.",
+      "tag": "Negócios",
+      "date": "10 Mar 2026",
+      "readTime": 6,
+      "img": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&q=80&auto=format&fit=crop"
+    },
+    {
+      "slug": "consumo-inteligente-2026",
+      "title": "Consumo inteligente em 2026: dicas práticas",
+      "excerpt": "Tendências de consumo responsável e como o cashback pode ajudar sua economia.",
+      "tag": "Dicas",
+      "date": "08 Mar 2026",
+      "readTime": 3,
+      "img": "https://images.unsplash.com/photo-1512941691920-25bda36dc643?w=600&q=80&auto=format&fit=crop"
+    }
+  ],
+  "social": [
+    {
+      "id": 1,
+      "rede": "Instagram",
+      "legenda": "Cashback em tempo real ✨",
+      "thumb": "https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=300&q=80&auto=format&fit=crop"
+    },
+    {
+      "id": 2,
+      "rede": "YouTube",
+      "legenda": "Como começar agora",
+      "thumb": "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=300&q=80&auto=format&fit=crop"
+    },
+    {
+      "id": 3,
+      "rede": "Instagram",
+      "legenda": "Histórias de sucesso",
+      "thumb": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=300&q=80&auto=format&fit=crop"
+    },
+    {
+      "id": 4,
+      "rede": "YouTube",
+      "legenda": "Dicas e truques",
+      "thumb": "https://images.unsplash.com/photo-1516738901601-6d0ee099431b?w=300&q=80&auto=format&fit=crop"
+    }
+  ]
+}

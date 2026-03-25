@@ -1,0 +1,51 @@
+Reproduzir fielmente a Home Page da Quanta Shop baseada no PDF anexo. O projeto deve ser um ecossistema de alta performance usando Nuxt 3 (Vue 3), SCSS e a estrutura de grid do Bootstrap 5. O design deve ser "Premium", minimalista e focado em conversão.
+
+1. Stack Técnica & Configuração:
+
+Framework: Nuxt 3 (Vite).
+
+CSS: SCSS (Sass) com Bootstrap 5.
+
+Variáveis de Cor (Criar assets/scss/_variables.scss):
+
+$quanta-teal: #2F7785; (Primária)
+
+$quanta-green: #98C73A; (Secundária/Cashback)
+
+$quanta-dark: #225F6B; (Contraste)
+
+$quanta-bg: #F4F4F5; (Fundo)
+
+Tipografia: Aplicar fonte 'Jost' via Google Fonts globalmente.
+
+2. Estrutura de Componentes (Atomic Design):
+
+TheHeader.vue: Menu fixo. Links: Para Você | Para sua Empresa | Seja um Agente | Quanta Amizade | Blog | Fale Conosco. Botão 'Cadastro' em $quanta-green com texto em $quanta-dark.
+
+TheSearchBar.vue: Barra de busca minimalista logo abaixo do header. Placeholder: "Busque produtos, grandes marcas ou lojas por CEP...". Incluir ícones de Lupa e Microfone.
+
+HeroSection.vue: Altura fixa de 60vh. Título: "Sua Receita por Minuto Começa Aqui". Subtítulo sobre cashback e crescimento de saldo. CTA Dourado/Verde de alta visibilidade.
+
+BrandsMarquee.vue: Grid ou carrossel infinito das logos (Amazon, Magalu, etc.) com logos grandes e nítidas, respeitando a "segunda dobra" visível logo após o banner.
+
+ProductCarousel.vue: Carrossel de 'Ofertas do Dia'. Exibir 4 cards por vez (desktop). Cards com bordas suaves, sombra sutil e destaque para a % de cashback.
+
+LiveFeed.vue: Grid dinâmico conforme página 3 do PDF. Mostrar cards do Blog e miniaturas de Redes Sociais com tags de identificação.
+
+CeoSection.vue: Banner com foto de Mauro Triumph. Botão "Iniciar Conversa com IA". Ao clicar, abrir um Modal de Chat estilizado para qualificação de leads.
+
+3. Regras de Estilo & UX:
+
+Banner Compacto: O banner principal não deve ocupar 100% da tela. Use max-height: 60vh para que a seção de marcas seja vista parcialmente sem rolagem.
+
+Interatividade: Adicionar efeitos de hover (elevação e brilho suave) em todos os botões e cards de produtos.
+
+Responsividade: No mobile, ocultar elementos secundários e transformar o menu em 'Hamburguer'. O buscador deve permanecer acessível no topo.
+
+4. Instruções de Execução para o Agent:
+
+Analise o layout do PDF anexo para posicionar as imagens e textos exatamente como desenhado.
+
+Utilize o sistema de grid do Bootstrap (container, row, col) para garantir o alinhamento.
+
+Crie um arquivo de dados (mock-data.json) para preencher as ofertas e posts do blog para que o site não pareça vazio.

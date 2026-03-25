@@ -1,5 +1,5 @@
 <template>
-  <section class="qs-hero">
+  <section class="qs-hero" style="max-height: 60vh; overflow: hidden;">
     <div v-if="sliderData.length === 0" class="qs-hero__loading">
       <img src="/img/ui/loading.gif" alt="Carregando..." width="48" />
     </div>
@@ -29,8 +29,8 @@
                 </span>
 
                 <h1 class="qs-hero__title">
-                  {{ item.texto2 || 'Transforme cada compra em' }}
-                  <span class="qs-hero__title--lime">{{ item.highlightText || 'dinheiro de volta' }}</span>
+                  {{ item.texto2 || 'Sua Receita por Minuto' }}
+                  <span class="qs-hero__title--lime">{{ item.highlightText || 'Começa Aqui' }}</span>
                 </h1>
 
                 <p class="qs-hero__subtitle">
@@ -264,6 +264,12 @@ const sliderData = computed(() => {
   padding: 14px 20px;
   box-shadow: 0 8px 32px rgba(0,0,0,0.15);
   min-width: 180px;
+  transition: all 0.3s ease;
+}
+
+.qs-hero__card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.25);
 }
 
 .qs-hero__card-icon {

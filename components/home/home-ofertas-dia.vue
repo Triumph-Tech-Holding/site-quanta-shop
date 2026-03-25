@@ -41,13 +41,25 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref, onMounted } from 'vue';
 import { usePartnerStore } from "@/pinia/usePartnerStore";
 
 const partnerStore = usePartnerStore();
+const mockOffers = ref([]);
+
+onMounted(async () => {
+  try {
+    const res = await fetch('/data/mock-data.json');
+    const data = await res.json();
+    mockOffers.value = data.ofertas || [];
+  } catch (e) {
+    console.warn('Failed to load mock offers');
+  }
+});
 
 const offers = computed(() => {
-  return (partnerStore.featuredPartners || []).slice(0, 4);
+  const storeOffers = (partnerStore.featuredPartners || []).slice(0, 4);
+  return storeOffers.length > 0 ? storeOffers : mockOffers.value.slice(0, 4);
 });
 
 function formatPrice(price: any): string {

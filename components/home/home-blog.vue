@@ -7,31 +7,47 @@
         <p class="qs-section-sub">Conteúdo prático sobre cashback, finanças e consumo inteligente.</p>
       </div>
 
-      <div class="qs-blog__grid">
-        <a
-          v-for="post in posts"
-          :key="post.slug"
-          href="/blog"
-          class="qs-blog-card"
-        >
-          <div class="qs-blog-card__thumb">
-            <img :src="post.img" :alt="post.title" />
-            <span class="qs-blog-card__tag">{{ post.tag }}</span>
-          </div>
-          <div class="qs-blog-card__body">
-            <div class="qs-blog-card__meta">
-              <span>{{ post.date }}</span>
-              <span>·</span>
-              <span>{{ post.readTime }} min leitura</span>
+      <div class="qs-livefeed">
+        <!-- Coluna Principal: Blog Cards -->
+        <div class="qs-livefeed__blog">
+          <a
+            v-for="(post, i) in blogPosts.slice(0, 2)"
+            :key="i"
+            href="/blog"
+            class="qs-livefeed-card"
+          >
+            <div class="qs-livefeed-card__thumb">
+              <img :src="post.img" :alt="post.title" />
+              <span class="qs-livefeed-card__tag">{{ post.tag }}</span>
             </div>
-            <h3 class="qs-blog-card__title">{{ post.title }}</h3>
-            <p class="qs-blog-card__excerpt">{{ post.excerpt }}</p>
-            <span class="qs-blog-card__link">
-              Ler artigo
-              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </span>
+            <div class="qs-livefeed-card__body">
+              <div class="qs-livefeed-card__meta">
+                <span>{{ post.date }}</span>
+                <span>·</span>
+                <span>{{ post.readTime }} min leitura</span>
+              </div>
+              <h3 class="qs-livefeed-card__title">{{ post.title }}</h3>
+              <p class="qs-livefeed-card__excerpt">{{ post.excerpt }}</p>
+              <span class="qs-livefeed-card__link">
+                Ler artigo
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </span>
+            </div>
+          </a>
+        </div>
+
+        <!-- Coluna Lateral: Redes Sociais -->
+        <div class="qs-livefeed__social">
+          <div
+            v-for="(item, i) in socialFeed.slice(0, 4)"
+            :key="i"
+            class="qs-social-thumbnail"
+          >
+            <img :src="item.thumb" :alt="item.rede" />
+            <div class="qs-social-badge">{{ item.rede }}</div>
+            <p class="qs-social-caption">{{ item.legenda }}</p>
           </div>
-        </a>
+        </div>
       </div>
 
       <div class="qs-blog__more">
@@ -45,62 +61,50 @@
 </template>
 
 <script setup lang="ts">
-const posts = [
-  {
-    slug: 'como-maximizar-cashback',
-    title: 'Como maximizar seu cashback em compras online',
-    excerpt: 'Estratégias simples para multiplicar o dinheiro que volta para o seu bolso a cada compra.',
-    tag: 'Finanças',
-    date: '15 Mar 2026',
-    readTime: 4,
-    img: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&q=80&auto=format&fit=crop',
-  },
-  {
-    slug: 'parceiros-locais-quanta',
-    title: 'Parceiros locais: cashback na sua cidade',
-    excerpt: 'Descubra como aproveitar o cashback em lojas, restaurantes e serviços perto de você.',
-    tag: 'Cashback Local',
-    date: '10 Mar 2026',
-    readTime: 3,
-    img: 'https://images.unsplash.com/photo-1534531173927-aeb928d54385?w=600&q=80&auto=format&fit=crop',
-  },
-  {
-    slug: 'quanta-plus-vale-a-pena',
-    title: 'Quanta Plus vale a pena? Calculamos pra você',
-    excerpt: 'Fizemos as contas: saiba exatamente quando o plano premium se paga.',
-    tag: 'Plano Plus',
-    date: '05 Mar 2026',
-    readTime: 5,
-    img: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=600&q=80&auto=format&fit=crop',
-  },
-];
+import { ref, onMounted } from 'vue';
+
+const blogPosts = ref([]);
+const socialFeed = ref([]);
+
+onMounted(async () => {
+  try {
+    const res = await fetch('/data/mock-data.json');
+    const data = await res.json();
+    blogPosts.value = data.blog || [];
+    socialFeed.value = data.social || [];
+  } catch (e) {
+    console.warn('Failed to load mock-data.json');
+  }
+});
 </script>
 
 <style scoped>
 .qs-blog {
   padding: 72px 0;
-  background: #f7f8fa;
+  background: #fff;
 }
 
 .qs-section-header {
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 48px;
 }
 
 .qs-section-label {
   display: inline-block;
-  font-family: 'Inter', 'Jost', sans-serif;
+  background: rgba(47, 119, 133, 0.08);
+  color: #2F7785;
+  border-radius: 999px;
+  padding: 4px 14px;
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #98C73A;
-  margin-bottom: 10px;
+  letter-spacing: 0.06em;
+  margin-bottom: 12px;
 }
 
 .qs-section-title {
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: clamp(24px, 4vw, 36px);
+  font-family: 'Jost', 'Inter', sans-serif;
+  font-size: clamp(24px, 4vw, 40px);
   font-weight: 800;
   color: #111827;
   letter-spacing: -0.03em;
@@ -108,113 +112,165 @@ const posts = [
 }
 
 .qs-section-sub {
-  font-family: 'Inter', 'Jost', sans-serif;
   font-size: 15px;
-  color: #6b7280;
+  color: #6B7280;
+  max-width: 540px;
+  margin: 0 auto;
 }
 
-.qs-blog__grid {
+.qs-livefeed {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  margin-bottom: 36px;
+  grid-template-columns: 2fr 1fr;
+  gap: 32px;
+  margin-bottom: 40px;
 }
 
-@media (max-width: 991px) { .qs-blog__grid { grid-template-columns: 1fr; } }
-@media (max-width: 1199px) { .qs-blog__grid { grid-template-columns: repeat(2, 1fr); } }
+.qs-livefeed__blog {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
 
-.qs-blog-card {
+.qs-livefeed__social {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.qs-livefeed-card {
   background: #fff;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #E5E7EB;
   border-radius: 12px;
   overflow: hidden;
+  transition: all 0.3s ease;
   text-decoration: none;
-  transition: all 0.25s ease;
-  display: block;
+  color: inherit;
 }
 
-.qs-blog-card:hover {
-  box-shadow: 0 8px 32px rgba(0,0,0,0.10);
-  transform: translateY(-3px);
-  border-color: transparent;
+.qs-livefeed-card:hover {
+  border-color: #2F7785;
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(47, 119, 133, 0.12);
 }
 
-.qs-blog-card__thumb {
+.qs-livefeed-card__thumb {
   position: relative;
-  height: 180px;
   overflow: hidden;
+  height: 280px;
 }
 
-.qs-blog-card__thumb img {
+.qs-livefeed-card__thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s ease;
 }
 
-.qs-blog-card:hover .qs-blog-card__thumb img {
-  transform: scale(1.04);
-}
-
-.qs-blog-card__tag {
+.qs-livefeed-card__tag {
   position: absolute;
   top: 12px;
-  left: 12px;
-  background: #2F7785;
-  color: #fff;
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 10px;
-  font-weight: 700;
-  padding: 3px 10px;
+  right: 12px;
+  background: #98C73A;
+  color: #225F6B;
+  padding: 4px 12px;
   border-radius: 999px;
-  letter-spacing: 0.06em;
+  font-size: 11px;
+  font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
-.qs-blog-card__body {
+.qs-livefeed-card__body {
   padding: 20px;
 }
 
-.qs-blog-card__meta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 11px;
-  color: #9ca3af;
-  margin-bottom: 10px;
-}
-
-.qs-blog-card__title {
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  color: #111827;
-  line-height: 1.4;
+.qs-livefeed-card__meta {
+  font-size: 12px;
+  color: #6B7280;
   margin-bottom: 8px;
 }
 
-.qs-blog-card__excerpt {
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 13px;
-  color: #6b7280;
-  line-height: 1.5;
-  margin-bottom: 16px;
+.qs-livefeed-card__title {
+  font-family: 'Jost', 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 8px;
+  line-height: 1.4;
 }
 
-.qs-blog-card__link {
+.qs-livefeed-card__excerpt {
+  font-size: 13px;
+  color: #6B7280;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.qs-livefeed-card__link {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   color: #2F7785;
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 13px;
-  font-weight: 600;
-  transition: gap 0.2s;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: gap 0.2s ease;
 }
 
-.qs-blog-card:hover .qs-blog-card__link {
-  gap: 8px;
+.qs-livefeed-card:hover .qs-livefeed-card__link {
+  gap: 10px;
+}
+
+.qs-social-thumbnail {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  aspect-ratio: 1;
+  background: #F4F4F5;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.qs-social-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.qs-social-thumbnail:hover {
+  transform: scale(1.05);
+}
+
+.qs-social-thumbnail:hover .qs-social-caption {
+  opacity: 1;
+}
+
+.qs-social-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: rgba(47, 119, 133, 0.9);
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.qs-social-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+  color: #fff;
+  padding: 12px 8px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .qs-blog__more {
@@ -225,19 +281,49 @@ const posts = [
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  border: 2px solid #2F7785;
-  color: #2F7785;
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
   padding: 12px 28px;
+  border: 2px solid #2F7785;
   border-radius: 8px;
+  color: #2F7785;
+  background: transparent;
+  font-family: 'Jost', 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
   text-decoration: none;
-  transition: all 0.2s ease;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .qs-btn-outline-primary:hover {
   background: #2F7785;
   color: #fff;
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .qs-livefeed {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .qs-livefeed__social {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .qs-section-header {
+    margin-bottom: 32px;
+  }
+
+  .qs-livefeed-card__thumb {
+    height: 200px;
+  }
+
+  .qs-section-title {
+    font-size: 24px;
+  }
 }
 </style>

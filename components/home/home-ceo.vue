@@ -7,10 +7,16 @@
           <p class="qs-ceo__pre">Fale com o CEO</p>
           <h2 class="qs-ceo__name">Mauro Triumph</h2>
           <p class="qs-ceo__desc">Clareza estratégica sem rodeios, sem burocracia, sem perda de tempo.</p>
-          <a href="https://api.whatsapp.com/send/?phone=552140404866&text&type=phone_number&app_absent=0" target="_blank" rel="noopener" class="qs-ceo__btn">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            Iniciar Conversa
-          </a>
+          <div style="display: flex; gap: 14px;">
+            <button @click="openModal" class="qs-ceo__btn" style="background: #98C73A; color: #225F6B; border: 0;">
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/></svg>
+              Iniciar Conversa com IA
+            </button>
+            <a href="https://api.whatsapp.com/send/?phone=552140404866&text&type=phone_number&app_absent=0" target="_blank" rel="noopener" class="qs-ceo__btn-secondary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              WhatsApp
+            </a>
+          </div>
         </div>
         <div class="qs-ceo__badges">
           <div class="qs-ceo__badge">
@@ -30,8 +36,94 @@
         </div>
       </div>
     </div>
+
+    <!-- Modal IA Chat -->
+    <div v-if="showModal" class="qs-modal-overlay" @click="closeModal">
+      <div class="qs-modal" @click.stop>
+        <div class="qs-modal-header">
+          <h3>Conversa com IA</h3>
+          <button @click="closeModal" class="qs-modal-close">×</button>
+        </div>
+        <div class="qs-modal-body">
+          <div class="qs-chat">
+            <div v-for="(msg, i) in chatMessages" :key="i" :class="['qs-chat-msg', msg.type]">
+              {{ msg.text }}
+            </div>
+          </div>
+          <div v-if="currentStep === 0" class="qs-form-group">
+            <input v-model="userResponses.name" type="text" placeholder="Qual é seu nome?" class="qs-input" @keyup.enter="nextStep" />
+          </div>
+          <div v-else-if="currentStep === 1" class="qs-form-group">
+            <label v-for="opt in ['Quero cashback', 'Quero credenciar minha loja', 'Quero ser agente']" :key="opt" class="qs-radio-label">
+              <input type="radio" v-model="userResponses.interest" :value="opt" />
+              {{ opt }}
+            </label>
+          </div>
+          <div v-else-if="currentStep === 2" class="qs-form-group">
+            <input v-model="userResponses.email" type="email" placeholder="Seu e-mail" class="qs-input" @keyup.enter="submitChat" />
+          </div>
+          <div class="qs-modal-footer">
+            <button @click="nextStep" v-if="currentStep < 2" class="qs-btn-primary">Próximo</button>
+            <button @click="submitChat" v-else class="qs-btn-primary">Enviar</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue';
+
+const showModal = ref(false);
+const currentStep = ref(0);
+const chatMessages = ref([
+  { type: 'bot', text: 'Olá! Qual é seu nome?' }
+]);
+const userResponses = ref({
+  name: '',
+  interest: '',
+  email: ''
+});
+
+const questions = [
+  'Qual é seu interesse?',
+  'Qual é seu e-mail?'
+];
+
+function openModal() {
+  showModal.value = true;
+  currentStep.value = 0;
+  userResponses.value = { name: '', interest: '', email: '' };
+  chatMessages.value = [{ type: 'bot', text: 'Olá! Qual é seu nome?' }];
+}
+
+function closeModal() {
+  showModal.value = false;
+}
+
+function nextStep() {
+  if (currentStep.value === 0 && !userResponses.value.name) return;
+  if (currentStep.value === 1 && !userResponses.value.interest) return;
+
+  if (currentStep.value === 0) {
+    chatMessages.value.push({ type: 'user', text: userResponses.value.name });
+    chatMessages.value.push({ type: 'bot', text: questions[0] });
+  } else if (currentStep.value === 1) {
+    chatMessages.value.push({ type: 'user', text: userResponses.value.interest });
+    chatMessages.value.push({ type: 'bot', text: questions[1] });
+  }
+  
+  currentStep.value++;
+}
+
+function submitChat() {
+  if (!userResponses.value.email) return;
+  chatMessages.value.push({ type: 'user', text: userResponses.value.email });
+  chatMessages.value.push({ type: 'bot', text: 'Obrigado! Em breve entraremos em contato.' });
+  setTimeout(() => closeModal(), 2000);
+}
+</script>
 
 <style scoped>
 .qs-ceo {
@@ -173,5 +265,207 @@
   font-size: 15px;
   font-weight: 700;
   color: #111827;
+}
+
+.qs-ceo__btn-secondary {
+  padding: 10px 24px;
+  border: 1px solid rgba(255,255,255,0.30);
+  border-radius: 8px;
+  background: transparent;
+  color: #fff;
+  font-weight: 600;
+  font-size: 13px;
+  font-family: 'Inter', 'Jost', sans-serif;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.qs-ceo__btn-secondary:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.50);
+}
+
+/* Modal */
+.qs-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.qs-modal {
+  background: #1f2937;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 420px;
+  max-height: 600px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.qs-modal-header {
+  padding: 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.qs-modal-header h3 {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.qs-modal-close {
+  background: transparent;
+  border: 0;
+  color: rgba(255,255,255,0.5);
+  font-size: 28px;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qs-modal-close:hover {
+  color: #fff;
+}
+
+.qs-modal-body {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.qs-chat {
+  margin-bottom: 20px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.qs-chat-msg {
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.qs-chat-msg.bot {
+  background: rgba(152,199,58,0.15);
+  color: #a8d84e;
+  border-left: 3px solid #98C73A;
+}
+
+.qs-chat-msg.user {
+  background: rgba(47,119,133,0.15);
+  color: #a8d7e8;
+  border-left: 3px solid #2F7785;
+  margin-left: auto;
+  max-width: 80%;
+}
+
+.qs-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.qs-input {
+  padding: 10px 12px;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 6px;
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+  font-size: 13px;
+  font-family: 'Inter', 'Jost', sans-serif;
+}
+
+.qs-input::placeholder {
+  color: rgba(255,255,255,0.4);
+}
+
+.qs-input:focus {
+  outline: none;
+  background: rgba(255,255,255,0.08);
+  border-color: #98C73A;
+}
+
+.qs-radio-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.1);
+  cursor: pointer;
+  color: rgba(255,255,255,0.8);
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+
+.qs-radio-label:hover {
+  background: rgba(255,255,255,0.05);
+  border-color: #98C73A;
+}
+
+.qs-radio-label input {
+  cursor: pointer;
+}
+
+.qs-modal-footer {
+  padding: 15px 20px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  gap: 10px;
+}
+
+.qs-btn-primary {
+  flex: 1;
+  padding: 10px 16px;
+  background: #98C73A;
+  color: #225F6B;
+  border: 0;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 13px;
+  font-family: 'Inter', 'Jost', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.qs-btn-primary:hover {
+  background: #a8d84e;
+  transform: translateY(-2px);
+}
+
+.qs-btn-primary:active {
+  transform: translateY(0);
 }
 </style>
