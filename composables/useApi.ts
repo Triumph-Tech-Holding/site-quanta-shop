@@ -12,6 +12,8 @@ function getApiClient(): AxiosInstance {
         _apiClient = axios.create({
             baseURL,
             headers: {},
+            // 30s: alinhado com o timeout do proxy Nitro (20s) + margem de rede.
+            // O proxy remoto pode levar até 20s em cargas pesadas de produto.
             timeout: 30000,
         });
 

@@ -53,8 +53,11 @@ Rota raiz: `/agencia` (login), painel: `/agencia/painel/**`, admin: `/agencia/pa
 - **Middleware admin:** `middleware/agencia-admin.ts` — protege `/agencia/painel/admin/**`, usa `useAgenciaStore()` para validar token e perfil admin; redireciona para `/agencia/no-permission` se não autorizado
 - **ApexCharts:** `vue3-apexcharts` instalado; plugin em `plugins/apexcharts.client.ts`; usado na página de performance com gráfico de área
 - **Tipos:** `types/agencia.ts` define todas as interfaces do domínio; `types/nuxt.d.ts` declara o tipo do plugin `$toast`; `composables/useAgenciaStore.ts` reexporta o store para auto-import do Nuxt
-- **Axios timeout:** 30s (suficiente para cargas pesadas de produto via proxy com fallback remoto)
-- **Build validado:** `npm run build:nuxt` passa sem erros; avisos de fontes/imagens externas são `WARN` ignoráveis
+- **Axios timeout:** 30s — alinhado com o proxy Nitro (timeout 20s) + margem de rede; elimina erros `timeout of 10000ms exceeded` em chamadas de produtos pesados
+- **Build validado (Fase 5):** `npm run build:nuxt` passa sem erros (1224 módulos); warnings de fontes/imagens externas são WARN ignoráveis; `.output/server/index.mjs` gerado corretamente
+- **Rotas validadas (Fase 5):** `/` ✅ `/agencia` ✅ `/agencia/login` ✅ `/agencia/painel` (→ redireciona para `/agencia/login` sem token) ✅ `/primeira-compra` ✅
+- **Proteção de rotas (Fase 5):** `agencia-auth.ts` redireciona `/agencia/painel` sem token para `/agencia/login`; redireciona `/agencia/painel/admin` sem permissão de admin para `/agencia/painel`; `agencia-admin.ts` é camada adicional de proteção para admin routes, redireciona para `/agencia/no-permission` (página existente)
+- **Preview validado (Fase 5):** `node .output/server/index.mjs` inicia sem erros, porta 3000, serve HTTP 200 em `/` e `/agencia/login`
 
 ## API .NET 8
 
