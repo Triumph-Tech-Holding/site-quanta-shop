@@ -15,28 +15,37 @@
       class="qs-hero__swiper"
     >
       <SwiperSlide v-for="(item, i) in sliderData" :key="i" class="qs-hero__slide">
-        <!-- Fundo sempre fixo — a API de carrosseis fornece apenas texto, nunca o background -->
-        <div class="qs-hero__bg"></div>
-        <div class="qs-hero__overlay"></div>
+        <div
+          class="qs-hero__bg"
+          :style="item.url ? { backgroundImage: `url(${item.url})` } : undefined"
+        ></div>
+        <div
+          class="qs-hero__overlay"
+          :style="{ opacity: item.overlayIntensidade != null ? item.overlayIntensidade / 100 : undefined }"
+        ></div>
 
         <div class="container qs-hero__content-wrap">
           <div class="row align-items-center qs-hero__row">
             <div class="col-xl-6 col-lg-7">
-              <div class="qs-hero__content">
+              <div class="qs-hero__content" :class="item.textoCor === 'dark' ? 'qs-hero__content--dark' : ''">
                 <span class="qs-hero__badge">
                   <span class="qs-hero__badge-dot"></span>
-                  {{ config.hero.badge }}
+                  {{ item.badge || config.hero.badge }}
                 </span>
 
-                <h1 class="qs-hero__title" v-html="heroTitle"></h1>
+                <h1 class="qs-hero__title" v-html="getSlideTitle(item)"></h1>
 
                 <p class="qs-hero__subtitle">
-                  {{ config.hero.subtitle }}
+                  {{ item.subtitulo || config.hero.subtitle }}
                 </p>
 
                 <div class="qs-hero__actions">
-                  <nuxt-link :href="item.link || config.hero.ctaPrimaryLink" class="qs-hero__cta">
-                    {{ config.hero.ctaPrimaryText }}
+                  <nuxt-link
+                    :href="item.ctaLink || config.hero.ctaPrimaryLink"
+                    class="qs-hero__cta"
+                    :style="item.ctaCor ? { background: item.ctaCor, borderColor: item.ctaCor } : undefined"
+                  >
+                    {{ item.ctaTexto || config.hero.ctaPrimaryText }}
                     <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                   </nuxt-link>
                 </div>
@@ -104,30 +113,74 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useCarouselStore } from "@/pinia/useCarouselStore";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import { useHomeConfig } from '@/composables/useHomeConfig';
+import type { HeroBannerSlide } from '~/types/agencia';
 
 const { config, loadConfig } = useHomeConfig();
 const carouselStore = useCarouselStore();
+const heroSlides = ref<HeroBannerSlide[]>([]);
 
-const heroTitle = computed(() =>
-  config.value.hero.title.replace(
-    '<highlight>',
-    '<span style="color:#98C73A">'
-  ).replace('</highlight>', '</span>')
-);
+function getSlideTitle(item: HeroBannerSlide): string {
+  const raw = item.headline || config.value.hero.title;
+  return raw
+    .replace('<highlight>', '<span style="color:#98C73A">')
+    .replace('</highlight>', '</span>');
+}
 
-onMounted(() => loadConfig());
+onMounted(async () => {
+  loadConfig();
+  try {
+    const slides = await $fetch<HeroBannerSlide[]>('/data/hero-banners.json');
+    if (Array.isArray(slides)) heroSlides.value = slides;
+  } catch {
+    heroSlides.value = [];
+  }
+});
 
-const sliderData = computed(() => {
+const sliderData = computed<HeroBannerSlide[]>(() => {
+  const newSlides = heroSlides.value.filter(s => s.ativo);
+  if (newSlides.length > 0) return newSlides;
+
   const carousels = carouselStore.carousels;
-  const filtered = carousels
-    .filter(c => c.posicao === "1" && c.ativo === true)
-    .sort((a, b) => a.ordemExibicao - b.ordemExibicao);
-  return filtered.length > 0 ? filtered : [{ texto2: 'Transforme cada compra em', texto3: 'Ative o cashback com um clique, compre normalmente e veja o saldo crescer automaticamente.', link: '/register', imagem: null }];
+  const oldFiltered = carousels
+    .filter((c: Record<string, unknown>) => c.posicao === "1" && c.ativo === true)
+    .sort((a: Record<string, unknown>, b: Record<string, unknown>) => (a.ordemExibicao as number) - (b.ordemExibicao as number));
+
+  if (oldFiltered.length > 0) {
+    return oldFiltered.map((c: Record<string, unknown>): HeroBannerSlide => ({
+      id: (c.idCarrossel as number) || 0,
+      url: (c.imagem as string) || '',
+      urlDestino: (c.link as string) || '',
+      ativo: true,
+      headline: '',
+      subtitulo: '',
+      badge: '',
+      ctaTexto: '',
+      ctaLink: (c.link as string) || '',
+      ctaCor: '#98C73A',
+      textoCor: 'light',
+      overlayIntensidade: 70,
+    }));
+  }
+
+  return [{
+    id: 0,
+    url: '',
+    urlDestino: '/register',
+    ativo: true,
+    headline: '',
+    subtitulo: '',
+    badge: '',
+    ctaTexto: '',
+    ctaLink: '/register',
+    ctaCor: '#98C73A',
+    textoCor: 'light',
+    overlayIntensidade: 70,
+  }];
 });
 </script>
 
@@ -206,6 +259,20 @@ const sliderData = computed(() => {
 
 .qs-hero__title--lime {
   color: #98C73A;
+}
+
+.qs-hero__content--dark .qs-hero__badge {
+  color: #1a2236;
+  background: rgba(0,0,0,0.06);
+  border-color: rgba(0,0,0,0.12);
+}
+
+.qs-hero__content--dark .qs-hero__title {
+  color: #1a2236;
+}
+
+.qs-hero__content--dark .qs-hero__subtitle {
+  color: rgba(26,34,54,0.80);
 }
 
 .qs-hero__subtitle {

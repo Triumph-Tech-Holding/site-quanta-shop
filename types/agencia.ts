@@ -81,12 +81,27 @@ export interface EcossistemaAdmin {
   [key: string]: unknown;
 }
 
+export interface HeroBannerSlide {
+  id: number;
+  url: string;
+  urlDestino: string;
+  ativo: boolean;
+  headline: string;
+  subtitulo: string;
+  badge: string;
+  ctaTexto: string;
+  ctaLink: string;
+  ctaCor: string;
+  textoCor: 'light' | 'dark';
+  overlayIntensidade: number;
+}
+
 export interface CarrosselAdmin {
   id: number;
   titulo: string;
   url?: string;
+  urlDestino?: string;
   ativo: boolean;
-  [key: string]: unknown;
 }
 
 export interface ComunicadoAdmin {

@@ -216,7 +216,7 @@ function handleSearch() {
 
 .qs-home-header__search {
   background: #fff;
-  padding: 4px 0;
+  padding: 2px 0;
   border-bottom: 1px solid #f0f0f0;
 }
 
@@ -226,7 +226,7 @@ function handleSearch() {
   background: #f7f9fc;
   border: 1.5px solid #e2e8f0;
   border-radius: 999px;
-  padding: 4px 16px;
+  padding: 2px 14px;
   gap: 10px;
   transition: all 0.25s ease;
   max-width: 640px;
