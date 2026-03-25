@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#1f2937;background:#fff;line-height:1.6;}
+.cover{min-height:100vh;background:linear-gradient(135deg,#0f232d 0%,#225F6B 50%,#2F7785 100%);display:flex;flex-direction:column;justify-content:center;padding:80px 72px;page-break-after:always;}
+.cover-tag{background:rgba(152,199,58,0.2);color:#98C73A;border:1px solid rgba(152,199,58,0.4);border-radius:999px;padding:5px 16px;font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:24px;display:inline-block;}
+.cover h1{font-size:42px;font-weight:800;color:#fff;line-height:1.15;margin-bottom:16px;}
+.cover h1 span{color:#98C73A;}
+.cover p{font-size:15px;color:rgba(255,255,255,0.7);max-width:540px;line-height:1.7;margin-bottom:40px;}
+.cover-divider{width:60px;height:3px;background:#98C73A;border-radius:999px;margin:28px 0;}
+.cover-meta{display:flex;gap:40px;margin-top:24px;}
+.cover-meta-item{display:flex;flex-direction:column;gap:4px;}
+.cover-meta-item label{font-size:10px;color:rgba(255,255,255,0.5);text-transform:uppercase;letter-spacing:0.06em;}
+.cover-meta-item strong{font-size:13px;color:#fff;}
+.toc{padding:60px 72px;page-break-after:always;}
+.toc h2{font-size:22px;font-weight:700;color:#111827;margin-bottom:32px;padding-bottom:12px;border-bottom:2px solid #f0f0f0;}
+.toc-sec{margin-bottom:10px;}
+.toc-sec-title{font-size:12px;font-weight:700;color:#2F7785;padding:8px 0 4px;text-transform:uppercase;letter-spacing:0.04em;}
+.toc-item{display:flex;justify-content:space-between;padding:3px 0 3px 16px;font-size:11px;color:#374151;border-bottom:1px dotted #e5e7eb;}
+.toc-page{color:#9ca3af;font-size:10px;}
+.section{padding:48px 72px;}
+.section:not(:last-child){border-bottom:1px solid #f0f0f0;}
+.section-header{display:flex;align-items:center;gap:14px;margin-bottom:28px;}
+.section-num{width:36px;height:36px;border-radius:50%;background:#2F7785;color:#fff;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.section-title{font-size:20px;font-weight:700;color:#111827;}
+h3{font-size:14px;font-weight:700;color:#2F7785;margin:24px 0 10px;padding-bottom:6px;border-bottom:1px solid #e5e7eb;}
+h4{font-size:12px;font-weight:700;color:#374151;margin:14px 0 6px;}
+p{margin-bottom:10px;color:#4b5563;}
+ul,ol{padding-left:18px;margin-bottom:10px;}
+li{margin-bottom:4px;color:#4b5563;}
+li strong{color:#111827;}
+.tag{display:inline-block;background:rgba(47,119,133,0.08);color:#2F7785;border-radius:4px;padding:1px 7px;font-size:10px;font-weight:600;}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:10.5px;}
+th{background:#2F7785;color:#fff;padding:8px 10px;text-align:left;font-weight:600;font-size:10px;text-transform:uppercase;letter-spacing:0.04em;}
+td{padding:7px 10px;border-bottom:1px solid #f0f0f0;color:#374151;vertical-align:top;}
+tr:nth-child(even) td{background:#f9fafb;}
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;}
+.badge-get{background:#dbeafe;color:#1d4ed8;}
+.badge-post{background:#dcfce7;color:#166534;}
+.badge-put{background:#fef3c7;color:#92400e;}
+.info-box{background:#f0f9f7;border:1.5px solid #a7d7d3;border-radius:10px;padding:16px 20px;margin:16px 0;}
+.info-box-title{font-size:11px;font-weight:700;color:#2F7785;margin-bottom:6px;}
+.warn-box{background:#fefce8;border:1.5px solid #fde68a;border-radius:10px;padding:16px 20px;margin:16px 0;}
+.warn-box-title{font-size:11px;font-weight:700;color:#92400e;margin-bottom:6px;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:14px 0;}
+.card{background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:16px;}
+.card-title{font-size:11px;font-weight:700;color:#111827;margin-bottom:6px;}
+code{background:#f3f4f6;color:#dc2626;padding:1px 5px;border-radius:4px;font-family:'Courier New',monospace;font-size:10px;}
+.page-break{page-break-before:always;}
+.footer-note{background:#111827;color:rgba(255,255,255,0.6);padding:20px 72px;font-size:9px;text-align:center;page-break-inside:avoid;}
+</style>
+</head>
+<body>
+
+<!-- CAPA -->
+<div class="cover">
+  <div class="cover-tag">Documento Técnico Confidencial</div>
+  <h1>Quanta Shop<br/><span>Especificação Técnica</span><br/>para Migração Lovable</h1>
+  <div class="cover-divider"></div>
+  <p>Documentação completa de todas as páginas, componentes, endpoints de API e fluxos de autenticação da plataforma Quanta Shop — preparada para reprodução na plataforma Lovable (React + TypeScript + Tailwind) com integração ao backend Replit.</p>
+  <div class="cover-meta">
+    <div class="cover-meta-item"><label>Versão</label><strong>1.0.0</strong></div>
+    <div class="cover-meta-item"><label>Data</label><strong>Março 2026</strong></div>
+    <div class="cover-meta-item"><label>Plataforma</label><strong>quantashop.com.br</strong></div>
+    <div class="cover-meta-item"><label>Destino</label><strong>Lovable + Replit</strong></div>
+  </div>
+</div>
+
+<!-- ÍNDICE -->
+<div class="toc">
+  <h2>Índice</h2>
+  <div class="toc-sec">
+    <div class="toc-sec-title">1 — Visão Geral do Sistema</div>
+    <div class="toc-item"><span>Stack atual e recomendação para Lovable</span><span class="toc-page">3</span></div>
+    <div class="toc-item"><span>Restrições importantes de integração</span><span class="toc-page">3</span></div>
+  </div>
+  <div class="toc-sec">
+    <div class="toc-sec-title">2 — Identidade Visual</div>
+    <div class="toc-item"><span>Paleta de cores, tipografia e tokens de design</span><span class="toc-page">3</span></div>
+  </div>
+  <div class="toc-sec">
+    <div class="toc-sec-title">3 — Páginas Públicas</div>
+    <div class="toc-item"><span>/agencia — Landing institucional</span><span class="toc-page">4</span></div>
+    <div class="toc-item"><span>/agencia/login — Formulário de login</span><span class="toc-page">4</span></div>
+    <div class="toc-item"><span>/agencia/cadastro — Cadastro de afiliado</span><span class="toc-page">4</span></div>
+    <div class="toc-item"><span>Recuperar senha, Quem somos, Como funciona, FAQ, Privacidade</span><span class="toc-page">4</span></div>
+    <div class="toc-item"><span>Lojas físicas (mapa), Mais vendas (ranking)</span><span class="toc-page">5</span></div>
+  </div>
+  <div class="toc-sec">
+    <div class="toc-sec-title">4 — Painel do Afiliado (autenticação obrigatória)</div>
+    <div class="toc-item"><span>Dashboard principal — stats, meta minuto, vídeos</span><span class="toc-page">5</span></div>
+    <div class="toc-item"><span>Meus Dados (4 abas), Financeiro CCR (3 abas)</span><span class="toc-page">6</span></div>
+    <div class="toc-item"><span>Minhas Compras, Minha Rede, Meus Diretos, Performance</span><span class="toc-page">6</span></div>
+    <div class="toc-item"><span>Graduações, Suporte, Solicitar Suporte, Contas Bancárias</span><span class="toc-page">7</span></div>
+    <div class="toc-item"><span>Assinatura, Planos, Cupons, Material de Apoio, Tutoriais</span><span class="toc-page">7</span></div>
+    <div class="toc-item"><span>FAQ painel, Comerciante, Meus Credenciamentos</span><span class="toc-page">8</span></div>
+  </div>
+  <div class="toc-sec">
+    <div class="toc-sec-title">5 — Painel Administrativo (/admin)</div>
+    <div class="toc-item"><span>Dashboard admin, Usuários, Credenciamento, Compras, Pagamentos</span><span class="toc-page">8</span></div>
+    <div class="toc-item"><span>Categorias, Ecossistemas, Carrosseis, Comunicados, Rede</span><span class="toc-page">9</span></div>
+    <div class="toc-item"><span>Suporte admin + 12 outras rotas administrativas</span><span class="toc-page">9</span></div>
+  </div>
+  <div class="toc-sec">
+    <div class="toc-sec-title">6 — Componentes Compartilhados (Lovable)</div>
+    <div class="toc-item"><span>Sidebar, TopBar, StatCard, DataTable, Modal e outros 8 componentes</span><span class="toc-page">10</span></div>
+  </div>
+  <div class="toc-sec">
+    <div class="toc-sec-title">7 — Fluxo de Autenticação</div>
+    <div class="toc-item"><span>JWT, localStorage, middleware, Zustand store</span><span class="toc-page">10</span></div>
+  </div>
+  <div class="toc-sec">
+    <div class="toc-sec-title">8 — Endpoints de API</div>
+    <div class="toc-item"><span>Tabela completa — 22 endpoints com método e uso</span><span class="toc-page">11</span></div>
+  </div>
+  <div class="toc-sec">
+    <div class="toc-sec-title">9 — Guia de Integração Lovable → Replit</div>
+    <div class="toc-item"><span>Proxy, estratégias, configuração Axios, checklist</span><span class="toc-page">11</span></div>
+  </div>
+</div>
+
+<!-- SEÇÃO 1 -->
+<div class="section page-break">
+  <div class="section-header"><div class="section-num">1</div><div class="section-title">Visão Geral do Sistema</div></div>
+  <div class="info-box">
+    <div class="info-box-title">Sistema: Quanta Shop — Plataforma de Cashback e Afiliados</div>
+    <p>URL de produção: <strong>quantashop.com.br</strong> — Plataforma B2C/B2B conectando consumidores, lojistas e afiliados por cashback automático e rede de indicações MLM.</p>
+  </div>
+  <h3>Stack Atual vs. Recomendação Lovable</h3>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Stack Atual (Nuxt 3)</div>
+      <ul>
+        <li><strong>Framework:</strong> Nuxt 3 + Vue 3 + TypeScript</li>
+        <li><strong>CSS:</strong> Bootstrap 5 + SCSS</li>
+        <li><strong>Estado:</strong> Pinia</li>
+        <li><strong>Renderização:</strong> SPA (SSR desabilitado)</li>
+        <li><strong>Auth:</strong> JWT em <code>localStorage['agencia_user']</code></li>
+        <li><strong>Backend:</strong> .NET 8, porta 8000, Azure SQL</li>
+        <li><strong>Proxy:</strong> Nitro <code>/api-proxy/*</code></li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title">Stack Recomendada (Lovable)</div>
+      <ul>
+        <li><strong>Framework:</strong> React 18 + TypeScript</li>
+        <li><strong>CSS:</strong> Tailwind CSS</li>
+        <li><strong>Roteamento:</strong> React Router v6</li>
+        <li><strong>Estado:</strong> Zustand</li>
+        <li><strong>HTTP:</strong> Axios + interceptor JWT</li>
+        <li><strong>Formulários:</strong> React Hook Form + Zod</li>
+        <li><strong>Tabelas:</strong> TanStack Table</li>
+        <li><strong>Gráficos:</strong> Recharts</li>
+        <li><strong>UI:</strong> Headless UI / Radix UI</li>
+      </ul>
+    </div>
+  </div>
+  <div class="warn-box">
+    <div class="warn-box-title">IMPORTANTE — Regras de Integração com Replit</div>
+    <ul>
+      <li>Usar <strong>SEMPRE</strong> paths relativos <code>/api-proxy/*</code> — nunca URLs absolutas</li>
+      <li>Manter chave localStorage <code>agencia_user</code> (compatibilidade com código existente)</li>
+      <li><strong>NÃO</strong> alterar estrutura de rotas da API .NET no backend Replit</li>
+    </ul>
+  </div>
+</div>
+
+<!-- SEÇÃO 2 -->
+<div class="section">
+  <div class="section-header"><div class="section-num">2</div><div class="section-title">Identidade Visual</div></div>
+  <h3>Paleta de Cores</h3>
+  <table>
+    <tr><th>Token SCSS</th><th>Hex</th><th>Uso</th></tr>
+    <tr><td><code>$quanta-teal</code></td><td>#2F7785</td><td>Cor primária — botões, links, títulos, ícones ativos</td></tr>
+    <tr><td><code>$quanta-dark</code></td><td>#225F6B</td><td>Hover e ênfase — versão escura da primária</td></tr>
+    <tr><td><code>$quanta-green</code></td><td>#98C73A</td><td>Acento e conversão — cashback, CTAs, badges de sucesso</td></tr>
+    <tr><td><code>$quanta-bg</code></td><td>#F4F4F5</td><td>Fundo do painel, superfícies cinzas</td></tr>
+    <tr><td>Background painel</td><td>#ECF2F7</td><td>Área do painel de afiliado, login</td></tr>
+    <tr><td>Footer/Dark</td><td>#111827</td><td>Footer, seções com fundo escuro</td></tr>
+    <tr><td>Texto principal</td><td>#1F2937</td><td>Corpo de texto e headings</td></tr>
+    <tr><td>Texto secundário</td><td>#6B7280</td><td>Labels, subtítulos, placeholders</td></tr>
+    <tr><td>Borda padrão</td><td>#E5E7EB</td><td>Cards, inputs, dividers</td></tr>
+  </table>
+  <h3>Tipografia</h3>
+  <ul>
+    <li><strong>Fonte primária:</strong> 'Jost' (Google Fonts) — weights 400, 500, 600, 700, 800</li>
+    <li><strong>Fallback:</strong> 'Inter', system-ui, sans-serif</li>
+    <li>H1: 42–48px | H2: 28–34px | H3: 18–22px | Body: 14–15px | Caption: 11–12px</li>
+    <li><strong>Border-radius:</strong> 8px (cards/inputs), 12–16px (seções), 999px (pills/badges)</li>
+  </ul>
+</div>
+
+<!-- SEÇÃO 3 -->
+<div class="section page-break">
+  <div class="section-header"><div class="section-num">3</div><div class="section-title">Páginas Públicas (sem autenticação)</div></div>
+
+  <h3>/agencia — Landing Institucional</h3>
+  <p>Página de entrada da área de negócios. Seções: <strong>Hero</strong> (fundo escuro, CTA cadastro/login), <strong>Como funciona</strong> (4 passos numerados), <strong>Benefícios</strong> (6 cards com ícones), <strong>CTA final</strong> (fundo teal, botões).</p>
+
+  <h3>/agencia/login — Login do Afiliado</h3>
+  <ul>
+    <li><strong>Campos:</strong> Login ou e-mail, Senha (toggle visibilidade)</li>
+    <li><strong>Ação:</strong> <span class="badge badge-post">POST</span> <code>/usuario/autenticar</code> → retorna JWT + dados</li>
+    <li><strong>Storage:</strong> <code>localStorage.setItem('agencia_user', JSON.stringify(resp))</code></li>
+    <li><strong>Redirect pós-login:</strong> <code>/agencia/painel</code></li>
+    <li><strong>Links:</strong> "Esqueci minha senha" | "Criar conta grátis" | Login com Google (OAuth)</li>
+  </ul>
+
+  <h3>/agencia/cadastro — Cadastro de Afiliado</h3>
+  <ul>
+    <li><strong>Campos:</strong> nome completo, login (único), e-mail, senha, confirmação, CPF (máscara), telefone (máscara), indicador (query param pré-preenchido)</li>
+    <li><strong>Ação:</strong> <span class="badge badge-post">POST</span> <code>/usuario/cadastrar</code></li>
+    <li><strong>Validação:</strong> CPF válido, e-mail único, senha ≥ 8 chars, confirmação igual</li>
+  </ul>
+
+  <h3>Outras Páginas Públicas</h3>
+  <table>
+    <tr><th>Rota</th><th>Conteúdo</th><th>API</th></tr>
+    <tr><td>/agencia/recuperar-senha</td><td>Campo e-mail → enviar link de recuperação</td><td>POST /usuario/recuperarSenha</td></tr>
+    <tr><td>/agencia/quem-somos</td><td>Missão, visão, valores, história — layout texto + imagem</td><td>Estático</td></tr>
+    <tr><td>/agencia/como-funciona</td><td>Modelo de negócio: cashback, afiliados, ecossistema de pontos</td><td>Estático</td></tr>
+    <tr><td>/agencia/faq</td><td>Acordeão com perguntas por categoria</td><td>Estático</td></tr>
+    <tr><td>/agencia/privacidade</td><td>Política de privacidade LGPD completa, âncoras internas</td><td>Estático</td></tr>
+    <tr><td>/agencia/lojas-fisicas</td><td>Mapa (Google Maps/Leaflet) + lista lateral de lojas com cashback %</td><td>GET /LojasFisicas/obterLojasFisicas</td></tr>
+    <tr><td>/agencia/mais-vendas/[[login]]</td><td>Ranking de afiliados por vendas, parâmetro login opcional</td><td>GET /Ranking/obterMaisVendas/{login?}</td></tr>
+  </table>
+</div>
+
+<!-- SEÇÃO 4 -->
+<div class="section page-break">
+  <div class="section-header"><div class="section-num">4</div><div class="section-title">Painel do Afiliado (autenticação obrigatória)</div></div>
+
+  <div class="info-box">
+    <div class="info-box-title">Layout base do painel</div>
+    <p><strong>Sidebar fixa (esquerda):</strong> Logo + menu de navegação colapsável + info do usuário (avatar, nome, graduação). <strong>TopBar:</strong> Link de indicação copiável + notificações + logout. <strong>Conteúdo:</strong> Área à direita com breadcrumb e título de página.</p>
+  </div>
+
+  <h3>/agencia/painel — Dashboard Principal</h3>
+  <div class="grid-2">
+    <div>
+      <h4>4 Cards de Estatísticas</h4>
+      <ul>
+        <li><strong>Equipe:</strong> Total de afiliados na rede</li>
+        <li><strong>Saldo:</strong> Disponível para saque (R$)</li>
+        <li><strong>Ecossistemas:</strong> Ecossistemas ativos</li>
+        <li><strong>Pontos:</strong> Pontuação acumulada</li>
+      </ul>
+      <p>API: <span class="badge badge-get">GET</span> <code>/v2/dashboard/get-totalizers-user</code></p>
+    </div>
+    <div>
+      <h4>Outros Elementos</h4>
+      <ul>
+        <li><strong>Meta Minuto:</strong> Contador regressivo — <code>/MetaMinuto/obterMetaMinuto</code></li>
+        <li><strong>3 Vídeos YouTube:</strong> boas-vindas, como funciona, como ganhar</li>
+        <li><strong>Mapa Google Maps:</strong> Iframe com lojas próximas</li>
+        <li><strong>Link de indicação:</strong> Input copiável + Modal "Convide seus amigos"</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>/agencia/painel/meus-dados</h3>
+  <p><strong>4 abas:</strong> <strong>Dados pessoais</strong> (nome, CPF, data nasc., e-mail, telefone, foto) | <strong>Endereço</strong> (CEP auto-fill ViaCEP, rua, número, bairro, cidade, estado) | <strong>Conta bancária</strong> (banco select, agência, conta, tipo, CPF titular) | <strong>Senha</strong> (atual, nova, confirmação)</p>
+  <p>API: <span class="badge badge-get">GET</span> <code>/usuario/obterDados</code> | <span class="badge badge-put">PUT</span> <code>/usuario/alterarDados</code></p>
+
+  <h3>/agencia/painel/financeiro — CCR</h3>
+  <p><strong>Resumo:</strong> Saldo disponível | Total recebido | Total sacado</p>
+  <p><strong>Aba 1 — Movimentações:</strong> Tabela com descrição, data, valor, tipo (CRÉDITO verde / DÉBITO vermelho) — <code>/financeiro/listaMovimentacoes</code></p>
+  <p><strong>Aba 2 — Solicitar Saque:</strong> Campo valor + botão — <code>POST /saque/solicitar</code></p>
+  <p><strong>Aba 3 — Histórico de Saques:</strong> Data, valor, status badge — <code>/saque/historico</code></p>
+
+  <h3>/agencia/painel/minhas-compras</h3>
+  <p><strong>Filtros:</strong> Descrição, Data início, Data fim | <strong>Tabela:</strong> Descrição, Valor, Cashback a receber, Data, Status, Detalhes | <strong>Modal:</strong> Distribuição do cashback por nível</p>
+  <p>API: <span class="badge badge-post">POST</span> <code>/Pedidos/listaPedidosAfiliados</code></p>
+
+  <h3>/agencia/painel/minha-rede e /meus-diretos</h3>
+  <table>
+    <tr><th>Página</th><th>Conteúdo</th><th>API</th></tr>
+    <tr><td>Minha Rede</td><td>Cards: Total, Diretos, Inativos, VIPs. Tabela: login, nome, nível, status, data entrada</td><td>GET /Rede/obterMinhaRede</td></tr>
+    <tr><td>Meus Diretos</td><td>Tabela: login, nome, graduação, status, data</td><td>GET /Rede/obterMeusDiretos</td></tr>
+    <tr><td>Performance</td><td>Radio (top/bottom 10), tabela login/nome/graduação/consumo/nível</td><td>POST /Dashboard/obterPerformance</td></tr>
+    <tr><td>Graduações</td><td>Lista de níveis: nome, ícone, requisitos de pontos, benefícios</td><td>GET /Graduacoes/obterGraduacoes</td></tr>
+  </table>
+</div>
+
+<!-- SEÇÃO 4 cont. -->
+<div class="section page-break">
+  <h3>Suporte e Chamados</h3>
+  <div class="grid-2">
+    <div>
+      <h4>Status dos Tickets</h4>
+      <table>
+        <tr><th>Código</th><th>Status</th></tr>
+        <tr><td>1</td><td>Em processamento</td></tr>
+        <tr><td>2</td><td>Finalizado</td></tr>
+        <tr><td>3</td><td>Cancelado</td></tr>
+        <tr><td>4</td><td>Em aprovação</td></tr>
+        <tr><td>5</td><td>Recusado</td></tr>
+        <tr><td>6</td><td>Aprovado</td></tr>
+        <tr><td>7</td><td>Aguardando pagamento</td></tr>
+      </table>
+    </div>
+    <div>
+      <h4>Tipos de Chamado</h4>
+      <table>
+        <tr><th>Código</th><th>Tipo</th></tr>
+        <tr><td>1</td><td>Contato</td></tr>
+        <tr><td>2</td><td>Cashback não pago</td></tr>
+        <tr><td>3</td><td>Cancelamento do parcelamento</td></tr>
+        <tr><td>4</td><td>Reabertura do parcelamento</td></tr>
+      </table>
+    </div>
+  </div>
+  <p><strong>/agencia/painel/suporte:</strong> Filtros por status/tipo/data. Tabela: #, Título, Tipo, Data, Status badge, Ações. API: <span class="badge badge-post">POST</span> <code>/Suporte/listaSuporte</code></p>
+  <p><strong>/agencia/painel/solicitar-suporte:</strong> Campos: tipo (select), assunto, descrição, anexo opcional. API: <span class="badge badge-post">POST</span> <code>/Suporte/abrirSuporte</code></p>
+  <p><strong>/agencia/painel/contas-bancarias:</strong> CRUD de contas para saque. Modal add/edit, confirm para remover. Campos: banco select, agência, conta, dígito, tipo, CPF titular.</p>
+
+  <h3>Demais Páginas do Painel do Afiliado</h3>
+  <table>
+    <tr><th>Rota</th><th>Descrição</th></tr>
+    <tr><td>/painel/assinatura</td><td>Plano ativo, data vencimento, histórico de pagamentos</td></tr>
+    <tr><td>/painel/planos</td><td>Grid de planos com preços, benefícios e CTA de contratação</td></tr>
+    <tr><td>/painel/cupons</td><td>Cupons de cashback disponíveis para ativar</td></tr>
+    <tr><td>/painel/meus-cupons</td><td>Tabela: código, valor, data, status (ativo/usado/expirado)</td></tr>
+    <tr><td>/painel/gerar-cupons</td><td>Formulário: CNPJ estabelecimento, valor, data validade</td></tr>
+    <tr><td>/painel/inserir-cupom</td><td>Campo de chave NF-e para validar cashback de compra física</td></tr>
+    <tr><td>/painel/material-apoio</td><td>Biblioteca de arquivos de marketing — download direto por categoria</td></tr>
+    <tr><td>/painel/tutoriais-usuario</td><td>Vídeos tutoriais categorizados com player YouTube embutido</td></tr>
+    <tr><td>/painel/faq</td><td>FAQ para usuários autenticados em formato acordeão</td></tr>
+    <tr><td>/painel/comerciante</td><td>Dados de credenciamento, QR code de cobrança, transações recebidas</td></tr>
+    <tr><td>/painel/meus-credenciamentos</td><td>Pedidos de credenciamento: nome, CNPJ, data, status</td></tr>
+  </table>
+</div>
+
+<!-- SEÇÃO 5 -->
+<div class="section page-break">
+  <div class="section-header"><div class="section-num">5</div><div class="section-title">Painel Administrativo (/agencia/painel/admin)</div></div>
+
+  <div class="warn-box">
+    <div class="warn-box-title">Acesso Restrito — Perfil Admin</div>
+    <p>Middleware verifica campo <code>perfil</code> ou <code>role</code> no JWT decodificado. Redireciona para <code>/agencia/painel</code> se não tiver permissão admin.</p>
+  </div>
+
+  <h3>Páginas Principais do Admin</h3>
+  <table>
+    <tr><th>Rota</th><th>Conteúdo</th></tr>
+    <tr><td>/admin (Dashboard)</td><td>4 cards stats: total usuários, compras, cashback pago, estabelecimentos ativos. Gráficos de crescimento.</td></tr>
+    <tr><td>/admin/usuarios</td><td>Busca por nome/e-mail. Tabela com avatar, login, nome, graduação, status. Ações: perfil, editar, bloquear, impersonar.</td></tr>
+    <tr><td>/admin/credenciamento</td><td>Tabs: Pendente/Aprovado/Reprovado. Ações: aprovar (modal), reprovar (com motivo), detalhes.</td></tr>
+    <tr><td>/admin/compras</td><td>Relatório geral de compras. Filtros: data, usuário, estabelecimento, status. Exportar Excel.</td></tr>
+    <tr><td>/admin/pagamentos</td><td>Cobranças e assinaturas. Ações: confirmar manualmente, cancelar, reenviar boleto.</td></tr>
+    <tr><td>/admin/categorias</td><td>CRUD de categorias de lojas. Drag-and-drop para reordenar. Modal: nome, ícone, descrição.</td></tr>
+    <tr><td>/admin/ecossistemas</td><td>Gestão de ecossistemas de pontos. CRUD com regras de pontuação.</td></tr>
+    <tr><td>/admin/carrosseis</td><td>CRUD de banners home. Campos: imagem desktop/mobile (upload), link, texto sobreposto, ordem, ativo. Preview em tempo real.</td></tr>
+    <tr><td>/admin/comunicados</td><td>Notificações para usuários. Segmentação: todos/grupo/individual. Tipos: push, e-mail, banner painel. Agendamento.</td></tr>
+    <tr><td>/admin/rede</td><td>Árvore binária interativa da rede. Busca por login. Zoom e pan.</td></tr>
+    <tr><td>/admin/suporte</td><td>Todos os tickets. Atribuir agente, responder, fechar. Filtros completos.</td></tr>
+    <tr><td>/admin/lojas-credenciados</td><td>Lista de estabelecimentos ativos com dados e métricas de cashback.</td></tr>
+    <tr><td>/admin/alterar-dados-usuario</td><td>Formulário admin para editar qualquer usuário por login.</td></tr>
+    <tr><td>/admin/relatorio-de-faturas</td><td>Faturas financeiras por período. Exportação Excel.</td></tr>
+    <tr><td>/admin/relatorio-de-anunciantes</td><td>Desempenho e métricas dos parceiros anunciantes.</td></tr>
+    <tr><td>/admin/relatorio-cashback</td><td>Cashback distribuído por período, usuário, loja. Exportação.</td></tr>
+    <tr><td>/admin/aniversariantes</td><td>Usuários com aniversário no período — filtros por mês/data.</td></tr>
+    <tr><td>/admin/acessos</td><td>Log de acessos: usuário, data/hora, IP, dispositivo, duração sessão.</td></tr>
+    <tr><td>/admin/lancamentos</td><td>Lançamentos manuais de saldo com justificativa e aprovação.</td></tr>
+    <tr><td>/admin/material-apoio-admin</td><td>Upload e gestão de arquivos de marketing para afiliados.</td></tr>
+    <tr><td>/admin/assinaturas</td><td>Gerenciar assinaturas ativas, vencidas, canceladas.</td></tr>
+    <tr><td>/admin/gerenciar-grupos</td><td>CRUD de grupos de usuários para segmentação de comunicados.</td></tr>
+  </table>
+</div>
+
+<!-- SEÇÃO 6 -->
+<div class="section page-break">
+  <div class="section-header"><div class="section-num">6</div><div class="section-title">Componentes Compartilhados (Lovable)</div></div>
+  <table>
+    <tr><th>Componente</th><th>Props Principais</th><th>Descrição</th></tr>
+    <tr><td><code>Sidebar</code></td><td>menuItems, collapsed, user</td><td>Menu lateral com submenu colapsável, avatar, graduação do usuário</td></tr>
+    <tr><td><code>TopBar</code></td><td>user, indicationLink</td><td>Link de indicação copiável, notificações, logout</td></tr>
+    <tr><td><code>StatCard</code></td><td>icon, label, value, trend, color</td><td>Card de estatística com ícone colorido e tendência (↑/↓)</td></tr>
+    <tr><td><code>PageHeader</code></td><td>title, subtitle, breadcrumb[]</td><td>Título + subtítulo + breadcrumb de navegação</td></tr>
+    <tr><td><code>FilterBox</code></td><td>children, onApply, onReset</td><td>Container de filtros com botões "Aplicar" e "Limpar"</td></tr>
+    <tr><td><code>DataTable</code></td><td>columns, data, loading, empty, pagination</td><td>Tabela responsiva com skeleton loading, estado vazio, paginação</td></tr>
+    <tr><td><code>StatusBadge</code></td><td>status (number|string), map</td><td>Badge colorido mapeado por valor de status</td></tr>
+    <tr><td><code>LoadingSpinner</code></td><td>size, color, fullscreen</td><td>Indicador de carregamento circular</td></tr>
+    <tr><td><code>EmptyState</code></td><td>icon, title, message, action</td><td>Estado vazio: ícone SVG + mensagem + botão opcional</td></tr>
+    <tr><td><code>Modal</code></td><td>open, onClose, title, size, footer</td><td>Modal genérico: overlay, header, body, footer, fechar com ESC</td></tr>
+    <tr><td><code>ConfirmDialog</code></td><td>open, message, onConfirm, onCancel</td><td>Dialog de confirmação para ações destrutivas</td></tr>
+    <tr><td><code>Toast</code></td><td>type, message, duration</td><td>Notificação temporária: success (verde), error (vermelho), info</td></tr>
+    <tr><td><code>CopyInput</code></td><td>value, label</td><td>Input read-only com botão "Copiar" e feedback "Copiado!"</td></tr>
+    <tr><td><code>FileUpload</code></td><td>accept, maxSize, onUpload</td><td>Drag-and-drop para upload de imagens e arquivos</td></tr>
+  </table>
+
+  <div class="info-box">
+    <div class="info-box-title">Hook useApi — Axios configurado para o proxy Replit</div>
+    <p>Criar <code>src/lib/api.ts</code>: instância Axios com <code>baseURL: '/api-proxy'</code> e interceptor que lê <code>localStorage.getItem('agencia_user')</code>, extrai o token e adiciona o header <code>Authorization: Bearer TOKEN</code> em toda requisição. Interceptor de resposta: redirecionar para /login se HTTP 401.</p>
+  </div>
+</div>
+
+<!-- SEÇÃO 7 -->
+<div class="section page-break">
+  <div class="section-header"><div class="section-num">7</div><div class="section-title">Fluxo de Autenticação JWT</div></div>
+  <div class="info-box">
+    <div class="info-box-title">Fluxo completo — 7 passos</div>
+    <ol style="padding-left:18px;">
+      <li style="margin-bottom:8px;"><strong>Usuário submete login</strong> → <span class="badge badge-post">POST</span> <code>/usuario/autenticar</code> com body <code>{"login": "...", "senha": "..."}</code></li>
+      <li style="margin-bottom:8px;"><strong>API retorna</strong> JSON com <code>token</code> (JWT), <code>nome</code>, <code>login</code>, <code>perfil</code>, e demais dados do usuário</li>
+      <li style="margin-bottom:8px;"><strong>Frontend armazena:</strong> <code>localStorage.setItem('agencia_user', JSON.stringify(responseData))</code></li>
+      <li style="margin-bottom:8px;"><strong>Toda requisição autenticada:</strong> Header <code>Authorization: Bearer {token}</code> via interceptor Axios</li>
+      <li style="margin-bottom:8px;"><strong>Guard de rota:</strong> Antes de renderizar página protegida, verificar se <code>agencia_user</code> existe e decodificar JWT para checar campo <code>exp</code> (expiração)</li>
+      <li style="margin-bottom:8px;"><strong>Token expirado:</strong> <code>localStorage.removeItem('agencia_user')</code> → redirect para <code>/agencia/login</code></li>
+      <li style="margin-bottom:8px;"><strong>Perfil admin:</strong> Verificar campo <code>perfil</code> no payload JWT — se não for admin, bloquear <code>/admin/*</code> e redirecionar</li>
+    </ol>
+  </div>
+
+  <h3>Zustand Auth Store (equivalente ao Pinia atual)</h3>
+  <table>
+    <tr><th>State / Action</th><th>Tipo</th><th>Descrição</th></tr>
+    <tr><td>user</td><td>User | null</td><td>Objeto completo do usuário autenticado</td></tr>
+    <tr><td>token</td><td>string | null</td><td>JWT ativo atual</td></tr>
+    <tr><td>isAdmin</td><td>boolean</td><td>true se perfil admin</td></tr>
+    <tr><td>isAuthenticated</td><td>computed boolean</td><td>true se token existir e não estiver expirado</td></tr>
+    <tr><td>setUser(data)</td><td>action</td><td>Popula store + persiste em localStorage</td></tr>
+    <tr><td>logout()</td><td>action</td><td>Limpa store + localStorage + redireciona</td></tr>
+    <tr><td>initFromStorage()</td><td>action</td><td>Inicializa store ao montar o app lendo localStorage</td></tr>
+  </table>
+</div>
+
+<!-- SEÇÃO 8 -->
+<div class="section page-break">
+  <div class="section-header"><div class="section-num">8</div><div class="section-title">Endpoints de API</div></div>
+  <p>Todos os endpoints são chamados via <code>/api-proxy/{endpoint}</code> no frontend. O proxy Nitro encaminha para <code>http://localhost:8000/{endpoint}</code>.</p>
+  <table>
+    <tr><th>Método</th><th>Endpoint</th><th>Auth</th><th>Uso</th></tr>
+    <tr><td><span class="badge badge-post">POST</span></td><td>/usuario/autenticar</td><td>—</td><td>Login — retorna JWT + dados do usuário</td></tr>
+    <tr><td><span class="badge badge-post">POST</span></td><td>/usuario/cadastrar</td><td>—</td><td>Cadastro de novo afiliado</td></tr>
+    <tr><td><span class="badge badge-post">POST</span></td><td>/usuario/recuperarSenha</td><td>—</td><td>Enviar link de recuperação de senha por e-mail</td></tr>
+    <tr><td><span class="badge badge-get">GET</span></td><td>/usuario/obterDados</td><td>JWT</td><td>Dados completos do perfil do usuário logado</td></tr>
+    <tr><td><span class="badge badge-put">PUT</span></td><td>/usuario/alterarDados</td><td>JWT</td><td>Atualizar dados do perfil (qualquer campo)</td></tr>
+    <tr><td><span class="badge badge-get">GET</span></td><td>/v2/dashboard/get-totalizers-user</td><td>JWT</td><td>Cards do dashboard: equipe, saldo, ecossistemas, pontos</td></tr>
+    <tr><td><span class="badge badge-get">GET</span></td><td>/MetaMinuto/obterMetaMinuto</td><td>JWT</td><td>Dados do contador Meta Minuto</td></tr>
+    <tr><td><span class="badge badge-get">GET</span></td><td>/financeiro/saldo</td><td>JWT</td><td>Saldo disponível para saque (R$)</td></tr>
+    <tr><td><span class="badge badge-get">GET</span></td><td>/financeiro/listaMovimentacoes</td><td>JWT</td><td>Extrato financeiro paginado</td></tr>
+    <tr><td><span class="badge badge-post">POST</span></td><td>/saque/solicitar</td><td>JWT</td><td>Solicitar saque para conta bancária cadastrada</td></tr>
+    <tr><td><span class="badge badge-get">GET</span></td><td>/saque/historico</td><td>JWT</td><td>Histórico de saques com status</td></tr>
+    <tr><td><span class="badge badge-post">POST</span></td><td>/Pedidos/listaPedidosAfiliados</td><td>JWT</td><td>Minhas compras com filtros de data e paginação</td></tr>
+    <tr><td><span class="badge badge-get">GET</span></td><td>/Rede/obterMinhaRede</td><td>JWT</td><td>Rede completa de indicados (todos os níveis)</td></tr>
+    <tr><td><span class="badge badge-get">GET</span></td><td>/Rede/obterMeusDiretos</td><td>JWT</td><td>Somente indicados diretos (nível 1)</td></tr>
+    <tr><td><span class="badge badge-post">POST</span></td><td>/Dashboard/obterPerformance</td><td>JWT</td><td>Tabela de performance da rede com filtros</td></tr>
+    <tr><td><span class="badge badge-get">GET</span></td><td>/Graduacoes/obterGraduacoes</td><td>JWT</td><td>Lista de graduações/níveis do sistema</td></tr>
+    <tr><td><span class="badge badge-post">POST</span></td><td>/Suporte/listaSuporte</td><td>JWT</td><td>Tickets de suporte com filtros de status/tipo/data</td></tr>
+    <tr><td><span class="badge badge-post">POST</span></td><td>/Suporte/abrirSuporte</td><td>JWT</td><td>Abrir novo ticket com tipo, assunto, descrição, anexo</td></tr>
+    <tr><td><span class="badge badge-get">GET</span></td><td>/geral/obterMenu/{perfil}</td><td>JWT</td><td>Menu dinâmico personalizado por perfil do usuário</td></tr>
+    <tr><td><span class="badge badge-get">GET</span></td><td>/LojasFisicas/obterLojasFisicas</td><td>—</td><td>Lista de lojas físicas credenciadas com coordenadas</td></tr>
+    <tr><td><span class="badge badge-get">GET</span></td><td>/Ranking/obterMaisVendas/{login?}</td><td>—</td><td>Ranking de afiliados por volume de vendas</td></tr>
+    <tr><td><span class="badge badge-get">GET</span></td><td>/parceiros/obterParceiros</td><td>—</td><td>Lista de parceiros online para a home</td></tr>
+    <tr><td><span class="badge badge-get">GET</span></td><td>/carousel/obterCarousel</td><td>—</td><td>Banners do carrossel da home page</td></tr>
+  </table>
+</div>
+
+<!-- SEÇÃO 9 -->
+<div class="section page-break">
+  <div class="section-header"><div class="section-num">9</div><div class="section-title">Guia de Integração Lovable → Replit</div></div>
+
+  <div class="warn-box">
+    <div class="warn-box-title">Regras Inegociáveis</div>
+    <ul>
+      <li>Usar <strong>SEMPRE</strong> paths relativos <code>/api-proxy/*</code> — nunca <code>https://api.quantashop...</code></li>
+      <li>Manter chave <code>agencia_user</code> em localStorage</li>
+      <li>Não alterar rotas da API .NET no Replit backend</li>
+    </ul>
+  </div>
+
+  <h3>O Proxy Nitro (já configurado)</h3>
+  <p>O arquivo <code>server/routes/api-proxy/[...path].ts</code> recebe <code>/api-proxy/ENDPOINT</code> e faz proxy para <code>http://localhost:8000/ENDPOINT</code>, passando todos os headers (incluindo Authorization). CORS já está resolvido nesta camada.</p>
+
+  <h3>Estratégias de Migração</h3>
+  <table>
+    <tr><th>Estratégia</th><th>Descrição</th><th>Dificuldade</th></tr>
+    <tr><td><strong>A — Substituição gradual</strong></td><td>Migrar página a página, usando ClientOnly wrapper para componentes React dentro do Nuxt</td><td>Média</td></tr>
+    <tr><td><strong>B — Frontend separado (recomendada)</strong></td><td>Criar novo Repl apenas para o frontend React. Configurar proxy apontando para o Repl original.</td><td>Baixa</td></tr>
+    <tr><td><strong>C — Substituição completa</strong></td><td>Migrar todo o frontend de uma vez, mantendo apenas proxy + backend no Replit original</td><td>Alta</td></tr>
+  </table>
+
+  <h3>Checklist de Migração Lovable</h3>
+  <div class="grid-2">
+    <div>
+      <h4>Fase 1 — Estrutura base</h4>
+      <ul>
+        <li>☐ Configurar React + TypeScript + Tailwind</li>
+        <li>☐ Criar <code>src/lib/api.ts</code> com Axios + interceptores</li>
+        <li>☐ Criar Zustand auth store</li>
+        <li>☐ Implementar React Router com PrivateRoute</li>
+        <li>☐ Construir Sidebar + TopBar + Layout base</li>
+        <li>☐ Criar StatCard, DataTable, Modal, Toast</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Fase 2 — Páginas e dados reais</h4>
+      <ul>
+        <li>☐ Páginas públicas: login, cadastro, recuperar-senha</li>
+        <li>☐ Dashboard do afiliado com API real</li>
+        <li>☐ Módulo Financeiro (3 abas)</li>
+        <li>☐ Módulos Rede e Performance</li>
+        <li>☐ Módulo Suporte completo</li>
+        <li>☐ Painel Admin com todas as rotas</li>
+        <li>☐ Testar autenticação end-to-end</li>
+        <li>☐ Validar responsividade mobile</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="footer-note">
+  Quanta Shop — Documento Técnico Confidencial | Versão 1.0.0 | Março 2026 | quantashop.com.br
+</div>
+
+</body>
+</html>
