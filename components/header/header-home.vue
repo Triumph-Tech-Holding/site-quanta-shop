@@ -5,7 +5,7 @@
         <div class="qs-home-header__row">
           <div class="qs-home-header__logo">
             <nuxt-link href="/">
-              <img src="/img/logo/logo.png" alt="Quanta Shop" />
+              <img src="/img/logo/logo-nova.png" alt="Quanta Shop" />
             </nuxt-link>
           </div>
 
@@ -115,7 +115,7 @@ function handleSearch() {
 }
 
 .qs-home-header__logo img {
-  height: 38px;
+  height: 72px;
   width: auto;
 }
 
@@ -216,7 +216,7 @@ function handleSearch() {
 
 .qs-home-header__search {
   background: #f7f8fa;
-  padding: 10px 0;
+  padding: 6px 0;
   border-bottom: 1px solid #eee;
 }
 
@@ -226,7 +226,7 @@ function handleSearch() {
   background: #fff;
   border: 1.5px solid #e5e7eb;
   border-radius: 999px;
-  padding: 9px 18px;
+  padding: 6px 16px;
   gap: 10px;
   transition: border-color 0.2s;
   max-width: 680px;
@@ -242,7 +242,7 @@ function handleSearch() {
   border: none;
   outline: none;
   font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 14px;
+  font-size: 13px;
   color: #374151;
   background: transparent;
 }
