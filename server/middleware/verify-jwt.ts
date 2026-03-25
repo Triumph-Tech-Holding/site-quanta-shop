@@ -17,16 +17,29 @@ declare module 'h3' {
   }
 }
 
+/**
+ * Prefixos de rotas que nunca precisam de autenticação Nuxt (são públicas ou
+ * delegam auth para a API .NET via api-proxy).
+ */
 const PUBLIC_PATH_PREFIXES = [
   '/agencia/login',
   '/agencia/cadastro',
   '/agencia/recuperar-senha',
   '/agencia/reset-password',
   '/agencia/confirm-email',
-  '/api-proxy',
-  '/api/auth/logout',
+  '/api-proxy',         // proxy para .NET — a API externa autentica por conta própria
+  '/api/auth/logout',   // endpoint de logout não requer token válido
   '/_nuxt',
   '/data',
+  '/img',
+] as const;
+
+/**
+ * Prefixos de rotas Nuxt internas que EXIGEM token válido.
+ * Qualquer rota sob esses prefixos retorna 401 se o token estiver ausente ou inválido.
+ */
+const PROTECTED_PATH_PREFIXES = [
+  '/api/admin',
 ] as const;
 
 export default defineEventHandler(async (event) => {
@@ -35,14 +48,14 @@ export default defineEventHandler(async (event) => {
   const isPublicPath = PUBLIC_PATH_PREFIXES.some((prefix) => url.startsWith(prefix));
   if (isPublicPath) return;
 
-  // Aceitar token via cookie (SSR) ou header Authorization (SPA/API calls)
+  // Extrair token via cookie (SSR) ou header Authorization: Bearer (SPA)
   const cookieToken = getCookie(event, 'agencia_token') ?? getCookie(event, 'auth_token');
   const headerAuth = event.node.req.headers.authorization;
   const bearerToken = headerAuth?.startsWith('Bearer ') ? headerAuth.slice(7) : undefined;
   const token = cookieToken ?? bearerToken;
 
-  // Rotas de admin de dados exigem token; rotas públicas de leitura passam sem token
-  const requiresAuth = url.startsWith('/api/admin');
+  const requiresAuth = PROTECTED_PATH_PREFIXES.some((prefix) => url.startsWith(prefix));
+
   if (!token) {
     if (requiresAuth) {
       throw createError({ statusCode: 401, statusMessage: 'Não autorizado: token ausente.' });
@@ -62,18 +75,14 @@ export default defineEventHandler(async (event) => {
     const decoded = jwt.verify(token, jwtSecret) as JwtPayload;
     event.context.user = decoded;
   } catch (err: unknown) {
-    const isJwtError = err instanceof Error && (
-      err.name === 'TokenExpiredError' || err.name === 'JsonWebTokenError'
-    );
-
-    if (err instanceof Error && err.name === 'TokenExpiredError') {
-      throw createError({ statusCode: 401, statusMessage: 'Não autorizado: token expirado.' });
+    if (err instanceof Error) {
+      if (err.name === 'TokenExpiredError') {
+        throw createError({ statusCode: 401, statusMessage: 'Não autorizado: token expirado.' });
+      }
+      if (err.name === 'JsonWebTokenError') {
+        throw createError({ statusCode: 401, statusMessage: 'Não autorizado: token inválido.' });
+      }
     }
-
-    if (isJwtError) {
-      throw createError({ statusCode: 401, statusMessage: 'Não autorizado: token inválido.' });
-    }
-
     throw err;
   }
 });

@@ -16,6 +16,11 @@ function getApiClient(): AxiosInstance {
     _apiClient.interceptors.request.use(
       (req) => {
         const store = useAgenciaStore();
+        // Garantir que o estado do localStorage está hidratado antes de ler o token,
+        // importante em recargas de página onde o store pode ainda não ter sido populado.
+        if (import.meta.client && !store.currentToken) {
+          store.loadFromStorage();
+        }
         const token = store.getToken();
         if (token) {
           req.headers.Authorization = `Bearer ${token}`;
@@ -55,7 +60,7 @@ function getApiClient(): AxiosInstance {
   return _apiClient;
 }
 
-/** Reinicia o cliente axios (útil após logout para limpar estado de auth). */
+/** Reinicia o cliente axios (útil após logout para limpar cabeçalhos de auth em cache). */
 export function resetApiClient(): void {
   _apiClient = null;
 }
