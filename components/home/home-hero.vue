@@ -15,10 +15,8 @@
       class="qs-hero__swiper"
     >
       <SwiperSlide v-for="(item, i) in sliderData" :key="i" class="qs-hero__slide">
-        <div
-          class="qs-hero__bg"
-          :style="item.imagem ? `background-image: url('${item.imagem}')` : `background: linear-gradient(135deg, #1a4a54 0%, #225F6B 40%, #2F7785 100%)`"
-        ></div>
+        <!-- Fundo sempre fixo — a API de carrosseis fornece apenas texto, nunca o background -->
+        <div class="qs-hero__bg"></div>
         <div class="qs-hero__overlay"></div>
 
         <div class="container qs-hero__content-wrap">
@@ -43,6 +41,9 @@
                   <nuxt-link :href="item.link || '/register'" class="qs-hero__cta">
                     Começar Agora
                     <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                  </nuxt-link>
+                  <nuxt-link href="/partners" class="qs-hero__cta-sec">
+                    Ver parceiros
                   </nuxt-link>
                 </div>
               </div>
@@ -132,15 +133,17 @@ const sliderData = computed(() => {
 .qs-hero__bg {
   position: absolute;
   inset: 0;
+  /* Foto profissional fixa — ignora item.imagem da API (colagem de logos) */
+  background-image: url('https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1600&q=85&auto=format&fit=crop');
   background-size: cover;
-  background-position: center;
+  background-position: center top;
   background-repeat: no-repeat;
 }
 
 .qs-hero__overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(20, 50, 60, 0.75) 0%, rgba(34, 95, 107, 0.60) 50%, rgba(47, 119, 133, 0.45) 100%);
+  background: linear-gradient(to right, rgba(15,35,45,0.88) 0%, rgba(15,35,45,0.65) 45%, rgba(15,35,45,0.30) 100%);
 }
 
 .qs-hero__content-wrap {
@@ -211,6 +214,37 @@ const sliderData = computed(() => {
   transform: translateY(-2px);
   box-shadow: 0 6px 28px rgba(152, 199, 58, 0.50);
   color: #fff;
+}
+
+.qs-hero__actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.qs-hero__cta-sec {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1.5px solid rgba(255,255,255,0.55);
+  color: #fff;
+  font-family: 'Inter', 'Jost', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 13px 26px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
+  background: rgba(255,255,255,0.08);
+}
+
+.qs-hero__cta-sec:hover {
+  border-color: #fff;
+  background: rgba(255,255,255,0.18);
+  color: #fff;
+  transform: translateY(-2px);
 }
 
 .qs-hero__cards {
