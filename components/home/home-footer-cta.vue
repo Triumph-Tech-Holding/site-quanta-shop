@@ -19,9 +19,9 @@
 <style scoped>
 .qs-footer-cta {
   padding: 72px 0;
-  background: #fff;
+  background: linear-gradient(135deg, #f7f8fa 0%, #fff 50%, #f7f8fa 100%);
   text-align: center;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid #e5e7eb;
 }
 
 .qs-footer-cta__title {

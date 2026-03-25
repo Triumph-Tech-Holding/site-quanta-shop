@@ -113,9 +113,9 @@ const hasMore = computed(() => (partnerStore.newPartners || []).length > 8);
 }
 
 .qs-partner-card:hover {
-  box-shadow: 0 6px 24px rgba(0,0,0,0.10);
-  transform: translateY(-2px);
-  border-color: transparent;
+  border-color: #2F7785;
+  box-shadow: 0 12px 32px rgba(47, 119, 133, 0.15);
+  transform: translateY(-4px);
 }
 
 .qs-partner-card--skeleton {
