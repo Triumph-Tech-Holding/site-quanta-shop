@@ -11,16 +11,22 @@
 
           <nav class="qs-home-header__nav d-none d-xl-flex">
             <nuxt-link href="/">Para Você</nuxt-link>
-            <nuxt-link href="/agencia/como-funciona">Para sua Empresa</nuxt-link>
-            <nuxt-link href="/primeira-compra">Seja um Agente</nuxt-link>
-            <nuxt-link href="/about">Quanta Amizade</nuxt-link>
+            <nuxt-link href="/para-sua-empresa">Para sua Empresa</nuxt-link>
+            <nuxt-link href="/seja-um-agente">Seja um Agente</nuxt-link>
+            <nuxt-link href="/quanta-amizade" class="qs-nav-icon-link">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              Quanta Amizade
+            </nuxt-link>
             <nuxt-link href="/blog">Blog</nuxt-link>
-            <nuxt-link href="/contact">Fale Conosco</nuxt-link>
+            <nuxt-link href="/contato" class="qs-nav-icon-link">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              Fale Conosco
+            </nuxt-link>
           </nav>
 
           <div class="qs-home-header__actions">
             <nuxt-link href="/login" class="qs-btn-login">Login</nuxt-link>
-            <nuxt-link href="/register" class="qs-btn-cadastro">Cadastre-se</nuxt-link>
+            <nuxt-link href="/register" class="qs-btn-cadastro">Cadastro</nuxt-link>
             <button class="qs-mobile-menu-btn d-xl-none" @click="toggleMobile">
               <span></span><span></span><span></span>
             </button>
@@ -42,6 +48,14 @@
             @keyup.enter="handleSearch"
           />
           <button v-if="searchQuery" @click="searchQuery = ''" class="qs-search-clear">✕</button>
+          <button class="qs-search-mic" aria-label="Busca por voz">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+              <line x1="12" y1="19" x2="12" y2="23"/>
+              <line x1="8" y1="23" x2="16" y2="23"/>
+            </svg>
+          </button>
         </div>
       </div>
     </div>
@@ -49,14 +63,14 @@
     <div v-if="mobileOpen" class="qs-mobile-menu d-xl-none">
       <nav>
         <nuxt-link href="/" @click="mobileOpen = false">Para Você</nuxt-link>
-        <nuxt-link href="/agencia/como-funciona" @click="mobileOpen = false">Para sua Empresa</nuxt-link>
-        <nuxt-link href="/primeira-compra" @click="mobileOpen = false">Seja um Agente</nuxt-link>
-        <nuxt-link href="/about" @click="mobileOpen = false">Quanta Amizade</nuxt-link>
+        <nuxt-link href="/para-sua-empresa" @click="mobileOpen = false">Para sua Empresa</nuxt-link>
+        <nuxt-link href="/seja-um-agente" @click="mobileOpen = false">Seja um Agente</nuxt-link>
+        <nuxt-link href="/quanta-amizade" @click="mobileOpen = false">Quanta Amizade</nuxt-link>
         <nuxt-link href="/blog" @click="mobileOpen = false">Blog</nuxt-link>
-        <nuxt-link href="/contact" @click="mobileOpen = false">Fale Conosco</nuxt-link>
+        <nuxt-link href="/contato" @click="mobileOpen = false">Fale Conosco</nuxt-link>
         <div class="qs-mobile-menu__actions">
           <nuxt-link href="/login" class="qs-btn-login" @click="mobileOpen = false">Login</nuxt-link>
-          <nuxt-link href="/register" class="qs-btn-cadastro" @click="mobileOpen = false">Cadastre-se</nuxt-link>
+          <nuxt-link href="/register" class="qs-btn-cadastro" @click="mobileOpen = false">Cadastro</nuxt-link>
         </div>
       </nav>
     </div>
@@ -108,7 +122,7 @@ function handleSearch() {
 .qs-home-header__nav {
   flex: 1;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
 }
 
 .qs-home-header__nav a {
@@ -116,7 +130,7 @@ function handleSearch() {
   font-size: 14px;
   font-weight: 500;
   color: #374151;
-  padding: 6px 12px;
+  padding: 6px 11px;
   border-radius: 6px;
   text-decoration: none;
   white-space: nowrap;
@@ -127,6 +141,12 @@ function handleSearch() {
 .qs-home-header__nav a.router-link-active {
   color: #2F7785;
   background: rgba(47, 119, 133, 0.06);
+}
+
+.qs-nav-icon-link {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 5px;
 }
 
 .qs-home-header__actions {
@@ -209,6 +229,8 @@ function handleSearch() {
   padding: 9px 18px;
   gap: 10px;
   transition: border-color 0.2s;
+  max-width: 680px;
+  margin: 0 auto;
 }
 
 .qs-home-header__search-inner:focus-within {
@@ -237,6 +259,22 @@ function handleSearch() {
   font-size: 14px;
   padding: 0;
   line-height: 1;
+}
+
+.qs-search-mic {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.qs-search-mic:hover {
+  opacity: 1;
 }
 
 .qs-mobile-menu {
