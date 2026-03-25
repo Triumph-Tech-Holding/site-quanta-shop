@@ -92,15 +92,28 @@ function tableHeader(cols) {
 function tableRow(cells, isEven) {
   const colW = PAGE_W / cells.length;
   const y = doc.y;
-  const maxH = 16;
+  const PADDING = 5;
+  const LINE_GAP = 1;
+  // Calculate the tallest cell to set row height dynamically
+  let maxCellH = 0;
+  cells.forEach(cell => {
+    const h = doc.heightOfString(cell, { width: colW - PADDING * 2, lineGap: LINE_GAP, fontSize: 8.5 });
+    if (h > maxCellH) maxCellH = h;
+  });
+  const rowH = maxCellH + PADDING * 2;
+  // check if we need a new page
+  if (y + rowH > doc.page.height - doc.page.margins.bottom) {
+    doc.addPage();
+  }
+  const rowY = doc.y;
   if (isEven) {
-    doc.rect(doc.page.margins.left, y, PAGE_W, maxH).fill(BG_LIGHT);
+    doc.rect(doc.page.margins.left, rowY, PAGE_W, rowH).fill(BG_LIGHT);
   }
   cells.forEach((cell, i) => {
     doc.fontSize(8.5).font('Helvetica').fillColor(TEXT)
-      .text(cell, doc.page.margins.left + i * colW + 5, y + 3, { width: colW - 10, lineGap: 1 });
+      .text(cell, doc.page.margins.left + i * colW + PADDING, rowY + PADDING, { width: colW - PADDING * 2, lineGap: LINE_GAP });
   });
-  doc.y = y + maxH;
+  doc.y = rowY + rowH;
   doc.moveTo(doc.page.margins.left, doc.y).lineTo(doc.page.margins.left + PAGE_W, doc.y).strokeColor(BORDER).stroke();
 }
 
