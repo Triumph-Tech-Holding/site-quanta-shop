@@ -1,32 +1,65 @@
 <template>
   <div>
     <div class="ag-page-header d-flex align-items-center justify-content-between flex-wrap gap-2">
-      <div><h1>Carrosseis</h1><p>Gerenciar banners e campanhas do hero da home</p></div>
+      <div><h1>Carrosseis</h1><p>Banners do hero da home — arraste as setas para reordenar</p></div>
       <button class="btn btn-ag-primary" @click="abrirNovo">+ Novo Banner</button>
     </div>
 
     <div v-if="loading" class="ag-loading"><div class="spinner-border" /></div>
     <div v-else class="ag-card">
-      <div v-if="itens.length === 0" class="ag-empty-state"><h5>Nenhum banner encontrado</h5></div>
+      <div v-if="itens.length === 0" class="ag-empty-state">
+        <h5>Nenhum banner criado ainda</h5>
+        <p class="text-muted">Clique em <strong>+ Novo Banner</strong> para criar o primeiro slide do hero.</p>
+      </div>
       <div v-else class="table-responsive">
         <table class="table ag-table">
-          <thead><tr><th>Título</th><th>Imagem</th><th>Headline</th><th>URL Destino</th><th>Ativo</th><th></th></tr></thead>
+          <thead>
+            <tr>
+              <th style="width:70px">Ordem</th>
+              <th>Título</th>
+              <th>Imagem</th>
+              <th>Headline</th>
+              <th>Ativo</th>
+              <th></th>
+            </tr>
+          </thead>
           <tbody>
-            <tr v-for="item in itens" :key="item.id">
-              <td class="fw-bold">{{ item.titulo }}</td>
+            <tr v-for="(item, i) in itens" :key="item.id">
               <td>
+                <div class="d-flex flex-column gap-1">
+                  <button
+                    class="btn btn-xs btn-ag-outline car-order-btn"
+                    :disabled="i === 0"
+                    title="Subir"
+                    @click="moverItem(item, 'up')"
+                  >↑</button>
+                  <button
+                    class="btn btn-xs btn-ag-outline car-order-btn"
+                    :disabled="i === itens.length - 1"
+                    title="Descer"
+                    @click="moverItem(item, 'down')"
+                  >↓</button>
+                </div>
+              </td>
+              <td class="fw-bold align-middle">{{ item.titulo }}</td>
+              <td class="align-middle">
                 <img v-if="item.url" :src="item.url" alt="" style="height:40px;width:80px;object-fit:cover;border-radius:4px;" />
                 <span v-else class="text-muted">—</span>
               </td>
-              <td>
-                <span v-if="campaigns[String(item.id)]?.headline" class="text-truncate d-block" style="max-width:160px">{{ campaigns[String(item.id)].headline }}</span>
+              <td class="align-middle">
+                <span v-if="item.headline" class="text-truncate d-block" style="max-width:160px">{{ item.headline }}</span>
                 <span v-else class="text-muted small">Global (CMS)</span>
               </td>
-              <td><a v-if="item.urlDestino" :href="item.urlDestino" target="_blank" class="text-truncate d-block" style="max-width:140px">{{ item.urlDestino }}</a><span v-else>—</span></td>
-              <td><span class="badge-ag" :class="item.ativo ? 'badge-ag-success' : 'badge-ag-warning'">{{ item.ativo ? 'Ativo' : 'Inativo' }}</span></td>
-              <td class="d-flex gap-1">
-                <button class="btn btn-sm btn-ag-outline" @click="abrirEditar(item)">Editar</button>
-                <button class="btn btn-sm btn-outline-danger" @click="confirmarExcluir(item)">Excluir</button>
+              <td class="align-middle">
+                <span class="badge-ag" :class="item.ativo ? 'badge-ag-success' : 'badge-ag-warning'">
+                  {{ item.ativo ? 'Ativo' : 'Inativo' }}
+                </span>
+              </td>
+              <td class="align-middle">
+                <div class="d-flex gap-1">
+                  <button class="btn btn-sm btn-ag-outline" @click="abrirEditar(item)">Editar</button>
+                  <button class="btn btn-sm btn-outline-danger" @click="confirmarExcluir(item)">Excluir</button>
+                </div>
               </td>
             </tr>
           </tbody>
@@ -195,10 +228,7 @@
                   backgroundImage: form.url ? `url(${form.url})` : 'linear-gradient(135deg, #1a4a54, #225F6B)',
                 }"
               >
-                <div
-                  class="car-preview-overlay"
-                  :style="{ opacity: form.overlayIntensidade / 100 }"
-                ></div>
+                <div class="car-preview-overlay" :style="{ opacity: form.overlayIntensidade / 100 }"></div>
                 <div class="car-preview-content" :class="form.textoCor === 'dark' ? 'text-dark-mode' : 'text-light-mode'">
                   <div v-if="form.badge" class="car-preview-badge">
                     <span class="car-preview-badge-dot"></span>
@@ -210,7 +240,6 @@
                   </div>
 
                   <h2 class="car-preview-title" v-html="previewHeadline"></h2>
-
                   <p class="car-preview-subtitle">{{ form.subtitulo || 'Subtítulo (CMS global)' }}</p>
 
                   <a
@@ -234,9 +263,7 @@
 
         <div class="ag-modal-footer">
           <button class="btn btn-secondary" @click="fecharModal">Cancelar</button>
-          <button v-if="abaAtiva !== 'preview'" class="btn btn-ag-outline" @click="proximaAba">
-            Próximo →
-          </button>
+          <button v-if="abaAtiva !== 'preview'" class="btn btn-ag-outline" @click="proximaAba">Próximo →</button>
           <button class="btn btn-ag-primary" :disabled="saving" @click="salvar">
             {{ saving ? 'Salvando...' : 'Salvar e Publicar' }}
           </button>
@@ -260,23 +287,20 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { extractApiErrorMessage } from '~/types/agencia';
-import type { CarrosselAdmin, HeroBannerSlide } from '~/types/agencia';
+import type { HeroBannerSlide } from '~/types/agencia';
 
 definePageMeta({ layout: 'agencia-painel', middleware: ['agencia-auth', 'agencia-admin'] });
 
 const agenciaStore = useAgenciaStore();
-const api = useApi();
-
 const loading = ref(true);
 const saving = ref(false);
 const uploadingFile = ref(false);
 const isDragging = ref(false);
-const itens = ref<CarrosselAdmin[]>([]);
-const campaigns = ref<Record<string, HeroBannerSlide>>({});
+const itens = ref<HeroBannerSlide[]>([]);
 const showModal = ref(false);
 const showConfirm = ref(false);
 const modalError = ref('');
-const itemParaExcluir = ref<CarrosselAdmin | null>(null);
+const itemParaExcluir = ref<HeroBannerSlide | null>(null);
 const modoImagem = ref<'url' | 'arquivo'>('url');
 const arquivoFile = ref<File | null>(null);
 const arquivoPreview = ref('');
@@ -304,18 +328,10 @@ const form = reactive<{
   textoCor: 'light' | 'dark';
   overlayIntensidade: number;
 }>({
-  titulo: '',
-  url: '',
-  urlDestino: '',
-  ativo: true,
-  headline: '',
-  subtitulo: '',
-  badge: '',
-  ctaTexto: 'Criar Conta Grátis',
-  ctaLink: '/register',
-  ctaCor: '#98C73A',
-  textoCor: 'light',
-  overlayIntensidade: 70,
+  titulo: '', url: '', urlDestino: '', ativo: true,
+  headline: '', subtitulo: '', badge: '',
+  ctaTexto: 'Criar Conta Grátis', ctaLink: '/register',
+  ctaCor: '#98C73A', textoCor: 'light', overlayIntensidade: 70,
 });
 
 const previewHeadline = computed(() => {
@@ -329,8 +345,7 @@ const isCtaColorDark = computed(() => {
   const r = parseInt(hex.substring(0, 2), 16);
   const g = parseInt(hex.substring(2, 4), 16);
   const b = parseInt(hex.substring(4, 6), 16);
-  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-  return luminance < 0.5;
+  return (0.299 * r + 0.587 * g + 0.114 * b) / 255 < 0.5;
 });
 
 function authHeader() {
@@ -391,8 +406,9 @@ async function fazerUpload() {
 function abrirNovo() {
   Object.assign(form, {
     id: undefined, titulo: '', url: '', urlDestino: '', ativo: true,
-    headline: '', subtitulo: '', badge: '', ctaTexto: 'Criar Conta Grátis',
-    ctaLink: '/register', ctaCor: '#98C73A', textoCor: 'light', overlayIntensidade: 70,
+    headline: '', subtitulo: '', badge: '',
+    ctaTexto: 'Criar Conta Grátis', ctaLink: '/register',
+    ctaCor: '#98C73A', textoCor: 'light', overlayIntensidade: 70,
   });
   modoImagem.value = 'url';
   limparArquivo();
@@ -401,22 +417,12 @@ function abrirNovo() {
   showModal.value = true;
 }
 
-function abrirEditar(item: CarrosselAdmin) {
-  const camp = campaigns.value[String(item.id)];
+function abrirEditar(item: HeroBannerSlide) {
   Object.assign(form, {
-    id: item.id,
-    titulo: item.titulo,
-    url: item.url || '',
-    urlDestino: item.urlDestino || '',
-    ativo: item.ativo,
-    headline: camp?.headline || '',
-    subtitulo: camp?.subtitulo || '',
-    badge: camp?.badge || '',
-    ctaTexto: camp?.ctaTexto || 'Criar Conta Grátis',
-    ctaLink: camp?.ctaLink || '/register',
-    ctaCor: camp?.ctaCor || '#98C73A',
-    textoCor: camp?.textoCor || 'light',
-    overlayIntensidade: camp?.overlayIntensidade ?? 70,
+    id: item.id, titulo: item.titulo, url: item.url, urlDestino: item.urlDestino, ativo: item.ativo,
+    headline: item.headline, subtitulo: item.subtitulo, badge: item.badge,
+    ctaTexto: item.ctaTexto, ctaLink: item.ctaLink, ctaCor: item.ctaCor,
+    textoCor: item.textoCor, overlayIntensidade: item.overlayIntensidade,
   });
   modoImagem.value = 'url';
   limparArquivo();
@@ -426,49 +432,42 @@ function abrirEditar(item: CarrosselAdmin) {
 }
 
 function fecharModal() { showModal.value = false; }
-function confirmarExcluir(item: CarrosselAdmin) { itemParaExcluir.value = item; showConfirm.value = true; }
+function confirmarExcluir(item: HeroBannerSlide) { itemParaExcluir.value = item; showConfirm.value = true; }
 
 async function salvar() {
   if (!form.titulo.trim()) { modalError.value = 'Título é obrigatório.'; abaAtiva.value = 'imagem'; return; }
-  if (!form.url.trim()) { modalError.value = 'Imagem é obrigatória. Informe uma URL ou envie um arquivo.'; abaAtiva.value = 'imagem'; return; }
+  if (!form.url.trim()) { modalError.value = 'Imagem é obrigatória.'; abaAtiva.value = 'imagem'; return; }
   saving.value = true;
   modalError.value = '';
   try {
-    const payload = { titulo: form.titulo, url: form.url, urlDestino: form.urlDestino, ativo: form.ativo };
-    let bannerId = form.id;
+    const isNew = !form.id;
+    const slide: HeroBannerSlide = {
+      id: form.id || Date.now(),
+      titulo: form.titulo,
+      url: form.url,
+      urlDestino: form.urlDestino,
+      ativo: form.ativo,
+      headline: form.headline,
+      subtitulo: form.subtitulo,
+      badge: form.badge,
+      ctaTexto: form.ctaTexto,
+      ctaLink: form.ctaLink,
+      ctaCor: form.ctaCor,
+      textoCor: form.textoCor,
+      overlayIntensidade: form.overlayIntensidade,
+    };
 
-    if (form.id) {
-      await api.put(`/admin/carrosseis/${form.id}`, payload, authHeader());
-      const idx = itens.value.findIndex(i => i.id === form.id);
-      if (idx !== -1) itens.value[idx] = { ...itens.value[idx], ...payload };
+    await $fetch('/api/admin/banner-campaigns', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${agenciaStore.getToken()}` },
+      body: slide,
+    });
+
+    if (isNew) {
+      itens.value.push(slide);
     } else {
-      const { data } = await api.post('/admin/carrosseis/criar', payload, authHeader());
-      const newItem = data as CarrosselAdmin;
-      bannerId = newItem.id;
-      itens.value.unshift(newItem);
-    }
-
-    if (bannerId) {
-      const slide: HeroBannerSlide = {
-        id: bannerId,
-        url: form.url,
-        urlDestino: form.urlDestino,
-        ativo: form.ativo,
-        headline: form.headline,
-        subtitulo: form.subtitulo,
-        badge: form.badge,
-        ctaTexto: form.ctaTexto,
-        ctaLink: form.ctaLink,
-        ctaCor: form.ctaCor,
-        textoCor: form.textoCor,
-        overlayIntensidade: form.overlayIntensidade,
-      };
-      await $fetch('/api/admin/banner-campaigns', {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${agenciaStore.getToken()}` },
-        body: slide,
-      });
-      campaigns.value[String(bannerId)] = slide;
+      const idx = itens.value.findIndex(i => i.id === slide.id);
+      if (idx !== -1) itens.value[idx] = slide;
     }
 
     fecharModal();
@@ -484,13 +483,11 @@ async function excluir() {
   saving.value = true;
   try {
     const id = itemParaExcluir.value.id;
-    await api.delete(`/admin/carrosseis/${id}`, authHeader());
     await $fetch('/api/admin/banner-campaigns', {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${agenciaStore.getToken()}` },
       body: { id },
     });
-    delete campaigns.value[String(id)];
     itens.value = itens.value.filter(i => i.id !== id);
     showConfirm.value = false;
   } catch (e: unknown) {
@@ -500,23 +497,31 @@ async function excluir() {
   }
 }
 
+async function moverItem(item: HeroBannerSlide, direction: 'up' | 'down') {
+  const idx = itens.value.findIndex(i => i.id === item.id);
+  const newIdx = direction === 'up' ? idx - 1 : idx + 1;
+  if (newIdx < 0 || newIdx >= itens.value.length) return;
+  const arr = [...itens.value];
+  [arr[idx], arr[newIdx]] = [arr[newIdx], arr[idx]];
+  itens.value = arr;
+  try {
+    await $fetch('/api/admin/banner-campaigns', {
+      method: 'PATCH',
+      headers: { Authorization: `Bearer ${agenciaStore.getToken()}` },
+      body: { orderedIds: arr.map(i => i.id) },
+    });
+  } catch (e: unknown) {
+    console.error('Erro ao reordenar:', extractApiErrorMessage(e));
+  }
+}
+
 onMounted(async () => {
   agenciaStore.loadFromStorage();
   try {
-    const [bannersResult, campaignsResult] = await Promise.allSettled([
-      api.get('/admin/carrosseis/listar', authHeader()),
-      $fetch<HeroBannerSlide[]>('/api/admin/banner-campaigns', authHeader()),
-    ]);
-    if (bannersResult.status === 'fulfilled') {
-      const { data } = bannersResult.value;
-      itens.value = Array.isArray(data) ? data : ((data as { items?: CarrosselAdmin[] })?.items || []);
-    }
-    if (campaignsResult.status === 'fulfilled') {
-      const slidesArr = campaignsResult.value;
-      campaigns.value = Object.fromEntries(slidesArr.map(s => [String(s.id), s]));
-    }
+    const slides = await $fetch<HeroBannerSlide[]>('/api/admin/banner-campaigns', authHeader());
+    itens.value = Array.isArray(slides) ? slides : [];
   } catch (e: unknown) {
-    console.error('Erro ao carregar:', extractApiErrorMessage(e));
+    console.error('Erro ao carregar banners:', extractApiErrorMessage(e));
   } finally {
     loading.value = false;
   }
@@ -524,14 +529,17 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.car-modal-wide {
-  max-width: 680px;
-  width: 100%;
+.car-modal-wide { max-width: 680px; width: 100%; }
+.car-modal-body { min-height: 320px; }
+
+.car-order-btn {
+  padding: 0 6px;
+  font-size: 12px;
+  line-height: 1.4;
+  min-width: 28px;
 }
 
-.car-modal-body {
-  min-height: 320px;
-}
+.car-order-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
 .car-tabs {
   display: flex;
@@ -558,7 +566,6 @@ onMounted(async () => {
 
 .car-tab-btn:hover { color: #2F7785; }
 .car-tab-btn.active { color: #2F7785; border-bottom-color: #2F7785; }
-
 .car-tab-icon { display: flex; align-items: center; }
 
 .car-dim-info {
@@ -574,141 +581,46 @@ onMounted(async () => {
 }
 
 .car-text-claro {
-  background: #1a2236;
-  color: #fff;
-  border: 2px solid transparent;
-  font-size: 12px;
+  background: #1a2236; color: #fff;
+  border: 2px solid transparent; font-size: 12px;
 }
-
 .car-text-escuro {
-  background: #f8f9fa;
-  color: #1a2236;
-  border: 2px solid #dee2e6;
-  font-size: 12px;
+  background: #f8f9fa; color: #1a2236;
+  border: 2px solid #dee2e6; font-size: 12px;
 }
-
 .car-text-claro.active { border-color: #2F7785; }
 .car-text-escuro.active { border-color: #2F7785; }
 
-.car-preview-wrap {
-  position: relative;
-  border-radius: 10px;
-  overflow: hidden;
-  background: #1a2236;
-}
-
-.car-preview {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 5;
-  background-size: cover;
-  background-position: center;
-  display: flex;
-  align-items: center;
-}
-
-.car-preview-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to right, rgba(15,35,45,1) 0%, rgba(15,35,45,0.7) 50%, rgba(15,35,45,0.3) 100%);
-}
-
-.car-preview-content {
-  position: relative;
-  z-index: 2;
-  padding: 24px 28px;
-  max-width: 65%;
-}
-
+.car-preview-wrap { position: relative; border-radius: 10px; overflow: hidden; background: #1a2236; }
+.car-preview { position: relative; width: 100%; aspect-ratio: 16 / 5; background-size: cover; background-position: center; display: flex; align-items: center; }
+.car-preview-overlay { position: absolute; inset: 0; background: linear-gradient(to right, rgba(15,35,45,1) 0%, rgba(15,35,45,0.7) 50%, rgba(15,35,45,0.3) 100%); }
+.car-preview-content { position: relative; z-index: 2; padding: 24px 28px; max-width: 65%; }
 .text-light-mode { color: #fff; }
 .text-dark-mode { color: #1a2236; }
 
 .car-preview-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 999px;
-  padding: 3px 10px;
-  font-size: 10px;
-  font-weight: 500;
-  margin-bottom: 10px;
-  backdrop-filter: blur(4px);
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 999px; padding: 3px 10px; font-size: 10px; font-weight: 500;
+  margin-bottom: 10px; backdrop-filter: blur(4px);
 }
-
-.text-dark-mode .car-preview-badge {
-  background: rgba(0, 0, 0, 0.08);
-  border-color: rgba(0, 0, 0, 0.15);
-}
-
+.text-dark-mode .car-preview-badge { background: rgba(0,0,0,0.08); border-color: rgba(0,0,0,0.15); }
 .car-preview-badge-placeholder { opacity: 0.5; }
-
-.car-preview-badge-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: #98C73A;
-  flex-shrink: 0;
-}
-
-.car-preview-title {
-  font-size: 18px;
-  font-weight: 800;
-  line-height: 1.2;
-  margin: 0 0 6px;
-}
-
-.car-preview-subtitle {
-  font-size: 11px;
-  opacity: 0.85;
-  margin: 0 0 12px;
-  line-height: 1.5;
-}
-
-.car-preview-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 16px;
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 700;
-  text-decoration: none;
-  cursor: default;
-}
+.car-preview-badge-dot { width: 5px; height: 5px; border-radius: 50%; background: #98C73A; flex-shrink: 0; }
+.car-preview-title { font-size: 18px; font-weight: 800; line-height: 1.2; margin: 0 0 6px; }
+.car-preview-subtitle { font-size: 11px; opacity: 0.85; margin: 0 0 12px; line-height: 1.5; }
+.car-preview-cta { display: inline-flex; align-items: center; gap: 6px; padding: 7px 16px; border-radius: 999px; font-size: 11px; font-weight: 700; text-decoration: none; cursor: default; }
 
 .car-preview-no-img {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 8px 12px;
-  background: rgba(0,0,0,0.35);
-  font-size: 11px;
-  color: #adb5bd;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 8px 12px; background: rgba(0,0,0,0.35); font-size: 11px; color: #adb5bd;
+  position: absolute; bottom: 0; left: 0; right: 0;
 }
 
 .upload-drop-area {
-  border: 2px dashed #dee2e6;
-  border-radius: 8px;
-  padding: 24px;
-  text-align: center;
-  cursor: pointer;
-  transition: border-color 0.2s, background 0.2s;
-  background: #fafafa;
-  color: #6c757d;
+  border: 2px dashed #dee2e6; border-radius: 8px; padding: 24px; text-align: center;
+  cursor: pointer; transition: border-color 0.2s, background 0.2s; background: #fafafa; color: #6c757d;
 }
-
-.upload-drop-area:hover,
-.upload-drop-area.drag-over {
-  border-color: #2F7785;
-  background: #f0f7f8;
-}
-
+.upload-drop-area:hover, .upload-drop-area.drag-over { border-color: #2F7785; background: #f0f7f8; }
 .upload-drop-placeholder svg { color: #adb5bd; }
 </style>

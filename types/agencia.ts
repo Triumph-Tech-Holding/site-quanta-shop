@@ -83,6 +83,7 @@ export interface EcossistemaAdmin {
 
 export interface HeroBannerSlide {
   id: number;
+  titulo: string;
   url: string;
   urlDestino: string;
   ativo: boolean;

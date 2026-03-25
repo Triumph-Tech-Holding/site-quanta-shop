@@ -4,7 +4,7 @@
     <div class="box-header-panel">
       <div class="flex-header">
         <div class="logo">
-          <NuxtLink :to="user?.admin ? '/agencia/painel/admin' : '/agencia/painel'">
+          <NuxtLink to="/">
             <img src="/agencia/imgs/quanta-shop-branca.png" alt="Quanta Shop" />
           </NuxtLink>
         </div>

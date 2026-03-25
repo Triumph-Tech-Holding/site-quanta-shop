@@ -4,6 +4,7 @@ import path from 'path';
 
 export interface HeroBannerSlide {
   id: number;
+  titulo: string;
   url: string;
   urlDestino: string;
   ativo: boolean;
@@ -60,6 +61,24 @@ export default defineEventHandler(async (event) => {
       banners.push(slide);
     }
     await writeBanners(banners);
+    return { success: true };
+  }
+
+  if (method === 'PATCH') {
+    const body = await readBody<unknown>(event);
+    if (!body || typeof body !== 'object' || Array.isArray(body)) {
+      return sendError(event, createError({ statusCode: 400, message: 'Dados inválidos' }));
+    }
+    const { orderedIds } = body as { orderedIds: number[] };
+    if (!Array.isArray(orderedIds)) {
+      return sendError(event, createError({ statusCode: 400, message: 'orderedIds deve ser um array' }));
+    }
+    const banners = await readBanners();
+    const reordered = orderedIds
+      .map(id => banners.find(b => b.id === id))
+      .filter((b): b is HeroBannerSlide => b !== undefined);
+    const unlisted = banners.filter(b => !orderedIds.includes(b.id));
+    await writeBanners([...reordered, ...unlisted]);
     return { success: true };
   }
 
