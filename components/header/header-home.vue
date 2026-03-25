@@ -9,7 +9,7 @@
             </nuxt-link>
           </div>
 
-          <nav class="qs-home-header__nav d-none d-xl-flex">
+          <nav class="qs-home-header__nav d-none d-md-flex">
             <nuxt-link href="/">Para Você</nuxt-link>
             <nuxt-link href="/para-sua-empresa">Para sua Empresa</nuxt-link>
             <nuxt-link href="/seja-um-agente">Seja um Agente</nuxt-link>
@@ -27,7 +27,7 @@
           <div class="qs-home-header__actions">
             <nuxt-link href="/login" class="qs-btn-login">Login</nuxt-link>
             <nuxt-link href="/register" class="qs-btn-cadastro">Cadastro</nuxt-link>
-            <button class="qs-mobile-menu-btn d-xl-none" @click="toggleMobile">
+            <button class="qs-mobile-menu-btn d-md-none" @click="toggleMobile">
               <span></span><span></span><span></span>
             </button>
           </div>
@@ -60,7 +60,7 @@
       </div>
     </div>
 
-    <div v-if="mobileOpen" class="qs-mobile-menu d-xl-none">
+    <div v-if="mobileOpen" class="qs-mobile-menu d-md-none">
       <nav>
         <nuxt-link href="/" @click="mobileOpen = false">Para Você</nuxt-link>
         <nuxt-link href="/para-sua-empresa" @click="mobileOpen = false">Para sua Empresa</nuxt-link>
@@ -111,7 +111,7 @@ function handleSearch() {
 .qs-home-header__row {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 12px;
 }
 
 .qs-home-header__logo img {
@@ -127,10 +127,10 @@ function handleSearch() {
 
 .qs-home-header__nav a {
   font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   color: #374151;
-  padding: 6px 11px;
+  padding: 6px 8px;
   border-radius: 6px;
   text-decoration: none;
   white-space: nowrap;
@@ -158,13 +158,13 @@ function handleSearch() {
 
 .qs-btn-login {
   font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   color: #2F7785;
   border: 1.5px solid #2F7785;
   background: transparent;
   border-radius: 6px;
-  padding: 7px 20px;
+  padding: 6px 14px;
   text-decoration: none;
   transition: all 0.2s ease;
   white-space: nowrap;
@@ -177,13 +177,13 @@ function handleSearch() {
 
 .qs-btn-cadastro {
   font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   color: #fff;
   background: #98C73A;
   border: 1.5px solid #98C73A;
   border-radius: 6px;
-  padding: 7px 20px;
+  padding: 6px 14px;
   text-decoration: none;
   transition: all 0.2s ease;
   white-space: nowrap;
