@@ -25,20 +25,18 @@
               <div class="qs-hero__content">
                 <span class="qs-hero__badge">
                   <span class="qs-hero__badge-dot"></span>
-                  +12.000 usuários economizando
+                  {{ config.hero.badge }}
                 </span>
 
-                <h1 class="qs-hero__title">
-                  Seu dinheiro <span class="qs-hero__title--lime">volta</span> a cada compra
-                </h1>
+                <h1 class="qs-hero__title" v-html="heroTitle"></h1>
 
                 <p class="qs-hero__subtitle">
-                  Compre nas suas lojas favoritas e receba cashback de verdade. Simples, transparente e instantâneo.
+                  {{ config.hero.subtitle }}
                 </p>
 
                 <div class="qs-hero__actions">
-                  <nuxt-link :href="item.link || '/register'" class="qs-hero__cta">
-                    Criar Conta Grátis
+                  <nuxt-link :href="item.link || config.hero.ctaPrimaryLink" class="qs-hero__cta">
+                    {{ config.hero.ctaPrimaryText }}
                     <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                   </nuxt-link>
                 </div>
@@ -106,12 +104,23 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useCarouselStore } from "@/pinia/useCarouselStore";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import { useHomeConfig } from '@/composables/useHomeConfig';
 
+const { config, loadConfig } = useHomeConfig();
 const carouselStore = useCarouselStore();
+
+const heroTitle = computed(() =>
+  config.value.hero.title.replace(
+    '<highlight>',
+    '<span style="color:#98C73A">'
+  ).replace('</highlight>', '</span>')
+);
+
+onMounted(() => loadConfig());
 
 const sliderData = computed(() => {
   const carousels = carouselStore.carousels;

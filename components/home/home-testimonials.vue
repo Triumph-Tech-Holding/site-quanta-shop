@@ -2,8 +2,8 @@
   <section class="qs-testimonials">
     <div class="container">
       <div class="qs-section-header">
-        <h2 class="qs-section-title">Testemunhos de Usuários Reais</h2>
-        <p class="qs-section-sub">Veja quanto nossos usuários já economizaram.</p>
+        <h2 class="qs-section-title">{{ config.testimonials.title }}</h2>
+        <p class="qs-section-sub">{{ config.testimonials.subtitle }}</p>
       </div>
 
       <div class="qs-testimonials__grid">
@@ -29,6 +29,13 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from 'vue';
+import { useHomeConfig } from '@/composables/useHomeConfig';
+
+const { config, loadConfig } = useHomeConfig();
+
+onMounted(() => loadConfig());
+
 const testimonials = [
   {
     name: 'Marina Costa',

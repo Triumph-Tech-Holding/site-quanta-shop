@@ -2,9 +2,9 @@
   <section class="qs-parceiros-online">
     <div class="container">
       <div class="qs-section-header">
-        <span class="qs-section-label">Parceiros Online</span>
-        <h2 class="qs-section-title">Compre online e receba cashback</h2>
-        <p class="qs-section-sub">Centenas de marcas com cashback garantido. Ative e compre normalmente.</p>
+        <span class="qs-section-label">{{ config.parceirosOnline.label }}</span>
+        <h2 class="qs-section-title">{{ config.parceirosOnline.title }}</h2>
+        <p class="qs-section-sub">{{ config.parceirosOnline.subtitle }}</p>
       </div>
 
       <div v-if="loading" class="qs-parceiros-online__grid">
@@ -44,10 +44,14 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 import { usePartnerStore } from "@/pinia/usePartnerStore";
+import { useHomeConfig } from '@/composables/useHomeConfig';
 
+const { config, loadConfig } = useHomeConfig();
 const partnerStore = usePartnerStore();
+
+onMounted(() => loadConfig());
 
 const loading = computed(() => !partnerStore.newPartners || partnerStore.newPartners.length === 0);
 const displayedPartners = computed(() => (partnerStore.newPartners || []).slice(0, 8));

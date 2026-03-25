@@ -2,9 +2,9 @@
   <section class="qs-social">
     <div class="container">
       <div class="qs-social__header">
-        <span class="qs-social__label">SEMPRE CONECTADO</span>
-        <h2 class="qs-social__title">Quanta em Tempo Real: Blog e Redes Sociais</h2>
-        <p class="qs-social__sub">Fique por dentro das últimas novidades, promoções e conteúdos exclusivos.</p>
+        <span class="qs-social__label">{{ config.blog.label }}</span>
+        <h2 class="qs-social__title">{{ config.blog.title }}</h2>
+        <p class="qs-social__sub">{{ config.blog.subtitle }}</p>
       </div>
 
       <div class="qs-social__grid">
@@ -41,6 +41,9 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
+import { useHomeConfig } from '@/composables/useHomeConfig';
+
+const { config, loadConfig } = useHomeConfig();
 
 type FeedType = 'blog' | 'instagram' | 'youtube';
 
@@ -108,6 +111,7 @@ const feedItems = computed<FeedItem[]>(() => {
 });
 
 onMounted(async () => {
+  await loadConfig();
   try {
     const data = await $fetch<MockData>('/data/mock-data.json');
     blogPosts.value = data.blog ?? [];

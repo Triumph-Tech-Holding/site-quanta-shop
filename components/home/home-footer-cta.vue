@@ -1,20 +1,29 @@
 <template>
   <section class="qs-footer-cta">
     <div class="container">
-      <h2 class="qs-footer-cta__title">Pronto para começar a economizar?</h2>
-      <p class="qs-footer-cta__sub">Cadastre-se gratuitamente e aproveite cashback em milhares de lojas.</p>
+      <h2 class="qs-footer-cta__title">{{ config.footerCta.title }}</h2>
+      <p class="qs-footer-cta__sub">{{ config.footerCta.subtitle }}</p>
       <div class="qs-footer-cta__actions">
-        <nuxt-link href="/register" class="qs-footer-cta__btn-primary">
-          Cadastrar Agora
+        <nuxt-link :href="config.footerCta.primaryLink" class="qs-footer-cta__btn-primary">
+          {{ config.footerCta.primaryText }}
           <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </nuxt-link>
-        <nuxt-link href="/login" class="qs-footer-cta__btn-outline">
-          Já tenho conta
+        <nuxt-link :href="config.footerCta.outlineLink" class="qs-footer-cta__btn-outline">
+          {{ config.footerCta.outlineText }}
         </nuxt-link>
       </div>
     </div>
   </section>
 </template>
+
+<script setup lang="ts">
+import { onMounted } from 'vue';
+import { useHomeConfig } from '@/composables/useHomeConfig';
+
+const { config, loadConfig } = useHomeConfig();
+
+onMounted(() => loadConfig());
+</script>
 
 <style scoped>
 .qs-footer-cta {

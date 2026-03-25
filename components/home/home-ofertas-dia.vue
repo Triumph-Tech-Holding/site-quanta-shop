@@ -2,8 +2,8 @@
   <section class="qs-ofertas" v-if="offers.length > 0">
     <div class="container">
       <div class="qs-section-header">
-        <h2 class="qs-section-title">Ofertas do Dia</h2>
-        <p class="qs-section-sub">Produtos selecionados com cashback turbinado. Aproveite antes que acabe!</p>
+        <h2 class="qs-section-title">{{ config.ofertas.title }}</h2>
+        <p class="qs-section-sub">{{ config.ofertas.subtitle }}</p>
       </div>
 
       <div class="qs-ofertas__grid">
@@ -43,11 +43,15 @@
 <script setup lang="ts">
 import { computed, ref, onMounted } from 'vue';
 import { usePartnerStore } from "@/pinia/usePartnerStore";
+import { useHomeConfig } from '@/composables/useHomeConfig';
+
+const { config, loadConfig } = useHomeConfig();
 
 const partnerStore = usePartnerStore();
 const mockOffers = ref([]);
 
 onMounted(async () => {
+  loadConfig();
   try {
     const res = await fetch('/data/mock-data.json');
     const data = await res.json();

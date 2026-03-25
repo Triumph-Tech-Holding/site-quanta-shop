@@ -2,9 +2,9 @@
   <section class="qs-locais">
     <div class="container">
       <div class="qs-section-header">
-        <span class="qs-section-label">Parceiros Locais</span>
-        <h2 class="qs-section-title">Cashback perto de você</h2>
-        <p class="qs-section-sub">Lojas, restaurantes e serviços no seu bairro com cashback automático.</p>
+        <span class="qs-section-label">{{ config.parceirosLocais.label }}</span>
+        <h2 class="qs-section-title">{{ config.parceirosLocais.title }}</h2>
+        <p class="qs-section-sub">{{ config.parceirosLocais.subtitle }}</p>
       </div>
 
       <div v-if="loading" class="qs-locais__grid">
@@ -56,12 +56,16 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 import { usePartnerStore } from "@/pinia/usePartnerStore";
+import { useHomeConfig } from '@/composables/useHomeConfig';
 
+const { config, loadConfig } = useHomeConfig();
 const partnerStore = usePartnerStore();
 const loading = computed(() => !partnerStore.localPartners || partnerStore.localPartners.length === 0);
 const displayedLocais = computed(() => (partnerStore.localPartners || []).slice(0, 6));
+
+onMounted(() => loadConfig());
 </script>
 
 <style scoped>
