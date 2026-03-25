@@ -24,50 +24,66 @@
             <div class="col-xl-6 col-lg-7">
               <div class="qs-hero__content">
                 <span class="qs-hero__badge">
-                  <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#98C73A" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-                  Simples e rápido
+                  <span class="qs-hero__badge-dot"></span>
+                  +12.000 usuários economizando
                 </span>
 
                 <h1 class="qs-hero__title">
-                  {{ item.texto2 || 'Sua Receita por Minuto' }}
-                  <span class="qs-hero__title--lime">{{ item.highlightText || 'Começa Aqui' }}</span>
+                  Seu dinheiro <span class="qs-hero__title--lime">volta</span> a cada compra
                 </h1>
 
                 <p class="qs-hero__subtitle">
-                  {{ item.texto3 || 'Ative o cashback com um clique, compre normalmente e veja o saldo crescer automaticamente.' }}
+                  Compre nas suas lojas favoritas e receba cashback de verdade. Simples, transparente e instantâneo.
                 </p>
 
                 <div class="qs-hero__actions">
                   <nuxt-link :href="item.link || '/register'" class="qs-hero__cta">
-                    Começar Agora
+                    Criar Conta Grátis
                     <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                   </nuxt-link>
-                  <nuxt-link href="/partners" class="qs-hero__cta-sec">
-                    Ver parceiros
-                  </nuxt-link>
+                </div>
+
+                <div class="qs-hero__social-proof">
+                  <div class="qs-hero__avatars">
+                    <img src="/img/users/user-1.jpg" alt="Usuário" />
+                    <img src="/img/users/user-2.jpg" alt="Usuário" />
+                    <img src="/img/users/user-3.jpg" alt="Usuário" />
+                    <img src="/img/users/user-4.jpg" alt="Usuário" />
+                  </div>
+                  <span class="qs-hero__rating">4.9 ★ — Avaliação dos usuários</span>
                 </div>
               </div>
             </div>
 
             <div class="col-xl-6 col-lg-5 d-none d-lg-flex justify-content-end align-items-center">
               <div class="qs-hero__cards">
-                <div class="qs-hero__card qs-hero__card--activation">
+                <div class="qs-hero__card">
                   <div class="qs-hero__card-icon">
-                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#2F7785" stroke-width="2.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#2F7785" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
                   </div>
                   <div>
-                    <div class="qs-hero__card-label">Ativação rápida</div>
-                    <div class="qs-hero__card-value">1 clique</div>
+                    <div class="qs-hero__card-label">PIX INSTANTÂNEO</div>
+                    <div class="qs-hero__card-value qs-hero__card-value--green">Saque em segundos ✓</div>
                   </div>
                 </div>
 
-                <div class="qs-hero__card qs-hero__card--balance">
+                <div class="qs-hero__card qs-hero__card--offset">
                   <div class="qs-hero__card-icon qs-hero__card-icon--green">
-                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
                   </div>
                   <div>
-                    <div class="qs-hero__card-label">Seu saldo</div>
-                    <div class="qs-hero__card-value qs-hero__card-value--green">R$ 127,50</div>
+                    <div class="qs-hero__card-label">CASHBACK RECEBIDO</div>
+                    <div class="qs-hero__card-value qs-hero__card-value--green">R$ 50,00</div>
+                  </div>
+                </div>
+
+                <div class="qs-hero__card">
+                  <div class="qs-hero__card-icon">
+                    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="#2F7785" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+                  </div>
+                  <div>
+                    <div class="qs-hero__card-label">MARCAS PARCEIRAS</div>
+                    <div class="qs-hero__card-value">+500 lojas</div>
                   </div>
                 </div>
               </div>
@@ -181,7 +197,6 @@ const sliderData = computed(() => {
 
 .qs-hero__title--lime {
   color: #98C73A;
-  display: block;
 }
 
 .qs-hero__subtitle {
@@ -304,6 +319,12 @@ const sliderData = computed(() => {
 
 .qs-hero__card-value--green {
   color: #2F7785;
+  font-size: 13px;
+}
+
+.qs-hero__card--offset {
+  align-self: flex-end;
+  margin-right: -20px;
 }
 
 .qs-hero-dots {
@@ -356,6 +377,53 @@ const sliderData = computed(() => {
 
 .qs-hero-prev:hover, .qs-hero-next:hover {
   background: rgba(255,255,255,0.30);
+}
+
+/* Badge dot pulsante */
+.qs-hero__badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #98C73A;
+  flex-shrink: 0;
+  animation: pulse-dot 2s infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.3); }
+}
+
+/* Social proof */
+.qs-hero__social-proof {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.qs-hero__avatars {
+  display: flex;
+}
+
+.qs-hero__avatars img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.8);
+  object-fit: cover;
+  margin-left: -8px;
+}
+
+.qs-hero__avatars img:first-child {
+  margin-left: 0;
+}
+
+.qs-hero__rating {
+  font-family: 'Inter', 'Jost', sans-serif;
+  font-size: 13px;
+  color: rgba(255,255,255,0.85);
+  font-weight: 500;
 }
 
 @media (max-width: 991px) {
