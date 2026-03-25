@@ -10,7 +10,7 @@
           </div>
 
           <nav class="qs-home-header__nav d-none d-xl-flex">
-            <nuxt-link href="/">Para Você</nuxt-link>
+            <nuxt-link href="/para-voce">Para Você</nuxt-link>
             <nuxt-link href="/para-sua-empresa">Para sua Empresa</nuxt-link>
             <nuxt-link href="/seja-um-agente">Seja um Agente</nuxt-link>
             <nuxt-link href="/quanta-amizade" class="qs-nav-icon-link">
@@ -62,7 +62,7 @@
 
     <div v-if="mobileOpen" class="qs-mobile-menu d-xl-none">
       <nav>
-        <nuxt-link href="/" @click="mobileOpen = false">Para Você</nuxt-link>
+        <nuxt-link href="/para-voce" @click="mobileOpen = false">Para Você</nuxt-link>
         <nuxt-link href="/para-sua-empresa" @click="mobileOpen = false">Para sua Empresa</nuxt-link>
         <nuxt-link href="/seja-um-agente" @click="mobileOpen = false">Seja um Agente</nuxt-link>
         <nuxt-link href="/quanta-amizade" @click="mobileOpen = false">Quanta Amizade</nuxt-link>
