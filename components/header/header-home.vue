@@ -19,8 +19,8 @@
             </nuxt-link>
             <nuxt-link href="/blog">Blog</nuxt-link>
             <nuxt-link href="/contato" class="qs-nav-icon-link">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-              Fale Conosco
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"/><path d="M12 1v6m6.16-1.86l-4.24 4.24m1.86 6.16h-6m-6.16-1.86l4.24-4.24m-1.86-6.16v6M4.22 4.22l3 3m10.56 0l3-3M4.22 19.78l3-3m10.56 0l3 3"/></svg>
+              Atendimento
             </nuxt-link>
           </nav>
 
@@ -67,7 +67,7 @@
         <nuxt-link href="/seja-um-agente" @click="mobileOpen = false">Seja um Agente</nuxt-link>
         <nuxt-link href="/quanta-amizade" @click="mobileOpen = false">Quanta Amizade</nuxt-link>
         <nuxt-link href="/blog" @click="mobileOpen = false">Blog</nuxt-link>
-        <nuxt-link href="/contato" @click="mobileOpen = false">Fale Conosco</nuxt-link>
+        <nuxt-link href="/contato" @click="mobileOpen = false">Atendimento</nuxt-link>
         <div class="qs-mobile-menu__actions">
           <nuxt-link href="/login" class="qs-btn-login" @click="mobileOpen = false">Login</nuxt-link>
           <nuxt-link href="/register" class="qs-btn-cadastro" @click="mobileOpen = false">Cadastro</nuxt-link>
