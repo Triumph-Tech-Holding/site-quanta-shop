@@ -293,6 +293,24 @@
                 </button>
               </div>
             </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-bold">Alinhamento do Botão CTA</label>
+              <div class="d-flex gap-2">
+                <button type="button" class="btn btn-sm car-align-btn" :class="{ active: (form.ctaAlinhamento || 'esquerda') === 'esquerda' }" @click="form.ctaAlinhamento = 'esquerda'">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/><line x1="3" y1="18" x2="18" y2="18"/></svg>
+                  Esquerda
+                </button>
+                <button type="button" class="btn btn-sm car-align-btn" :class="{ active: form.ctaAlinhamento === 'centro' }" @click="form.ctaAlinhamento = 'centro'">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+                  Centro
+                </button>
+                <button type="button" class="btn btn-sm car-align-btn" :class="{ active: form.ctaAlinhamento === 'direita' }" @click="form.ctaAlinhamento = 'direita'">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="9" y1="12" x2="21" y2="12"/><line x1="6" y1="18" x2="21" y2="18"/></svg>
+                  Direita
+                </button>
+              </div>
+            </div>
           </div>
 
               </div>
@@ -305,15 +323,20 @@
                   class="car-preview"
                   :style="{
                     backgroundImage: form.url ? `url(${form.url})` : 'linear-gradient(135deg, #1a4a54, #225F6B)',
+                    backgroundPosition: form.objectPosition || '50% 50%',
                   }"
                 >
-                  <div class="car-preview-overlay" :style="{ background: previewOverlayGradient, opacity: form.overlayIntensidade / 100 }"></div>
-                  <div class="car-preview-content" :class="form.textoCor === 'dark' ? 'text-dark-mode' : 'text-light-mode'">
-                    <div v-if="form.badge" class="car-preview-badge">
+                  <div class="car-preview-overlay" :style="{ background: previewOverlayGradient, opacity: previewOverlayOpacity }"></div>
+                  <div
+                    class="car-preview-content"
+                    :class="form.textoCor === 'dark' ? 'text-dark-mode' : 'text-light-mode'"
+                    :style="form.ctaAlinhamento === 'direita' ? { textAlign: 'right' } : form.ctaAlinhamento === 'centro' ? { textAlign: 'center' } : { textAlign: 'left' }"
+                  >
+                    <div v-if="form.badge" class="car-preview-badge" :style="form.ctaAlinhamento === 'direita' ? { marginLeft: 'auto' } : form.ctaAlinhamento === 'centro' ? { margin: '0 auto 10px' } : {}">
                       <span class="car-preview-badge-dot"></span>
                       {{ form.badge }}
                     </div>
-                    <div v-else class="car-preview-badge car-preview-badge-placeholder">
+                    <div v-else class="car-preview-badge car-preview-badge-placeholder" :style="form.ctaAlinhamento === 'direita' ? { marginLeft: 'auto' } : form.ctaAlinhamento === 'centro' ? { margin: '0 auto 10px' } : {}">
                       <span class="car-preview-badge-dot"></span>
                       Badge (CMS global)
                     </div>
@@ -321,13 +344,15 @@
                     <h2 class="car-preview-title" :style="previewTitleStyle" v-html="previewHeadline"></h2>
                     <p class="car-preview-subtitle">{{ form.subtitulo || 'Subtítulo (CMS global)' }}</p>
 
-                    <a
-                      class="car-preview-cta"
-                      :style="{ background: form.ctaCor || '#98C73A', color: isCtaColorDark ? '#fff' : '#1a2236' }"
-                    >
-                      {{ form.ctaTexto || 'Criar Conta Grátis' }}
-                      <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                    </a>
+                    <div :style="form.ctaAlinhamento === 'direita' ? { display: 'flex', justifyContent: 'flex-end' } : form.ctaAlinhamento === 'centro' ? { display: 'flex', justifyContent: 'center' } : {}">
+                      <a
+                        class="car-preview-cta"
+                        :style="{ background: form.ctaCor || '#98C73A', color: isCtaColorDark ? '#fff' : '#1a2236' }"
+                      >
+                        {{ form.ctaTexto || 'Criar Conta Grátis' }}
+                        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                      </a>
+                    </div>
                   </div>
                 </div>
                 <div v-if="!form.url" class="car-preview-no-img">
@@ -420,6 +445,7 @@ const form = reactive<{
   objectPosition: string;
   tituloFontSize: 'pequeno' | 'medio' | 'grande';
   overlayDirecao: 'esquerda' | 'direita' | 'centro' | 'uniforme';
+  ctaAlinhamento: 'esquerda' | 'centro' | 'direita';
 }>({
   titulo: '', url: '', urlDestino: '', ativo: true,
   headline: '', subtitulo: '', badge: '',
@@ -427,6 +453,7 @@ const form = reactive<{
   ctaCor: '#98C73A', textoCor: 'light', overlayIntensidade: 70,
   objectPosition: '50% 50%',
   tituloFontSize: 'medio', overlayDirecao: 'esquerda',
+  ctaAlinhamento: 'esquerda',
 });
 
 const previewHeadline = computed(() => {
@@ -441,6 +468,11 @@ const isCtaColorDark = computed(() => {
   const g = parseInt(hex.substring(2, 4), 16);
   const b = parseInt(hex.substring(4, 6), 16);
   return (0.299 * r + 0.587 * g + 0.114 * b) / 255 < 0.5;
+});
+
+const previewOverlayOpacity = computed(() => {
+  if (form.textoCor === 'dark') return Math.min(form.overlayIntensidade / 100, 0.35);
+  return form.overlayIntensidade / 100;
 });
 
 const previewOverlayGradient = computed(() => {
@@ -461,7 +493,9 @@ const previewTitleStyle = computed(() => {
 });
 
 function authHeader() {
-  return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } };
+  const token = agenciaStore.getToken();
+  if (!token) return {};
+  return { headers: { Authorization: `Bearer ${token}` } };
 }
 
 function triggerFileInput() { fileInputRef.value?.click(); }
@@ -547,6 +581,7 @@ function abrirNovo() {
     ctaTexto: 'Criar Conta Grátis', ctaLink: '/register',
     ctaCor: '#98C73A', textoCor: 'light', overlayIntensidade: 70,
     objectPosition: '50% 50%', tituloFontSize: 'medio', overlayDirecao: 'esquerda',
+    ctaAlinhamento: 'esquerda',
   });
   modoImagem.value = 'url';
   limparArquivo();
@@ -565,6 +600,7 @@ function abrirEditar(item: HeroBannerSlide) {
     objectPosition: item.objectPosition || '50% 50%',
     tituloFontSize: item.tituloFontSize || 'medio',
     overlayDirecao: item.overlayDirecao || 'esquerda',
+    ctaAlinhamento: item.ctaAlinhamento || 'esquerda',
   });
   modoImagem.value = 'url';
   modalError.value = '';
@@ -599,6 +635,7 @@ async function salvar() {
       objectPosition: form.objectPosition || '50% 50%',
       tituloFontSize: form.tituloFontSize,
       overlayDirecao: form.overlayDirecao,
+      ctaAlinhamento: form.ctaAlinhamento,
     };
 
     await $fetch('/api/admin/banner-campaigns', {
@@ -694,12 +731,12 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.car-modal-wide { max-width: 980px; width: 100%; }
+.car-modal-wide { max-width: 1080px; width: 100%; }
 .car-modal-body { min-height: 420px; }
 
 .car-editor-layout { display: flex; gap: 24px; align-items: flex-start; }
 .car-editor-left { flex: 1; min-width: 0; overflow-y: auto; max-height: calc(80vh - 120px); padding-right: 4px; }
-.car-editor-right { width: 320px; flex-shrink: 0; position: sticky; top: 0; }
+.car-editor-right { width: 420px; flex-shrink: 0; position: sticky; top: 0; }
 .car-editor-form { padding-top: 12px; }
 .car-preview-label { font-size: 11px; font-weight: 700; color: #6c757d; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
 .car-preview-hint { font-size: 11px; color: #adb5bd; text-align: center; margin-top: 6px; margin-bottom: 0; }
@@ -764,7 +801,7 @@ onMounted(async () => {
 .car-text-escuro.active { border-color: #2F7785; }
 
 .car-preview-wrap { position: relative; border-radius: 10px; overflow: hidden; background: #1a2236; }
-.car-preview { position: relative; width: 100%; aspect-ratio: 16 / 5; background-size: cover; background-position: center; display: flex; align-items: center; }
+.car-preview { position: relative; width: 100%; aspect-ratio: 16 / 6; background-size: cover; display: flex; align-items: center; }
 .car-preview-overlay { position: absolute; inset: 0; }
 
 .car-font-btn {
@@ -791,9 +828,19 @@ onMounted(async () => {
 .car-dir-icon--direita { background: linear-gradient(to left, #225F6B, transparent); }
 .car-dir-icon--centro { background: linear-gradient(to right, transparent, #225F6B, transparent); }
 .car-dir-icon--uniforme { background: #225F6B; }
-.car-preview-content { position: relative; z-index: 2; padding: 24px 28px; max-width: 65%; }
+.car-preview-content { position: relative; z-index: 2; padding: 24px 28px; width: 85%; }
 .text-light-mode { color: #fff; }
 .text-dark-mode { color: #1a2236; }
+.text-dark-mode .car-preview-title { color: #1a2236 !important; }
+.text-dark-mode .car-preview-subtitle { color: rgba(26,34,54,0.85) !important; }
+
+.car-align-btn {
+  background: #f8f9fa; color: #495057;
+  border: 2px solid #dee2e6; font-size: 12px;
+  display: inline-flex; align-items: center; gap: 5px;
+}
+.car-align-btn.active { border-color: #2F7785; background: #e8f4f6; color: #2F7785; }
+.car-align-btn:hover { border-color: #2F7785; }
 
 .car-preview-badge {
   display: inline-flex; align-items: center; gap: 6px;

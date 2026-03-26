@@ -98,6 +98,7 @@ export interface HeroBannerSlide {
   objectPosition?: string;
   tituloFontSize?: 'pequeno' | 'medio' | 'grande';
   overlayDirecao?: 'esquerda' | 'direita' | 'centro' | 'uniforme';
+  ctaAlinhamento?: 'esquerda' | 'centro' | 'direita';
 }
 
 export interface CarrosselAdmin {

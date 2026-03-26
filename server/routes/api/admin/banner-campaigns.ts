@@ -16,6 +16,10 @@ export interface HeroBannerSlide {
   ctaCor: string;
   textoCor: 'light' | 'dark';
   overlayIntensidade: number;
+  objectPosition?: string;
+  tituloFontSize?: 'pequeno' | 'medio' | 'grande';
+  overlayDirecao?: 'esquerda' | 'direita' | 'centro' | 'uniforme';
+  ctaAlinhamento?: 'esquerda' | 'centro' | 'direita';
 }
 
 const BANNERS_FILE = path.join(process.cwd(), 'public', 'data', 'hero-banners.json');

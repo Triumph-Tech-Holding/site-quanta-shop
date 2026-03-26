@@ -5,7 +5,7 @@
     "url": "/uploads/banners/1774526789235-BANNER_RJ.png",
     "urlDestino": "",
     "ativo": true,
-    "headline": "Comprar também </gera retorno>",
+    "headline": "Comprar também <highlight>gera retorno</highlight>",
     "subtitulo": "Cashback em centenas de lojas parceiras",
     "badge": "+12.000 consumidores ganhando",
     "ctaTexto": "Cadastre Grátis",
@@ -13,6 +13,9 @@
     "ctaCor": "#98C73A",
     "textoCor": "dark",
     "overlayIntensidade": 10,
-    "objectPosition": "50% 50%"
+    "objectPosition": "50% 50%",
+    "tituloFontSize": "medio",
+    "overlayDirecao": "esquerda",
+    "ctaAlinhamento": "esquerda"
   }
 ]

@@ -47,7 +47,7 @@ export default defineEventHandler(async (event) => {
   const cookieToken = getCookie(event, 'agencia_token') ?? getCookie(event, 'auth_token');
   const headerAuth = event.node.req.headers.authorization;
   const bearerToken = headerAuth?.startsWith('Bearer ') ? headerAuth.slice(7) : undefined;
-  const rawToken = cookieToken ?? bearerToken;
+  const rawToken = bearerToken ?? cookieToken;
 
   const requiresAuth = PROTECTED_PATH_PREFIXES.some((prefix) => url.startsWith(prefix));
 

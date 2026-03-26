@@ -39,7 +39,10 @@
                   {{ item.subtitulo || config.hero.subtitle }}
                 </p>
 
-                <div class="qs-hero__actions">
+                <div
+                  class="qs-hero__actions"
+                  :style="item.ctaAlinhamento === 'direita' ? { justifyContent: 'flex-end' } : item.ctaAlinhamento === 'centro' ? { justifyContent: 'center' } : {}"
+                >
                   <nuxt-link
                     :href="item.ctaLink || config.hero.ctaPrimaryLink"
                     class="qs-hero__cta"
@@ -311,6 +314,7 @@ const sliderData = computed<HeroBannerSlide[]>(() => {
   text-decoration: none;
   transition: all 0.2s ease;
   box-shadow: 0 4px 20px rgba(152, 199, 58, 0.40);
+  white-space: nowrap;
 }
 
 .qs-hero__cta:hover {
