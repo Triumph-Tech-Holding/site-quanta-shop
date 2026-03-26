@@ -231,19 +231,27 @@
         </div>
         <div class="hcms__field">
           <label class="hcms__label">Imagem de Fundo do Banner</label>
-          <div v-if="form.ceo.imagemFundo" class="hcms__img-preview-wrap">
-            <img :src="form.ceo.imagemFundo" class="hcms__img-preview" alt="Fundo CEO" />
-            <button type="button" class="hcms__img-remove" @click="removeCeoImage">&#10005; Remover</button>
+          <div class="hcms__ceo-drop-area" @click="!ceoUploading ? triggerCeoFileInput() : undefined">
+            <input ref="ceoFileInput" type="file" accept="image/*" style="display:none" @change="onCeoFileChange" :disabled="ceoUploading" />
+            <div v-if="ceoUploading" style="text-align:center;padding:20px 0;">
+              <span class="hcms__spinner-sm" style="width:22px;height:22px;border-width:3px;"></span>
+              <p style="margin:8px 0 0;font-size:13px;color:#6b7280;">Enviando imagem...</p>
+            </div>
+            <div v-else-if="form.ceo.imagemFundo || ceoLocalPreview" style="position:relative;">
+              <img :src="form.ceo.imagemFundo || ceoLocalPreview" style="width:100%;max-height:160px;object-fit:cover;border-radius:8px;display:block;" alt="Fundo CEO" />
+              <div style="position:absolute;inset:0;background:rgba(34,95,107,0.45);border-radius:8px;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;" class="hcms__ceo-drop-hover">
+                <span style="color:#fff;font-size:13px;font-weight:700;">Clique para trocar</span>
+              </div>
+              <button type="button" @click.stop="removeCeoImage" style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.6);color:#fff;border:0;border-radius:6px;font-size:11px;font-weight:700;padding:4px 10px;cursor:pointer;">&#10005; Remover</button>
+            </div>
+            <div v-else style="text-align:center;padding:24px 0;">
+              <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="#9ca3af" stroke-width="1.5" style="margin:0 auto 8px;display:block;"><path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M16 10l-4-4-4 4M12 6v10"/></svg>
+              <p style="margin:0;font-size:13px;color:#6b7280;">Clique para escolher uma imagem</p>
+              <p style="margin:4px 0 0;font-size:11px;color:#9ca3af;">Recomendado: 1200 × 400px • JPG ou PNG</p>
+            </div>
           </div>
-          <label class="hcms__upload-btn" :class="{ 'hcms__upload-btn--loading': ceoUploading }">
-            <svg v-if="!ceoUploading" width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M16 10l-4-4-4 4M12 6v10"/></svg>
-            <span class="hcms__spinner-sm" v-if="ceoUploading"></span>
-            {{ ceoUploading ? 'Enviando...' : 'Escolher imagem' }}
-            <input type="file" accept="image/*" style="display:none" @change="uploadCeoImage" :disabled="ceoUploading" />
-          </label>
-          <small v-if="form.ceo.imagemFundo" class="text-muted d-block mt-1">{{ form.ceo.imagemFundo }}</small>
           <small v-if="ceoUploadError" class="text-danger d-block mt-1">{{ ceoUploadError }}</small>
-          <small class="text-muted d-block mt-1">Deixe vazio para usar o gradiente teal padrão.</small>
+          <small class="text-muted d-block mt-1">Sem imagem → usa o gradiente teal padrão.</small>
         </div>
 
         <div v-if="form.ceo.imagemFundo" class="hcms__field">
@@ -433,25 +441,37 @@ function reset() {
 
 const ceoUploading = ref(false);
 const ceoUploadError = ref('');
+const ceoLocalPreview = ref('');
+const ceoFileInput = ref<HTMLInputElement | null>(null);
 
-async function uploadCeoImage(event: Event) {
+function triggerCeoFileInput() { ceoFileInput.value?.click(); }
+
+function onCeoFileChange(event: Event) {
   const input = event.target as HTMLInputElement;
   const file = input.files?.[0];
-  if (!file || !form.value) return;
+  if (!file) return;
+  ceoLocalPreview.value = URL.createObjectURL(file);
+  uploadCeoImage(file, input);
+}
+
+async function uploadCeoImage(file: File, input: HTMLInputElement) {
+  if (!form.value) return;
   ceoUploading.value = true;
   ceoUploadError.value = '';
   try {
     const token = agenciaStore.getToken();
     const fd = new FormData();
-    fd.append('file', file);
+    fd.append('files', file);
     const res = await $fetch<{ url: string }>('/api/admin/upload-banner', {
       method: 'POST',
       body: fd,
       headers: token ? { Authorization: `Bearer ${token}` } : {},
     });
     form.value.ceo.imagemFundo = res.url;
+    ceoLocalPreview.value = '';
   } catch {
     ceoUploadError.value = 'Erro ao fazer upload. Tente novamente.';
+    ceoLocalPreview.value = '';
   } finally {
     ceoUploading.value = false;
     input.value = '';
@@ -459,7 +479,11 @@ async function uploadCeoImage(event: Event) {
 }
 
 function removeCeoImage() {
-  if (form.value) form.value.ceo.imagemFundo = '';
+  if (form.value) {
+    form.value.ceo.imagemFundo = '';
+    ceoLocalPreview.value = '';
+    ceoUploadError.value = '';
+  }
 }
 
 onMounted(() => load());
@@ -578,6 +602,24 @@ onMounted(() => load());
   outline: none;
   transition: border-color 0.15s ease;
   resize: vertical;
+}
+
+.hcms__ceo-drop-area {
+  border: 1.5px dashed #d1d5db;
+  border-radius: 10px;
+  background: #f9fafb;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.hcms__ceo-drop-area:hover {
+  border-color: #2F7785;
+  background: #f0fafa;
+}
+
+.hcms__ceo-drop-area:hover .hcms__ceo-drop-hover {
+  opacity: 1 !important;
 }
 
 .hcms__upload-btn {
