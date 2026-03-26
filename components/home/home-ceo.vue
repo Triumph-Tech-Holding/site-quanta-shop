@@ -188,11 +188,12 @@ function submitChat() {
     padding: 44px 24px 40px;
     text-align: center;
     min-height: 480px;
-    background-position: right top !important;
+    background-position: center !important;
+    background-size: cover !important;
   }
 
   .qs-ceo__overlay {
-    opacity: 0.72;
+    opacity: 0.45 !important;
   }
 
   .qs-ceo__content {
@@ -202,8 +203,38 @@ function submitChat() {
 
   .qs-ceo__badges {
     width: 100%;
-    max-width: 280px;
+    max-width: 300px;
     margin: 0 auto;
+    flex-direction: row;
+    gap: 10px;
+  }
+
+  .qs-ceo__badge {
+    background: rgba(255,255,255,0.12) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255,255,255,0.22) !important;
+    border-radius: 10px !important;
+    padding: 10px 14px !important;
+    min-width: 0 !important;
+    flex: 1;
+    gap: 8px;
+  }
+
+  .qs-ceo__badge svg {
+    stroke: rgba(255,255,255,0.70) !important;
+    flex-shrink: 0;
+  }
+
+  .qs-ceo__badge-label {
+    color: rgba(255,255,255,0.60) !important;
+    font-size: 10px !important;
+  }
+
+  .qs-ceo__badge-value {
+    color: #fff !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
   }
 
   .qs-ceo__mobile-photo {
