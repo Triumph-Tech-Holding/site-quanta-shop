@@ -177,30 +177,37 @@ function submitChat() {
 }
 
 @media (max-width: 767px) {
+  .qs-ceo {
+    padding: 40px 0;
+  }
+
   .qs-ceo__card {
     flex-direction: column;
-    padding: 36px 24px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 44px 24px 40px;
     text-align: center;
-    background: linear-gradient(135deg, #1a4a54 0%, #225F6B 50%, #2F7785 100%) !important;
+    min-height: 480px;
+    background-position: right top !important;
   }
 
   .qs-ceo__overlay {
-    display: none;
+    opacity: 0.72;
+  }
+
+  .qs-ceo__content {
+    width: 100%;
+    text-align: center;
+  }
+
+  .qs-ceo__badges {
+    width: 100%;
+    max-width: 280px;
+    margin: 0 auto;
   }
 
   .qs-ceo__mobile-photo {
-    display: block;
-    width: 100%;
-    margin-top: 24px;
-  }
-
-  .qs-ceo__mobile-photo-img {
-    width: 100%;
-    height: 260px;
-    object-fit: cover;
-    object-position: top center !important;
-    border-radius: 14px;
-    display: block;
+    display: none;
   }
 }
 
