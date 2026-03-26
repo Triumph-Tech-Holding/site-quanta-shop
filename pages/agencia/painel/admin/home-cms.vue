@@ -200,6 +200,15 @@
       <!-- CEO -->
       <div v-show="activeTab === 'ceo'" class="hcms__section">
         <h2 class="hcms__section-title">Seção CEO</h2>
+
+        <div class="hcms__field">
+          <label class="hcms__label d-flex align-items-center gap-2">
+            <input type="checkbox" v-model="form.ceo.ativo" class="form-check-input m-0" style="width:18px;height:18px;" />
+            Exibir seção na home
+          </label>
+          <small class="text-muted">Desmarque para ocultar esta seção do site.</small>
+        </div>
+
         <div class="hcms__field">
           <label class="hcms__label">Tag (ex: CEO & Founder)</label>
           <input v-model="form.ceo.tag" class="hcms__input" />
@@ -223,6 +232,30 @@
         <div class="hcms__field">
           <label class="hcms__label">Link do WhatsApp</label>
           <input v-model="form.ceo.whatsappLink" class="hcms__input" />
+        </div>
+
+        <hr class="my-3" />
+        <p class="hcms__label fw-bold mb-2">Cartões de Destaque (direita)</p>
+
+        <div class="row g-2 mb-2">
+          <div class="col-6">
+            <label class="hcms__label">Cartão 1 — Rótulo</label>
+            <input v-model="form.ceo.badge1Label" class="hcms__input" placeholder="ex: Respostas" />
+          </div>
+          <div class="col-6">
+            <label class="hcms__label">Cartão 1 — Valor</label>
+            <input v-model="form.ceo.badge1Value" class="hcms__input" placeholder="ex: Em até 24h" />
+          </div>
+        </div>
+        <div class="row g-2">
+          <div class="col-6">
+            <label class="hcms__label">Cartão 2 — Rótulo</label>
+            <input v-model="form.ceo.badge2Label" class="hcms__input" placeholder="ex: Parcerias" />
+          </div>
+          <div class="col-6">
+            <label class="hcms__label">Cartão 2 — Valor</label>
+            <input v-model="form.ceo.badge2Value" class="hcms__input" placeholder="ex: +200 fechadas" />
+          </div>
         </div>
       </div>
 

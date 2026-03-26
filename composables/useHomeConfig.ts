@@ -33,12 +33,17 @@ export interface LabelTitleSubtitleSection {
 }
 
 export interface CeoSection {
+  ativo?: boolean;
   tag: string;
   pre: string;
   name: string;
   desc: string;
   ctaText: string;
   whatsappLink: string;
+  badge1Label?: string;
+  badge1Value?: string;
+  badge2Label?: string;
+  badge2Value?: string;
 }
 
 export interface FooterCtaSection {
@@ -103,12 +108,17 @@ const DEFAULT_CONFIG: HomeConfig = {
     subtitle: 'Fique por dentro das últimas novidades, promoções e conteúdos exclusivos.',
   },
   ceo: {
+    ativo: true,
     tag: 'CEO & Founder',
     pre: 'Fale com o CEO',
     name: 'Mauro Triumph',
     desc: 'Clareza estratégica sem rodeios, sem burocracia, sem perda de tempo.',
     ctaText: 'Iniciar Conversa com IA',
     whatsappLink: 'https://api.whatsapp.com/send/?phone=552140404866&text&type=phone_number&app_absent=0',
+    badge1Label: 'Respostas',
+    badge1Value: 'Em até 24h',
+    badge2Label: 'Parcerias',
+    badge2Value: '+200 fechadas',
   },
   footerCta: {
     title: 'Pronto para começar a economizar?',

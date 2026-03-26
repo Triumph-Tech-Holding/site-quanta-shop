@@ -1,5 +1,5 @@
 <template>
-  <section class="qs-ceo">
+  <section v-if="config.ceo.ativo !== false" class="qs-ceo">
     <div class="container">
       <div class="qs-ceo__card">
         <div class="qs-ceo__content">
@@ -22,15 +22,15 @@
           <div class="qs-ceo__badge">
             <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#2F7785" stroke-width="2"><path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
             <div>
-              <div class="qs-ceo__badge-label">Respostas</div>
-              <div class="qs-ceo__badge-value">Em até 24h</div>
+              <div class="qs-ceo__badge-label">{{ config.ceo.badge1Label || 'Respostas' }}</div>
+              <div class="qs-ceo__badge-value">{{ config.ceo.badge1Value || 'Em até 24h' }}</div>
             </div>
           </div>
           <div class="qs-ceo__badge">
             <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#2F7785" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
             <div>
-              <div class="qs-ceo__badge-label">Parcerias</div>
-              <div class="qs-ceo__badge-value">+200 fechadas</div>
+              <div class="qs-ceo__badge-label">{{ config.ceo.badge2Label || 'Parcerias' }}</div>
+              <div class="qs-ceo__badge-value">{{ config.ceo.badge2Value || '+200 fechadas' }}</div>
             </div>
           </div>
         </div>
