@@ -7,6 +7,11 @@
 
     <div v-if="loading" class="ag-loading"><div class="spinner-border" /></div>
     <div v-else class="ag-card">
+      <div v-if="importadoMsg" class="alert alert-success d-flex align-items-center gap-2 mb-3 py-2 px-3">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+        {{ importadoMsg }}
+        <button type="button" class="btn-close ms-auto" style="font-size:11px" @click="importadoMsg = ''"></button>
+      </div>
       <div v-if="itens.length === 0" class="ag-empty-state">
         <h5>Nenhum banner criado ainda</h5>
         <p class="text-muted">Clique em <strong>+ Novo Banner</strong> para criar o primeiro slide do hero.</p>
@@ -288,12 +293,15 @@
 import { computed } from 'vue';
 import { extractApiErrorMessage } from '~/types/agencia';
 import type { HeroBannerSlide } from '~/types/agencia';
+import { useCarouselStore } from '@/pinia/useCarouselStore';
 
 definePageMeta({ layout: 'agencia-painel', middleware: ['agencia-auth', 'agencia-admin'] });
 
 const agenciaStore = useAgenciaStore();
+const carouselStore = useCarouselStore();
 const loading = ref(true);
 const saving = ref(false);
+const importadoMsg = ref('');
 const uploadingFile = ref(false);
 const isDragging = ref(false);
 const itens = ref<HeroBannerSlide[]>([]);
@@ -520,6 +528,47 @@ onMounted(async () => {
   try {
     const slides = await $fetch<HeroBannerSlide[]>('/api/admin/banner-campaigns', authHeader());
     itens.value = Array.isArray(slides) ? slides : [];
+
+    if (itens.value.length === 0) {
+      try {
+        await carouselStore.fetchCarousels();
+        const oldCarousels = carouselStore.carousels as Record<string, unknown>[];
+        const heroOld = oldCarousels
+          .filter(c => c.posicao === '1' && c.ativo === true)
+          .sort((a, b) => (a.ordemExibicao as number) - (b.ordemExibicao as number));
+
+        if (heroOld.length > 0) {
+          const migrados: HeroBannerSlide[] = heroOld.map((c, idx): HeroBannerSlide => ({
+            id: Date.now() + idx,
+            titulo: typeof c.titulo === 'string' && c.titulo ? c.titulo : `Banner Hero ${idx + 1}`,
+            url: (c.imagem as string) || '',
+            urlDestino: (c.link as string) || '',
+            ativo: true,
+            headline: '',
+            subtitulo: '',
+            badge: '',
+            ctaTexto: '',
+            ctaLink: (c.link as string) || '',
+            ctaCor: '#98C73A',
+            textoCor: 'light',
+            overlayIntensidade: 70,
+          }));
+
+          for (const slide of migrados) {
+            await $fetch('/api/admin/banner-campaigns', {
+              method: 'POST',
+              ...authHeader(),
+              body: slide,
+            });
+          }
+
+          itens.value = migrados;
+          importadoMsg.value = `${migrados.length} banner(s) importado(s) automaticamente do sistema antigo. Edite cada um para ajustar os textos.`;
+        }
+      } catch (e: unknown) {
+        console.warn('Importação do sistema antigo não disponível:', extractApiErrorMessage(e));
+      }
+    }
   } catch (e: unknown) {
     console.error('Erro ao carregar banners:', extractApiErrorMessage(e));
   } finally {
