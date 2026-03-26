@@ -499,15 +499,15 @@ function abrirNovo() {
 }
 
 function abrirEditar(item: HeroBannerSlide) {
+  limparArquivo();
   Object.assign(form, {
     id: item.id, titulo: item.titulo, url: item.url, urlDestino: item.urlDestino, ativo: item.ativo,
     headline: item.headline, subtitulo: item.subtitulo, badge: item.badge,
-    ctaTexto: item.ctaTexto, ctaLink: item.ctaLink, ctaCor: item.ctaCor,
-    textoCor: item.textoCor, overlayIntensidade: item.overlayIntensidade,
+    ctaTexto: item.ctaTexto, ctaLink: item.ctaLink, ctaCor: item.ctaCor || '#98C73A',
+    textoCor: item.textoCor ?? 'light', overlayIntensidade: item.overlayIntensidade ?? 70,
     objectPosition: item.objectPosition || '50% 50%',
   });
   modoImagem.value = 'url';
-  limparArquivo();
   modalError.value = '';
   abaAtiva.value = 'imagem';
   showModal.value = true;
