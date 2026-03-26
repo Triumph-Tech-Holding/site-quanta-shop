@@ -318,9 +318,9 @@ const sliderData = computed<HeroBannerSlide[]>(() => {
   font-size: clamp(32px, 5vw, 54px);
   font-weight: 800;
   color: #fff;
-  line-height: 1.1;
+  line-height: 0.95;
   letter-spacing: -0.03em;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .qs-hero__title--lime {
@@ -345,9 +345,9 @@ const sliderData = computed<HeroBannerSlide[]>(() => {
   font-family: 'Inter', 'Jost', sans-serif;
   font-size: 16px;
   color: rgba(255,255,255,0.80);
-  line-height: 1.6;
+  line-height: 1.5;
   max-width: 440px;
-  margin-bottom: 32px;
+  margin-bottom: 20px;
 }
 
 .qs-hero__cta {
@@ -408,7 +408,7 @@ const sliderData = computed<HeroBannerSlide[]>(() => {
 .qs-hero__cards {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
   align-items: flex-end;
 }
 
@@ -416,25 +416,37 @@ const sliderData = computed<HeroBannerSlide[]>(() => {
   display: flex;
   align-items: center;
   gap: 12px;
-  background: rgba(255,255,255,0.95);
-  backdrop-filter: blur(12px);
-  border-radius: 12px;
-  padding: 14px 20px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-  min-width: 180px;
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.60);
+  padding: 12px 18px;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.20), 0 2px 8px rgba(0,0,0,0.10);
+  min-width: 190px;
   transition: all 0.3s ease;
+  animation: heroCardIn 0.6s ease both;
+}
+
+.qs-hero__card:nth-child(1) { animation-delay: 0.1s; }
+.qs-hero__card:nth-child(2) { animation-delay: 0.25s; }
+.qs-hero__card:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes heroCardIn {
+  from { opacity: 0; transform: translateX(24px); }
+  to   { opacity: 1; transform: translateX(0); }
 }
 
 .qs-hero__card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.28), 0 4px 12px rgba(0,0,0,0.12);
 }
 
 .qs-hero__card-icon {
-  width: 38px;
-  height: 38px;
-  border-radius: 8px;
-  background: rgba(47, 119, 133, 0.10);
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(47, 119, 133, 0.12);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -447,27 +459,30 @@ const sliderData = computed<HeroBannerSlide[]>(() => {
 
 .qs-hero__card-label {
   font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 11px;
-  color: #6b7280;
-  font-weight: 500;
-  margin-bottom: 2px;
+  font-size: 10px;
+  color: #9ca3af;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 3px;
 }
 
 .qs-hero__card-value {
   font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 700;
   color: #111827;
+  line-height: 1.2;
 }
 
 .qs-hero__card-value--green {
   color: #2F7785;
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .qs-hero__card--offset {
   align-self: flex-end;
-  margin-right: -20px;
+  margin-right: -28px;
 }
 
 .qs-hero-dots {
@@ -539,10 +554,16 @@ const sliderData = computed<HeroBannerSlide[]>(() => {
 
 /* Social proof */
 .qs-hero__social-proof {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 12px;
-  margin-top: 24px;
+  gap: 10px;
+  margin-top: 18px;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.18);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 999px;
+  padding: 6px 14px 6px 6px;
 }
 
 .qs-hero__avatars {
@@ -550,12 +571,12 @@ const sliderData = computed<HeroBannerSlide[]>(() => {
 }
 
 .qs-hero__avatars img {
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  border: 2px solid rgba(255,255,255,0.8);
+  border: 2px solid rgba(255,255,255,0.9);
   object-fit: cover;
-  margin-left: -8px;
+  margin-left: -7px;
 }
 
 .qs-hero__avatars img:first-child {
@@ -564,9 +585,10 @@ const sliderData = computed<HeroBannerSlide[]>(() => {
 
 .qs-hero__rating {
   font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 13px;
-  color: rgba(255,255,255,0.85);
-  font-weight: 500;
+  font-size: 12px;
+  color: rgba(255,255,255,0.92);
+  font-weight: 600;
+  letter-spacing: 0.01em;
 }
 
 .qs-hero__row {
