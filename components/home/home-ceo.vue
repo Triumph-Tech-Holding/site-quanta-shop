@@ -37,7 +37,6 @@
             :src="config.ceo.imagemFundo"
             alt="CEO"
             class="qs-ceo__mobile-photo-img"
-            :style="{ objectPosition: config.ceo.posicaoFundo ?? 'top center' }"
           />
         </div>
       </div>
@@ -182,7 +181,7 @@ function submitChat() {
     flex-direction: column;
     padding: 36px 24px;
     text-align: center;
-    background-image: none !important;
+    background: linear-gradient(135deg, #1a4a54 0%, #225F6B 50%, #2F7785 100%) !important;
   }
 
   .qs-ceo__overlay {
@@ -199,6 +198,7 @@ function submitChat() {
     width: 100%;
     height: 260px;
     object-fit: cover;
+    object-position: top center !important;
     border-radius: 14px;
     display: block;
   }
