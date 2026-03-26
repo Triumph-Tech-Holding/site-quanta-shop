@@ -2,6 +2,7 @@
   <section v-if="config.ceo.ativo !== false" class="qs-ceo">
     <div class="container">
       <div class="qs-ceo__card" :style="config.ceo.imagemFundo ? { backgroundImage: `url(${config.ceo.imagemFundo})`, backgroundSize: 'cover', backgroundPosition: 'center' } : {}">
+        <div v-if="config.ceo.imagemFundo" class="qs-ceo__overlay" :style="{ background: `rgba(34,95,107,${config.ceo.overlayOpacity ?? 0.72})` }"></div>
         <div class="qs-ceo__content">
           <span class="qs-ceo__tag">{{ config.ceo.tag }}</span>
           <p class="qs-ceo__pre">{{ config.ceo.pre }}</p>
@@ -142,6 +143,14 @@ function submitChat() {
   gap: 40px;
   position: relative;
   overflow: hidden;
+}
+
+.qs-ceo__overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .qs-ceo__card::before {

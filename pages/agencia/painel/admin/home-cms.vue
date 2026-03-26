@@ -246,6 +246,28 @@
           <small class="text-muted d-block mt-1">Deixe vazio para usar o gradiente teal padrão.</small>
         </div>
 
+        <div v-if="form.ceo.imagemFundo" class="hcms__field">
+          <label class="hcms__label">
+            Intensidade do Overlay <span style="color:#2F7785;font-weight:700;">{{ Math.round((form.ceo.overlayOpacity ?? 0.72) * 100) }}%</span>
+          </label>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <span style="font-size:12px;color:#9ca3af;">0% (foto aparece)</span>
+            <input
+              type="range" min="0" max="1" step="0.04"
+              :value="form.ceo.overlayOpacity ?? 0.72"
+              @input="(e) => { if(form) form.ceo.overlayOpacity = parseFloat((e.target as HTMLInputElement).value) }"
+              style="flex:1;"
+            />
+            <span style="font-size:12px;color:#9ca3af;">100% (cor sólida)</span>
+          </div>
+          <div style="margin-top:8px;border-radius:8px;height:32px;background:rgba(34,95,107,var(--ceo-ov));border:1.5px solid #e5e7eb;overflow:hidden;position:relative;">
+            <div style="position:absolute;inset:0;background:linear-gradient(135deg,#1a4a54,#225F6B,#2F7785);"></div>
+            <div :style="{ position:'absolute', inset:'0', background:`rgba(34,95,107,${form.ceo.overlayOpacity ?? 0.72})` }"></div>
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:600;letter-spacing:.04em;">Preview overlay</div>
+          </div>
+          <small class="text-muted d-block mt-1">Cor do overlay: <code>#225F6B</code></small>
+        </div>
+
         <hr class="my-3" />
         <p class="hcms__label fw-bold mb-2">Cartões de Destaque (direita)</p>
 

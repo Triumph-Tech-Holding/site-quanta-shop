@@ -35,6 +35,7 @@ export interface LabelTitleSubtitleSection {
 export interface CeoSection {
   ativo?: boolean;
   imagemFundo?: string;
+  overlayOpacity?: number;
   tag: string;
   pre: string;
   name: string;
@@ -111,6 +112,7 @@ const DEFAULT_CONFIG: HomeConfig = {
   ceo: {
     ativo: true,
     imagemFundo: '',
+    overlayOpacity: 0.72,
     tag: 'CEO & Founder',
     pre: 'Fale com o CEO',
     name: 'Mauro Triumph',
