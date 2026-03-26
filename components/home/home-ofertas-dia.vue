@@ -28,7 +28,7 @@
           class="qs-ofertas__card"
         >
           <div class="qs-ofertas__badge" v-if="item.percentualCashback">
-            {{ item.percentualCashback }}% Cashback
+            Até {{ item.percentualCashback }}% de Cashback
           </div>
           <div class="qs-ofertas__thumb">
             <img :src="item.imagemPequena || '/img/placeholder.png'" :alt="item.nome" />

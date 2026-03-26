@@ -23,7 +23,7 @@
 
       <div class="qs-cashback-badge qs-card-badge">
         <i class="fa-solid fa-tag" style="font-size: 9px;"></i>
-        {{ item.PercentualCashback }}% cashback
+        Até {{ item.PercentualCashback }}% de cashback
       </div>
     </div>
 

@@ -10,7 +10,7 @@
           <tbody>
             <tr v-for="item in itens" :key="item.id">
               <td class="fw-bold">{{ item.nome }}</td>
-              <td>{{ item.cashback }}%</td>
+              <td>Até {{ item.cashback }}%</td>
               <td><span class="badge-ag" :class="item.status === 'Ativo' ? 'badge-ag-success' : 'badge-ag-warning'">{{ item.status }}</span></td>
               <td><button class="btn btn-sm btn-ag-outline" @click="verDetalhes(item)">Ver</button></td>
             </tr>
@@ -23,7 +23,7 @@
         <div class="ag-modal-header"><h5 class="mb-0">{{ selecionado.nome }}</h5><button class="btn-close" @click="fecharModal" /></div>
         <div class="ag-modal-body">
           <div class="row g-2">
-            <div class="col-6"><strong>Cashback:</strong> {{ selecionado.cashback }}%</div>
+            <div class="col-6"><strong>Cashback:</strong> Até {{ selecionado.cashback }}%</div>
             <div class="col-6"><strong>Status:</strong> {{ selecionado.status }}</div>
           </div>
         </div>

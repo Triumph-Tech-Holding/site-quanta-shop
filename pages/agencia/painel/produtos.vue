@@ -16,7 +16,7 @@
             <div class="text-muted mb-2" style="font-size:.85rem; flex:1">{{ item.descricao || '' }}</div>
             <div class="d-flex align-items-center justify-content-between mt-auto">
               <div class="fw-bold text-ag-primary" style="font-size:1.1rem">{{ formatCurrency(item.preco) }}</div>
-              <span v-if="item.cashback" class="badge-ag badge-ag-success">{{ item.cashback }}% cashback</span>
+              <span v-if="item.cashback" class="badge-ag badge-ag-success">Até {{ item.cashback }}% de cashback</span>
             </div>
             <button class="btn btn-ag-outline btn-sm mt-2" @click="verProduto(item)">Ver detalhes</button>
           </div>
@@ -31,7 +31,7 @@
           <p v-if="selecionado.descricao" class="text-muted mb-3">{{ selecionado.descricao }}</p>
           <div class="row g-2">
             <div class="col-6"><strong>Preço:</strong><br/><span class="text-ag-primary fw-bold fs-5">{{ formatCurrency(selecionado.preco) }}</span></div>
-            <div v-if="selecionado.cashback" class="col-6"><strong>Cashback:</strong><br/><span class="badge-ag badge-ag-success">{{ selecionado.cashback }}% cashback</span></div>
+            <div v-if="selecionado.cashback" class="col-6"><strong>Cashback:</strong><br/><span class="badge-ag badge-ag-success">Até {{ selecionado.cashback }}% de cashback</span></div>
             <div v-if="selecionado.loja" class="col-12"><strong>Loja:</strong> {{ selecionado.loja }}</div>
             <div v-if="selecionado.categoria" class="col-12"><strong>Categoria:</strong> {{ selecionado.categoria }}</div>
           </div>

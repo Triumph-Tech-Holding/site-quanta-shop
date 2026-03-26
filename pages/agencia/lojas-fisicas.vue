@@ -19,7 +19,7 @@
               <div class="fw-bold mb-1" style="color:#2f7785">{{ loja.nomeFantasia || loja.nome }}</div>
               <div class="text-muted mb-1" style="font-size:.85rem">{{ loja.endereco }}</div>
               <div class="text-muted" style="font-size:.85rem">{{ loja.cidade }} / {{ loja.estado }}</div>
-              <div class="mt-2"><span class="badge bg-ag-secondary" style="background:#98c73a; color:#fff; padding:.3rem .8rem; border-radius:20px; font-size:.8rem">{{ loja.cashback }}% cashback</span></div>
+              <div class="mt-2"><span class="badge bg-ag-secondary" style="background:#98c73a; color:#fff; padding:.3rem .8rem; border-radius:20px; font-size:.8rem">Até {{ loja.cashback }}% de cashback</span></div>
             </div>
           </div>
         </div>

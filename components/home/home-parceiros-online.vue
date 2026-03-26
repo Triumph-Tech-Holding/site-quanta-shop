@@ -37,7 +37,7 @@
         <p>Nenhum parceiro disponível no momento. Volte em breve!</p>
       </div>
 
-      <div v-if="!loading && hasMore" class="qs-parceiros-online__more">
+      <div v-if="!loading && displayedPartners.length > 0" class="qs-parceiros-online__more">
         <nuxt-link href="/partners" class="qs-btn-outline-primary">
           Ver todos os parceiros
           <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -70,7 +70,6 @@ onMounted(async () => {
 
 const loading = computed(() => isLoading.value);
 const displayedPartners = computed(() => (partnerStore.newPartners || []).slice(0, 8));
-const hasMore = computed(() => (partnerStore.newPartners || []).length > 8);
 const isEmpty = computed(() => !isLoading.value && displayedPartners.value.length === 0);
 </script>
 
