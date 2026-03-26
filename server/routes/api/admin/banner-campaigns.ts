@@ -25,6 +25,8 @@ export interface HeroBannerSlide {
   headlineCor?: string;
   subtituloCor?: string;
   subtituloFontSize?: 'pequeno' | 'medio' | 'grande';
+  ctaTextoCor?: string;
+  overlayCor?: string;
 }
 
 const BANNERS_FILE = path.join(process.cwd(), 'public', 'data', 'hero-banners.json');

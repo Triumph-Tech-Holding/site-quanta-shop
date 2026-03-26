@@ -104,6 +104,8 @@ export interface HeroBannerSlide {
   headlineCor?: string;
   subtituloCor?: string;
   subtituloFontSize?: 'pequeno' | 'medio' | 'grande';
+  ctaTextoCor?: string;
+  overlayCor?: string;
 }
 
 export interface CarrosselAdmin {

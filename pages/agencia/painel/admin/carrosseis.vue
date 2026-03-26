@@ -279,6 +279,17 @@
                 </div>
               </div>
               <div class="col-md-6">
+                <label class="form-label fw-bold">Cor do Texto do Botão</label>
+                <div class="d-flex align-items-center gap-2">
+                  <input v-model="form.ctaTextoCor" type="color" class="form-control form-control-color" style="width:48px;height:38px;padding:2px;" />
+                  <input v-model="form.ctaTextoCor" type="text" class="form-control form-control-sm" placeholder="automático" style="font-family:monospace;" />
+                </div>
+                <small class="text-muted">Deixe vazio para cor automática (claro/escuro).</small>
+              </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
                 <label class="form-label fw-bold">Tamanho do Botão</label>
                 <div class="d-flex gap-2">
                   <button type="button" class="btn btn-sm car-font-btn" :class="{ active: (form.ctaTamanho || 'medio') === 'pequeno' }" @click="form.ctaTamanho = 'pequeno'">
@@ -324,12 +335,21 @@
             </div>
 
             <div class="mb-3">
-              <label class="form-label fw-bold">Intensidade do Overlay escuro: {{ form.overlayIntensidade }}%</label>
+              <label class="form-label fw-bold">Intensidade do Overlay: {{ form.overlayIntensidade }}%</label>
               <input v-model.number="form.overlayIntensidade" type="range" class="form-range" min="0" max="95" step="5" />
               <div class="d-flex justify-content-between">
                 <small class="text-muted">Transparente (0%)</small>
                 <small class="text-muted">Opaco (95%)</small>
               </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-bold">Cor do Overlay</label>
+              <div class="d-flex align-items-center gap-2">
+                <input v-model="form.overlayCor" type="color" class="form-control form-control-color" style="width:48px;height:38px;padding:2px;" />
+                <input v-model="form.overlayCor" type="text" class="form-control form-control-sm" placeholder="padrão (escuro)" style="font-family:monospace;" />
+              </div>
+              <small class="text-muted">Deixe vazio para o overlay escuro padrão. Use <strong>#2F7785</strong> para a cor da marca.</small>
             </div>
 
             <div class="mb-3">
@@ -496,7 +516,9 @@ const form = reactive<{
   ctaTexto: string;
   ctaLink: string;
   ctaCor: string;
+  ctaTextoCor: string;
   ctaTamanho: 'pequeno' | 'medio' | 'grande';
+  overlayCor: string;
   textoCor: 'light' | 'dark';
   overlayIntensidade: number;
   objectPosition: string;
@@ -508,7 +530,8 @@ const form = reactive<{
   headline: '', subtitulo: '', badge: '', badgeCor: '',
   headlineCor: '', subtituloCor: '', subtituloFontSize: 'medio',
   ctaTexto: 'Criar Conta Grátis', ctaLink: '/register',
-  ctaCor: '#98C73A', ctaTamanho: 'medio', textoCor: 'light', overlayIntensidade: 70,
+  ctaCor: '#98C73A', ctaTextoCor: '', ctaTamanho: 'medio', overlayCor: '',
+  textoCor: 'light', overlayIntensidade: 70,
   objectPosition: '50% 50%',
   tituloFontSize: 'medio', overlayDirecao: 'esquerda',
   ctaAlinhamento: 'esquerda',
@@ -592,7 +615,7 @@ const previewCtaStyle = computed(() => {
   const s = sizes[form.ctaTamanho || 'medio'];
   return {
     background: ctaColor,
-    color: isCtaColorDark.value ? '#fff' : '#1a2236',
+    color: form.ctaTextoCor || (isCtaColorDark.value ? '#fff' : '#1a2236'),
     padding: s.padding,
     fontSize: s.fontSize,
   };
@@ -686,7 +709,8 @@ function abrirNovo() {
     headline: '', subtitulo: '', badge: '', badgeCor: '',
     headlineCor: '', subtituloCor: '', subtituloFontSize: 'medio',
     ctaTexto: 'Criar Conta Grátis', ctaLink: '/register',
-    ctaCor: '#98C73A', ctaTamanho: 'medio', textoCor: 'light', overlayIntensidade: 70,
+    ctaCor: '#98C73A', ctaTextoCor: '', ctaTamanho: 'medio', overlayCor: '',
+    textoCor: 'light', overlayIntensidade: 70,
     objectPosition: '50% 50%', tituloFontSize: 'medio', overlayDirecao: 'esquerda',
     ctaAlinhamento: 'esquerda',
   });
@@ -705,7 +729,8 @@ function abrirEditar(item: HeroBannerSlide) {
     headlineCor: item.headlineCor || '', subtituloCor: item.subtituloCor || '',
     subtituloFontSize: item.subtituloFontSize || 'medio',
     ctaTexto: item.ctaTexto, ctaLink: item.ctaLink, ctaCor: item.ctaCor || '#98C73A',
-    ctaTamanho: item.ctaTamanho || 'medio',
+    ctaTextoCor: item.ctaTextoCor || '', ctaTamanho: item.ctaTamanho || 'medio',
+    overlayCor: item.overlayCor || '',
     textoCor: item.textoCor ?? 'light', overlayIntensidade: item.overlayIntensidade ?? 70,
     objectPosition: item.objectPosition || '50% 50%',
     tituloFontSize: item.tituloFontSize || 'medio',
@@ -741,6 +766,8 @@ async function salvar() {
       headlineCor: form.headlineCor,
       subtituloCor: form.subtituloCor,
       subtituloFontSize: form.subtituloFontSize,
+      ctaTextoCor: form.ctaTextoCor,
+      overlayCor: form.overlayCor,
       ctaTexto: form.ctaTexto,
       ctaLink: form.ctaLink,
       ctaCor: form.ctaCor,

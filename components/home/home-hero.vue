@@ -141,9 +141,18 @@ function getCardIconSvg(icon: string, iconBg: string): string {
   return `<svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="${stroke}" stroke-width="2">${paths}</svg>`;
 }
 
+function hexToRgba(hex: string, alpha: number): string {
+  const h = hex.replace('#', '');
+  const r = parseInt(h.substring(0, 2), 16);
+  const g = parseInt(h.substring(2, 4), 16);
+  const b = parseInt(h.substring(4, 6), 16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
+
 function getCtaStyle(item: HeroBannerSlide): Record<string, string> {
   const style: Record<string, string> = {};
   if (item.ctaCor) { style.background = item.ctaCor; style.borderColor = item.ctaCor; }
+  if (item.ctaTextoCor) style.color = item.ctaTextoCor;
   if (item.ctaTamanho === 'pequeno') { style.padding = '10px 20px'; style.fontSize = '13px'; }
   else if (item.ctaTamanho === 'grande') { style.padding = '18px 36px'; style.fontSize = '18px'; }
   return style;
@@ -159,10 +168,15 @@ function getSlideTitle(item: HeroBannerSlide): string {
 
 function getOverlayGradient(item: HeroBannerSlide): string {
   const d = item.overlayDirecao || 'esquerda';
-  if (d === 'direita') return 'linear-gradient(to left, rgba(15,35,45,0.88) 0%, rgba(15,35,45,0.65) 45%, rgba(15,35,45,0.30) 100%)';
-  if (d === 'centro') return 'linear-gradient(to right, rgba(15,35,45,0.20) 0%, rgba(15,35,45,0.88) 50%, rgba(15,35,45,0.20) 100%)';
-  if (d === 'uniforme') return 'rgba(15,35,45,0.88)';
-  return 'linear-gradient(to right, rgba(15,35,45,0.88) 0%, rgba(15,35,45,0.65) 45%, rgba(15,35,45,0.30) 100%)';
+  const cor = item.overlayCor && item.overlayCor.startsWith('#') ? item.overlayCor : null;
+  const hi = cor ? hexToRgba(cor, 0.88) : 'rgba(15,35,45,0.88)';
+  const mid = cor ? hexToRgba(cor, 0.65) : 'rgba(15,35,45,0.65)';
+  const lo = cor ? hexToRgba(cor, 0.30) : 'rgba(15,35,45,0.30)';
+  const loAlt = cor ? hexToRgba(cor, 0.20) : 'rgba(15,35,45,0.20)';
+  if (d === 'direita') return `linear-gradient(to left, ${hi} 0%, ${mid} 45%, ${lo} 100%)`;
+  if (d === 'centro') return `linear-gradient(to right, ${loAlt} 0%, ${hi} 50%, ${loAlt} 100%)`;
+  if (d === 'uniforme') return hi;
+  return `linear-gradient(to right, ${hi} 0%, ${mid} 45%, ${lo} 100%)`;
 }
 
 function getTitleFontSize(item: HeroBannerSlide): string {
