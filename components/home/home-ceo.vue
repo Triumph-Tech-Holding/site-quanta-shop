@@ -31,6 +31,15 @@
             </div>
           </div>
         </div>
+
+        <div v-if="config.ceo.imagemFundo" class="qs-ceo__mobile-photo">
+          <img
+            :src="config.ceo.imagemFundo"
+            alt="CEO"
+            class="qs-ceo__mobile-photo-img"
+            :style="{ objectPosition: config.ceo.posicaoFundo ?? 'top center' }"
+          />
+        </div>
       </div>
     </div>
 
@@ -164,11 +173,34 @@ function submitChat() {
   background: rgba(255,255,255,0.04);
 }
 
+.qs-ceo__mobile-photo {
+  display: none;
+}
+
 @media (max-width: 767px) {
   .qs-ceo__card {
     flex-direction: column;
     padding: 36px 24px;
     text-align: center;
+    background-image: none !important;
+  }
+
+  .qs-ceo__overlay {
+    display: none;
+  }
+
+  .qs-ceo__mobile-photo {
+    display: block;
+    width: 100%;
+    margin-top: 24px;
+  }
+
+  .qs-ceo__mobile-photo-img {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    border-radius: 14px;
+    display: block;
   }
 }
 
