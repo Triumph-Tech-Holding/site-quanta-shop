@@ -60,8 +60,9 @@
   },
   "ceo": {
     "ativo": true,
-    "imagemFundo": "",
-    "overlayOpacity": 0.72,
+    "imagemFundo": "/uploads/banners/1774551855403-ceo_mt_1200_x_600_px_.png",
+    "overlayOpacity": 0.56,
+    "posicaoFundo": "top center",
     "tag": "CEO & Founder",
     "pre": "Fale com o CEO",
     "name": "Mauro Triumph",

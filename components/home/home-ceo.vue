@@ -1,7 +1,7 @@
 <template>
   <section v-if="config.ceo.ativo !== false" class="qs-ceo">
     <div class="container">
-      <div class="qs-ceo__card" :style="config.ceo.imagemFundo ? { backgroundImage: `url(${config.ceo.imagemFundo})`, backgroundSize: 'cover', backgroundPosition: 'center' } : {}">
+      <div class="qs-ceo__card" :style="config.ceo.imagemFundo ? { backgroundImage: `url(${config.ceo.imagemFundo})`, backgroundSize: 'cover', backgroundPosition: config.ceo.posicaoFundo ?? 'center' } : {}">
         <div v-if="config.ceo.imagemFundo" class="qs-ceo__overlay" :style="{ background: `rgba(34,95,107,${config.ceo.overlayOpacity ?? 0.72})` }"></div>
         <div class="qs-ceo__content">
           <span class="qs-ceo__tag">{{ config.ceo.tag }}</span>
@@ -150,7 +150,7 @@ function submitChat() {
   inset: 0;
   border-radius: 20px;
   pointer-events: none;
-  z-index: 0;
+  z-index: 1;
 }
 
 .qs-ceo__card::before {
@@ -174,7 +174,7 @@ function submitChat() {
 
 .qs-ceo__content {
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 .qs-ceo__tag {
@@ -249,7 +249,7 @@ function submitChat() {
   gap: 12px;
   flex-shrink: 0;
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 .qs-ceo__badge {

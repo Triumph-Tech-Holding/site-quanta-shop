@@ -255,6 +255,30 @@
         </div>
 
         <div v-if="form.ceo.imagemFundo" class="hcms__field">
+          <label class="hcms__label">Posição da Imagem (vertical)</label>
+          <div style="display:flex;gap:8px;">
+            <button
+              v-for="pos in [{ label: '⬆ Topo', value: 'top center' }, { label: '⬛ Centro', value: 'center' }, { label: '⬇ Base', value: 'bottom center' }]"
+              :key="pos.value"
+              type="button"
+              @click="form.ceo.posicaoFundo = pos.value"
+              :style="{
+                padding: '7px 16px',
+                borderRadius: '7px',
+                border: '1.5px solid',
+                borderColor: (form.ceo.posicaoFundo ?? 'center') === pos.value ? '#2F7785' : '#d1d5db',
+                background: (form.ceo.posicaoFundo ?? 'center') === pos.value ? '#e8f4f6' : '#fff',
+                color: (form.ceo.posicaoFundo ?? 'center') === pos.value ? '#2F7785' : '#374151',
+                fontWeight: '600',
+                fontSize: '12px',
+                cursor: 'pointer'
+              }"
+            >{{ pos.label }}</button>
+          </div>
+          <small class="text-muted d-block mt-1">Use "Topo" para não cortar a cabeça de uma foto de pessoa.</small>
+        </div>
+
+        <div v-if="form.ceo.imagemFundo" class="hcms__field">
           <label class="hcms__label">
             Intensidade do Overlay <span style="color:#2F7785;font-weight:700;">{{ Math.round((form.ceo.overlayOpacity ?? 0.72) * 100) }}%</span>
           </label>
@@ -468,6 +492,12 @@ async function uploadCeoImage(file: File, input: HTMLInputElement) {
       headers: token ? { Authorization: `Bearer ${token}` } : {},
     });
     form.value.ceo.imagemFundo = res.url;
+    if (form.value.ceo.overlayOpacity === undefined || form.value.ceo.overlayOpacity === null) {
+      form.value.ceo.overlayOpacity = 0.72;
+    }
+    if (!form.value.ceo.posicaoFundo) {
+      form.value.ceo.posicaoFundo = 'top center';
+    }
     ceoLocalPreview.value = '';
   } catch {
     ceoUploadError.value = 'Erro ao fazer upload. Tente novamente.';
