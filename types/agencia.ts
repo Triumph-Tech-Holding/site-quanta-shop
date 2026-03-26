@@ -96,6 +96,8 @@ export interface HeroBannerSlide {
   textoCor: 'light' | 'dark';
   overlayIntensidade: number;
   objectPosition?: string;
+  tituloFontSize?: 'pequeno' | 'medio' | 'grande';
+  overlayDirecao?: 'esquerda' | 'direita' | 'centro' | 'uniforme';
 }
 
 export interface CarrosselAdmin {

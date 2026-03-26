@@ -21,7 +21,7 @@
         ></div>
         <div
           class="qs-hero__overlay"
-          :style="{ opacity: item.overlayIntensidade != null ? item.overlayIntensidade / 100 : undefined }"
+          :style="{ background: getOverlayGradient(item), opacity: item.overlayIntensidade != null ? item.overlayIntensidade / 100 : undefined }"
         ></div>
 
         <div class="container qs-hero__content-wrap">
@@ -33,7 +33,7 @@
                   {{ item.badge || config.hero.badge }}
                 </span>
 
-                <h1 class="qs-hero__title" v-html="getSlideTitle(item)"></h1>
+                <h1 class="qs-hero__title" :style="{ fontSize: getTitleFontSize(item) }" v-html="getSlideTitle(item)"></h1>
 
                 <p class="qs-hero__subtitle">
                   {{ item.subtitulo || config.hero.subtitle }}
@@ -131,6 +131,20 @@ function getSlideTitle(item: HeroBannerSlide): string {
     .replace('</highlight>', '</span>');
 }
 
+function getOverlayGradient(item: HeroBannerSlide): string {
+  const d = item.overlayDirecao || 'esquerda';
+  if (d === 'direita') return 'linear-gradient(to left, rgba(15,35,45,0.88) 0%, rgba(15,35,45,0.65) 45%, rgba(15,35,45,0.30) 100%)';
+  if (d === 'centro') return 'linear-gradient(to right, rgba(15,35,45,0.20) 0%, rgba(15,35,45,0.88) 50%, rgba(15,35,45,0.20) 100%)';
+  if (d === 'uniforme') return 'rgba(15,35,45,0.88)';
+  return 'linear-gradient(to right, rgba(15,35,45,0.88) 0%, rgba(15,35,45,0.65) 45%, rgba(15,35,45,0.30) 100%)';
+}
+
+function getTitleFontSize(item: HeroBannerSlide): string {
+  if (item.tituloFontSize === 'pequeno') return 'clamp(22px, 3.5vw, 36px)';
+  if (item.tituloFontSize === 'grande') return 'clamp(42px, 6.5vw, 68px)';
+  return 'clamp(32px, 5vw, 54px)';
+}
+
 onMounted(async () => {
   loadConfig();
   try {
@@ -221,7 +235,6 @@ const sliderData = computed<HeroBannerSlide[]>(() => {
 .qs-hero__overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to right, rgba(15,35,45,0.88) 0%, rgba(15,35,45,0.65) 45%, rgba(15,35,45,0.30) 100%);
 }
 
 .qs-hero__content-wrap {

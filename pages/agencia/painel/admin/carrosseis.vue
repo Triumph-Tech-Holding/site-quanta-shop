@@ -93,20 +93,24 @@
           <button class="btn-close" @click="fecharModal" />
         </div>
 
-        <div class="car-tabs">
-          <button
-            v-for="tab in tabs"
-            :key="tab.key"
-            class="car-tab-btn"
-            :class="{ active: abaAtiva === tab.key }"
-            @click="abaAtiva = tab.key"
-          >
-            <span class="car-tab-icon" v-html="tab.icon"></span>
-            {{ tab.label }}
-          </button>
-        </div>
-
         <div class="ag-modal-body car-modal-body">
+          <div class="car-editor-layout">
+
+            <div class="car-editor-left">
+              <div class="car-tabs">
+                <button
+                  v-for="tab in tabs"
+                  :key="tab.key"
+                  class="car-tab-btn"
+                  :class="{ active: abaAtiva === tab.key }"
+                  @click="abaAtiva = tab.key"
+                >
+                  <span class="car-tab-icon" v-html="tab.icon"></span>
+                  {{ tab.label }}
+                </button>
+              </div>
+
+              <div class="car-editor-form">
 
           <div v-if="abaAtiva === 'imagem'">
             <div class="car-dim-info mb-3">
@@ -249,6 +253,21 @@
             </div>
 
             <div class="mb-3">
+              <label class="form-label fw-bold">Tamanho da Fonte do Título</label>
+              <div class="d-flex gap-2">
+                <button type="button" class="btn btn-sm car-font-btn" :class="{ active: (form.tituloFontSize || 'medio') === 'pequeno' }" @click="form.tituloFontSize = 'pequeno'">
+                  <span style="font-size:10px;font-weight:800">Aa</span> Pequeno
+                </button>
+                <button type="button" class="btn btn-sm car-font-btn" :class="{ active: (form.tituloFontSize || 'medio') === 'medio' }" @click="form.tituloFontSize = 'medio'">
+                  <span style="font-size:13px;font-weight:800">Aa</span> Médio
+                </button>
+                <button type="button" class="btn btn-sm car-font-btn" :class="{ active: (form.tituloFontSize || 'medio') === 'grande' }" @click="form.tituloFontSize = 'grande'">
+                  <span style="font-size:16px;font-weight:800">Aa</span> Grande
+                </button>
+              </div>
+            </div>
+
+            <div class="mb-3">
               <label class="form-label fw-bold">Intensidade do Overlay escuro: {{ form.overlayIntensidade }}%</label>
               <input v-model.number="form.overlayIntensidade" type="range" class="form-range" min="0" max="95" step="5" />
               <div class="d-flex justify-content-between">
@@ -256,45 +275,69 @@
                 <small class="text-muted">Opaco (95%)</small>
               </div>
             </div>
-          </div>
 
-          <div v-if="abaAtiva === 'preview'">
-            <p class="text-muted small mb-3">Preview em tempo real de como o slide aparecerá na home. Salve para publicar.</p>
-            <div class="car-preview-wrap">
-              <div
-                class="car-preview"
-                :style="{
-                  backgroundImage: form.url ? `url(${form.url})` : 'linear-gradient(135deg, #1a4a54, #225F6B)',
-                }"
-              >
-                <div class="car-preview-overlay" :style="{ opacity: form.overlayIntensidade / 100 }"></div>
-                <div class="car-preview-content" :class="form.textoCor === 'dark' ? 'text-dark-mode' : 'text-light-mode'">
-                  <div v-if="form.badge" class="car-preview-badge">
-                    <span class="car-preview-badge-dot"></span>
-                    {{ form.badge }}
-                  </div>
-                  <div v-else class="car-preview-badge car-preview-badge-placeholder">
-                    <span class="car-preview-badge-dot"></span>
-                    Badge (CMS global)
-                  </div>
-
-                  <h2 class="car-preview-title" v-html="previewHeadline"></h2>
-                  <p class="car-preview-subtitle">{{ form.subtitulo || 'Subtítulo (CMS global)' }}</p>
-
-                  <a
-                    class="car-preview-cta"
-                    :style="{ background: form.ctaCor || '#98C73A', color: isCtaColorDark ? '#fff' : '#1a2236' }"
-                  >
-                    {{ form.ctaTexto || 'Criar Conta Grátis' }}
-                    <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                  </a>
-                </div>
-              </div>
-              <div v-if="!form.url" class="car-preview-no-img">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#adb5bd" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                <span>Adicione uma imagem na aba Imagem para ver o preview completo</span>
+            <div class="mb-3">
+              <label class="form-label fw-bold">Direção do Overlay</label>
+              <div class="d-flex gap-2 flex-wrap">
+                <button type="button" class="btn btn-sm car-dir-btn" :class="{ active: (form.overlayDirecao || 'esquerda') === 'esquerda' }" @click="form.overlayDirecao = 'esquerda'">
+                  <span class="car-dir-icon car-dir-icon--esquerda"></span> Esquerda
+                </button>
+                <button type="button" class="btn btn-sm car-dir-btn" :class="{ active: form.overlayDirecao === 'direita' }" @click="form.overlayDirecao = 'direita'">
+                  <span class="car-dir-icon car-dir-icon--direita"></span> Direita
+                </button>
+                <button type="button" class="btn btn-sm car-dir-btn" :class="{ active: form.overlayDirecao === 'centro' }" @click="form.overlayDirecao = 'centro'">
+                  <span class="car-dir-icon car-dir-icon--centro"></span> Centro
+                </button>
+                <button type="button" class="btn btn-sm car-dir-btn" :class="{ active: form.overlayDirecao === 'uniforme' }" @click="form.overlayDirecao = 'uniforme'">
+                  <span class="car-dir-icon car-dir-icon--uniforme"></span> Uniforme
+                </button>
               </div>
             </div>
+          </div>
+
+              </div>
+            </div>
+
+            <div class="car-editor-right">
+              <div class="car-preview-label">Preview ao vivo</div>
+              <div class="car-preview-wrap">
+                <div
+                  class="car-preview"
+                  :style="{
+                    backgroundImage: form.url ? `url(${form.url})` : 'linear-gradient(135deg, #1a4a54, #225F6B)',
+                  }"
+                >
+                  <div class="car-preview-overlay" :style="{ background: previewOverlayGradient, opacity: form.overlayIntensidade / 100 }"></div>
+                  <div class="car-preview-content" :class="form.textoCor === 'dark' ? 'text-dark-mode' : 'text-light-mode'">
+                    <div v-if="form.badge" class="car-preview-badge">
+                      <span class="car-preview-badge-dot"></span>
+                      {{ form.badge }}
+                    </div>
+                    <div v-else class="car-preview-badge car-preview-badge-placeholder">
+                      <span class="car-preview-badge-dot"></span>
+                      Badge (CMS global)
+                    </div>
+
+                    <h2 class="car-preview-title" :style="previewTitleStyle" v-html="previewHeadline"></h2>
+                    <p class="car-preview-subtitle">{{ form.subtitulo || 'Subtítulo (CMS global)' }}</p>
+
+                    <a
+                      class="car-preview-cta"
+                      :style="{ background: form.ctaCor || '#98C73A', color: isCtaColorDark ? '#fff' : '#1a2236' }"
+                    >
+                      {{ form.ctaTexto || 'Criar Conta Grátis' }}
+                      <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
+                  </div>
+                </div>
+                <div v-if="!form.url" class="car-preview-no-img">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#adb5bd" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                  <span>Adicione uma imagem para ver o preview</span>
+                </div>
+              </div>
+              <p class="car-preview-hint">Atualiza conforme você edita os campos</p>
+            </div>
+
           </div>
 
           <div v-if="modalError" class="alert alert-danger py-2 mt-3">{{ modalError }}</div>
@@ -302,7 +345,7 @@
 
         <div class="ag-modal-footer">
           <button class="btn btn-secondary" @click="fecharModal">Cancelar</button>
-          <button v-if="abaAtiva !== 'preview'" class="btn btn-ag-outline" @click="proximaAba">Próximo →</button>
+          <button v-if="abaAtiva === 'imagem'" class="btn btn-ag-outline" @click="abaAtiva = 'campanha'">Próximo →</button>
           <button class="btn btn-ag-primary" :disabled="saving" @click="salvar">
             {{ saving ? 'Salvando...' : 'Salvar e Publicar' }}
           </button>
@@ -353,12 +396,11 @@ const modoImagem = ref<'url' | 'arquivo'>('url');
 const arquivoFile = ref<File | null>(null);
 const arquivoPreview = ref('');
 const fileInputRef = ref<HTMLInputElement | null>(null);
-const abaAtiva = ref<'imagem' | 'campanha' | 'preview'>('imagem');
+const abaAtiva = ref<'imagem' | 'campanha'>('imagem');
 
 const tabs = [
   { key: 'imagem' as const, label: 'Imagem', icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>' },
   { key: 'campanha' as const, label: 'Campanha', icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>' },
-  { key: 'preview' as const, label: 'Preview', icon: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>' },
 ];
 
 const form = reactive<{
@@ -376,12 +418,15 @@ const form = reactive<{
   textoCor: 'light' | 'dark';
   overlayIntensidade: number;
   objectPosition: string;
+  tituloFontSize: 'pequeno' | 'medio' | 'grande';
+  overlayDirecao: 'esquerda' | 'direita' | 'centro' | 'uniforme';
 }>({
   titulo: '', url: '', urlDestino: '', ativo: true,
   headline: '', subtitulo: '', badge: '',
   ctaTexto: 'Criar Conta Grátis', ctaLink: '/register',
   ctaCor: '#98C73A', textoCor: 'light', overlayIntensidade: 70,
   objectPosition: '50% 50%',
+  tituloFontSize: 'medio', overlayDirecao: 'esquerda',
 });
 
 const previewHeadline = computed(() => {
@@ -398,13 +443,25 @@ const isCtaColorDark = computed(() => {
   return (0.299 * r + 0.587 * g + 0.114 * b) / 255 < 0.5;
 });
 
+const previewOverlayGradient = computed(() => {
+  const d = form.overlayDirecao || 'esquerda';
+  const dark = 'rgba(15,35,45,0.95)';
+  const mid = 'rgba(15,35,45,0.55)';
+  const trans = 'rgba(15,35,45,0)';
+  if (d === 'esquerda') return `linear-gradient(to right, ${dark} 0%, ${mid} 50%, ${trans} 100%)`;
+  if (d === 'direita') return `linear-gradient(to left, ${dark} 0%, ${mid} 50%, ${trans} 100%)`;
+  if (d === 'centro') return `linear-gradient(to right, ${trans} 0%, ${dark} 50%, ${trans} 100%)`;
+  return `rgba(15,35,45,0.92)`;
+});
+
+const previewTitleStyle = computed(() => {
+  const size = form.tituloFontSize || 'medio';
+  const sizes: Record<string, string> = { pequeno: '13px', medio: '18px', grande: '24px' };
+  return { fontSize: sizes[size] || '18px', fontWeight: '800', lineHeight: '1.2' };
+});
+
 function authHeader() {
   return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } };
-}
-
-function proximaAba() {
-  if (abaAtiva.value === 'imagem') abaAtiva.value = 'campanha';
-  else if (abaAtiva.value === 'campanha') abaAtiva.value = 'preview';
 }
 
 function triggerFileInput() { fileInputRef.value?.click(); }
@@ -489,7 +546,7 @@ function abrirNovo() {
     headline: '', subtitulo: '', badge: '',
     ctaTexto: 'Criar Conta Grátis', ctaLink: '/register',
     ctaCor: '#98C73A', textoCor: 'light', overlayIntensidade: 70,
-    objectPosition: '50% 50%',
+    objectPosition: '50% 50%', tituloFontSize: 'medio', overlayDirecao: 'esquerda',
   });
   modoImagem.value = 'url';
   limparArquivo();
@@ -506,6 +563,8 @@ function abrirEditar(item: HeroBannerSlide) {
     ctaTexto: item.ctaTexto, ctaLink: item.ctaLink, ctaCor: item.ctaCor || '#98C73A',
     textoCor: item.textoCor ?? 'light', overlayIntensidade: item.overlayIntensidade ?? 70,
     objectPosition: item.objectPosition || '50% 50%',
+    tituloFontSize: item.tituloFontSize || 'medio',
+    overlayDirecao: item.overlayDirecao || 'esquerda',
   });
   modoImagem.value = 'url';
   modalError.value = '';
@@ -538,6 +597,8 @@ async function salvar() {
       textoCor: form.textoCor,
       overlayIntensidade: form.overlayIntensidade,
       objectPosition: form.objectPosition || '50% 50%',
+      tituloFontSize: form.tituloFontSize,
+      overlayDirecao: form.overlayDirecao,
     };
 
     await $fetch('/api/admin/banner-campaigns', {
@@ -633,8 +694,15 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.car-modal-wide { max-width: 680px; width: 100%; }
-.car-modal-body { min-height: 320px; }
+.car-modal-wide { max-width: 980px; width: 100%; }
+.car-modal-body { min-height: 420px; }
+
+.car-editor-layout { display: flex; gap: 24px; align-items: flex-start; }
+.car-editor-left { flex: 1; min-width: 0; overflow-y: auto; max-height: calc(80vh - 120px); padding-right: 4px; }
+.car-editor-right { width: 320px; flex-shrink: 0; position: sticky; top: 0; }
+.car-editor-form { padding-top: 12px; }
+.car-preview-label { font-size: 11px; font-weight: 700; color: #6c757d; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+.car-preview-hint { font-size: 11px; color: #adb5bd; text-align: center; margin-top: 6px; margin-bottom: 0; }
 
 .car-order-btn {
   padding: 0 6px;
@@ -697,7 +765,32 @@ onMounted(async () => {
 
 .car-preview-wrap { position: relative; border-radius: 10px; overflow: hidden; background: #1a2236; }
 .car-preview { position: relative; width: 100%; aspect-ratio: 16 / 5; background-size: cover; background-position: center; display: flex; align-items: center; }
-.car-preview-overlay { position: absolute; inset: 0; background: linear-gradient(to right, rgba(15,35,45,1) 0%, rgba(15,35,45,0.7) 50%, rgba(15,35,45,0.3) 100%); }
+.car-preview-overlay { position: absolute; inset: 0; }
+
+.car-font-btn {
+  background: #f8f9fa; color: #495057;
+  border: 2px solid #dee2e6; font-size: 12px;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.car-font-btn.active { border-color: #2F7785; background: #e8f4f6; color: #2F7785; }
+.car-font-btn:hover { border-color: #2F7785; }
+
+.car-dir-btn {
+  background: #f8f9fa; color: #495057;
+  border: 2px solid #dee2e6; font-size: 12px;
+  display: inline-flex; align-items: center; gap: 5px;
+}
+.car-dir-btn.active { border-color: #2F7785; background: #e8f4f6; color: #2F7785; }
+.car-dir-btn:hover { border-color: #2F7785; }
+
+.car-dir-icon {
+  display: inline-block; width: 20px; height: 12px;
+  border-radius: 2px; flex-shrink: 0;
+}
+.car-dir-icon--esquerda { background: linear-gradient(to right, #225F6B, transparent); }
+.car-dir-icon--direita { background: linear-gradient(to left, #225F6B, transparent); }
+.car-dir-icon--centro { background: linear-gradient(to right, transparent, #225F6B, transparent); }
+.car-dir-icon--uniforme { background: #225F6B; }
 .car-preview-content { position: relative; z-index: 2; padding: 24px 28px; max-width: 65%; }
 .text-light-mode { color: #fff; }
 .text-dark-mode { color: #1a2236; }
