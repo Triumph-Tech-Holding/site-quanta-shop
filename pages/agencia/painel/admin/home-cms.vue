@@ -57,6 +57,55 @@
         </div>
       </div>
 
+      <!-- Hero Cards -->
+      <div v-show="activeTab === 'heroCards'" class="hcms__section">
+        <h2 class="hcms__section-title">Cartões Flutuantes do Hero</h2>
+        <p class="hcms__sub" style="margin-bottom:20px;">Os 3 cartões que aparecem à direita do banner hero. Você pode ativar/desativar, alterar textos, ícone e cor.</p>
+        <div v-for="(card, idx) in form.heroCards" :key="idx" class="hcms__card-editor">
+          <div class="hcms__card-editor-header">
+            <strong>Cartão {{ idx + 1 }}</strong>
+            <label class="hcms__toggle">
+              <input type="checkbox" v-model="card.ativo" />
+              <span class="hcms__toggle-track">
+                <span class="hcms__toggle-thumb"></span>
+              </span>
+              {{ card.ativo ? 'Ativo' : 'Inativo' }}
+            </label>
+          </div>
+          <div class="hcms__card-editor-body">
+            <div class="hcms__field">
+              <label class="hcms__label">Rótulo (label pequeno)</label>
+              <input v-model="card.label" class="hcms__input" placeholder="Ex: PIX INSTANTÂNEO" />
+            </div>
+            <div class="hcms__field">
+              <label class="hcms__label">Valor (texto principal)</label>
+              <input v-model="card.value" class="hcms__input" placeholder="Ex: Saque em segundos ✓" />
+            </div>
+            <div class="hcms__field">
+              <label class="hcms__label">Cor do Valor</label>
+              <div class="hcms__btn-group">
+                <button type="button" class="hcms__btn-opt" :class="{ active: card.valueColor === 'teal' }" @click="card.valueColor = 'teal'">Escuro</button>
+                <button type="button" class="hcms__btn-opt" :class="{ active: card.valueColor === 'green' }" @click="card.valueColor = 'green'">Teal</button>
+                <button type="button" class="hcms__btn-opt" :class="{ active: card.valueColor === 'white' }" @click="card.valueColor = 'white'">Branco</button>
+              </div>
+            </div>
+            <div class="hcms__field">
+              <label class="hcms__label">Ícone</label>
+              <div class="hcms__btn-group hcms__btn-group--wrap">
+                <button v-for="ic in ['card','chart','bag','star','percent','gift','users','zap']" :key="ic" type="button" class="hcms__btn-opt" :class="{ active: card.icon === ic }" @click="card.icon = ic">{{ ic }}</button>
+              </div>
+            </div>
+            <div class="hcms__field">
+              <label class="hcms__label">Fundo do Ícone</label>
+              <div class="hcms__btn-group">
+                <button type="button" class="hcms__btn-opt" :class="{ active: card.iconBg === 'teal' }" @click="card.iconBg = 'teal'">Teal claro</button>
+                <button type="button" class="hcms__btn-opt" :class="{ active: card.iconBg === 'green' }" @click="card.iconBg = 'green'">Verde-limão</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Brands -->
       <div v-show="activeTab === 'brands'" class="hcms__section">
         <h2 class="hcms__section-title">Seção Marcas (Carrossel de Logos)</h2>
@@ -226,12 +275,19 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
-import type { HomeConfig } from '@/composables/useHomeConfig';
+import type { HomeConfig, HeroCard } from '@/composables/useHomeConfig';
+
+const DEFAULT_HERO_CARDS: HeroCard[] = [
+  { ativo: true, label: 'PIX INSTANTÂNEO', value: 'Saque em segundos ✓', valueColor: 'green', icon: 'card', iconBg: 'teal' },
+  { ativo: true, label: 'CASHBACK RECEBIDO', value: 'R$ 50,00', valueColor: 'green', icon: 'chart', iconBg: 'green' },
+  { ativo: true, label: 'MARCAS PARCEIRAS', value: '+500 lojas', valueColor: 'teal', icon: 'bag', iconBg: 'teal' },
+];
 
 definePageMeta({ middleware: 'agencia-admin' });
 
 const tabs = [
   { key: 'hero', label: 'Hero' },
+  { key: 'heroCards', label: 'Cartões Hero' },
   { key: 'brands', label: 'Marcas' },
   { key: 'ofertas', label: 'Ofertas' },
   { key: 'parceirosOnline', label: 'Parceiros Online' },
@@ -261,8 +317,12 @@ async function load() {
   loadError.value = false;
   try {
     const data = await $fetch<HomeConfig>('/api/admin/home-config');
-    form.value = JSON.parse(JSON.stringify(data));
-    originalJson.value = JSON.stringify(data);
+    const parsed: HomeConfig = JSON.parse(JSON.stringify(data));
+    if (!parsed.heroCards || parsed.heroCards.length === 0) {
+      parsed.heroCards = JSON.parse(JSON.stringify(DEFAULT_HERO_CARDS));
+    }
+    form.value = parsed;
+    originalJson.value = JSON.stringify(parsed);
   } catch {
     loadError.value = true;
   }
@@ -525,5 +585,108 @@ onMounted(() => load());
 
 @keyframes hcms-spin {
   to { transform: rotate(360deg); }
+}
+
+.hcms__card-editor {
+  border: 1.5px solid #e5e7eb;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.hcms__card-editor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.hcms__card-editor-body {
+  padding: 18px;
+}
+
+.hcms__toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  user-select: none;
+}
+
+.hcms__toggle input {
+  display: none;
+}
+
+.hcms__toggle-track {
+  width: 36px;
+  height: 20px;
+  border-radius: 999px;
+  background: #d1d5db;
+  position: relative;
+  transition: background 0.2s;
+}
+
+.hcms__toggle input:checked ~ .hcms__toggle-track {
+  background: #2F7785;
+}
+
+.hcms__toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+.hcms__toggle input:checked ~ .hcms__toggle-track .hcms__toggle-thumb {
+  transform: translateX(16px);
+}
+
+.hcms__btn-group {
+  display: flex;
+  gap: 6px;
+}
+
+.hcms__btn-group--wrap {
+  flex-wrap: wrap;
+}
+
+.hcms__btn-opt {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border: 1.5px solid #d1d5db;
+  border-radius: 6px;
+  background: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: 'Inter', 'Jost', sans-serif;
+}
+
+.hcms__btn-opt:hover {
+  border-color: #2F7785;
+  color: #2F7785;
+}
+
+.hcms__btn-opt.active {
+  border-color: #2F7785;
+  background: #2F7785;
+  color: #fff;
 }
 </style>

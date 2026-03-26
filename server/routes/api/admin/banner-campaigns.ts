@@ -20,6 +20,8 @@ export interface HeroBannerSlide {
   tituloFontSize?: 'pequeno' | 'medio' | 'grande';
   overlayDirecao?: 'esquerda' | 'direita' | 'centro' | 'uniforme';
   ctaAlinhamento?: 'esquerda' | 'centro' | 'direita';
+  ctaTamanho?: 'pequeno' | 'medio' | 'grande';
+  badgeCor?: string;
 }
 
 const BANNERS_FILE = path.join(process.cwd(), 'public', 'data', 'hero-banners.json');

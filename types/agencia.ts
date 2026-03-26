@@ -99,6 +99,8 @@ export interface HeroBannerSlide {
   tituloFontSize?: 'pequeno' | 'medio' | 'grande';
   overlayDirecao?: 'esquerda' | 'direita' | 'centro' | 'uniforme';
   ctaAlinhamento?: 'esquerda' | 'centro' | 'direita';
+  ctaTamanho?: 'pequeno' | 'medio' | 'grande';
+  badgeCor?: string;
 }
 
 export interface CarrosselAdmin {

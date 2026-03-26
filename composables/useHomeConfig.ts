@@ -1,5 +1,14 @@
 import { ref } from 'vue';
 
+export interface HeroCard {
+  ativo: boolean;
+  label: string;
+  value: string;
+  valueColor: 'green' | 'teal' | 'white';
+  icon: 'card' | 'chart' | 'bag' | 'star' | 'percent' | 'gift' | 'users' | 'zap';
+  iconBg: 'teal' | 'green';
+}
+
 export interface HeroSection {
   badge: string;
   title: string;
@@ -43,6 +52,7 @@ export interface FooterCtaSection {
 
 export interface HomeConfig {
   hero: HeroSection;
+  heroCards: HeroCard[];
   brands: SimpleLabelSection;
   ofertas: TitleSubtitleSection;
   parceirosOnline: LabelTitleSubtitleSection;
@@ -61,6 +71,11 @@ const DEFAULT_CONFIG: HomeConfig = {
     ctaPrimaryText: 'Criar Conta Grátis',
     ctaPrimaryLink: '/register',
   },
+  heroCards: [
+    { ativo: true, label: 'PIX INSTANTÂNEO', value: 'Saque em segundos ✓', valueColor: 'green', icon: 'card', iconBg: 'teal' },
+    { ativo: true, label: 'CASHBACK RECEBIDO', value: 'R$ 50,00', valueColor: 'green', icon: 'chart', iconBg: 'green' },
+    { ativo: true, label: 'MARCAS PARCEIRAS', value: '+500 lojas', valueColor: 'teal', icon: 'bag', iconBg: 'teal' },
+  ],
   brands: {
     label: 'AS MAIORES MARCAS CONFIAM NA QUANTA',
   },

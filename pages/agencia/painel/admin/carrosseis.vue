@@ -204,15 +204,25 @@
               <span>Campos opcionais. Se vazios, os textos do <strong>CMS Global</strong> serão usados no hero.</span>
             </div>
 
-            <div class="mb-3">
-              <label class="form-label fw-bold">Badge (etiqueta)</label>
-              <input v-model="form.badge" type="text" class="form-control" placeholder="Ex: +12.000 usuários economizando" />
+            <div class="row g-3 mb-3">
+              <div class="col-md-8">
+                <label class="form-label fw-bold">Badge (etiqueta)</label>
+                <input v-model="form.badge" type="text" class="form-control" placeholder="Ex: +12.000 usuários economizando" />
+              </div>
+              <div class="col-md-4">
+                <label class="form-label fw-bold">Cor do Badge</label>
+                <div class="d-flex align-items-center gap-2">
+                  <input v-model="form.badgeCor" type="color" class="form-control form-control-color" style="width:48px;height:38px;padding:2px;" />
+                  <input v-model="form.badgeCor" type="text" class="form-control form-control-sm" placeholder="padrão" style="font-family:monospace;" />
+                </div>
+                <small class="text-muted">Deixe vazio para cor padrão.</small>
+              </div>
             </div>
 
             <div class="mb-3">
               <label class="form-label fw-bold">Headline (título principal)</label>
-              <input v-model="form.headline" type="text" class="form-control" placeholder="Ex: Seu dinheiro volta a cada compra" />
-              <small class="text-muted">Use &lt;highlight&gt;palavra&lt;/highlight&gt; para destacar em verde.</small>
+              <textarea v-model="form.headline" class="form-control" rows="3" placeholder="Ex: Seu dinheiro volta&#10;a cada compra"></textarea>
+              <small class="text-muted">Use &lt;highlight&gt;palavra&lt;/highlight&gt; para destacar em verde. Pressione Enter para quebrar linha.</small>
             </div>
 
             <div class="mb-3">
@@ -239,6 +249,23 @@
                   <input v-model="form.ctaCor" type="text" class="form-control form-control-sm" placeholder="#98C73A" style="font-family:monospace;" />
                 </div>
               </div>
+              <div class="col-md-6">
+                <label class="form-label fw-bold">Tamanho do Botão</label>
+                <div class="d-flex gap-2">
+                  <button type="button" class="btn btn-sm car-font-btn" :class="{ active: (form.ctaTamanho || 'medio') === 'pequeno' }" @click="form.ctaTamanho = 'pequeno'">
+                    Pequeno
+                  </button>
+                  <button type="button" class="btn btn-sm car-font-btn" :class="{ active: (form.ctaTamanho || 'medio') === 'medio' }" @click="form.ctaTamanho = 'medio'">
+                    Médio
+                  </button>
+                  <button type="button" class="btn btn-sm car-font-btn" :class="{ active: (form.ctaTamanho || 'medio') === 'grande' }" @click="form.ctaTamanho = 'grande'">
+                    Grande
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="row g-3 mb-3">
               <div class="col-md-6">
                 <label class="form-label fw-bold">Cor do Texto</label>
                 <div class="d-flex gap-2">
@@ -330,13 +357,12 @@
                   <div
                     class="car-preview-content"
                     :class="form.textoCor === 'dark' ? 'text-dark-mode' : 'text-light-mode'"
-                    :style="form.ctaAlinhamento === 'direita' ? { textAlign: 'right' } : form.ctaAlinhamento === 'centro' ? { textAlign: 'center' } : { textAlign: 'left' }"
                   >
-                    <div v-if="form.badge" class="car-preview-badge" :style="form.ctaAlinhamento === 'direita' ? { marginLeft: 'auto' } : form.ctaAlinhamento === 'centro' ? { margin: '0 auto 10px' } : {}">
-                      <span class="car-preview-badge-dot"></span>
+                    <div v-if="form.badge" class="car-preview-badge" :style="previewBadgeStyle">
+                      <span class="car-preview-badge-dot" :style="form.badgeCor ? { background: form.badgeCor } : {}"></span>
                       {{ form.badge }}
                     </div>
-                    <div v-else class="car-preview-badge car-preview-badge-placeholder" :style="form.ctaAlinhamento === 'direita' ? { marginLeft: 'auto' } : form.ctaAlinhamento === 'centro' ? { margin: '0 auto 10px' } : {}">
+                    <div v-else class="car-preview-badge car-preview-badge-placeholder">
                       <span class="car-preview-badge-dot"></span>
                       Badge (CMS global)
                     </div>
@@ -345,10 +371,7 @@
                     <p class="car-preview-subtitle">{{ form.subtitulo || 'Subtítulo (CMS global)' }}</p>
 
                     <div :style="form.ctaAlinhamento === 'direita' ? { display: 'flex', justifyContent: 'flex-end' } : form.ctaAlinhamento === 'centro' ? { display: 'flex', justifyContent: 'center' } : {}">
-                      <a
-                        class="car-preview-cta"
-                        :style="{ background: form.ctaCor || '#98C73A', color: isCtaColorDark ? '#fff' : '#1a2236' }"
-                      >
+                      <a class="car-preview-cta" :style="previewCtaStyle">
                         {{ form.ctaTexto || 'Criar Conta Grátis' }}
                         <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                       </a>
@@ -437,9 +460,11 @@ const form = reactive<{
   headline: string;
   subtitulo: string;
   badge: string;
+  badgeCor: string;
   ctaTexto: string;
   ctaLink: string;
   ctaCor: string;
+  ctaTamanho: 'pequeno' | 'medio' | 'grande';
   textoCor: 'light' | 'dark';
   overlayIntensidade: number;
   objectPosition: string;
@@ -448,9 +473,9 @@ const form = reactive<{
   ctaAlinhamento: 'esquerda' | 'centro' | 'direita';
 }>({
   titulo: '', url: '', urlDestino: '', ativo: true,
-  headline: '', subtitulo: '', badge: '',
+  headline: '', subtitulo: '', badge: '', badgeCor: '',
   ctaTexto: 'Criar Conta Grátis', ctaLink: '/register',
-  ctaCor: '#98C73A', textoCor: 'light', overlayIntensidade: 70,
+  ctaCor: '#98C73A', ctaTamanho: 'medio', textoCor: 'light', overlayIntensidade: 70,
   objectPosition: '50% 50%',
   tituloFontSize: 'medio', overlayDirecao: 'esquerda',
   ctaAlinhamento: 'esquerda',
@@ -458,7 +483,10 @@ const form = reactive<{
 
 const previewHeadline = computed(() => {
   const raw = form.headline || 'Headline da campanha (CMS global)';
-  return raw.replace('<highlight>', '<span style="color:#98C73A">').replace('</highlight>', '</span>');
+  return raw
+    .replace(/\n/g, '<br>')
+    .replace('<highlight>', '<span style="color:#98C73A">')
+    .replace('</highlight>', '</span>');
 });
 
 const isCtaColorDark = computed(() => {
@@ -490,6 +518,31 @@ const previewTitleStyle = computed(() => {
   const size = form.tituloFontSize || 'medio';
   const sizes: Record<string, string> = { pequeno: '13px', medio: '18px', grande: '24px' };
   return { fontSize: sizes[size] || '18px', fontWeight: '800', lineHeight: '1.2' };
+});
+
+const previewBadgeStyle = computed(() => {
+  if (!form.badgeCor) return {};
+  return {
+    color: form.badgeCor,
+    borderColor: form.badgeCor + '55',
+    background: form.badgeCor + '1A',
+  };
+});
+
+const previewCtaStyle = computed(() => {
+  const ctaColor = form.ctaCor || '#98C73A';
+  const sizes: Record<string, { padding: string; fontSize: string }> = {
+    pequeno: { padding: '4px 10px', fontSize: '9px' },
+    medio: { padding: '7px 16px', fontSize: '11px' },
+    grande: { padding: '11px 22px', fontSize: '13px' },
+  };
+  const s = sizes[form.ctaTamanho || 'medio'];
+  return {
+    background: ctaColor,
+    color: isCtaColorDark.value ? '#fff' : '#1a2236',
+    padding: s.padding,
+    fontSize: s.fontSize,
+  };
 });
 
 function authHeader() {
@@ -577,9 +630,9 @@ async function fazerUpload() {
 function abrirNovo() {
   Object.assign(form, {
     id: undefined, titulo: '', url: '', urlDestino: '', ativo: true,
-    headline: '', subtitulo: '', badge: '',
+    headline: '', subtitulo: '', badge: '', badgeCor: '',
     ctaTexto: 'Criar Conta Grátis', ctaLink: '/register',
-    ctaCor: '#98C73A', textoCor: 'light', overlayIntensidade: 70,
+    ctaCor: '#98C73A', ctaTamanho: 'medio', textoCor: 'light', overlayIntensidade: 70,
     objectPosition: '50% 50%', tituloFontSize: 'medio', overlayDirecao: 'esquerda',
     ctaAlinhamento: 'esquerda',
   });
@@ -594,8 +647,9 @@ function abrirEditar(item: HeroBannerSlide) {
   limparArquivo();
   Object.assign(form, {
     id: item.id, titulo: item.titulo, url: item.url, urlDestino: item.urlDestino, ativo: item.ativo,
-    headline: item.headline, subtitulo: item.subtitulo, badge: item.badge,
+    headline: item.headline, subtitulo: item.subtitulo, badge: item.badge, badgeCor: item.badgeCor || '',
     ctaTexto: item.ctaTexto, ctaLink: item.ctaLink, ctaCor: item.ctaCor || '#98C73A',
+    ctaTamanho: item.ctaTamanho || 'medio',
     textoCor: item.textoCor ?? 'light', overlayIntensidade: item.overlayIntensidade ?? 70,
     objectPosition: item.objectPosition || '50% 50%',
     tituloFontSize: item.tituloFontSize || 'medio',
@@ -627,9 +681,11 @@ async function salvar() {
       headline: form.headline,
       subtitulo: form.subtitulo,
       badge: form.badge,
+      badgeCor: form.badgeCor,
       ctaTexto: form.ctaTexto,
       ctaLink: form.ctaLink,
       ctaCor: form.ctaCor,
+      ctaTamanho: form.ctaTamanho,
       textoCor: form.textoCor,
       overlayIntensidade: form.overlayIntensidade,
       objectPosition: form.objectPosition || '50% 50%',

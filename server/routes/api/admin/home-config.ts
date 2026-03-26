@@ -2,6 +2,15 @@ import { defineEventHandler, readBody, sendError, createError } from 'h3';
 import fs from 'fs/promises';
 import path from 'path';
 
+interface HeroCard {
+  ativo: boolean;
+  label: string;
+  value: string;
+  valueColor: string;
+  icon: string;
+  iconBg: string;
+}
+
 interface HeroSection {
   badge: string;
   title: string;
@@ -45,6 +54,7 @@ interface FooterCtaSection {
 
 interface HomeConfig {
   hero: HeroSection;
+  heroCards?: HeroCard[];
   brands: SimpleLabelSection;
   ofertas: TitleSubtitleSection;
   parceirosOnline: LabelTitleSubtitleSection;
