@@ -563,7 +563,7 @@ async function fazerUpload() {
     fd.append('files', arquivoFile.value);
     const result = await $fetch<{ url: string }>('/api/admin/upload-banner', {
       method: 'POST',
-      headers: { Authorization: `Bearer ${agenciaStore.getToken()}` },
+      ...authHeader(),
       body: fd,
     });
     form.url = result.url;
@@ -640,7 +640,7 @@ async function salvar() {
 
     await $fetch('/api/admin/banner-campaigns', {
       method: 'POST',
-      headers: { Authorization: `Bearer ${agenciaStore.getToken()}` },
+      ...authHeader(),
       body: slide,
     });
 
@@ -666,7 +666,7 @@ async function excluir() {
     const id = itemParaExcluir.value.id;
     await $fetch('/api/admin/banner-campaigns', {
       method: 'DELETE',
-      headers: { Authorization: `Bearer ${agenciaStore.getToken()}` },
+      ...authHeader(),
       body: { id },
     });
     itens.value = itens.value.filter(i => i.id !== id);
@@ -688,7 +688,7 @@ async function moverItem(item: HeroBannerSlide, direction: 'up' | 'down') {
   try {
     await $fetch('/api/admin/banner-campaigns', {
       method: 'PATCH',
-      headers: { Authorization: `Bearer ${agenciaStore.getToken()}` },
+      ...authHeader(),
       body: { orderedIds: arr.map(i => i.id) },
     });
   } catch (e: unknown) {
