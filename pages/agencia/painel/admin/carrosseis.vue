@@ -219,15 +219,44 @@
               </div>
             </div>
 
-            <div class="mb-3">
+            <div class="mb-2">
               <label class="form-label fw-bold">Headline (título principal)</label>
               <textarea v-model="form.headline" class="form-control" rows="3" placeholder="Ex: Seu dinheiro volta&#10;a cada compra"></textarea>
-              <small class="text-muted">Use &lt;highlight&gt;palavra&lt;/highlight&gt; para destacar em verde. Pressione Enter para quebrar linha.</small>
+              <small class="text-muted">Use &lt;highlight&gt;palavra&lt;/highlight&gt; para destacar em verde. Enter para quebrar linha.</small>
+            </div>
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label class="form-label fw-bold">Cor da Headline</label>
+                <div class="d-flex align-items-center gap-2">
+                  <input v-model="form.headlineCor" type="color" class="form-control form-control-color" style="width:48px;height:38px;padding:2px;" />
+                  <input v-model="form.headlineCor" type="text" class="form-control form-control-sm" placeholder="padrão (branco/escuro)" style="font-family:monospace;" />
+                </div>
+                <small class="text-muted">Deixe vazio para usar a cor global (Claro/Escuro).</small>
+              </div>
             </div>
 
-            <div class="mb-3">
+            <div class="mb-2">
               <label class="form-label fw-bold">Subtítulo</label>
-              <textarea v-model="form.subtitulo" class="form-control" rows="2" placeholder="Ex: Cashback real em centenas de lojas parceiras." />
+              <textarea v-model="form.subtitulo" class="form-control" rows="2" placeholder="Ex: Cashback real em centenas de lojas parceiras.&#10;Enter para quebrar linha." />
+              <small class="text-muted">Enter para quebrar linha.</small>
+            </div>
+            <div class="row g-3 mb-3">
+              <div class="col-md-6">
+                <label class="form-label fw-bold">Cor do Subtítulo</label>
+                <div class="d-flex align-items-center gap-2">
+                  <input v-model="form.subtituloCor" type="color" class="form-control form-control-color" style="width:48px;height:38px;padding:2px;" />
+                  <input v-model="form.subtituloCor" type="text" class="form-control form-control-sm" placeholder="padrão" style="font-family:monospace;" />
+                </div>
+                <small class="text-muted">Deixe vazio para usar a cor global.</small>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-bold">Tamanho do Subtítulo</label>
+                <div class="d-flex gap-2">
+                  <button type="button" class="btn btn-sm car-font-btn" :class="{ active: (form.subtituloFontSize || 'medio') === 'pequeno' }" @click="form.subtituloFontSize = 'pequeno'">Pequeno</button>
+                  <button type="button" class="btn btn-sm car-font-btn" :class="{ active: (form.subtituloFontSize || 'medio') === 'medio' }" @click="form.subtituloFontSize = 'medio'">Médio</button>
+                  <button type="button" class="btn btn-sm car-font-btn" :class="{ active: (form.subtituloFontSize || 'medio') === 'grande' }" @click="form.subtituloFontSize = 'grande'">Grande</button>
+                </div>
+              </div>
             </div>
 
             <div class="row g-3 mb-3">
@@ -367,8 +396,8 @@
                       Badge (CMS global)
                     </div>
 
-                    <h2 class="car-preview-title" :style="previewTitleStyle" v-html="previewHeadline"></h2>
-                    <p class="car-preview-subtitle">{{ form.subtitulo || 'Subtítulo (CMS global)' }}</p>
+                    <h2 class="car-preview-title" :style="{ ...previewTitleStyle, ...previewHeadlineStyle }" v-html="previewHeadline"></h2>
+                    <p class="car-preview-subtitle" :style="previewSubtitleStyle" v-html="previewSubtitle"></p>
 
                     <div :style="form.ctaAlinhamento === 'direita' ? { display: 'flex', justifyContent: 'flex-end' } : form.ctaAlinhamento === 'centro' ? { display: 'flex', justifyContent: 'center' } : {}">
                       <a class="car-preview-cta" :style="previewCtaStyle">
@@ -461,6 +490,9 @@ const form = reactive<{
   subtitulo: string;
   badge: string;
   badgeCor: string;
+  headlineCor: string;
+  subtituloCor: string;
+  subtituloFontSize: 'pequeno' | 'medio' | 'grande';
   ctaTexto: string;
   ctaLink: string;
   ctaCor: string;
@@ -474,6 +506,7 @@ const form = reactive<{
 }>({
   titulo: '', url: '', urlDestino: '', ativo: true,
   headline: '', subtitulo: '', badge: '', badgeCor: '',
+  headlineCor: '', subtituloCor: '', subtituloFontSize: 'medio',
   ctaTexto: 'Criar Conta Grátis', ctaLink: '/register',
   ctaCor: '#98C73A', ctaTamanho: 'medio', textoCor: 'light', overlayIntensidade: 70,
   objectPosition: '50% 50%',
@@ -518,6 +551,26 @@ const previewTitleStyle = computed(() => {
   const size = form.tituloFontSize || 'medio';
   const sizes: Record<string, string> = { pequeno: '13px', medio: '18px', grande: '24px' };
   return { fontSize: sizes[size] || '18px', fontWeight: '800', lineHeight: '1.2' };
+});
+
+const previewSubtitle = computed(() => {
+  const raw = form.subtitulo || 'Subtítulo (CMS global)';
+  return raw.replace(/\n/g, '<br>');
+});
+
+const previewHeadlineStyle = computed(() => {
+  if (!form.headlineCor) return {};
+  return { color: form.headlineCor };
+});
+
+const previewSubtitleStyle = computed(() => {
+  const sizes: Record<string, string> = { pequeno: '9px', medio: '11px', grande: '13px' };
+  const style: Record<string, string> = {};
+  if (form.subtituloCor) style.color = form.subtituloCor;
+  if (form.subtituloFontSize && form.subtituloFontSize !== 'medio') {
+    style.fontSize = sizes[form.subtituloFontSize] || '11px';
+  }
+  return style;
 });
 
 const previewBadgeStyle = computed(() => {
@@ -631,6 +684,7 @@ function abrirNovo() {
   Object.assign(form, {
     id: undefined, titulo: '', url: '', urlDestino: '', ativo: true,
     headline: '', subtitulo: '', badge: '', badgeCor: '',
+    headlineCor: '', subtituloCor: '', subtituloFontSize: 'medio',
     ctaTexto: 'Criar Conta Grátis', ctaLink: '/register',
     ctaCor: '#98C73A', ctaTamanho: 'medio', textoCor: 'light', overlayIntensidade: 70,
     objectPosition: '50% 50%', tituloFontSize: 'medio', overlayDirecao: 'esquerda',
@@ -648,6 +702,8 @@ function abrirEditar(item: HeroBannerSlide) {
   Object.assign(form, {
     id: item.id, titulo: item.titulo, url: item.url, urlDestino: item.urlDestino, ativo: item.ativo,
     headline: item.headline, subtitulo: item.subtitulo, badge: item.badge, badgeCor: item.badgeCor || '',
+    headlineCor: item.headlineCor || '', subtituloCor: item.subtituloCor || '',
+    subtituloFontSize: item.subtituloFontSize || 'medio',
     ctaTexto: item.ctaTexto, ctaLink: item.ctaLink, ctaCor: item.ctaCor || '#98C73A',
     ctaTamanho: item.ctaTamanho || 'medio',
     textoCor: item.textoCor ?? 'light', overlayIntensidade: item.overlayIntensidade ?? 70,
@@ -682,6 +738,9 @@ async function salvar() {
       subtitulo: form.subtitulo,
       badge: form.badge,
       badgeCor: form.badgeCor,
+      headlineCor: form.headlineCor,
+      subtituloCor: form.subtituloCor,
+      subtituloFontSize: form.subtituloFontSize,
       ctaTexto: form.ctaTexto,
       ctaLink: form.ctaLink,
       ctaCor: form.ctaCor,

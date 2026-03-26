@@ -22,6 +22,9 @@ export interface HeroBannerSlide {
   ctaAlinhamento?: 'esquerda' | 'centro' | 'direita';
   ctaTamanho?: 'pequeno' | 'medio' | 'grande';
   badgeCor?: string;
+  headlineCor?: string;
+  subtituloCor?: string;
+  subtituloFontSize?: 'pequeno' | 'medio' | 'grande';
 }
 
 const BANNERS_FILE = path.join(process.cwd(), 'public', 'data', 'hero-banners.json');

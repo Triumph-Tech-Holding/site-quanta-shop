@@ -36,11 +36,9 @@
                   {{ item.badge || config.hero.badge }}
                 </span>
 
-                <h1 class="qs-hero__title" :style="{ fontSize: getTitleFontSize(item) }" v-html="getSlideTitle(item)"></h1>
+                <h1 class="qs-hero__title" :style="{ fontSize: getTitleFontSize(item), ...(item.headlineCor ? { color: item.headlineCor } : {}) }" v-html="getSlideTitle(item)"></h1>
 
-                <p class="qs-hero__subtitle">
-                  {{ item.subtitulo || config.hero.subtitle }}
-                </p>
+                <p class="qs-hero__subtitle" :style="getSubtitleStyle(item)" v-html="getSlideSubtitle(item)"></p>
 
                 <div
                   class="qs-hero__actions"
@@ -171,6 +169,19 @@ function getTitleFontSize(item: HeroBannerSlide): string {
   if (item.tituloFontSize === 'pequeno') return 'clamp(22px, 3.5vw, 36px)';
   if (item.tituloFontSize === 'grande') return 'clamp(42px, 6.5vw, 68px)';
   return 'clamp(32px, 5vw, 54px)';
+}
+
+function getSlideSubtitle(item: HeroBannerSlide): string {
+  const raw = item.subtitulo || config.value.hero.subtitle;
+  return raw.replace(/\n/g, '<br>');
+}
+
+function getSubtitleStyle(item: HeroBannerSlide): Record<string, string> {
+  const style: Record<string, string> = {};
+  if (item.subtituloCor) style.color = item.subtituloCor;
+  if (item.subtituloFontSize === 'pequeno') style.fontSize = 'clamp(12px, 1.5vw, 14px)';
+  else if (item.subtituloFontSize === 'grande') style.fontSize = 'clamp(18px, 2.5vw, 24px)';
+  return style;
 }
 
 onMounted(async () => {
