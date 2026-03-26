@@ -94,7 +94,7 @@ onMounted(() => loadConfig());
   font-family: 'Inter', 'Jost', sans-serif;
   font-size: clamp(24px, 4vw, 36px);
   font-weight: 800;
-  color: #111827;
+  color: #225F6B;
   letter-spacing: -0.03em;
   margin-bottom: 8px;
 }
@@ -102,7 +102,7 @@ onMounted(() => loadConfig());
 .qs-section-sub {
   font-family: 'Inter', 'Jost', sans-serif;
   font-size: 15px;
-  color: #6b7280;
+  color: #2F7785;
   max-width: 480px;
   margin: 0 auto;
 }
@@ -188,7 +188,7 @@ onMounted(() => loadConfig());
   font-family: 'Inter', 'Jost', sans-serif;
   font-size: 15px;
   font-weight: 700;
-  color: #111827;
+  color: #225F6B;
   margin-bottom: 6px;
 }
 
@@ -198,7 +198,7 @@ onMounted(() => loadConfig());
   gap: 4px;
   font-family: 'Inter', 'Jost', sans-serif;
   font-size: 12px;
-  color: #6b7280;
+  color: #2F7785;
   margin-bottom: 16px;
 }
 

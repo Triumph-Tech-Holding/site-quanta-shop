@@ -37,7 +37,7 @@ onMounted(() => loadConfig());
   font-family: 'Inter', 'Jost', sans-serif;
   font-size: clamp(28px, 4vw, 42px);
   font-weight: 800;
-  color: #111827;
+  color: #225F6B;
   letter-spacing: -0.03em;
   margin-bottom: 12px;
 }
@@ -45,7 +45,7 @@ onMounted(() => loadConfig());
 .qs-footer-cta__sub {
   font-family: 'Inter', 'Jost', sans-serif;
   font-size: 16px;
-  color: #6b7280;
+  color: #2F7785;
   margin-bottom: 32px;
 }
 

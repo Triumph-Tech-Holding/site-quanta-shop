@@ -84,7 +84,7 @@ const hasMore = computed(() => (partnerStore.newPartners || []).length > 8);
   font-family: 'Inter', 'Jost', sans-serif;
   font-size: clamp(24px, 4vw, 36px);
   font-weight: 800;
-  color: #111827;
+  color: #225F6B;
   letter-spacing: -0.03em;
   margin-bottom: 8px;
 }
@@ -92,7 +92,7 @@ const hasMore = computed(() => (partnerStore.newPartners || []).length > 8);
 .qs-section-sub {
   font-family: 'Inter', 'Jost', sans-serif;
   font-size: 15px;
-  color: #6b7280;
+  color: #2F7785;
   max-width: 500px;
   margin: 0 auto;
 }
@@ -144,14 +144,14 @@ const hasMore = computed(() => (partnerStore.newPartners || []).length > 8);
   font-family: 'Inter', 'Jost', sans-serif;
   font-size: 14px;
   font-weight: 700;
-  color: #111827;
+  color: #225F6B;
   margin-bottom: 4px;
 }
 
 .qs-partner-card__cashback {
   font-family: 'Inter', 'Jost', sans-serif;
   font-size: 12px;
-  color: #6b7280;
+  color: #2F7785;
   margin-bottom: 14px;
 }
 

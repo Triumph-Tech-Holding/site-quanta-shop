@@ -148,7 +148,7 @@ onMounted(async () => {
   font-family: 'Jost', 'Inter', sans-serif;
   font-size: clamp(24px, 4vw, 38px);
   font-weight: 800;
-  color: #111827;
+  color: #225F6B;
   letter-spacing: -0.02em;
   line-height: 1.2;
   margin-bottom: 12px;
@@ -156,7 +156,7 @@ onMounted(async () => {
 
 .qs-social__sub {
   font-size: 15px;
-  color: #6B7280;
+  color: #2F7785;
   max-width: 540px;
   margin: 0 auto;
 }
@@ -252,7 +252,7 @@ onMounted(async () => {
   font-family: 'Jost', 'Inter', sans-serif;
   font-size: 15px;
   font-weight: 700;
-  color: #111827;
+  color: #225F6B;
   line-height: 1.45;
   margin: 0;
 }

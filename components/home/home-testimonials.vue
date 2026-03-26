@@ -79,7 +79,7 @@ const testimonials = [
   font-family: 'Inter', 'Jost', sans-serif;
   font-size: clamp(24px, 4vw, 36px);
   font-weight: 800;
-  color: #111827;
+  color: #225F6B;
   letter-spacing: -0.03em;
   margin-bottom: 8px;
 }
@@ -87,7 +87,7 @@ const testimonials = [
 .qs-section-sub {
   font-family: 'Inter', 'Jost', sans-serif;
   font-size: 15px;
-  color: #6b7280;
+  color: #2F7785;
 }
 
 .qs-testimonials__grid {
@@ -158,7 +158,7 @@ const testimonials = [
   font-family: 'Inter', 'Jost', sans-serif;
   font-size: 14px;
   font-weight: 700;
-  color: #111827;
+  color: #225F6B;
 }
 
 .qs-testimonial-card__role {
