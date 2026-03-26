@@ -95,6 +95,7 @@ export interface HeroBannerSlide {
   ctaCor: string;
   textoCor: 'light' | 'dark';
   overlayIntensidade: number;
+  objectPosition?: string;
 }
 
 export interface CarrosselAdmin {

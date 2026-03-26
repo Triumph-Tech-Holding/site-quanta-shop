@@ -138,10 +138,14 @@
                   @dragover.prevent="isDragging = true"
                   @dragleave="isDragging = false"
                   @drop.prevent="onDrop"
-                  @click="triggerFileInput"
+                  @click="!arquivoPreview && !uploadingFile ? triggerFileInput() : undefined"
                 >
                   <input ref="fileInputRef" type="file" accept="image/*" style="display:none" @change="onFileChange" />
-                  <div v-if="!arquivoPreview" class="upload-drop-placeholder">
+                  <div v-if="uploadingFile" class="upload-drop-placeholder">
+                    <div class="spinner-border spinner-border-sm text-secondary mb-2" />
+                    <p class="mb-0 text-muted">Enviando imagem...</p>
+                  </div>
+                  <div v-else-if="!arquivoPreview" class="upload-drop-placeholder">
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                     <p class="mb-1 mt-2">Arraste uma imagem ou <strong>clique para selecionar</strong></p>
                     <small class="text-muted">PNG, JPG, WEBP — máx. 5MB — ideal 1920×600px</small>
@@ -151,12 +155,28 @@
                     <button type="button" class="btn btn-sm btn-outline-danger mt-2" @click.stop="limparArquivo">Remover</button>
                   </div>
                 </div>
-                <button v-if="arquivoFile" type="button" class="btn btn-ag-primary btn-sm mt-2 w-100" :disabled="uploadingFile" @click="fazerUpload">
-                  {{ uploadingFile ? 'Enviando...' : 'Enviar imagem' }}
-                </button>
-                <div v-if="form.url && modoImagem === 'arquivo'" class="mt-2 d-flex align-items-center gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#98C73A" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
-                  <small class="text-success fw-bold">Imagem enviada com sucesso</small>
+              </div>
+            </div>
+
+            <div v-if="form.url" class="mb-3">
+              <label class="form-label fw-bold">Ajustar posição da imagem</label>
+              <small class="text-muted d-block mb-2">Arraste para reposicionar o ponto focal do banner.</small>
+              <div
+                ref="posAdjusterRef"
+                class="pos-adjuster"
+                :class="{ 'pos-adjuster--dragging': isDraggingPos }"
+                :style="{
+                  backgroundImage: `url(${form.url})`,
+                  backgroundPosition: form.objectPosition || '50% 50%',
+                }"
+                @mousedown.prevent="onPosMouseDown"
+                @mousemove="onPosMouseMove"
+                @mouseup="onPosMouseUp"
+                @mouseleave="onPosMouseUp"
+              >
+                <div class="pos-adjuster-hint">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 9l-3 3 3 3M9 5l3-3 3 3M15 19l-3 3-3-3M19 9l3 3-3 3M2 12h20M12 2v20"/></svg>
+                  Arraste para reposicionar
                 </div>
               </div>
             </div>
@@ -318,6 +338,12 @@ const importadoMsg = ref('');
 const importErro = ref('');
 const uploadingFile = ref(false);
 const isDragging = ref(false);
+const isDraggingPos = ref(false);
+const dragStartMouseX = ref(0);
+const dragStartMouseY = ref(0);
+const dragStartBgX = ref(50);
+const dragStartBgY = ref(50);
+const posAdjusterRef = ref<HTMLElement | null>(null);
 const itens = ref<HeroBannerSlide[]>([]);
 const showModal = ref(false);
 const showConfirm = ref(false);
@@ -349,11 +375,13 @@ const form = reactive<{
   ctaCor: string;
   textoCor: 'light' | 'dark';
   overlayIntensidade: number;
+  objectPosition: string;
 }>({
   titulo: '', url: '', urlDestino: '', ativo: true,
   headline: '', subtitulo: '', badge: '',
   ctaTexto: 'Criar Conta Grátis', ctaLink: '/register',
   ctaCor: '#98C73A', textoCor: 'light', overlayIntensidade: 70,
+  objectPosition: '50% 50%',
 });
 
 const previewHeadline = computed(() => {
@@ -396,6 +424,36 @@ function setArquivo(file: File) {
   arquivoFile.value = file;
   arquivoPreview.value = URL.createObjectURL(file);
   form.url = '';
+  form.objectPosition = '50% 50%';
+  fazerUpload();
+}
+
+function parseBgPos(): { x: number; y: number } {
+  const parts = (form.objectPosition || '50% 50%').split(' ');
+  return { x: parseFloat(parts[0]) || 50, y: parseFloat(parts[1]) || 50 };
+}
+
+function onPosMouseDown(e: MouseEvent) {
+  isDraggingPos.value = true;
+  dragStartMouseX.value = e.clientX;
+  dragStartMouseY.value = e.clientY;
+  const p = parseBgPos();
+  dragStartBgX.value = p.x;
+  dragStartBgY.value = p.y;
+}
+
+function onPosMouseMove(e: MouseEvent) {
+  if (!isDraggingPos.value || !posAdjusterRef.value) return;
+  const rect = posAdjusterRef.value.getBoundingClientRect();
+  const dx = ((e.clientX - dragStartMouseX.value) / rect.width) * 100 * 1.5;
+  const dy = ((e.clientY - dragStartMouseY.value) / rect.height) * 100 * 1.5;
+  const newX = Math.max(0, Math.min(100, dragStartBgX.value - dx));
+  const newY = Math.max(0, Math.min(100, dragStartBgY.value - dy));
+  form.objectPosition = `${newX.toFixed(1)}% ${newY.toFixed(1)}%`;
+}
+
+function onPosMouseUp() {
+  isDraggingPos.value = false;
 }
 
 function limparArquivo() {
@@ -431,6 +489,7 @@ function abrirNovo() {
     headline: '', subtitulo: '', badge: '',
     ctaTexto: 'Criar Conta Grátis', ctaLink: '/register',
     ctaCor: '#98C73A', textoCor: 'light', overlayIntensidade: 70,
+    objectPosition: '50% 50%',
   });
   modoImagem.value = 'url';
   limparArquivo();
@@ -445,6 +504,7 @@ function abrirEditar(item: HeroBannerSlide) {
     headline: item.headline, subtitulo: item.subtitulo, badge: item.badge,
     ctaTexto: item.ctaTexto, ctaLink: item.ctaLink, ctaCor: item.ctaCor,
     textoCor: item.textoCor, overlayIntensidade: item.overlayIntensidade,
+    objectPosition: item.objectPosition || '50% 50%',
   });
   modoImagem.value = 'url';
   limparArquivo();
@@ -477,6 +537,7 @@ async function salvar() {
       ctaCor: form.ctaCor,
       textoCor: form.textoCor,
       overlayIntensidade: form.overlayIntensidade,
+      objectPosition: form.objectPosition || '50% 50%',
     };
 
     await $fetch('/api/admin/banner-campaigns', {
@@ -666,4 +727,37 @@ onMounted(async () => {
 }
 .upload-drop-area:hover, .upload-drop-area.drag-over { border-color: #2F7785; background: #f0f7f8; }
 .upload-drop-placeholder svg { color: #adb5bd; }
+
+.pos-adjuster {
+  width: 100%;
+  aspect-ratio: 16 / 3;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  border: 2px solid #dee2e6;
+  background-size: cover;
+  cursor: grab;
+  user-select: none;
+  transition: border-color 0.2s;
+}
+.pos-adjuster:hover { border-color: #2F7785; }
+.pos-adjuster--dragging { cursor: grabbing; }
+
+.pos-adjuster-hint {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+  white-space: nowrap;
+  backdrop-filter: blur(4px);
+}
 </style>

@@ -17,7 +17,7 @@
       <SwiperSlide v-for="(item, i) in sliderData" :key="i" class="qs-hero__slide">
         <div
           class="qs-hero__bg"
-          :style="item.url ? { backgroundImage: `url(${item.url})` } : undefined"
+          :style="item.url ? { backgroundImage: `url(${item.url})`, backgroundPosition: item.objectPosition || '50% 50%' } : undefined"
         ></div>
         <div
           class="qs-hero__overlay"
