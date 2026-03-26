@@ -106,6 +106,7 @@ export interface HeroBannerSlide {
   subtituloFontSize?: 'pequeno' | 'medio' | 'grande';
   ctaTextoCor?: string;
   overlayCor?: string;
+  headlineEspacamento?: 'compacto' | 'normal' | 'amplo';
 }
 
 export interface CarrosselAdmin {

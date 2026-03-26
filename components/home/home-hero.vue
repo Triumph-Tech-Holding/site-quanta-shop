@@ -36,7 +36,7 @@
                   {{ item.badge || config.hero.badge }}
                 </span>
 
-                <h1 class="qs-hero__title" :style="{ fontSize: getTitleFontSize(item), ...(item.headlineCor ? { color: item.headlineCor } : {}) }" v-html="getSlideTitle(item)"></h1>
+                <h1 class="qs-hero__title" :style="{ fontSize: getTitleFontSize(item), lineHeight: getTitleLineHeight(item), ...(item.headlineCor ? { color: item.headlineCor } : {}) }" v-html="getSlideTitle(item)"></h1>
 
                 <p class="qs-hero__subtitle" :style="getSubtitleStyle(item)" v-html="getSlideSubtitle(item)"></p>
 
@@ -183,6 +183,12 @@ function getTitleFontSize(item: HeroBannerSlide): string {
   if (item.tituloFontSize === 'pequeno') return 'clamp(22px, 3.5vw, 36px)';
   if (item.tituloFontSize === 'grande') return 'clamp(42px, 6.5vw, 68px)';
   return 'clamp(32px, 5vw, 54px)';
+}
+
+function getTitleLineHeight(item: HeroBannerSlide): string {
+  if (item.headlineEspacamento === 'normal') return '1.02';
+  if (item.headlineEspacamento === 'amplo') return '1.18';
+  return '0.95';
 }
 
 function getSlideSubtitle(item: HeroBannerSlide): string {

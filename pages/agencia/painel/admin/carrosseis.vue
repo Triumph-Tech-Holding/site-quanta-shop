@@ -208,6 +208,14 @@
               <div class="col-md-8">
                 <label class="form-label fw-bold">Badge (etiqueta)</label>
                 <input v-model="form.badge" type="text" class="form-control" placeholder="Ex: +12.000 usuários economizando" />
+                <div class="d-flex flex-wrap gap-1 mt-2">
+                  <button v-for="preset in BADGE_PRESETS" :key="preset" type="button"
+                    class="btn btn-sm car-badge-preset"
+                    :class="{ active: form.badge === preset }"
+                    @click="form.badge = preset">
+                    {{ preset }}
+                  </button>
+                </div>
               </div>
               <div class="col-md-4">
                 <label class="form-label fw-bold">Cor do Badge</label>
@@ -232,6 +240,15 @@
                   <input v-model="form.headlineCor" type="text" class="form-control form-control-sm" placeholder="padrão (branco/escuro)" style="font-family:monospace;" />
                 </div>
                 <small class="text-muted">Deixe vazio para usar a cor global (Claro/Escuro).</small>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-bold">Espaçamento entre linhas</label>
+                <div class="d-flex gap-2">
+                  <button type="button" class="btn btn-sm car-font-btn" :class="{ active: (form.headlineEspacamento || 'compacto') === 'compacto' }" @click="form.headlineEspacamento = 'compacto'">Compacto</button>
+                  <button type="button" class="btn btn-sm car-font-btn" :class="{ active: form.headlineEspacamento === 'normal' }" @click="form.headlineEspacamento = 'normal'">Normal</button>
+                  <button type="button" class="btn btn-sm car-font-btn" :class="{ active: form.headlineEspacamento === 'amplo' }" @click="form.headlineEspacamento = 'amplo'">Amplo</button>
+                </div>
+                <small class="text-muted">Compacto = 0.90 · Normal = 1.02 · Amplo = 1.18</small>
               </div>
             </div>
 
@@ -471,6 +488,19 @@ import type { HeroBannerSlide } from '~/types/agencia';
 definePageMeta({ layout: 'agencia-painel', middleware: ['agencia-auth', 'agencia-admin'] });
 
 const agenciaStore = useAgenciaStore();
+
+const BADGE_PRESETS = [
+  '+12.000 usuários economizando',
+  'Programa de pontos',
+  'Para lojistas',
+  'Simples e rápido',
+  'Cashback garantido',
+  'Novidade',
+  'Em alta',
+  'Exclusivo',
+  'Parceiros verificados',
+  'PIX instantâneo',
+];
 const loading = ref(true);
 const saving = ref(false);
 const importando = ref(false);
@@ -519,6 +549,7 @@ const form = reactive<{
   ctaTextoCor: string;
   ctaTamanho: 'pequeno' | 'medio' | 'grande';
   overlayCor: string;
+  headlineEspacamento: 'compacto' | 'normal' | 'amplo';
   textoCor: 'light' | 'dark';
   overlayIntensidade: number;
   objectPosition: string;
@@ -531,6 +562,7 @@ const form = reactive<{
   headlineCor: '', subtituloCor: '', subtituloFontSize: 'medio',
   ctaTexto: 'Criar Conta Grátis', ctaLink: '/register',
   ctaCor: '#98C73A', ctaTextoCor: '', ctaTamanho: 'medio', overlayCor: '',
+  headlineEspacamento: 'compacto',
   textoCor: 'light', overlayIntensidade: 70,
   objectPosition: '50% 50%',
   tituloFontSize: 'medio', overlayDirecao: 'esquerda',
@@ -573,7 +605,9 @@ const previewOverlayGradient = computed(() => {
 const previewTitleStyle = computed(() => {
   const size = form.tituloFontSize || 'medio';
   const sizes: Record<string, string> = { pequeno: '13px', medio: '18px', grande: '24px' };
-  return { fontSize: sizes[size] || '18px', fontWeight: '800', lineHeight: '1.2' };
+  const lineHeights: Record<string, string> = { compacto: '0.90', normal: '1.02', amplo: '1.18' };
+  const lineHeight = lineHeights[form.headlineEspacamento || 'compacto'] || '0.90';
+  return { fontSize: sizes[size] || '18px', fontWeight: '800', lineHeight };
 });
 
 const previewSubtitle = computed(() => {
@@ -710,6 +744,7 @@ function abrirNovo() {
     headlineCor: '', subtituloCor: '', subtituloFontSize: 'medio',
     ctaTexto: 'Criar Conta Grátis', ctaLink: '/register',
     ctaCor: '#98C73A', ctaTextoCor: '', ctaTamanho: 'medio', overlayCor: '',
+    headlineEspacamento: 'compacto',
     textoCor: 'light', overlayIntensidade: 70,
     objectPosition: '50% 50%', tituloFontSize: 'medio', overlayDirecao: 'esquerda',
     ctaAlinhamento: 'esquerda',
@@ -731,6 +766,7 @@ function abrirEditar(item: HeroBannerSlide) {
     ctaTexto: item.ctaTexto, ctaLink: item.ctaLink, ctaCor: item.ctaCor || '#98C73A',
     ctaTextoCor: item.ctaTextoCor || '', ctaTamanho: item.ctaTamanho || 'medio',
     overlayCor: item.overlayCor || '',
+    headlineEspacamento: item.headlineEspacamento || 'compacto',
     textoCor: item.textoCor ?? 'light', overlayIntensidade: item.overlayIntensidade ?? 70,
     objectPosition: item.objectPosition || '50% 50%',
     tituloFontSize: item.tituloFontSize || 'medio',
@@ -768,6 +804,7 @@ async function salvar() {
       subtituloFontSize: form.subtituloFontSize,
       ctaTextoCor: form.ctaTextoCor,
       overlayCor: form.overlayCor,
+      headlineEspacamento: form.headlineEspacamento,
       ctaTexto: form.ctaTexto,
       ctaLink: form.ctaLink,
       ctaCor: form.ctaCor,
@@ -953,6 +990,14 @@ onMounted(async () => {
 }
 .car-font-btn.active { border-color: #2F7785; background: #e8f4f6; color: #2F7785; }
 .car-font-btn:hover { border-color: #2F7785; }
+
+.car-badge-preset {
+  background: #f1f3f5; color: #495057;
+  border: 1.5px solid #dee2e6; font-size: 11px; padding: 3px 9px;
+  border-radius: 999px; cursor: pointer; transition: all 0.15s;
+}
+.car-badge-preset.active { border-color: #98C73A; background: #f0f9e0; color: #5a8a1a; }
+.car-badge-preset:hover { border-color: #98C73A; background: #f8fdf0; }
 
 .car-dir-btn {
   background: #f8f9fa; color: #495057;
