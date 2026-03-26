@@ -72,7 +72,8 @@ export default defineEventHandler(async (event) => {
     const decoded = jwt.verify(token, jwtSecret) as JwtPayload;
 
     const roleClaim = decoded[DOTNET_ROLE_CLAIM] ?? decoded['role'];
-    const isAdmin = roleClaim === 'Admin';
+    const roleStr = typeof roleClaim === 'string' ? roleClaim.toLowerCase() : '';
+    const isAdmin = roleStr === 'admin' || roleStr === 'administrador' || roleStr === 'administrator' || roleStr === 'gestor';
 
     event.context.user = { ...decoded, admin: isAdmin };
   } catch (err: unknown) {

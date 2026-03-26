@@ -309,6 +309,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import type { HomeConfig, HeroCard } from '@/composables/useHomeConfig';
+import { useAgenciaStore } from '@/composables/useAgenciaStore';
 
 const DEFAULT_HERO_CARDS: HeroCard[] = [
   { ativo: true, label: 'PIX INSTANTÂNEO', value: 'Saque em segundos ✓', valueColor: 'green', icon: 'card', iconBg: 'teal' },
@@ -317,6 +318,13 @@ const DEFAULT_HERO_CARDS: HeroCard[] = [
 ];
 
 definePageMeta({ middleware: 'agencia-admin' });
+
+const agenciaStore = useAgenciaStore();
+function authHeader() {
+  const token = agenciaStore.getToken();
+  if (!token) return {};
+  return { headers: { Authorization: `Bearer ${token}` } };
+}
 
 const tabs = [
   { key: 'hero', label: 'Hero' },
@@ -349,7 +357,7 @@ const previewHeroTitle = computed(() => {
 async function load() {
   loadError.value = false;
   try {
-    const data = await $fetch<HomeConfig>('/api/admin/home-config');
+    const data = await $fetch<HomeConfig>('/api/admin/home-config', { ...authHeader() });
     const parsed: HomeConfig = JSON.parse(JSON.stringify(data));
     if (!parsed.heroCards || parsed.heroCards.length === 0) {
       parsed.heroCards = JSON.parse(JSON.stringify(DEFAULT_HERO_CARDS));
@@ -370,6 +378,7 @@ async function save() {
     await $fetch('/api/admin/home-config', {
       method: 'POST',
       body: form.value,
+      ...authHeader(),
     });
     originalJson.value = JSON.stringify(form.value);
     saveSuccess.value = true;
