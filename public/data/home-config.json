@@ -60,6 +60,7 @@
   },
   "ceo": {
     "ativo": true,
+    "imagemFundo": "",
     "tag": "CEO & Founder",
     "pre": "Fale com o CEO",
     "name": "Mauro Triumph",

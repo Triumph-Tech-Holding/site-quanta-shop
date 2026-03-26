@@ -230,8 +230,20 @@
           <input v-model="form.ceo.ctaText" class="hcms__input" />
         </div>
         <div class="hcms__field">
-          <label class="hcms__label">Link do WhatsApp</label>
-          <input v-model="form.ceo.whatsappLink" class="hcms__input" />
+          <label class="hcms__label">Imagem de Fundo do Banner</label>
+          <div v-if="form.ceo.imagemFundo" class="hcms__img-preview-wrap">
+            <img :src="form.ceo.imagemFundo" class="hcms__img-preview" alt="Fundo CEO" />
+            <button type="button" class="hcms__img-remove" @click="removeCeoImage">&#10005; Remover</button>
+          </div>
+          <label class="hcms__upload-btn" :class="{ 'hcms__upload-btn--loading': ceoUploading }">
+            <svg v-if="!ceoUploading" width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M16 10l-4-4-4 4M12 6v10"/></svg>
+            <span class="hcms__spinner-sm" v-if="ceoUploading"></span>
+            {{ ceoUploading ? 'Enviando...' : 'Escolher imagem' }}
+            <input type="file" accept="image/*" style="display:none" @change="uploadCeoImage" :disabled="ceoUploading" />
+          </label>
+          <small v-if="form.ceo.imagemFundo" class="text-muted d-block mt-1">{{ form.ceo.imagemFundo }}</small>
+          <small v-if="ceoUploadError" class="text-danger d-block mt-1">{{ ceoUploadError }}</small>
+          <small class="text-muted d-block mt-1">Deixe vazio para usar o gradiente teal padrão.</small>
         </div>
 
         <hr class="my-3" />
@@ -397,6 +409,37 @@ function reset() {
   }
 }
 
+const ceoUploading = ref(false);
+const ceoUploadError = ref('');
+
+async function uploadCeoImage(event: Event) {
+  const input = event.target as HTMLInputElement;
+  const file = input.files?.[0];
+  if (!file || !form.value) return;
+  ceoUploading.value = true;
+  ceoUploadError.value = '';
+  try {
+    const token = agenciaStore.getToken();
+    const fd = new FormData();
+    fd.append('file', file);
+    const res = await $fetch<{ url: string }>('/api/admin/upload-banner', {
+      method: 'POST',
+      body: fd,
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
+    form.value.ceo.imagemFundo = res.url;
+  } catch {
+    ceoUploadError.value = 'Erro ao fazer upload. Tente novamente.';
+  } finally {
+    ceoUploading.value = false;
+    input.value = '';
+  }
+}
+
+function removeCeoImage() {
+  if (form.value) form.value.ceo.imagemFundo = '';
+}
+
 onMounted(() => load());
 </script>
 
@@ -513,6 +556,77 @@ onMounted(() => load());
   outline: none;
   transition: border-color 0.15s ease;
   resize: vertical;
+}
+
+.hcms__upload-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #f3f4f6;
+  border: 1.5px dashed #d1d5db;
+  border-radius: 8px;
+  padding: 9px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  margin-top: 6px;
+}
+
+.hcms__upload-btn:hover:not(.hcms__upload-btn--loading) {
+  border-color: #2F7785;
+  color: #2F7785;
+  background: #f0fafa;
+}
+
+.hcms__upload-btn--loading {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.hcms__img-preview-wrap {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 8px;
+}
+
+.hcms__img-preview {
+  display: block;
+  width: 100%;
+  max-height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1.5px solid #e5e7eb;
+}
+
+.hcms__img-remove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: rgba(0,0,0,0.65);
+  color: #fff;
+  border: 0;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.hcms__img-remove:hover {
+  background: rgba(180,0,0,0.8);
+}
+
+.hcms__spinner-sm {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  border: 2px solid rgba(47,119,133,0.25);
+  border-top-color: #2F7785;
+  border-radius: 50%;
+  animation: hcms-spin 0.7s linear infinite;
 }
 
 .hcms__input:focus,

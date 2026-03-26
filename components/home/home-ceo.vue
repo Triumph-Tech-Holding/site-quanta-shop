@@ -1,7 +1,7 @@
 <template>
   <section v-if="config.ceo.ativo !== false" class="qs-ceo">
     <div class="container">
-      <div class="qs-ceo__card">
+      <div class="qs-ceo__card" :style="config.ceo.imagemFundo ? { backgroundImage: `url(${config.ceo.imagemFundo})`, backgroundSize: 'cover', backgroundPosition: 'center' } : {}">
         <div class="qs-ceo__content">
           <span class="qs-ceo__tag">{{ config.ceo.tag }}</span>
           <p class="qs-ceo__pre">{{ config.ceo.pre }}</p>
