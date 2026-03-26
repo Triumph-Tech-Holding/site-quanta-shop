@@ -37,6 +37,7 @@
             :src="config.ceo.imagemFundo"
             alt="CEO"
             class="qs-ceo__mobile-photo-img"
+            :style="{ objectPosition: config.ceo.posicaoFundo ?? 'right center' }"
           />
         </div>
       </div>
@@ -185,15 +186,30 @@ function submitChat() {
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    padding: 44px 24px 40px;
+    padding: 44px 24px 36px;
     text-align: center;
     min-height: 480px;
-    background-position: center !important;
-    background-size: cover !important;
+    background: linear-gradient(135deg, #1a4a54 0%, #225F6B 50%, #2F7785 100%) !important;
   }
 
   .qs-ceo__overlay {
-    opacity: 0.45 !important;
+    opacity: 0.38 !important;
+  }
+
+  .qs-ceo__mobile-photo {
+    display: block !important;
+    position: absolute !important;
+    inset: 0 !important;
+    z-index: 0 !important;
+    pointer-events: none;
+  }
+
+  .qs-ceo__mobile-photo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+    display: block;
   }
 
   .qs-ceo__content {
@@ -202,43 +218,45 @@ function submitChat() {
   }
 
   .qs-ceo__badges {
-    width: 100%;
-    max-width: 300px;
+    width: auto;
+    max-width: 100%;
     margin: 0 auto;
     flex-direction: row;
     gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
   .qs-ceo__badge {
-    background: rgba(255,255,255,0.12) !important;
-    backdrop-filter: blur(12px) !important;
-    -webkit-backdrop-filter: blur(12px) !important;
-    border: 1px solid rgba(255,255,255,0.22) !important;
-    border-radius: 10px !important;
-    padding: 10px 14px !important;
+    background: rgba(0,0,0,0.28) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border: 1px solid rgba(255,255,255,0.18) !important;
+    border-radius: 999px !important;
+    padding: 7px 16px !important;
     min-width: 0 !important;
-    flex: 1;
-    gap: 8px;
+    width: auto !important;
+    gap: 7px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.22) !important;
   }
 
   .qs-ceo__badge svg {
-    stroke: rgba(255,255,255,0.70) !important;
+    stroke: rgba(255,255,255,0.75) !important;
     flex-shrink: 0;
+    width: 14px !important;
+    height: 14px !important;
   }
 
   .qs-ceo__badge-label {
-    color: rgba(255,255,255,0.60) !important;
-    font-size: 10px !important;
+    color: rgba(255,255,255,0.55) !important;
+    font-size: 9px !important;
+    margin-bottom: 0 !important;
   }
 
   .qs-ceo__badge-value {
     color: #fff !important;
-    font-size: 13px !important;
+    font-size: 12px !important;
     font-weight: 700 !important;
-  }
-
-  .qs-ceo__mobile-photo {
-    display: none;
   }
 }
 
