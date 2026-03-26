@@ -7,9 +7,30 @@
     "ctaPrimaryLink": "/register"
   },
   "heroCards": [
-    { "ativo": true, "label": "PIX INSTANTÂNEO", "value": "Saque em segundos ✓", "valueColor": "green", "icon": "card", "iconBg": "teal" },
-    { "ativo": true, "label": "CASHBACK RECEBIDO", "value": "R$ 50,00", "valueColor": "green", "icon": "chart", "iconBg": "green" },
-    { "ativo": true, "label": "MARCAS PARCEIRAS", "value": "+500 lojas", "valueColor": "teal", "icon": "bag", "iconBg": "teal" }
+    {
+      "ativo": true,
+      "label": "PIX INSTANTÂNEO",
+      "value": "Saque em segundos ✓",
+      "valueColor": "green",
+      "icon": "card",
+      "iconBg": "teal"
+    },
+    {
+      "ativo": true,
+      "label": "CASHBACK RECEBIDO",
+      "value": "R$ 50,00",
+      "valueColor": "green",
+      "icon": "chart",
+      "iconBg": "green"
+    },
+    {
+      "ativo": true,
+      "label": "MARCAS PARCEIRAS",
+      "value": "+500 lojas",
+      "valueColor": "teal",
+      "icon": "bag",
+      "iconBg": "teal"
+    }
   ],
   "brands": {
     "label": "AS MAIORES MARCAS CONFIAM NA QUANTA"
@@ -33,8 +54,8 @@
     "subtitle": "Veja quanto nossos usuários já economizaram."
   },
   "blog": {
-    "label": "SEMPRE CONECTADO",
-    "title": "Quanta em Tempo Real: Blog e Redes Sociais",
+    "label": "QUANTA SHOP ",
+    "title": "SEMPRE CONECTADO",
     "subtitle": "Fique por dentro das últimas novidades, promoções e conteúdos exclusivos."
   },
   "ceo": {
@@ -43,7 +64,7 @@
     "pre": "Fale com o CEO",
     "name": "Mauro Triumph",
     "desc": "Clareza estratégica sem rodeios, sem burocracia, sem perda de tempo.",
-    "ctaText": "Iniciar Conversa com IA",
+    "ctaText": "Iniciar Conversa",
     "whatsappLink": "https://api.whatsapp.com/send/?phone=552140404866&text&type=phone_number&app_absent=0",
     "badge1Label": "Respostas",
     "badge1Value": "Em até 24h",

@@ -113,7 +113,7 @@ const DEFAULT_CONFIG: HomeConfig = {
     pre: 'Fale com o CEO',
     name: 'Mauro Triumph',
     desc: 'Clareza estratégica sem rodeios, sem burocracia, sem perda de tempo.',
-    ctaText: 'Iniciar Conversa com IA',
+    ctaText: 'Iniciar Conversa',
     whatsappLink: 'https://api.whatsapp.com/send/?phone=552140404866&text&type=phone_number&app_absent=0',
     badge1Label: 'Respostas',
     badge1Value: 'Em até 24h',

@@ -226,7 +226,7 @@
           <textarea v-model="form.ceo.desc" class="hcms__textarea" rows="2"></textarea>
         </div>
         <div class="hcms__field">
-          <label class="hcms__label">Texto do Botão IA</label>
+          <label class="hcms__label">Texto do Botão</label>
           <input v-model="form.ceo.ctaText" class="hcms__input" />
         </div>
         <div class="hcms__field">
