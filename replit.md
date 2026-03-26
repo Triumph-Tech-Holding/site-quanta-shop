@@ -127,6 +127,17 @@ Nova home page implementada a partir do mockup PDF do Lovable (design de referê
 - **Rate limiting**: `FixedWindowRateLimiter` nos endpoints de autenticação — 10 req/60s por IP, retorna HTTP 429; configurado em `Startup.cs`, aplicado com `[EnableRateLimiting("auth-limit")]` em `UsuarioLoginController.cs`
 - **Cookie de debug removido**: bloco `oh_vida_oh_ceus` removido de `ExceptionHandler.cs` — erros internos são logados no stderr, nunca expostos na resposta HTTP
 
+## Auth Admin (Nuxt server routes)
+
+- **JWT emitido pelo .NET** (`GenerateTokenAndRefreshToken` em `UsuarioNegocio.cs`) contém claims via URIs `ClaimTypes.*`:
+  - `ClaimTypes.Name` → usuário ID
+  - `ClaimTypes.Role` → `usuario.Grupo.Descricao` (ex: `"Admin"`, `"Comerciante"`, etc.)
+  - `ClaimTypes.PrimarySid` → `IdGrupo`
+- **`NUXT_JWT_SECRET`** deve bater com o `AppSettings.Secret` da API .NET (configurado como env var no Replit)
+- **`server/middleware/verify-jwt.ts`**: decodifica o JWT e extrai o role claim via sua URI completa (`http://schemas.microsoft.com/ws/2008/06/identity/claims/role`). Se for `"Admin"`, seta `event.context.user.admin = true`
+- **`server/routes/api/admin/upload-banner.ts`**: salva arquivos localmente em `public/uploads/banners/` (sem depender da API .NET). Imagens ficam disponíveis via URL `/uploads/banners/filename.ext`
+- **`AdminController.cs`** usa `[Authorize(Roles = "Admin")]` — exige role `Admin` no JWT para chamar a API .NET diretamente
+
 ## Sistema de Design Premium (Task #33)
 
 Arquivo: `assets/scss/quanta-premium.scss` — importado por último em `nuxt.config.ts` css array.

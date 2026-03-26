@@ -1,7 +1,8 @@
 import { defineEventHandler, readMultipartFormData, sendError, createError } from 'h3';
+import { writeFile, mkdir } from 'fs/promises';
+import { join, extname } from 'path';
 
-const REMOTE_API = 'https://api.quantashop.com.br/api';
-const LOCAL_API = 'http://localhost:8000/api';
+const UPLOADS_DIR = join(process.cwd(), 'public', 'uploads', 'banners');
 
 export default defineEventHandler(async (event) => {
   if (!event.context.user?.admin) {
@@ -18,29 +19,13 @@ export default defineEventHandler(async (event) => {
     return sendError(event, createError({ statusCode: 400, message: 'Campo "files" não encontrado' }));
   }
 
-  const authHeader = getHeader(event, 'authorization') ?? '';
-  const filename = filePart.filename || 'banner.jpg';
-  const contentType = filePart.type || 'image/jpeg';
+  const originalName = filePart.filename || 'banner.jpg';
+  const ext = extname(originalName) || '.jpg';
+  const safeName = originalName.replace(/[^a-zA-Z0-9._-]/g, '_');
+  const uniqueName = `${Date.now()}-${safeName}`;
 
-  const formData = new FormData();
-  formData.append('files', new Blob([filePart.data], { type: contentType }), filename);
+  await mkdir(UPLOADS_DIR, { recursive: true });
+  await writeFile(join(UPLOADS_DIR, uniqueName), filePart.data);
 
-  const config = useRuntimeConfig();
-  const useLocalApi = config.useLocalApi === true;
-  const baseApi = useLocalApi ? LOCAL_API : REMOTE_API;
-
-  try {
-    const response = await $fetch<string>(`${baseApi}/Image`, {
-      method: 'POST',
-      headers: { Authorization: authHeader },
-      body: formData,
-    });
-    return { url: response };
-  } catch (err: unknown) {
-    const e = err as { response?: { status?: number; _data?: unknown } };
-    throw createError({
-      statusCode: e?.response?.status ?? 502,
-      message: 'Erro ao enviar imagem para o servidor',
-    });
-  }
+  return { url: `/uploads/banners/${uniqueName}` };
 });

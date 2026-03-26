@@ -1,43 +1,39 @@
 import jwt from 'jsonwebtoken';
 import { defineEventHandler, getCookie, createError } from 'h3';
 
+const DOTNET_ROLE_CLAIM = 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role';
+
 interface JwtPayload {
-  id: string;
-  email: string;
-  admin?: boolean;
-  perfil?: string;
-  idUsuario?: number;
+  'http://schemas.microsoft.com/ws/2008/06/identity/claims/role'?: string;
+  'http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'?: string;
+  unique_name?: string;
+  role?: string;
+  jti?: string;
   iat?: number;
   exp?: number;
+  [key: string]: unknown;
 }
 
 declare module 'h3' {
   interface H3EventContext {
-    user?: JwtPayload;
+    user?: JwtPayload & { admin: boolean };
   }
 }
 
-/**
- * Prefixos de rotas que nunca precisam de autenticação Nuxt (são públicas ou
- * delegam auth para a API .NET via api-proxy).
- */
 const PUBLIC_PATH_PREFIXES = [
   '/agencia/login',
   '/agencia/cadastro',
   '/agencia/recuperar-senha',
   '/agencia/reset-password',
   '/agencia/confirm-email',
-  '/api-proxy',         // proxy para .NET — a API externa autentica por conta própria
-  '/api/auth/logout',   // endpoint de logout não requer token válido
+  '/api-proxy',
+  '/api/auth/logout',
   '/_nuxt',
   '/data',
   '/img',
+  '/uploads',
 ] as const;
 
-/**
- * Prefixos de rotas Nuxt internas que EXIGEM token válido.
- * Qualquer rota sob esses prefixos retorna 401 se o token estiver ausente ou inválido.
- */
 const PROTECTED_PATH_PREFIXES = [
   '/api/admin',
 ] as const;
@@ -48,15 +44,14 @@ export default defineEventHandler(async (event) => {
   const isPublicPath = PUBLIC_PATH_PREFIXES.some((prefix) => url.startsWith(prefix));
   if (isPublicPath) return;
 
-  // Extrair token via cookie (SSR) ou header Authorization: Bearer (SPA)
   const cookieToken = getCookie(event, 'agencia_token') ?? getCookie(event, 'auth_token');
   const headerAuth = event.node.req.headers.authorization;
   const bearerToken = headerAuth?.startsWith('Bearer ') ? headerAuth.slice(7) : undefined;
-  const token = cookieToken ?? bearerToken;
+  const rawToken = cookieToken ?? bearerToken;
 
   const requiresAuth = PROTECTED_PATH_PREFIXES.some((prefix) => url.startsWith(prefix));
 
-  if (!token) {
+  if (!rawToken) {
     if (requiresAuth) {
       throw createError({ statusCode: 401, statusMessage: 'Não autorizado: token ausente.' });
     }
@@ -71,9 +66,15 @@ export default defineEventHandler(async (event) => {
     });
   }
 
+  const token = decodeURIComponent(rawToken);
+
   try {
     const decoded = jwt.verify(token, jwtSecret) as JwtPayload;
-    event.context.user = decoded;
+
+    const roleClaim = decoded[DOTNET_ROLE_CLAIM] ?? decoded['role'];
+    const isAdmin = roleClaim === 'Admin';
+
+    event.context.user = { ...decoded, admin: isAdmin };
   } catch (err: unknown) {
     if (err instanceof Error) {
       if (err.name === 'TokenExpiredError') {
