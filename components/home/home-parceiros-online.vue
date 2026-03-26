@@ -33,6 +33,10 @@
         </div>
       </div>
 
+      <div v-if="isEmpty" class="qs-parceiros-online__empty">
+        <p>Nenhum parceiro disponível no momento. Volte em breve!</p>
+      </div>
+
       <div v-if="!loading && hasMore" class="qs-parceiros-online__more">
         <nuxt-link href="/partners" class="qs-btn-outline-primary">
           Ver todos os parceiros
@@ -44,18 +48,30 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { usePartnerStore } from "@/pinia/usePartnerStore";
 import { useHomeConfig } from '@/composables/useHomeConfig';
 
 const { config, loadConfig } = useHomeConfig();
 const partnerStore = usePartnerStore();
 
-onMounted(() => loadConfig());
+const isLoading = ref(true);
 
-const loading = computed(() => !partnerStore.newPartners || partnerStore.newPartners.length === 0);
+onMounted(async () => {
+  loadConfig();
+  try {
+    await partnerStore.fetchNewPartners();
+  } catch {
+    console.warn('[home-parceiros-online] Falha ao carregar parceiros online');
+  } finally {
+    isLoading.value = false;
+  }
+});
+
+const loading = computed(() => isLoading.value);
 const displayedPartners = computed(() => (partnerStore.newPartners || []).slice(0, 8));
 const hasMore = computed(() => (partnerStore.newPartners || []).length > 8);
+const isEmpty = computed(() => !isLoading.value && displayedPartners.value.length === 0);
 </script>
 
 <style scoped>
@@ -196,6 +212,15 @@ const hasMore = computed(() => (partnerStore.newPartners || []).length > 8);
 .qs-btn-outline-primary:hover {
   background: #2F7785;
   color: #fff;
+}
+
+.qs-parceiros-online__empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: #2F7785;
+  font-family: 'Inter', 'Jost', sans-serif;
+  font-size: 15px;
+  opacity: 0.7;
 }
 
 .qs-skeleton {

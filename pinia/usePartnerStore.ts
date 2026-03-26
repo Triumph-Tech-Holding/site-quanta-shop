@@ -9,6 +9,19 @@ import {
 }
     from "@/services/partner-service";
 
+function normalizeOnlinePartner(p: Record<string, unknown>) {
+    return {
+        id: p['IdAnunciante'],
+        nome: p['Nome'],
+        imagem: p['Icone'],
+        imagemPequena: p['Icone'],
+        percentualCashback: p['MaxCashback'] ?? p['MinCashback'],
+        link: p['link'],
+        categoria: p['Categoria'],
+        tipo: p['Tipo'],
+    };
+}
+
 export const usePartnerStore = defineStore('partners', () => {
     const userStore = useUserStore();
     const loadingStore = useLoadingStore();
@@ -62,13 +75,7 @@ export const usePartnerStore = defineStore('partners', () => {
             if (newPartners.value.length == 0) {
                 const response = await getNewPartners();
 
-                newPartners.value = response.data;
-
-                await userStore.loadUserFromStorage();
-
-                // newPartners.value.forEach(partner => {
-                //     partner.link = userStore.isLoggedIn ? partner.link.replace('{userId}', userStore.userId) : null;
-                // });
+                newPartners.value = (response.data as Record<string, unknown>[]).map(normalizeOnlinePartner);
 
                 isNewPartnersLoaded.value = true;
             }
@@ -89,13 +96,7 @@ export const usePartnerStore = defineStore('partners', () => {
             if (featuredPartners.value.length == 0) {
                 const response = await getFeaturedPartners();
 
-                featuredPartners.value = response.data;
-
-                await userStore.loadUserFromStorage();
-
-                // featuredPartners.value.forEach(partner => {
-                //     partner.link = userStore.isLoggedIn ? partner.link.replace('{userId}', userStore.userId) : null;
-                // });
+                featuredPartners.value = (response.data as Record<string, unknown>[]).map(normalizeOnlinePartner);
 
                 isFeaturedPartnersLoaded.value = true;
             }
