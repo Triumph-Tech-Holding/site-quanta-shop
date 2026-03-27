@@ -34,7 +34,7 @@
             </div>
           </div>
           <div class="qs-ceo__mobile-photo">
-            <img :src="config.ceo.imagemFundo" alt="Mauro Triumph" class="qs-ceo__mobile-photo-img" />
+            <img src="/img/ceo-mobile.png" alt="Mauro Triumph" class="qs-ceo__mobile-photo-img" />
             <div class="qs-ceo__mobile-photo-fade"></div>
           </div>
         </div>
@@ -275,16 +275,19 @@ function submitChat() {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: top center;
+    object-position: center center;
     display: block;
   }
 
   .qs-ceo__mobile-photo-fade {
     position: absolute;
     inset: 0;
-    background:
-      linear-gradient(to right, #225F6B 0%, rgba(34, 95, 107, 0.60) 38%, rgba(34, 95, 107, 0.00) 100%),
-      linear-gradient(to bottom, rgba(22, 68, 80, 0.30) 0%, rgba(22, 68, 80, 0.55) 100%);
+    background: linear-gradient(
+      to right,
+      #225F6B 0%,
+      rgba(34, 95, 107, 0.30) 30%,
+      rgba(34, 95, 107, 0.00) 60%
+    );
   }
 }
 
