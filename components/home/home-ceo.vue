@@ -15,6 +15,31 @@
             </button>
           </div>
         </div>
+        <!-- Mobile: badges à esquerda + foto à direita -->
+        <div v-if="config.ceo.imagemFundo" class="qs-ceo__mobile-row">
+          <div class="qs-ceo__mobile-badges">
+            <div class="qs-ceo__mbadge">
+              <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="rgba(255,255,255,0.75)" stroke-width="2"><path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+              <div>
+                <div class="qs-ceo__mbadge-label">{{ config.ceo.badge1Label || 'Respostas' }}</div>
+                <div class="qs-ceo__mbadge-value">{{ config.ceo.badge1Value || 'Em até 24h' }}</div>
+              </div>
+            </div>
+            <div class="qs-ceo__mbadge">
+              <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="rgba(255,255,255,0.75)" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+              <div>
+                <div class="qs-ceo__mbadge-label">{{ config.ceo.badge2Label || 'Parcerias' }}</div>
+                <div class="qs-ceo__mbadge-value">{{ config.ceo.badge2Value || '+200 fechadas' }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="qs-ceo__mobile-photo">
+            <img :src="config.ceo.imagemFundo" alt="Mauro Triumph" class="qs-ceo__mobile-photo-img" />
+            <div class="qs-ceo__mobile-photo-fade"></div>
+          </div>
+        </div>
+
+        <!-- Desktop: badges originais -->
         <div class="qs-ceo__badges">
           <div class="qs-ceo__badge">
             <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#2F7785" stroke-width="2"><path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
@@ -165,65 +190,102 @@ function submitChat() {
   background: rgba(255,255,255,0.04);
 }
 
+.qs-ceo__mobile-row {
+  display: none;
+}
+
 @media (max-width: 767px) {
   .qs-ceo__card {
     flex-direction: column;
-    padding: 28px 24px 90px;
+    padding: 28px 24px 0;
     text-align: center;
-    min-height: 360px;
-    background-position: right center !important;
-    background-size: cover !important;
+    background: linear-gradient(160deg, #1a4a54 0%, #225F6B 55%, #2a7078 100%) !important;
+    overflow: hidden;
   }
 
   .qs-ceo__overlay {
-    background: linear-gradient(
-      148deg,
-      rgba(20, 62, 74, 0.94) 0%,
-      rgba(22, 68, 80, 0.82) 40%,
-      rgba(22, 68, 80, 0.38) 70%,
-      rgba(22, 68, 80, 0.08) 100%
-    ) !important;
-    opacity: 1 !important;
+    display: none !important;
   }
 
   .qs-ceo__badges {
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
+    display: none !important;
+  }
+
+  .qs-ceo__mobile-row {
+    display: flex;
     flex-direction: row;
-    gap: 8px;
-    z-index: 3;
-    align-items: stretch;
-  }
-
-  .qs-ceo__badge {
-    background: rgba(255, 255, 255, 0.12) !important;
-    backdrop-filter: blur(16px) !important;
-    -webkit-backdrop-filter: blur(16px) !important;
-    border: 1px solid rgba(255, 255, 255, 0.20) !important;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.20) !important;
-    padding: 6px 10px !important;
-    gap: 6px !important;
-    min-width: 0;
-  }
-
-  .qs-ceo__badge svg {
-    width: 12px !important;
-    height: 12px !important;
-    stroke: rgba(255, 255, 255, 0.75) !important;
+    width: calc(100% + 48px);
+    margin-left: -24px;
+    height: 175px;
+    margin-top: 18px;
     flex-shrink: 0;
+    overflow: hidden;
   }
 
-  .qs-ceo__badge-label {
-    color: rgba(255, 255, 255, 0.60) !important;
-    font-size: 8px !important;
-    margin-bottom: 1px !important;
+  .qs-ceo__mobile-badges {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 10px 0 18px;
+    flex-shrink: 0;
+    width: 138px;
+    z-index: 2;
   }
 
-  .qs-ceo__badge-value {
-    color: #fff !important;
-    font-size: 11px !important;
-    font-weight: 700 !important;
+  .qs-ceo__mbadge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.11);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 10px;
+    padding: 5px 9px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+  }
+
+  .qs-ceo__mbadge-label {
+    color: rgba(255, 255, 255, 0.58);
+    font-size: 7px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin-bottom: 1px;
+    font-family: 'Inter', 'Jost', sans-serif;
+  }
+
+  .qs-ceo__mbadge-value {
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    font-family: 'Inter', 'Jost', sans-serif;
+  }
+
+  .qs-ceo__mobile-photo {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .qs-ceo__mobile-photo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+  }
+
+  .qs-ceo__mobile-photo-fade {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to right,
+      #225F6B 0%,
+      rgba(34, 95, 107, 0.55) 35%,
+      rgba(34, 95, 107, 0.00) 100%
+    );
   }
 }
 
