@@ -277,14 +277,18 @@ function submitChat() {
     object-fit: cover;
     object-position: center center;
     display: block;
+    filter: brightness(0.70) saturate(0.85);
   }
 
   .qs-ceo__mobile-photo-fade {
     position: absolute;
     inset: 0;
-    background:
-      linear-gradient(to right, #225F6B 0%, rgba(34, 95, 107, 0.30) 30%, rgba(34, 95, 107, 0.00) 60%),
-      linear-gradient(to left, rgba(22, 68, 80, 0.45) 0%, rgba(22, 68, 80, 0.00) 55%);
+    background: linear-gradient(
+      to right,
+      #225F6B 0%,
+      rgba(34, 95, 107, 0.30) 30%,
+      rgba(34, 95, 107, 0.00) 60%
+    );
   }
 }
 
