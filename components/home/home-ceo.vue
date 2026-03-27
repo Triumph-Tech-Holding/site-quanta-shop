@@ -179,23 +179,35 @@ function submitChat() {
 
 @media (max-width: 767px) {
   .qs-ceo {
-    padding: 40px 0;
+    padding: 32px 0;
   }
 
+  /* Card vira um portrait card estilo magazine */
   .qs-ceo__card {
     flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    padding: 44px 24px 36px;
-    text-align: center;
-    min-height: 480px;
-    background: linear-gradient(135deg, #1a4a54 0%, #225F6B 50%, #2F7785 100%) !important;
+    justify-content: flex-end;
+    align-items: stretch;
+    padding: 0 0 28px 0;
+    text-align: left;
+    min-height: 520px;
+    border-radius: 20px;
+    background: #1a4a54 !important;
   }
 
+  /* Substitui o overlay flat por gradiente direcional:
+     transparente no topo (foto visível) → escuro na base (texto legível) */
   .qs-ceo__overlay {
-    opacity: 0.38 !important;
+    background: linear-gradient(
+      to top,
+      rgba(15, 48, 57, 0.97) 0%,
+      rgba(26, 74, 84, 0.80) 38%,
+      rgba(34, 95, 107, 0.30) 65%,
+      rgba(34, 95, 107, 0.00) 100%
+    ) !important;
+    opacity: 1 !important;
   }
 
+  /* <img> preenche todo o card absolutamente — foto no topo visível */
   .qs-ceo__mobile-photo {
     display: block !important;
     position: absolute !important;
@@ -207,50 +219,79 @@ function submitChat() {
   .qs-ceo__mobile-photo-img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: cover !important;
+    object-position: top center !important;
     border-radius: 20px;
     display: block;
   }
 
+  /* Conteúdo ancorado na base, sobre o gradiente escuro */
   .qs-ceo__content {
     width: 100%;
-    text-align: center;
+    text-align: left;
+    padding: 0 24px;
+    margin-bottom: 20px;
   }
 
+  /* Esconde tag e pre no mobile — fica mais limpo */
+  .qs-ceo__tag {
+    display: none !important;
+  }
+
+  .qs-ceo__pre {
+    display: none !important;
+  }
+
+  /* Nome grande e impactante */
+  .qs-ceo__name {
+    font-size: 28px !important;
+    margin-bottom: 6px !important;
+  }
+
+  /* Descrição menor */
+  .qs-ceo__desc {
+    font-size: 13px !important;
+    opacity: 0.80;
+    margin-bottom: 16px !important;
+  }
+
+  /* Badges flutuantes lado a lado, estilo pill premium */
   .qs-ceo__badges {
-    width: auto;
-    max-width: 100%;
-    margin: 0 auto;
     flex-direction: row;
-    gap: 10px;
-    flex-wrap: wrap;
-    justify-content: center;
+    gap: 8px;
+    padding: 0 24px;
+    flex-wrap: nowrap;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .qs-ceo__badge {
-    background: rgba(0,0,0,0.28) !important;
-    backdrop-filter: blur(16px) !important;
-    -webkit-backdrop-filter: blur(16px) !important;
-    border: 1px solid rgba(255,255,255,0.18) !important;
-    border-radius: 999px !important;
-    padding: 7px 16px !important;
+    background: rgba(255,255,255,0.10) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(255,255,255,0.20) !important;
+    border-radius: 12px !important;
+    padding: 8px 14px !important;
     min-width: 0 !important;
-    width: auto !important;
-    gap: 7px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.22) !important;
+    flex: 1 !important;
+    gap: 8px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.25) !important;
+    align-items: center !important;
   }
 
   .qs-ceo__badge svg {
-    stroke: rgba(255,255,255,0.75) !important;
+    stroke: #98C73A !important;
     flex-shrink: 0;
     width: 14px !important;
     height: 14px !important;
   }
 
   .qs-ceo__badge-label {
-    color: rgba(255,255,255,0.55) !important;
+    color: rgba(255,255,255,0.50) !important;
     font-size: 9px !important;
-    margin-bottom: 0 !important;
+    margin-bottom: 1px !important;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
   }
 
   .qs-ceo__badge-value {
