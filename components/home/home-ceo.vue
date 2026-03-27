@@ -227,9 +227,9 @@ function submitChat() {
     flex-direction: column;
     justify-content: center;
     gap: 8px;
-    padding: 0 10px 0 18px;
+    padding: 0 8px 0 16px;
     flex-shrink: 0;
-    width: 138px;
+    width: 155px;
     z-index: 2;
   }
 
@@ -237,29 +237,31 @@ function submitChat() {
     display: flex;
     align-items: center;
     gap: 6px;
-    background: rgba(255, 255, 255, 0.11);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: rgba(255, 255, 255, 0.13);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.20);
     border-radius: 10px;
-    padding: 5px 9px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+    padding: 6px 10px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.22);
   }
 
   .qs-ceo__mbadge-label {
-    color: rgba(255, 255, 255, 0.58);
+    color: rgba(255, 255, 255, 0.60);
     font-size: 7px;
     font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.04em;
     margin-bottom: 1px;
+    white-space: nowrap;
     font-family: 'Inter', 'Jost', sans-serif;
   }
 
   .qs-ceo__mbadge-value {
     color: #fff;
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 700;
+    white-space: nowrap;
     font-family: 'Inter', 'Jost', sans-serif;
   }
 
@@ -280,12 +282,9 @@ function submitChat() {
   .qs-ceo__mobile-photo-fade {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      to right,
-      #225F6B 0%,
-      rgba(34, 95, 107, 0.55) 35%,
-      rgba(34, 95, 107, 0.00) 100%
-    );
+    background:
+      linear-gradient(to right, #225F6B 0%, rgba(34, 95, 107, 0.60) 38%, rgba(34, 95, 107, 0.00) 100%),
+      linear-gradient(to bottom, rgba(22, 68, 80, 0.30) 0%, rgba(22, 68, 80, 0.55) 100%);
   }
 }
 
