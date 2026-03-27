@@ -282,12 +282,9 @@ function submitChat() {
   .qs-ceo__mobile-photo-fade {
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      to right,
-      #225F6B 0%,
-      rgba(34, 95, 107, 0.30) 30%,
-      rgba(34, 95, 107, 0.00) 60%
-    );
+    background:
+      linear-gradient(to right, #225F6B 0%, rgba(34, 95, 107, 0.30) 30%, rgba(34, 95, 107, 0.00) 60%),
+      rgba(22, 68, 80, 0.42);
   }
 }
 
