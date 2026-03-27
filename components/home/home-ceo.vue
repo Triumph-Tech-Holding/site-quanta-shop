@@ -15,6 +15,10 @@
             </button>
           </div>
         </div>
+        <div v-if="config.ceo.imagemFundo" class="qs-ceo__photo-mobile">
+          <img :src="config.ceo.imagemFundo" alt="Mauro Triumph" class="qs-ceo__photo-mobile-img" />
+        </div>
+
         <div class="qs-ceo__badges">
           <div class="qs-ceo__badge">
             <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#2F7785" stroke-width="2"><path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
@@ -165,17 +169,64 @@ function submitChat() {
   background: rgba(255,255,255,0.04);
 }
 
+.qs-ceo__photo-mobile {
+  display: none;
+}
+
 @media (max-width: 767px) {
   .qs-ceo__card {
     flex-direction: column;
-    padding: 36px 24px;
+    padding: 28px 24px 24px;
     text-align: center;
-    min-height: 460px;
-    background-position: right center !important;
+    background: linear-gradient(135deg, #1a4a54 0%, #225F6B 50%, #2F7785 100%) !important;
   }
 
   .qs-ceo__overlay {
-    opacity: 0.52 !important;
+    display: none !important;
+  }
+
+  .qs-ceo__photo-mobile {
+    display: block;
+    width: calc(100% + 48px);
+    margin: 20px -24px 0;
+    height: 240px;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+  }
+
+  .qs-ceo__photo-mobile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+  }
+
+  .qs-ceo__badges {
+    margin-top: 16px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .qs-ceo__badge {
+    background: rgba(255, 255, 255, 0.12) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.22) !important;
+    box-shadow: none !important;
+  }
+
+  .qs-ceo__badge-label {
+    color: rgba(255, 255, 255, 0.70) !important;
+  }
+
+  .qs-ceo__badge-value {
+    color: #fff !important;
+  }
+
+  .qs-ceo__badge svg {
+    stroke: rgba(255, 255, 255, 0.80) !important;
   }
 }
 
