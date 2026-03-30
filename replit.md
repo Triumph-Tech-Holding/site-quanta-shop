@@ -2,6 +2,32 @@
 
 Frontend Nuxt.js 3 da plataforma de cashback Quanta Shop.
 
+## Design System Premium (Task #80 — COMPLETO)
+
+### Componente QsHero (`components/qs/QsHero.vue`)
+- Hero fullscreen com foto real via `<img>` (NUNCA `background-image` CSS para URLs externas)
+- Overlay teal `rgba(34,95,107,0.80)` via `div` absoluto
+- Symbol watermark do logo (`/img/logo/logo-symbol-white.png`) no canto inferior direito
+- Pill badge com ponto verde + texto de categoria
+- Título com acento lime (`titleAccent`)
+- Dois floating badges (glass cards com `backdrop-filter: blur`)
+- Barra de stats opcional na base
+- Props: `badge`, `title`, `titleAccent`, `subtitle`, `ctaPrimary`, `ctaSecondary`, `photoUrl`, `photoAlt`, `floatingBadges[]`, `stats[]`
+
+### Shared CSS (`assets/scss/quanta-premium.scss` — seção SHARED PAGE DESIGN SYSTEM)
+Classes: `.qs-section`, `.qs-section--gray/dark`, `.qs-section-header`, `.qs-label`, `.qs-step-card`, `.qs-step-num`, `.qs-benefits-grid`, `.qs-benefit-card`, `.qs-benefit-card--light`, `.qs-testimonial`, `.qs-cta-section`, `.qs-cta-inner`, `.qs-faq`, `.qs-rewards-grid`, `.qs-reward-card`, `.qs-invite-wrap`, `.qs-link-box`, `.qs-levels-grid`, `.qs-level-card`, `.qs-example-grid`, `.qs-categories-grid`, `.qs-section-symbol`
+
+### Páginas redesenhadas com QsHero
+- `pages/para-voce.vue` — foto consumidores, badge "Para Consumidores", stats: +80mil/R$4,2M/+2.400
+- `pages/para-sua-empresa.vue` — foto empresária, badge "Para Lojistas e Empresas", stats: +2.400 emp/R$4,2M/98%
+- `pages/seja-um-agente.vue` — foto profissionais, badge "Oportunidade de renda extra"
+- `pages/quanta-amizade.vue` — foto amigos, badge "Programa de Indicações"
+- `pages/contato.vue` — hero com foto nova, pill badge, floating badges de horário
+
+### Logo symbols
+- `/img/logo/logo-symbol.png` — símbolo colorido (bQ)
+- `/img/logo/logo-symbol-white.png` — símbolo branco para uso em fundos teal/dark
+
 ## Stack
 
 - **Framework:** Nuxt.js 3 (Vue 3, TypeScript)

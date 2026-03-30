@@ -2,11 +2,38 @@
   <div class="qct-page">
 
     <!-- Hero -->
-    <section class="qct-hero">
-      <div class="container qct-hero__inner">
-        <span class="qct-label qct-label--hero">Atendimento</span>
-        <h1>Fale com a <span class="qct-accent">Quanta Shop</span></h1>
+    <section class="qct-hero-new">
+      <div class="qct-hero-new__photo-wrap">
+        <img
+          src="https://images.unsplash.com/photo-1577563908411-5077b6dc7624?w=1400&q=80&auto=format&fit=crop"
+          alt="Equipe de atendimento Quanta Shop"
+          class="qct-hero-new__photo"
+        />
+      </div>
+      <div class="qct-hero-new__overlay"></div>
+      <div class="container qct-hero-new__body">
+        <span class="qct-hero-new__pill">
+          <span class="qct-hero-new__pill-dot"></span>
+          Atendimento
+        </span>
+        <h1>Fale com a <span class="qct-hero-new__accent">Quanta Shop</span></h1>
         <p>Tem uma dúvida, sugestão ou precisa de suporte? Nossa equipe está pronta para ajudar.</p>
+        <div class="qct-hero-new__badges">
+          <div class="qct-hero-new__badge">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#98C73A" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <div>
+              <span>Resposta em</span>
+              <strong>5 minutos</strong>
+            </div>
+          </div>
+          <div class="qct-hero-new__badge">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#98C73A" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <div>
+              <span>Atendimento</span>
+              <strong>Seg–Sex 8h–18h</strong>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -173,14 +200,65 @@ async function submitForm() {
 <style scoped>
 .qct-page { font-family: 'Inter', 'Jost', sans-serif; }
 
-.qct-hero {
-  background: linear-gradient(135deg, #0f232d 0%, #225F6B 60%, #2F7785 100%);
-  padding: 60px 0 48px;
+/* ─── New hero ───────────────────────────────────────────── */
+.qct-hero-new {
+  position: relative;
+  min-height: 360px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
   text-align: center;
 }
-.qct-hero h1 { font-size: clamp(26px, 3vw, 42px); font-weight: 800; color: #fff; margin: 12px 0 14px; }
-.qct-accent { color: #98C73A; }
-.qct-hero p { font-size: 16px; color: rgba(255,255,255,0.72); max-width: 480px; margin: 0 auto; }
+.qct-hero-new__photo-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.qct-hero-new__photo {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center 30%;
+  display: block;
+}
+.qct-hero-new__overlay {
+  position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(100deg, rgba(20,55,65,0.90) 0%, rgba(34,95,107,0.82) 100%);
+}
+.qct-hero-new__body {
+  position: relative; z-index: 2;
+  padding: 72px 0 64px;
+  display: flex; flex-direction: column; align-items: center;
+}
+.qct-hero-new__pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 999px; padding: 5px 14px 5px 10px;
+  font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.92);
+  margin-bottom: 20px;
+}
+.qct-hero-new__pill-dot {
+  width: 7px; height: 7px; border-radius: 50%; background: #98C73A; flex-shrink: 0;
+}
+.qct-hero-new__body h1 {
+  font-size: clamp(26px, 3vw, 46px); font-weight: 800; color: #fff;
+  margin: 0 0 14px; letter-spacing: -0.02em;
+}
+.qct-hero-new__accent { color: #98C73A; }
+.qct-hero-new__body > p {
+  font-size: 17px; color: rgba(255,255,255,0.75);
+  max-width: 520px; margin: 0 auto 32px; line-height: 1.65;
+}
+.qct-hero-new__badges {
+  display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
+}
+.qct-hero-new__badge {
+  display: flex; align-items: center; gap: 12px;
+  background: rgba(15,30,40,0.55); backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.18); border-radius: 12px;
+  padding: 12px 18px;
+}
+.qct-hero-new__badge span { display: block; font-size: 11px; color: rgba(255,255,255,0.55); text-transform: uppercase; letter-spacing: 0.06em; }
+.qct-hero-new__badge strong { display: block; font-size: 15px; font-weight: 700; color: #fff; }
 
 .qct-label { display: inline-block; font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #2F7785; background: rgba(47,119,133,0.08); padding: 4px 12px; border-radius: 999px; margin-bottom: 12px; }
 .qct-label--hero { color: #98C73A; background: rgba(152,199,58,0.12); }
