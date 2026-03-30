@@ -86,4 +86,3 @@ HOST = "0.0.0.0"
 
 [userenv.shared]
 USE_LOCAL_API = "true"
-NUXT_JWT_SECRET = "O empenho em analisar a execucao dos pontos do programa e uma das consequencias de alternativas as solucoes ortodoxas."
