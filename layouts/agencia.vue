@@ -10,7 +10,6 @@
           <NuxtLink to="/agencia/como-funciona" class="ag-nav-link">Como Funciona</NuxtLink>
           <NuxtLink to="/agencia/faq" class="ag-nav-link">FAQ</NuxtLink>
           <NuxtLink to="/agencia/lojas-fisicas" class="ag-nav-link">Lojas</NuxtLink>
-          <NuxtLink to="/agencia/credenciar" class="ag-nav-link ag-nav-credenciar">Se Credenciar</NuxtLink>
           <NuxtLink to="/agencia/login" class="btn btn-sm btn-ag-outline px-3">Entrar</NuxtLink>
           <NuxtLink to="/agencia/cadastro" class="btn btn-sm btn-ag-primary px-3">Cadastrar</NuxtLink>
         </nav>

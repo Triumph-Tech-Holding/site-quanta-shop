@@ -13,7 +13,7 @@
           <h1>Aumente suas vendas com <span class="pse-accent">cashback real</span> para seus clientes</h1>
           <p>Ofereça recompensas automáticas em cada compra, fidelize seu público e atraia novos clientes sem custo fixo. Só paga quando vende.</p>
           <div class="pse-hero__btns">
-            <nuxt-link href="/agencia/cadastro" class="pse-btn-primary">Credenciar minha empresa →</nuxt-link>
+            <nuxt-link href="/agencia/credenciar" class="pse-btn-primary">Credenciar minha empresa →</nuxt-link>
             <nuxt-link href="#como-funciona" class="pse-btn-outline">Como funciona</nuxt-link>
           </div>
           <div class="pse-hero__stats">
@@ -110,7 +110,7 @@
               <li>✓ Sem mensalidade ou taxa de adesão</li>
               <li>✓ Integração com maquininha e e-commerce</li>
             </ul>
-            <nuxt-link href="/agencia/cadastro" class="pse-btn-primary pse-btn-full">Credenciar agora gratuitamente →</nuxt-link>
+            <nuxt-link href="/agencia/credenciar" class="pse-btn-primary pse-btn-full">Credenciar agora gratuitamente →</nuxt-link>
           </div>
         </div>
       </div>
@@ -124,7 +124,7 @@
           <p>Mais de 2.400 empresas já usam a Quanta Shop para fidelizar clientes e aumentar vendas.</p>
         </div>
         <div class="pse-cta__btns">
-          <nuxt-link href="/agencia/cadastro" class="pse-btn-primary">Credenciar minha empresa</nuxt-link>
+          <nuxt-link href="/agencia/credenciar" class="pse-btn-primary">Credenciar minha empresa</nuxt-link>
           <nuxt-link href="/contato" class="pse-btn-outline pse-btn-outline--white">Falar com consultor</nuxt-link>
         </div>
       </div>

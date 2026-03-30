@@ -220,7 +220,7 @@
 <script setup lang="ts">
 import { extractApiErrorMessage } from '~/types/agencia';
 
-definePageMeta({ layout: 'agencia' });
+definePageMeta({ layout: 'layout-home' });
 
 const api = useApi();
 const route = useRoute();
