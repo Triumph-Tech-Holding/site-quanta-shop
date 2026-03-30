@@ -8,15 +8,29 @@ export ASPNETCORE_URLS=http://0.0.0.0:8000
 
 echo "[start-prod] === Iniciando Quanta Shop ==="
 
-# Verificar se .NET está disponível (para produção em Replit sem .NET)
-if ! dotnet --version > /dev/null 2>&1; then
-  echo "[start-prod] .NET runtime nao funcional. Iniciando apenas Nuxt com API remota (Azure)..."
-  export NUXT_USE_LOCAL_API=false
-  echo "[start-prod] Iniciando servidor Nuxt na porta 5000 (API remota)..."
+# Modo Nuxt-only: quando NUXT_USE_LOCAL_API=false, pula a API local e usa o Azure
+if [ "${NUXT_USE_LOCAL_API}" = "false" ]; then
+  echo "[start-prod] NUXT_USE_LOCAL_API=false — iniciando Nuxt com API remota (Azure)..."
   exec node /home/runner/workspace/.output/server/index.mjs
 fi
 
-echo "[start-prod] .NET runtime funcional. Iniciando com API local (.NET + Nuxt)..."
+# Verificar se o .NET runtime consegue executar o binario compilado
+API_BINARY="/home/runner/workspace/api/publish/MMN.Api"
+
+if [ ! -f "$API_BINARY" ]; then
+  echo "[start-prod] Binario .NET nao encontrado — iniciando Nuxt com API remota..."
+  export NUXT_USE_LOCAL_API=false
+  exec node /home/runner/workspace/.output/server/index.mjs
+fi
+
+# Testar se o runtime consegue carregar o binario (nao apenas se dotnet CLI existe)
+if ! "$API_BINARY" --version > /dev/null 2>&1 && ! "$API_BINARY" -h > /dev/null 2>&1; then
+  echo "[start-prod] Runtime .NET incapaz de executar o binario — iniciando Nuxt com API remota..."
+  export NUXT_USE_LOCAL_API=false
+  exec node /home/runner/workspace/.output/server/index.mjs
+fi
+
+echo "[start-prod] .NET runtime OK. Iniciando com API local (.NET + Nuxt)..."
 
 DB_SERVER="tcp:bigcash.database.windows.net,1433"
 DB_NAME="Bigcash"
@@ -34,14 +48,6 @@ if [ -n "$RAW_SECRET" ]; then
   fi
 else
   echo "[start-prod] WARNING: SQL_CONNECTION_STRING nao configurado — API iniciara sem banco."
-fi
-
-API_BINARY="/home/runner/workspace/api/publish/MMN.Api"
-
-if [ ! -f "$API_BINARY" ]; then
-  echo "[start-prod] ERRO: Binario publicado nao encontrado em $API_BINARY"
-  echo "[start-prod] Execute build-prod.sh para compilar a API antes de iniciar."
-  exit 1
 fi
 
 echo "[start-prod] Iniciando API via binario publicado..."

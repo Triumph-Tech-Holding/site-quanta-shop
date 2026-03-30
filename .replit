@@ -83,6 +83,7 @@ NUXT_API_BASE_URL = "/api-proxy"
 NUXT_API_BASE_URL = "/api-proxy"
 PORT = "5000"
 HOST = "0.0.0.0"
+NUXT_USE_LOCAL_API = "false"
 
 [userenv.shared]
 USE_LOCAL_API = "true"
