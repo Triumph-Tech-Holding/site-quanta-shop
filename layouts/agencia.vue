@@ -10,6 +10,7 @@
           <NuxtLink to="/agencia/como-funciona" class="ag-nav-link">Como Funciona</NuxtLink>
           <NuxtLink to="/agencia/faq" class="ag-nav-link">FAQ</NuxtLink>
           <NuxtLink to="/agencia/lojas-fisicas" class="ag-nav-link">Lojas</NuxtLink>
+          <NuxtLink to="/agencia/credenciar" class="ag-nav-link ag-nav-credenciar">Se Credenciar</NuxtLink>
           <NuxtLink to="/agencia/login" class="btn btn-sm btn-ag-outline px-3">Entrar</NuxtLink>
           <NuxtLink to="/agencia/cadastro" class="btn btn-sm btn-ag-primary px-3">Cadastrar</NuxtLink>
         </nav>
@@ -38,5 +39,7 @@
 .ag-portal-header { background:#fff; box-shadow:0 1px 4px rgba(0,0,0,.08); position:sticky; top:0; z-index:100; }
 .ag-nav-link { color:#2f7785; text-decoration:none; font-size:.9rem; font-weight:500; }
 .ag-nav-link:hover { color:#98c73a; }
+.ag-nav-credenciar { color:#98c73a !important; font-weight:600 !important; border:1.5px solid #98c73a; border-radius:6px; padding:3px 10px; }
+.ag-nav-credenciar:hover { background:#98c73a; color:#fff !important; }
 .ag-portal-footer { background:#fff; border-top:1px solid #dee2e6; }
 </style>
