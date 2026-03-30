@@ -110,7 +110,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 definePageMeta({ layout: 'layout-home' });
-useSeoMeta({ title: "Seja um Agente | Quanta Shop", description: "Indique lojas e consumidores e ganhe comissões recorrentes. 100% gratuito." });
+useSeoMeta({ title: "Seja um Agente | Quanta Shop", description: "Indique lojas e consumidores e ganhe comissões recorrentes. 100% gratuito.", canonical: "https://quantashop.com.br/seja-um-agente" });
 
 const openFaq = ref(-1);
 

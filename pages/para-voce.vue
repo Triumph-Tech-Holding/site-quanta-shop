@@ -177,6 +177,7 @@ definePageMeta({ layout: 'layout-home' });
 useSeoMeta({
   title: 'Para Você | Quanta Shop — Cashback de Verdade',
   description: 'Compre nas suas lojas favoritas e ganhe cashback real. Mais de 2.400 lojas parceiras, cadastro grátis, dinheiro de volta na sua conta.',
+  canonical: 'https://quantashop.com.br/para-voce'
 });
 
 const steps = [

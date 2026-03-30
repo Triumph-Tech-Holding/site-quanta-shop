@@ -135,7 +135,7 @@
 
 <script setup lang="ts">
 definePageMeta({ layout: 'layout-home' });
-useSeoMeta({ title: "Para sua Empresa | Quanta Shop", description: "Ofereça cashback real aos seus clientes. Aumente vendas, fidelize clientes. Só paga quando vende." });
+useSeoMeta({ title: "Para sua Empresa | Quanta Shop", description: "Ofereça cashback real aos seus clientes. Aumente vendas, fidelize clientes. Só paga quando vende.", canonical: "https://quantashop.com.br/para-sua-empresa" });
 
 const steps = [
   {

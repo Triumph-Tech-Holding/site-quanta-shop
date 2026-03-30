@@ -120,7 +120,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 definePageMeta({ layout: 'layout-home' });
-useSeoMeta({ title: "Quanta Amizade | Quanta Shop", description: "Indique amigos para a Quanta Shop e ganhe cashback bônus em cada compra deles." });
+useSeoMeta({ title: "Quanta Amizade | Quanta Shop", description: "Indique amigos para a Quanta Shop e ganhe cashback bônus em cada compra deles.", canonical: "https://quantashop.com.br/quanta-amizade" });
 
 const copied = ref(false);
 const userName = ref('seu-usuario');

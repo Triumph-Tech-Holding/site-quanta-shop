@@ -75,7 +75,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 definePageMeta({ layout: 'layout-home' });
-useSeoMeta({ title: "Blog | Quanta Shop", description: "Dicas de cashback, finanças pessoais e novidades do ecossistema Quanta Shop." });
+useSeoMeta({ title: "Blog | Quanta Shop", description: "Dicas de cashback, finanças pessoais e novidades do ecossistema Quanta Shop.", canonical: "https://quantashop.com.br/blog" });
 
 const email = ref('');
 const activeCategory = ref('Todos');

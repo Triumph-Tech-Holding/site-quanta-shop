@@ -13,5 +13,8 @@
 </template>
 
 <script setup lang="ts">
-useSeoMeta({ title: "Parceiros | Quanta Shop" });
+useSeoMeta({ 
+  title: "Parceiros | Quanta Shop",
+  canonical: "https://quantashop.com.br/partners"
+});
 </script>

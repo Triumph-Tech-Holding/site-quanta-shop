@@ -153,7 +153,7 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue';
 definePageMeta({ layout: 'layout-home' });
-useSeoMeta({ title: "Fale Conosco | Quanta Shop", description: "Entre em contato com a equipe Quanta Shop. Suporte, parceria e atendimento." });
+useSeoMeta({ title: "Fale Conosco | Quanta Shop", description: "Entre em contato com a equipe Quanta Shop. Suporte, parceria e atendimento.", canonical: "https://quantashop.com.br/contato" });
 
 const sent = ref(false);
 const loading = ref(false);
