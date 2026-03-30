@@ -7,7 +7,7 @@
         <p class="qs-section-sub">{{ config.parceirosLocais.subtitle }}</p>
       </div>
 
-      <div v-if="loading" class="qs-locais__grid">
+      <div v-if="!partnerStore.isLocalPartnersLoaded" class="qs-locais__grid">
         <div v-for="n in 6" :key="n" class="qs-local-card qs-local-card--skeleton">
           <div class="qs-skeleton" style="height:14px;width:40%;border-radius:4px;margin-bottom:8px;"></div>
           <div class="qs-skeleton" style="height:18px;width:70%;border-radius:4px;margin-bottom:6px;"></div>
@@ -17,7 +17,7 @@
         </div>
       </div>
 
-      <div v-else class="qs-locais__grid">
+      <div v-else-if="displayedLocais.length > 0" class="qs-locais__grid">
         <div
           v-for="item in displayedLocais"
           :key="item.id"
@@ -45,7 +45,11 @@
         </div>
       </div>
 
-      <div v-if="!loading" class="qs-locais__more">
+      <div v-else-if="partnerStore.isLocalPartnersLoaded && displayedLocais.length === 0" class="qs-locais__empty">
+        <p>Nenhum parceiro local disponível no momento.</p>
+      </div>
+
+      <div v-if="partnerStore.isLocalPartnersLoaded && displayedLocais.length > 0" class="qs-locais__more">
         <nuxt-link href="/partners?tipo=LOCAL" class="qs-btn-outline-primary">
           Ver parceiros locais
           <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -62,7 +66,6 @@ import { useHomeConfig } from '@/composables/useHomeConfig';
 
 const { config, loadConfig } = useHomeConfig();
 const partnerStore = usePartnerStore();
-const loading = computed(() => !partnerStore.localPartners || partnerStore.localPartners.length === 0);
 const displayedLocais = computed(() => (partnerStore.localPartners || []).slice(0, 6));
 
 onMounted(() => loadConfig());

@@ -27,9 +27,9 @@ export const menu_data: IMenuItem[] = [
   },
   {
     id: 5,
-    link: 'https://bigcash.blob.core.windows.net/documentos/CAMPANHA%20QUANTA%20AMIZADE.pdf',
+    link: '/quanta-amizade',
     title: 'Quanta Amizade',
-    target: '_blank'
+    target: '_self'
   },
 ]
 
@@ -61,8 +61,8 @@ export const mobile_menu: IMobileType[] = [
   },
   {
     id: 5,
-    link: 'https://bigcash.blob.core.windows.net/documentos/CAMPANHA%20QUANTA%20AMIZADE.pdf',
+    link: '/quanta-amizade',
     title: 'Quanta Amizade',
-    target: '_blank'
+    target: '_self'
   },
 ]

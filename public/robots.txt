@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /agencia/painel/
+Disallow: /agencia/painel/admin/
+Disallow: /admin
+Disallow: /*.pdf$
+Disallow: *.jpg$
+
+Sitemap: https://quantashop.com.br/sitemap.xml
