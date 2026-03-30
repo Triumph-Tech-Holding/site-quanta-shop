@@ -6,7 +6,17 @@ export DOTNET_NOLOGO=1
 export ASPNETCORE_ENVIRONMENT=Production
 export ASPNETCORE_URLS=http://0.0.0.0:8000
 
-echo "[start-prod] === Iniciando Quanta Shop (API .NET + Nuxt) ==="
+echo "[start-prod] === Iniciando Quanta Shop ==="
+
+# Verificar se .NET está disponível (para produção em Replit sem .NET)
+if ! command -v dotnet &> /dev/null; then
+  echo "[start-prod] .NET não encontrado. Iniciando apenas Nuxt com API remota (Azure)..."
+  export NUXT_USE_LOCAL_API=false
+  echo "[start-prod] Iniciando servidor Nuxt na porta 5000 (API remota)..."
+  exec node /home/runner/workspace/.output/server/index.mjs
+fi
+
+echo "[start-prod] .NET encontrado. Iniciando com API local (.NET + Nuxt)..."
 
 DB_SERVER="tcp:bigcash.database.windows.net,1433"
 DB_NAME="Bigcash"
