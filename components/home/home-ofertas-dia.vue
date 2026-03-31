@@ -76,7 +76,7 @@ function normalizeProduct(p: Record<string, unknown>) {
   return {
     id: p['aw_product_id'] as string,
     nome: p['product_name'] as string,
-    imagemPequena: p['merchant_image_url'] as string,
+    imagemPequena: (p['merchant_image_url'] || p['imagem']) as string,
     parceiro: p['merchant_name'] as string,
     percentualCashback: p['cashback'] as number,
     preco: p['search_price'] as string,
