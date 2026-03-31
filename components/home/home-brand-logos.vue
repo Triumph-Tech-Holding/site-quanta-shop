@@ -29,13 +29,11 @@
 import { ref, computed, onMounted } from 'vue';
 import { useHomeConfig } from '@/composables/useHomeConfig';
 import { usePartnerStore } from '@/pinia/usePartnerStore';
-import { useUserStore } from '@/pinia/useUserStore';
-import { useRouter } from 'vue-router';
+import { useAgenciaStore } from '@/pinia/useAgenciaStore';
 
 const { config, loadConfig } = useHomeConfig();
 const partnerStore = usePartnerStore();
-const userStore = useUserStore();
-const router = useRouter();
+const agenciaStore = useAgenciaStore();
 const paused = ref(false);
 
 const activeBrands = computed(() => {
@@ -50,18 +48,19 @@ const loopedBrands = computed(() => {
 });
 
 function handleBrandClick(brand: any) {
-  if (!userStore.isLoggedIn) {
-    router.push('/login');
+  if (!agenciaStore.isLoggedIn) {
+    navigateTo('/login');
     return;
   }
   
   if (brand.link) {
-    const url = brand.link.replace('{userId}', userStore.userId || '');
+    const url = brand.link.replace('{userId}', String(agenciaStore.user?.idUsuario || ''));
     window.open(url, '_blank', 'noopener');
   }
 }
 
 onMounted(async () => {
+  agenciaStore.loadFromStorage();
   await loadConfig();
   try {
     await partnerStore.fetchNewPartners();

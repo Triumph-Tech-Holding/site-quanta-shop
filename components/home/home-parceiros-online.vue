@@ -51,17 +51,16 @@
 import { computed, onMounted, ref } from 'vue';
 import { usePartnerStore } from "@/pinia/usePartnerStore";
 import { useHomeConfig } from '@/composables/useHomeConfig';
-import { useUserStore } from '@/pinia/useUserStore';
-import { useRouter } from 'vue-router';
+import { useAgenciaStore } from '@/pinia/useAgenciaStore';
 
 const { config, loadConfig } = useHomeConfig();
 const partnerStore = usePartnerStore();
-const userStore = useUserStore();
-const router = useRouter();
+const agenciaStore = useAgenciaStore();
 
 const isLoading = ref(true);
 
 onMounted(async () => {
+  agenciaStore.loadFromStorage();
   loadConfig();
   try {
     await partnerStore.fetchNewPartners();
@@ -77,13 +76,13 @@ const displayedPartners = computed(() => (partnerStore.newPartners || []));
 const isEmpty = computed(() => !isLoading.value && displayedPartners.value.length === 0);
 
 function handlePartnerClick(item: any) {
-  if (!userStore.isLoggedIn) {
-    router.push('/login');
+  if (!agenciaStore.isLoggedIn) {
+    navigateTo('/login');
     return;
   }
   
   if (item.link) {
-    const url = item.link.replace('{userId}', userStore.userId || '');
+    const url = item.link.replace('{userId}', String(agenciaStore.user?.idUsuario || ''));
     window.open(url, '_blank', 'noopener');
   }
 }
