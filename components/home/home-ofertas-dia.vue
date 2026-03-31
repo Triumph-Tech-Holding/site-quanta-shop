@@ -43,7 +43,7 @@
         :autoplay="{ delay: 5000, disableOnInteraction: false }"
         :breakpoints="{
           640: { slidesPerView: 2, spaceBetween: 20 },
-          1024: { slidesPerView: 4, spaceBetween: 20 }
+          1024: { slidesPerView: 3.2, spaceBetween: 20 }
         }"
         class="qs-ofertas__swiper"
       >
@@ -53,7 +53,7 @@
               Até {{ item.percentualCashback }}% de Cashback
             </div>
             <div class="qs-ofertas__thumb">
-              <img :src="item.imagemPequena || '/img/placeholder.png'" :alt="item.nome" />
+              <img :src="item.imagemPequena || item.imagem || '/img/placeholder.png'" :alt="item.nome" />
             </div>
             <div class="qs-ofertas__body">
               <div class="qs-ofertas__brand">
@@ -139,7 +139,18 @@ onMounted(async () => {
     try {
       const res = await fetch('/data/mock-data.json');
       const data = await res.json();
-      mockOffers.value = (data.ofertas || []).slice(0, 4);
+      mockOffers.value = (data.ofertas || []).map((p: Record<string, unknown>) =>
+        normalizeProduct({
+          ...p,
+          merchant_image_url: p['imagem'],
+          product_name: p['nome'],
+          merchant_name: p['parceiro'],
+          cashback: p['percentualCashback'],
+          search_price: p['preco'],
+          aw_deep_link: p['link'],
+          aw_product_id: p['id'],
+        })
+      );
     } catch {
       console.warn('[home-ofertas-dia] Fallback mock também falhou');
     }
