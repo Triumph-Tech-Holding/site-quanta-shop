@@ -27,7 +27,7 @@
           </div>
           <h3 class="qs-partner-card__name">{{ item.nome }}</h3>
           <p class="qs-partner-card__cashback">Até {{ item.percentualCashback || '?' }}% de cashback</p>
-          <a :href="item.link || `/partners`" target="_blank" rel="noopener" class="qs-partner-card__btn">
+          <a :href="item.link || '/login'" target="_blank" rel="noopener" class="qs-partner-card__btn">
             Ative seu cashback
           </a>
         </div>

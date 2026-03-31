@@ -7,7 +7,7 @@
           <a
             v-for="(brand, i) in loopedBrands"
             :key="`${brand.id}-${i}`"
-            :href="brand.link || '/partners'"
+            :href="brand.link || '/login'"
             target="_blank"
             rel="noopener"
             class="qs-brands__item"
