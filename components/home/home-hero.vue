@@ -1,5 +1,5 @@
 <template>
-  <section class="qs-hero" style="max-height: 60vh; overflow: hidden;">
+  <section class="qs-hero">
     <div v-if="sliderData.length === 0" class="qs-hero__loading">
       <img src="/img/ui/loading.gif" alt="Carregando..." width="48" />
     </div>
