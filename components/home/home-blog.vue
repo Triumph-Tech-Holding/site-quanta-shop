@@ -124,7 +124,7 @@ onMounted(async () => {
 
 <style scoped>
 .qs-social {
-  padding: 72px 0;
+  padding: 48px 0;
   background: #f9fafb;
 }
 

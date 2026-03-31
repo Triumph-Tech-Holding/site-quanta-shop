@@ -83,7 +83,7 @@ onMounted(() => {
 
 <style scoped>
 .qs-locais {
-  padding: 72px 0;
+  padding: 48px 0;
   background: #fff;
 }
 

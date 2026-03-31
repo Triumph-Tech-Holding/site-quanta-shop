@@ -75,7 +75,7 @@ const isEmpty = computed(() => !isLoading.value && displayedPartners.value.lengt
 
 <style scoped>
 .qs-parceiros-online {
-  padding: 72px 0;
+  padding: 48px 0;
   background: #f7f8fa;
 }
 

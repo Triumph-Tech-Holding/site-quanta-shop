@@ -66,7 +66,7 @@ const testimonials = [
 
 <style scoped>
 .qs-testimonials {
-  padding: 72px 0;
+  padding: 48px 0;
   background: #f7f8fa;
 }
 

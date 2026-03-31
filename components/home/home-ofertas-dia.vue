@@ -6,49 +6,82 @@
         <p class="qs-section-sub">{{ config.ofertas.subtitle }}</p>
       </div>
 
-      <div v-if="isLoading" class="qs-ofertas__grid">
-        <div v-for="n in 4" :key="n" class="qs-ofertas__card qs-ofertas__card--skeleton">
-          <div class="qs-ofertas__thumb qs-ofertas__thumb--skeleton">
-            <div class="qs-skeleton" style="height:120px;width:80%;border-radius:8px;"></div>
+      <Swiper
+        v-if="isLoading"
+        :slidesPerView="1.2"
+        :spaceBetween="20"
+        :modules="[]"
+        :breakpoints="{
+          640: { slidesPerView: 2, spaceBetween: 20 },
+          1024: { slidesPerView: 4, spaceBetween: 20 }
+        }"
+        class="qs-ofertas__swiper"
+      >
+        <SwiperSlide v-for="n in 4" :key="n" class="qs-ofertas__slide">
+          <div class="qs-ofertas__card qs-ofertas__card--skeleton">
+            <div class="qs-ofertas__thumb qs-ofertas__thumb--skeleton">
+              <div class="qs-skeleton" style="height:120px;width:80%;border-radius:8px;"></div>
+            </div>
+            <div class="qs-ofertas__body">
+              <div class="qs-skeleton" style="height:11px;width:50%;border-radius:4px;margin-bottom:8px;"></div>
+              <div class="qs-skeleton" style="height:14px;width:90%;border-radius:4px;margin-bottom:6px;"></div>
+              <div class="qs-skeleton" style="height:14px;width:70%;border-radius:4px;margin-bottom:10px;"></div>
+              <div class="qs-skeleton" style="height:24px;width:45%;border-radius:4px;margin-bottom:14px;"></div>
+              <div class="qs-skeleton" style="height:36px;width:100%;border-radius:8px;"></div>
+            </div>
           </div>
-          <div class="qs-ofertas__body">
-            <div class="qs-skeleton" style="height:11px;width:50%;border-radius:4px;margin-bottom:8px;"></div>
-            <div class="qs-skeleton" style="height:14px;width:90%;border-radius:4px;margin-bottom:6px;"></div>
-            <div class="qs-skeleton" style="height:14px;width:70%;border-radius:4px;margin-bottom:10px;"></div>
-            <div class="qs-skeleton" style="height:24px;width:45%;border-radius:4px;margin-bottom:14px;"></div>
-            <div class="qs-skeleton" style="height:36px;width:100%;border-radius:8px;"></div>
-          </div>
-        </div>
-      </div>
+        </SwiperSlide>
+      </Swiper>
 
-      <div v-else-if="offers.length > 0" class="qs-ofertas__grid">
-        <div
-          v-for="item in offers"
-          :key="item.id"
-          class="qs-ofertas__card"
-        >
-          <div class="qs-ofertas__badge" v-if="item.percentualCashback">
-            Até {{ item.percentualCashback }}% de Cashback
-          </div>
-          <div class="qs-ofertas__thumb">
-            <img :src="item.imagemPequena || '/img/placeholder.png'" :alt="item.nome" />
-          </div>
-          <div class="qs-ofertas__body">
-            <div class="qs-ofertas__brand">
-              <span>{{ item.parceiro }}</span>
+      <Swiper
+        v-if="offers.length > 0"
+        :slidesPerView="1.2"
+        :spaceBetween="20"
+        :navigation="{ nextEl: '.qs-ofertas-next', prevEl: '.qs-ofertas-prev' }"
+        :pagination="{ el: '.qs-ofertas-dots', clickable: true }"
+        :modules="[Navigation, Pagination, Autoplay]"
+        :autoplay="{ delay: 5000, disableOnInteraction: false }"
+        :breakpoints="{
+          640: { slidesPerView: 2, spaceBetween: 20 },
+          1024: { slidesPerView: 4, spaceBetween: 20 }
+        }"
+        class="qs-ofertas__swiper"
+      >
+        <SwiperSlide v-for="item in offers" :key="item.id" class="qs-ofertas__slide">
+          <div class="qs-ofertas__card">
+            <div class="qs-ofertas__badge" v-if="item.percentualCashback">
+              Até {{ item.percentualCashback }}% de Cashback
             </div>
-            <h3 class="qs-ofertas__name">{{ item.nome }}</h3>
-            <div class="qs-ofertas__price">R$ {{ formatPrice(item.preco) }}</div>
-            <div class="qs-ofertas__cashback-label">
-              <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="#2F7785" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
-              Cashback Garantido
+            <div class="qs-ofertas__thumb">
+              <img :src="item.imagemPequena || '/img/placeholder.png'" :alt="item.nome" />
             </div>
-            <a :href="item.link" target="_blank" rel="noopener" class="qs-ofertas__btn">
-              Aproveitar Agora
-              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
+            <div class="qs-ofertas__body">
+              <div class="qs-ofertas__brand">
+                <span>{{ item.parceiro }}</span>
+              </div>
+              <h3 class="qs-ofertas__name">{{ item.nome }}</h3>
+              <div class="qs-ofertas__price">R$ {{ formatPrice(item.preco) }}</div>
+              <div class="qs-ofertas__cashback-label">
+                <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="#2F7785" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                Cashback Garantido
+              </div>
+              <a :href="item.link" target="_blank" rel="noopener" class="qs-ofertas__btn">
+                Aproveitar Agora
+                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+            </div>
           </div>
-        </div>
+        </SwiperSlide>
+      </Swiper>
+      
+      <div v-if="offers.length > 0" class="qs-ofertas-dots"></div>
+      <div v-if="offers.length > 0" class="qs-ofertas-arrows d-none d-lg-flex">
+        <button class="qs-ofertas-prev">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button class="qs-ofertas-next">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
       </div>
 
       <div v-if="!isLoading && offers.length > 0" class="qs-ofertas__more">
@@ -65,6 +98,11 @@
 import { computed, ref, onMounted } from 'vue';
 import { useHomeConfig } from '@/composables/useHomeConfig';
 import { getProducts } from '@/services/product-service';
+import { Swiper, SwiperSlide } from 'swiper/vue';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 const { config, loadConfig } = useHomeConfig();
 
@@ -124,7 +162,7 @@ function formatPrice(price: unknown): string {
 
 <style scoped>
 .qs-ofertas {
-  padding: 72px 0;
+  padding: 48px 0;
   background: #fff;
 }
 
@@ -150,16 +188,15 @@ function formatPrice(price: unknown): string {
   margin: 0 auto;
 }
 
-.qs-ofertas__grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 20px;
-  margin-bottom: 36px;
+.qs-ofertas__swiper {
+  width: 100%;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
 }
 
-@media (max-width: 1199px) { .qs-ofertas__grid { grid-template-columns: repeat(3, 1fr); } }
-@media (max-width: 767px) { .qs-ofertas__grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 575px) { .qs-ofertas__grid { grid-template-columns: 1fr; } }
+.qs-ofertas__slide {
+  height: auto;
+}
 
 .qs-ofertas__card {
   position: relative;
@@ -319,5 +356,56 @@ function formatPrice(price: unknown): string {
 @keyframes qs-skeleton-wave {
   0% { background-position: 200% 0; }
   100% { background-position: -200% 0; }
+}
+
+.qs-ofertas-dots {
+  position: relative;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+:deep(.qs-ofertas-dots .swiper-pagination-bullet) {
+  width: 8px !important;
+  height: 8px !important;
+  background: rgba(47, 119, 133, 0.45) !important;
+  opacity: 1 !important;
+  border-radius: 50%;
+  transition: all 0.3s;
+}
+
+:deep(.qs-ofertas-dots .swiper-pagination-bullet-active) {
+  background: #2F7785 !important;
+  width: 24px !important;
+  border-radius: 999px !important;
+}
+
+.qs-ofertas-arrows {
+  position: relative;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.qs-ofertas-prev, .qs-ofertas-next {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  color: #2F7785;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.qs-ofertas-prev:hover, .qs-ofertas-next:hover {
+  background: #2F7785;
+  color: #fff;
+  border-color: #2F7785;
 }
 </style>
