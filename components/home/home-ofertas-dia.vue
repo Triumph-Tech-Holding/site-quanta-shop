@@ -177,6 +177,14 @@ function formatPrice(price: unknown): string {
   background: #fff;
 }
 
+.qs-ofertas .container {
+  overflow: visible;
+}
+
+.qs-ofertas__swiper {
+  overflow: visible !important;
+}
+
 .qs-section-header {
   text-align: center;
   margin-bottom: 40px;

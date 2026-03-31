@@ -85,7 +85,7 @@ const DEFAULT_CONFIG: HomeConfig = {
     { ativo: true, label: 'MARCAS PARCEIRAS', value: '+500 lojas', valueColor: 'teal', icon: 'bag', iconBg: 'teal' },
   ],
   brands: {
-    label: 'AS MAIORES MARCAS CONFIAM NA QUANTA',
+    label: 'GANHE CASHBACK COM AS MELHORES MARCAS',
   },
   ofertas: {
     title: 'Ofertas do Dia',

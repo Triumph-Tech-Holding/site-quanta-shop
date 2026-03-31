@@ -112,7 +112,7 @@ onMounted(async () => {
   align-items: center;
   gap: 0;
   width: max-content;
-  animation: qs-brands-scroll 28s linear infinite;
+  animation: qs-brands-scroll 35s linear infinite;
 }
 
 .qs-brands__track--paused {
@@ -129,21 +129,21 @@ onMounted(async () => {
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  width: 160px;
-  height: 64px;
-  padding: 0 20px;
+  width: 180px;
+  height: 88px;
+  padding: 0 24px;
   text-decoration: none;
   transition: filter 0.3s ease;
-  filter: grayscale(1) opacity(0.55);
+  filter: none;
 }
 
 .qs-brands__item:hover {
-  filter: grayscale(0) opacity(1);
+  filter: none;
 }
 
 .qs-brands__item img {
   max-width: 100%;
-  max-height: 40px;
+  max-height: 60px;
   object-fit: contain;
 }
 
