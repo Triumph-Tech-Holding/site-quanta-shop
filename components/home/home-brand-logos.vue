@@ -4,19 +4,21 @@
       <p class="qs-brands__label">{{ config.brands.label }}</p>
       <div class="qs-brands__track-wrap">
         <div class="qs-brands__track" :class="{ 'qs-brands__track--paused': paused }">
-          <a
+          <div
             v-for="(brand, i) in loopedBrands"
             :key="`${brand.id}-${i}`"
-            :href="brand.link || '/login'"
-            target="_blank"
-            rel="noopener"
             class="qs-brands__item"
+            role="link"
+            tabindex="0"
             :title="brand.nome"
+            style="cursor: pointer"
+            @click="handleBrandClick(brand)"
+            @keydown.enter="handleBrandClick(brand)"
             @mouseenter="paused = true"
             @mouseleave="paused = false"
           >
             <img :src="brand.imagem || brand.imagemPequena || '/img/placeholder.png'" :alt="brand.nome" loading="lazy" @error="(e) => (e.target as HTMLImageElement).style.display = 'none'" />
-          </a>
+          </div>
         </div>
       </div>
     </div>
@@ -27,9 +29,13 @@
 import { ref, computed, onMounted } from 'vue';
 import { useHomeConfig } from '@/composables/useHomeConfig';
 import { usePartnerStore } from '@/pinia/usePartnerStore';
+import { useUserStore } from '@/pinia/useUserStore';
+import { useRouter } from 'vue-router';
 
 const { config, loadConfig } = useHomeConfig();
 const partnerStore = usePartnerStore();
+const userStore = useUserStore();
+const router = useRouter();
 const paused = ref(false);
 
 const activeBrands = computed(() => {
@@ -42,6 +48,18 @@ const loopedBrands = computed(() => {
   if (list.length === 0) return [];
   return [...list, ...list, ...list];
 });
+
+function handleBrandClick(brand: any) {
+  if (!userStore.isLoggedIn) {
+    router.push('/login');
+    return;
+  }
+  
+  if (brand.link) {
+    const url = brand.link.replace('{userId}', userStore.userId || '');
+    window.open(url, '_blank', 'noopener');
+  }
+}
 
 onMounted(async () => {
   await loadConfig();

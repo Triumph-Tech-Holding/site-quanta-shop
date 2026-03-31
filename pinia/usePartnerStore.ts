@@ -92,18 +92,6 @@ export const usePartnerStore = defineStore('partners', () => {
 
                 newPartners.value = (response.data as Record<string, unknown>[]).map(normalizeOnlinePartner);
 
-                await userStore.loadUserFromStorage();
-
-                newPartners.value.forEach(partner => {
-                    if (partner.link) {
-                        if (partner.link.includes('{userId}')) {
-                            partner.link = userStore.isLoggedIn ? partner.link.replace('{userId}', userStore.userId) : null;
-                        } else {
-                            partner.link = userStore.isLoggedIn ? partner.link : null;
-                        }
-                    }
-                });
-
                 isNewPartnersLoaded.value = true;
             }
         } catch (error) {
@@ -125,18 +113,6 @@ export const usePartnerStore = defineStore('partners', () => {
 
                 featuredPartners.value = (response.data as Record<string, unknown>[]).map(normalizeOnlinePartner);
 
-                await userStore.loadUserFromStorage();
-
-                featuredPartners.value.forEach(partner => {
-                    if (partner.link) {
-                        if (partner.link.includes('{userId}')) {
-                            partner.link = userStore.isLoggedIn ? partner.link.replace('{userId}', userStore.userId) : null;
-                        } else {
-                            partner.link = userStore.isLoggedIn ? partner.link : null;
-                        }
-                    }
-                });
-
                 isFeaturedPartnersLoaded.value = true;
             }
         } catch (error) {
@@ -157,18 +133,6 @@ export const usePartnerStore = defineStore('partners', () => {
                 const response = await getTopSellersPartners();
 
                 topSellersPartners.value = response.data;
-
-                await userStore.loadUserFromStorage();
-
-                topSellersPartners.value.forEach(partner => {
-                    if (partner.link) {
-                        if (partner.link.includes('{userId}')) {
-                            partner.link = userStore.isLoggedIn ? partner.link.replace('{userId}', userStore.userId) : null;
-                        } else {
-                            partner.link = userStore.isLoggedIn ? partner.link : null;
-                        }
-                    }
-                });
 
                 isTopSellersPartnersLoaded.value = true;
             }

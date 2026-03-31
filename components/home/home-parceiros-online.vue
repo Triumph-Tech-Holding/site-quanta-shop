@@ -27,9 +27,9 @@
           </div>
           <h3 class="qs-partner-card__name">{{ item.nome }}</h3>
           <p class="qs-partner-card__cashback">Até {{ item.percentualCashback || '?' }}% de cashback</p>
-          <a :href="item.link || '/login'" target="_blank" rel="noopener" class="qs-partner-card__btn">
+          <button @click="handlePartnerClick(item)" class="qs-partner-card__btn">
             Ative seu cashback
-          </a>
+          </button>
         </div>
       </div>
 
@@ -51,9 +51,13 @@
 import { computed, onMounted, ref } from 'vue';
 import { usePartnerStore } from "@/pinia/usePartnerStore";
 import { useHomeConfig } from '@/composables/useHomeConfig';
+import { useUserStore } from '@/pinia/useUserStore';
+import { useRouter } from 'vue-router';
 
 const { config, loadConfig } = useHomeConfig();
 const partnerStore = usePartnerStore();
+const userStore = useUserStore();
+const router = useRouter();
 
 const isLoading = ref(true);
 
@@ -71,6 +75,18 @@ onMounted(async () => {
 const loading = computed(() => isLoading.value);
 const displayedPartners = computed(() => (partnerStore.newPartners || []));
 const isEmpty = computed(() => !isLoading.value && displayedPartners.value.length === 0);
+
+function handlePartnerClick(item: any) {
+  if (!userStore.isLoggedIn) {
+    router.push('/login');
+    return;
+  }
+  
+  if (item.link) {
+    const url = item.link.replace('{userId}', userStore.userId || '');
+    window.open(url, '_blank', 'noopener');
+  }
+}
 </script>
 
 <style scoped>
