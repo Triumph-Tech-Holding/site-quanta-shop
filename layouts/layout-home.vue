@@ -10,6 +10,8 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from 'vue'
+
 useSeoMeta({
   description: "Lojistas, aumentem suas vendas com o programa de cashback da Quanta Shop. Cadastre-se agora em quantashop.com.br/credenciar e ofereça mais valor aos seus clientes!",
   ogUrl: "https://quantashop.com.br",

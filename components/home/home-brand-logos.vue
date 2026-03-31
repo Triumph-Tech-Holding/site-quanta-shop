@@ -8,7 +8,7 @@
       <div class="relative overflow-hidden">
         <div 
           class="flex animate-scroll"
-          :style="{ animationDuration: `${activeBrands.length * 3}s` }`
+          :style="{ animationDuration: `${activeBrands.length * 3}s` }"
           @mouseenter="paused = true"
           @mouseleave="paused = false"
         >

@@ -86,6 +86,8 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted, onUnmounted } from 'vue'
+
 interface Slide {
   headline: string
   subheadline: string
