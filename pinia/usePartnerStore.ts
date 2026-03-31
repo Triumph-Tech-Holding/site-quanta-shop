@@ -22,6 +22,21 @@ function normalizeOnlinePartner(p: Record<string, unknown>) {
     };
 }
 
+function normalizeLocalPartner(p: Record<string, unknown>) {
+    return {
+        id: p['IdAnunciante'] ?? p['id'],
+        nome: p['Nome'] ?? p['nome'],
+        imagem: p['Icone'] ?? p['imagem'],
+        imagemPequena: p['Icone'] ?? p['imagemPequena'],
+        percentualCashback: p['PercentualCashback'] ?? p['MaxCashback'] ?? p['percentualCashback'],
+        bairro: p['Bairro'] ?? p['bairro'],
+        cidade: p['Cidade'] ?? p['cidade'],
+        estado: p['Estado'] ?? p['estado'],
+        whatsapp: p['WhatsApp'] ?? p['Whatsapp'] ?? p['whatsapp'],
+        link: p['Link'] ?? p['link'],
+    };
+}
+
 export const usePartnerStore = defineStore('partners', () => {
     const userStore = useUserStore();
     const loadingStore = useLoadingStore();
@@ -142,7 +157,7 @@ export const usePartnerStore = defineStore('partners', () => {
             if (localPartners.value.length == 0) {
                 const response = await getLocalPartners();
 
-                localPartners.value = response.data;
+                localPartners.value = (response.data as Record<string, unknown>[]).map(normalizeLocalPartner);
 
                 await userStore.loadUserFromStorage();
 
@@ -252,10 +267,12 @@ export const usePartnerStore = defineStore('partners', () => {
     return {
         // Partners
         partners, newPartners, featuredPartners, topSellersPartners,
+        isPartnersLoaded, isNewPartnersLoaded, isFeaturedPartnersLoaded, isTopSellersPartnersLoaded,
         fetchPartners, fetchNewPartners, fetchFeaturedPartners, fetchTopSellersPartners,
 
         // Local partners
         localPartners, bestDiscountsLocalPartners, featuredLocalPartners, topSellersLocalPartners,
+        isLocalPartnersLoaded, isBestDiscountsLocalPartnersLoaded, isFeaturedLocalPartnersLoaded, isTopSellersLocalPartnersLoaded,
         fetchLocalPartners, fetchBestDiscountsLocalPartners, fetchFeaturedLocalPartners, fetchTopSellersLocalPartners
     }
 });

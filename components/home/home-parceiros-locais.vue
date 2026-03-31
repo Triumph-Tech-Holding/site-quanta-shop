@@ -68,7 +68,10 @@ const { config, loadConfig } = useHomeConfig();
 const partnerStore = usePartnerStore();
 const displayedLocais = computed(() => (partnerStore.localPartners || []).slice(0, 6));
 
-onMounted(() => loadConfig());
+onMounted(() => {
+  loadConfig();
+  partnerStore.fetchLocalPartners();
+});
 </script>
 
 <style scoped>
