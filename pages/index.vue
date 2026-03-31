@@ -1,7 +1,6 @@
 <template>
   <div>
     <home-hero />
-    <home-omni-search />
     <home-brand-logos />
     <home-ofertas-dia />
     <home-parceiros-online />
