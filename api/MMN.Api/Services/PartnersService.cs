@@ -64,8 +64,8 @@ public class PartnersService : IPartnersService
                 A.ImagemUrl AS Icone,
                 AC.MinCashback,
                 AC.MaxCashback,
-	            AC.Tipo,
-	            (SELECT TOP 1 C.Nome 
+                    AC.Tipo,
+                    (SELECT TOP 1 C.Nome 
                  FROM Categoria C
                  INNER JOIN CategoriaAnunciante CA ON CA.IdCategoria = C.IdCategoria
                  WHERE CA.IdAnunciante = A.IdAnunciante) AS Categoria
@@ -75,7 +75,7 @@ public class PartnersService : IPartnersService
                     IdAnunciante,
                     MIN(Percentual) AS MinCashback,
                     MAX(Percentual) AS MaxCashback,
-		            Tipo
+                            Tipo
                 FROM AnuncianteCashback
                 WHERE Ativo = 1
                 GROUP BY IdAnunciante, Tipo
@@ -102,8 +102,8 @@ public class PartnersService : IPartnersService
                 A.ImagemUrl AS Icone,
                 AC.MinCashback,
                 AC.MaxCashback,
-	            AC.Tipo,
-	            (SELECT TOP 1 C.Nome 
+                    AC.Tipo,
+                    (SELECT TOP 1 C.Nome 
                  FROM Categoria C
                  INNER JOIN CategoriaAnunciante CA ON CA.IdCategoria = C.IdCategoria
                  WHERE CA.IdAnunciante = A.IdAnunciante) AS Categoria,
@@ -114,7 +114,7 @@ public class PartnersService : IPartnersService
                     IdAnunciante,
                     MIN(Percentual) AS MinCashback,
                     MAX(Percentual) AS MaxCashback,
-		            Tipo
+                            Tipo
                 FROM AnuncianteCashback
                 WHERE Ativo = 1
                 GROUP BY IdAnunciante, Tipo
@@ -136,8 +136,8 @@ public class PartnersService : IPartnersService
                 A.ImagemUrl AS Icone,
                 AC.MinCashback,
                 AC.MaxCashback,
-	            AC.Tipo,
-	            (SELECT TOP 1 C.Nome 
+                    AC.Tipo,
+                    (SELECT TOP 1 C.Nome 
                  FROM Categoria C
                  INNER JOIN CategoriaAnunciante CA ON CA.IdCategoria = C.IdCategoria
                  WHERE CA.IdAnunciante = A.IdAnunciante) AS Categoria,
@@ -148,7 +148,7 @@ public class PartnersService : IPartnersService
                     IdAnunciante,
                     MIN(Percentual) AS MinCashback,
                     MAX(Percentual) AS MaxCashback,
-		            Tipo
+                            Tipo
                 FROM AnuncianteCashback
                 WHERE Ativo = 1
                 GROUP BY IdAnunciante, Tipo
@@ -207,18 +207,19 @@ public class PartnersService : IPartnersService
     {
         const string sql = @"
             SELECT TOP 12
-	            Credenciamento.IdCredenciamento,
-	            UPPER(Credenciamento.Estabelecimento) AS Estabelecimento,
-	            Credenciamento.PercentualCashback,
-	            UPPER(Categoria.Nome) AS Categoria,
-                'https://escritorio.quantashop.com.br/anunciante?idAnunciante=' + CAST(Credenciamento.IdCredenciamento AS VARCHAR) AS link,
-                Credenciamento.LogoUrl AS Imagem,
-	            COUNT(*) AS Quantidade
-            FROM CuponCashback
-            INNER JOIN Credenciamento ON Credenciamento.IdUsuario = CuponCashback.IdComerciante
-            INNER JOIN Categoria ON Categoria.IdCategoria = Credenciamento.IdCategoria
-            WHERE Credenciamento.Status = 2 AND MONTH(CuponCashback.DataCompra) >= MONTH(GETDATE()) -1 AND YEAR(CuponCashback.DataCompra) = YEAR(GETDATE()) AND Credenciamento.PercentualCashback >= 10
-            GROUP BY Credenciamento.IdCredenciamento, Credenciamento.Estabelecimento, Credenciamento.PercentualCashback, Categoria.Nome, Credenciamento.LogoUrl
+                    Credenciamento.IdCredenciamento,
+                    UPPER(Credenciamento.Estabelecimento) AS Estabelecimento,
+                    Credenciamento.PercentualCashback,
+                    Credenciamento.LogoUrl AS Imagem,
+                    Credenciamento.Bairro,
+                    Cidade.Nome AS CidadeNome,
+                    Estado.Sigla AS EstadoNome,
+                    Credenciamento.CelularContato,
+                    'https://escritorio.quantashop.com.br/anunciante?idAnunciante=' + CAST(Credenciamento.IdCredenciamento AS VARCHAR) AS link
+            FROM Credenciamento
+            LEFT JOIN Cidade ON Cidade.IdCidade = Credenciamento.IdCidade
+            LEFT JOIN Estado ON Estado.IdEstado = Cidade.IdEstado
+            WHERE Credenciamento.Status = 2
             ORDER BY NEWID()";
 
         var result = _dbConnection.Query(sql).ToList();
@@ -241,7 +242,7 @@ public class PartnersService : IPartnersService
             INNER JOIN Credenciamento ON Credenciamento.IdUsuario = CuponCashback.IdComerciante
             INNER JOIN Categoria ON Categoria.IdCategoria = Credenciamento.IdCategoria
             WHERE 
-	            Credenciamento.PercentualCashback >= 10 AND Credenciamento.Status = 2
+                    Credenciamento.PercentualCashback >= 10 AND Credenciamento.Status = 2
             GROUP BY Credenciamento.IdCredenciamento, Credenciamento.Estabelecimento, Credenciamento.PercentualCashback, Categoria.Nome, Credenciamento.LogoUrl
             HAVING COUNT(*) > 15
             ORDER BY Credenciamento.PercentualCashback DESC, NEWID()";
@@ -305,12 +306,12 @@ public class PartnersService : IPartnersService
              SELECT 
                  IdCredenciamento AS id,
                  UPPER(estabelecimento) AS name,
-	             Rua AS street,
-	             Numero AS number,
-	             Bairro AS neighborhood,
-	             CEP AS zipcode,
-	             Cidade.Nome AS city,
-	             UF AS state,
+                     Rua AS street,
+                     Numero AS number,
+                     Bairro AS neighborhood,
+                     CEP AS zipcode,
+                     Cidade.Nome AS city,
+                     UF AS state,
                  Categoria.Nome AS category,
                  Telefone AS phone,
                  TRY_CAST(Latitude AS FLOAT) AS latitude,

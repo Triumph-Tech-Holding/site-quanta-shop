@@ -24,16 +24,16 @@ function normalizeOnlinePartner(p: Record<string, unknown>) {
 
 function normalizeLocalPartner(p: Record<string, unknown>) {
     return {
-        id: p['IdAnunciante'] ?? p['id'],
-        nome: p['Nome'] ?? p['nome'],
-        imagem: p['Icone'] ?? p['imagem'],
-        imagemPequena: p['Icone'] ?? p['imagemPequena'],
-        percentualCashback: p['PercentualCashback'] ?? p['MaxCashback'] ?? p['percentualCashback'],
+        id: p['IdCredenciamento'] ?? p['IdAnunciante'] ?? p['id'],
+        nome: p['Estabelecimento'] ?? p['Nome'] ?? p['nome'],
+        imagem: p['Imagem'] ?? p['Icone'] ?? p['imagem'],
+        imagemPequena: p['Imagem'] ?? p['Icone'] ?? p['imagemPequena'],
+        percentualCashback: p['PercentualCashback'] ?? p['percentualCashback'],
         bairro: p['Bairro'] ?? p['bairro'],
-        cidade: p['Cidade'] ?? p['cidade'],
-        estado: p['Estado'] ?? p['estado'],
-        whatsapp: p['WhatsApp'] ?? p['Whatsapp'] ?? p['whatsapp'],
-        link: p['Link'] ?? p['link'],
+        cidade: p['CidadeNome'] ?? p['Cidade'] ?? p['cidade'],
+        estado: p['EstadoNome'] ?? p['Estado'] ?? p['estado'],
+        whatsapp: p['CelularContato'] ?? p['WhatsApp'] ?? p['Whatsapp'] ?? p['whatsapp'],
+        link: p['link'],
     };
 }
 
