@@ -7,7 +7,7 @@
           <a
             v-for="(brand, i) in loopedBrands"
             :key="`${brand.id}-${i}`"
-            :href="brand.url"
+            :href="brand.link || '/partners'"
             target="_blank"
             rel="noopener"
             class="qs-brands__item"
@@ -15,7 +15,7 @@
             @mouseenter="paused = true"
             @mouseleave="paused = false"
           >
-            <img :src="brand.logo" :alt="brand.nome" loading="lazy" />
+            <img :src="brand.imagem || brand.imagemPequena || '/img/placeholder.png'" :alt="brand.nome" loading="lazy" @error="(e) => (e.target as HTMLImageElement).style.display = 'none'" />
           </a>
         </div>
       </div>
@@ -26,23 +26,16 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import { useHomeConfig } from '@/composables/useHomeConfig';
-
-interface Brand {
-  id: number;
-  nome: string;
-  logo: string;
-  url: string;
-  ativo: boolean;
-  ordem: number;
-}
+import { usePartnerStore } from '@/pinia/usePartnerStore';
 
 const { config, loadConfig } = useHomeConfig();
-const brands = ref<Brand[]>([]);
+const partnerStore = usePartnerStore();
 const paused = ref(false);
 
-const activeBrands = computed(() =>
-  brands.value.filter(b => b.ativo).sort((a, b) => a.ordem - b.ordem)
-);
+const activeBrands = computed(() => {
+  const partners = partnerStore.newPartners || [];
+  return partners.slice(0, 20);
+});
 
 const loopedBrands = computed(() => {
   const list = activeBrands.value;
@@ -53,9 +46,9 @@ const loopedBrands = computed(() => {
 onMounted(async () => {
   await loadConfig();
   try {
-    brands.value = await $fetch<Brand[]>('/data/brands.json');
+    await partnerStore.fetchNewPartners();
   } catch (error) {
-    console.error('[Brands] Erro ao carregar:', error);
+    console.error('[Brands] Erro ao carregar parceiros:', error);
   }
 });
 </script>
