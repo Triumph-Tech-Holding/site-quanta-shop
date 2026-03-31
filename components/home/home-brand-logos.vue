@@ -122,8 +122,8 @@ onMounted(async () => {
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  width: 180px;
-  height: 88px;
+  width: 210px;
+  height: 108px;
   padding: 0 24px;
   text-decoration: none;
   transition: filter 0.3s ease;
@@ -136,7 +136,7 @@ onMounted(async () => {
 
 .qs-brands__item img {
   max-width: 100%;
-  max-height: 60px;
+  max-height: 80px;
   object-fit: contain;
 }
 
