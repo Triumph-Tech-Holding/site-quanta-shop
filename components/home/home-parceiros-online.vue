@@ -69,7 +69,7 @@ onMounted(async () => {
 });
 
 const loading = computed(() => isLoading.value);
-const displayedPartners = computed(() => (partnerStore.newPartners || []).slice(0, 8));
+const displayedPartners = computed(() => (partnerStore.newPartners || []));
 const isEmpty = computed(() => !isLoading.value && displayedPartners.value.length === 0);
 </script>
 
@@ -142,7 +142,7 @@ const isEmpty = computed(() => !isLoading.value && displayedPartners.value.lengt
 }
 
 .qs-partner-card__logo {
-  height: 64px;
+  height: 90px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -150,7 +150,7 @@ const isEmpty = computed(() => !isLoading.value && displayedPartners.value.lengt
 }
 
 .qs-partner-card__logo img {
-  max-height: 56px;
+  max-height: 80px;
   max-width: 100%;
   object-fit: contain;
 }

@@ -126,7 +126,7 @@ onMounted(async () => {
   loadConfig();
 
   try {
-    const result = await getProducts(4, 1, null, null, null, null) as { data?: { products?: unknown[] } };
+    const result = await getProducts(24, 1, null, null, null, null) as { data?: { products?: unknown[] } };
     const products = result?.data?.products;
     if (Array.isArray(products) && products.length > 0) {
       apiProducts.value = products.map(p => normalizeProduct(p as Record<string, unknown>));
