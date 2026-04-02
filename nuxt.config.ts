@@ -16,15 +16,20 @@ export default defineNuxtConfig({
     },
   },
   watch: ['!api/**'],
-  modules: [[
-    '@pinia/nuxt',
-    {
-      autoImports: [
-        'defineStore',
-        ['defineStore', 'definePiniaStore'],
-      ],
-    },
-  ], "nuxt-gtag", '@vite-pwa/nuxt'],
+  modules: [
+    '@nuxtjs/tailwindcss',
+    [
+      '@pinia/nuxt',
+      {
+        autoImports: [
+          'defineStore',
+          ['defineStore', 'definePiniaStore'],
+        ],
+      },
+    ],
+    "nuxt-gtag",
+    '@vite-pwa/nuxt',
+  ],
   plugins: ['~/plugins/directives.ts', '~/plugins/filters.ts', '~/plugins/mask.ts'],
   gtag: {
     id: 'G-3YM68FHXJW'
