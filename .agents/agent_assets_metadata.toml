@@ -1,5 +1,22 @@
 uploads = []
-generated = []
+
+[[generated]]
+id = "QeElCA7hVmp8mNk5nRkHK"
+uri = "file://public/images/hero-consumidor.png"
+type = "image"
+title = "hero-consumidor"
+
+[[generated]]
+id = "O4KeZ9e5crkJzTwlEecCg"
+uri = "file://public/images/hero-lojista.png"
+type = "image"
+title = "hero-lojista"
+
+[[generated]]
+id = "l_ne0BNSLkkeltPlkXq87"
+uri = "file://public/images/hero-agente.png"
+type = "image"
+title = "hero-agente"
 
 [[outputs]]
 id = "FhM_dR1fE8TazshjrdTy_"
