@@ -1,14 +1,15 @@
 # Quanta Shop Web
 
-## Blog Premium (Task #101 — COMPLETO)
+## Blog Premium (Task #101 — COMPLETO + redesign Apple)
 
 ### Estrutura de páginas
-- `pages/blog.vue` — Listagem premium: hero gradiente teal, filtros por categoria (sticky), artigo em destaque (hero card com imagem), grid 3-col de artigos, newsletter. Lê de `qs_blog_artigos` localStorage (publicado=true). Fallback com 6 artigos de exemplo.
-- `pages/blog/[id].vue` — Detalhe de artigo: lê por ID numérico de `qs_blog_artigos`, exibe hero com imagem+título+meta, conteúdo em parágrafos, sidebar de artigos relacionados, CTA. Fallback "artigo não encontrado".
+- `pages/blog/index.vue` — Listagem Apple-style: hero preto clean, eyebrow "INSIGHTS & IDEIAS", nav sticky frosted-glass com pills, hero-card 2-col (imagem + copy), grid 3-col de cards, newsletter dark. Lê de `qs_blog_artigos` localStorage (publicado=true). Fallback com 6 artigos de exemplo.
+- `pages/blog/[id].vue` — Detalhe de artigo Apple-style: hero preto (ou com imagem de fundo + scrim), título grande, lead, conteúdo em parágrafos com tipografia generosa, sidebar de artigos relacionados, CTA dark. Fallback "artigo não encontrado".
 - Admin: `pages/agencia/painel/admin/blog.vue` — upload de imagem PNG/JPG (converte para base64, drag & drop ou colar URL). Thumbnail na tabela. Conteúdo separado em parágrafos.
 
-### Roteamento
-- Blog items da home (`home-blog.vue`) usam `<nuxt-link>` (mesma aba, sem `target="_blank"`). URL: `/blog/${id}` para artigos do admin, `/blog` para fallback mock.
+### Roteamento (CORRIGIDO)
+- Conflito Nuxt 3 corrigido: `pages/blog.vue` renomeado para `pages/blog/index.vue` (evita conflito com `pages/blog/[id].vue`)
+- Blog items da home (`home-blog.vue`) usam `resolveComponent('NuxtLink')`. URL: `/blog/${id}` para artigos do admin, `/blog` para fallback mock.
 - Artigos de redes sociais mantêm `<a target="_blank">` para URLs externas.
 
 ### Stubs antigos removidos
