@@ -15,7 +15,6 @@
 <script setup lang="ts">
 definePageMeta({
   layout: 'layout-home',
-  middleware: () => navigateTo('/home-v2', { replace: true }),
 });
 
 useSeoMeta({ 
