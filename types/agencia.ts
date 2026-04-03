@@ -354,6 +354,35 @@ export interface PerformancePeriodo {
   [key: string]: unknown;
 }
 
+export interface BlogArtigo {
+  id: number;
+  titulo: string;
+  slug: string;
+  resumo?: string;
+  conteudo: string;
+  imagemDestaque?: string;
+  categoria?: string;
+  autor?: string;
+  dataPublicacao?: string;
+  publicado: boolean;
+  destaque: boolean;
+  [key: string]: unknown;
+}
+
+export type PlataformaSocial = 'Instagram' | 'YouTube' | 'TikTok' | 'Facebook' | 'Twitter' | 'Outro';
+
+export interface PostRedeSocial {
+  id: number;
+  plataforma: PlataformaSocial;
+  titulo: string;
+  url: string;
+  thumbnailUrl?: string;
+  descricao?: string;
+  dataPublicacao?: string;
+  ativo: boolean;
+  [key: string]: unknown;
+}
+
 export interface Loja {
   id: number;
   nome: string;
