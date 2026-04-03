@@ -7,7 +7,6 @@
     <home-parceiros-locais />
     <home-testimonials />
     <home-blog />
-    <home-ceo />
     <home-footer-cta />
   </div>
 </template>
