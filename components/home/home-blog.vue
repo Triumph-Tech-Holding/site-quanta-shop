@@ -8,13 +8,15 @@
       </div>
 
       <div class="qs-social__grid">
-        <a
+        <component
           v-for="(item, i) in feedItems"
           :key="i"
-          :href="item.url"
+          :is="item.type === 'blog' ? 'nuxt-link' : 'a'"
+          :to="item.type === 'blog' ? item.url : undefined"
+          :href="item.type !== 'blog' ? item.url : undefined"
+          :target="item.type !== 'blog' ? '_blank' : undefined"
+          :rel="item.type !== 'blog' ? 'noopener' : undefined"
           class="qs-feed-card"
-          target="_blank"
-          rel="noopener"
         >
           <div class="qs-feed-card__img-wrap">
             <img :src="item.img" :alt="item.title" loading="lazy" />
@@ -33,7 +35,7 @@
             <p v-if="item.date" class="qs-feed-card__date">{{ item.date }}</p>
             <span class="qs-feed-card__link">Ler mais →</span>
           </div>
-        </a>
+        </component>
       </div>
     </div>
   </section>
@@ -57,6 +59,7 @@ interface FeedItem {
 }
 
 interface BlogPost {
+  id: number;
   slug: string;
   title: string;
   excerpt: string;
@@ -92,7 +95,7 @@ const feedItems = computed<FeedItem[]>(() => {
       title: post.title,
       img: post.img,
       date: post.date,
-      url: `/blog/${post.slug}`,
+      url: post.id ? `/blog/${post.id}` : '/blog',
     });
   }
 
@@ -129,6 +132,7 @@ function lsArtigosBlog(): BlogPost[] {
       })
       .slice(0, 3)
       .map(a => ({
+        id: a.id,
         slug: a.slug || String(a.id),
         title: a.titulo,
         excerpt: a.resumo || '',

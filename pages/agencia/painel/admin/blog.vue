@@ -23,6 +23,7 @@
         <table class="table ag-table">
           <thead>
             <tr>
+              <th>Imagem</th>
               <th>Título</th>
               <th>Categoria</th>
               <th>Autor</th>
@@ -34,6 +35,10 @@
           </thead>
           <tbody>
             <tr v-for="item in itens" :key="item.id">
+              <td>
+                <img v-if="item.imagemDestaque" :src="item.imagemDestaque" class="blog-thumb" alt="" />
+                <div v-else class="blog-thumb-placeholder" />
+              </td>
               <td class="fw-bold">{{ item.titulo }}</td>
               <td>{{ item.categoria || '—' }}</td>
               <td>{{ item.autor || '—' }}</td>
@@ -58,12 +63,12 @@
     </div>
 
     <div v-if="showModal" class="ag-modal-overlay" @click.self="fecharModal">
-      <div class="ag-modal" style="max-width:680px">
+      <div class="ag-modal" style="max-width:720px">
         <div class="ag-modal-header">
           <h5 class="mb-0">{{ form.id ? 'Editar Artigo' : 'Novo Artigo' }}</h5>
           <button class="btn-close" @click="fecharModal" />
         </div>
-        <div class="ag-modal-body" style="max-height:70vh;overflow-y:auto">
+        <div class="ag-modal-body" style="max-height:75vh;overflow-y:auto">
           <div class="row g-3">
             <div class="col-12">
               <label class="form-label fw-bold">Título *</label>
@@ -72,7 +77,7 @@
             <div class="col-12">
               <label class="form-label fw-bold">Slug</label>
               <input v-model="form.slug" type="text" class="form-control" placeholder="gerado-automaticamente" />
-              <div class="form-text">Gerado automaticamente a partir do título. Edite se necessário.</div>
+              <div class="form-text">Gerado automaticamente. Edite se necessário.</div>
             </div>
             <div class="col-md-6">
               <label class="form-label fw-bold">Categoria</label>
@@ -86,12 +91,28 @@
               <label class="form-label fw-bold">Data de Publicação</label>
               <input v-model="form.dataPublicacao" type="date" class="form-control" />
             </div>
-            <div class="col-md-6">
-              <label class="form-label fw-bold">URL da Imagem Destaque</label>
-              <input v-model="form.imagemDestaque" type="url" class="form-control" placeholder="https://..." />
-            </div>
-            <div class="col-12" v-if="form.imagemDestaque">
-              <img :src="form.imagemDestaque" alt="Preview" class="img-thumbnail" style="max-height:140px;object-fit:cover" />
+            <div class="col-12">
+              <label class="form-label fw-bold">Imagem Destaque</label>
+              <div class="blog-img-field">
+                <div class="blog-img-upload-zone" @click="triggerFileInput" @dragover.prevent @drop.prevent="handleDrop">
+                  <input ref="fileInputRef" type="file" accept="image/png,image/jpeg,image/jpg" class="d-none" @change="handleFileChange" />
+                  <div v-if="!form.imagemDestaque" class="blog-img-placeholder">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                    <p>Clique para fazer upload<br/><span>PNG, JPG — máx. 5 MB</span></p>
+                    <p class="blog-img-or">— ou —</p>
+                    <p class="blog-img-url-hint">Cole uma URL abaixo</p>
+                  </div>
+                  <div v-else class="blog-img-preview-wrap">
+                    <img :src="form.imagemDestaque" alt="Preview" class="blog-img-preview" />
+                    <button type="button" class="blog-img-remove" @click.stop="form.imagemDestaque = ''">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                    </button>
+                  </div>
+                </div>
+                <div class="mt-2">
+                  <input v-model="urlManual" type="url" class="form-control form-control-sm" placeholder="https://... (ou faça upload acima)" @blur="aplicarUrl" @keydown.enter.prevent="aplicarUrl" />
+                </div>
+              </div>
             </div>
             <div class="col-12">
               <label class="form-label fw-bold">Resumo</label>
@@ -99,7 +120,8 @@
             </div>
             <div class="col-12">
               <label class="form-label fw-bold">Conteúdo *</label>
-              <textarea v-model="form.conteudo" class="form-control" rows="8" placeholder="Conteúdo completo do artigo..." />
+              <textarea v-model="form.conteudo" class="form-control" rows="10" placeholder="Conteúdo completo do artigo... (use linhas em branco para separar parágrafos)" />
+              <div class="form-text">Separe os parágrafos com uma linha em branco.</div>
             </div>
             <div class="col-md-6">
               <div class="form-check form-switch">
@@ -160,6 +182,8 @@ const showModal = ref(false);
 const showConfirm = ref(false);
 const modalError = ref('');
 const itemParaExcluir = ref<BlogArtigo | null>(null);
+const fileInputRef = ref<HTMLInputElement | null>(null);
+const urlManual = ref('');
 
 const emptyForm = () => ({
   id: undefined as number | undefined,
@@ -196,8 +220,46 @@ function gerarSlug() {
     .replace(/\s+/g, '-');
 }
 
+function triggerFileInput() {
+  fileInputRef.value?.click();
+}
+
+function handleFileChange(e: Event) {
+  const file = (e.target as HTMLInputElement).files?.[0];
+  if (file) processFile(file);
+}
+
+function handleDrop(e: DragEvent) {
+  const file = e.dataTransfer?.files?.[0];
+  if (file && (file.type === 'image/png' || file.type === 'image/jpeg')) {
+    processFile(file);
+  }
+}
+
+function processFile(file: File) {
+  if (file.size > 5 * 1024 * 1024) {
+    modalError.value = 'Imagem muito grande. Máximo 5 MB.';
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    form.imagemDestaque = e.target?.result as string;
+    urlManual.value = '';
+    modalError.value = '';
+  };
+  reader.readAsDataURL(file);
+}
+
+function aplicarUrl() {
+  if (urlManual.value.trim()) {
+    form.imagemDestaque = urlManual.value.trim();
+    urlManual.value = '';
+  }
+}
+
 function abrirNovo() {
   Object.assign(form, emptyForm());
+  urlManual.value = '';
   modalError.value = '';
   showModal.value = true;
 }
@@ -216,6 +278,7 @@ function abrirEditar(item: BlogArtigo) {
     publicado: item.publicado,
     destaque: item.destaque,
   });
+  urlManual.value = '';
   modalError.value = '';
   showModal.value = true;
 }
@@ -268,7 +331,7 @@ async function salvar() {
     const vi = itens.value.findIndex(i => i.id === form.id);
     if (vi !== -1) itens.value[vi] = { ...itens.value[vi], ...payload } as BlogArtigo;
   } else {
-    const novo: BlogArtigo = { id: Date.now(), ...payload, publicado: payload.publicado, destaque: payload.destaque } as BlogArtigo;
+    const novo: BlogArtigo = { id: Date.now(), ...payload } as BlogArtigo;
     lista.unshift(novo);
     itens.value.unshift(novo);
   }
@@ -326,3 +389,65 @@ onMounted(async () => {
   }
 });
 </script>
+
+<style scoped>
+.blog-thumb {
+  width: 48px;
+  height: 36px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #f0f0f0;
+}
+.blog-thumb-placeholder {
+  width: 48px;
+  height: 36px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #2F7785, #98C73A);
+  opacity: 0.3;
+}
+
+.blog-img-field {}
+
+.blog-img-upload-zone {
+  border: 2px dashed #d1d5db;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  overflow: hidden;
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.blog-img-upload-zone:hover { border-color: #2F7785; background: rgba(47,119,133,0.03); }
+
+.blog-img-placeholder {
+  text-align: center;
+  padding: 20px;
+  color: #9ca3af;
+}
+.blog-img-placeholder p { font-size: 13px; margin: 8px 0 4px; line-height: 1.5; }
+.blog-img-placeholder span { font-size: 11px; }
+.blog-img-or { color: #d1d5db; margin: 6px 0 !important; font-size: 11px !important; }
+.blog-img-url-hint { color: #2F7785 !important; font-size: 12px !important; font-weight: 600; }
+
+.blog-img-preview-wrap { position: relative; width: 100%; }
+.blog-img-preview { width: 100%; max-height: 200px; object-fit: cover; display: block; }
+.blog-img-remove {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0,0,0,0.6);
+  border: none;
+  color: #fff;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.blog-img-remove:hover { background: rgba(220,38,38,0.85); }
+</style>

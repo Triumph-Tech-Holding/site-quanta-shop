@@ -1,5 +1,21 @@
 # Quanta Shop Web
 
+## Blog Premium (Task #101 — COMPLETO)
+
+### Estrutura de páginas
+- `pages/blog.vue` — Listagem premium: hero gradiente teal, filtros por categoria (sticky), artigo em destaque (hero card com imagem), grid 3-col de artigos, newsletter. Lê de `qs_blog_artigos` localStorage (publicado=true). Fallback com 6 artigos de exemplo.
+- `pages/blog/[id].vue` — Detalhe de artigo: lê por ID numérico de `qs_blog_artigos`, exibe hero com imagem+título+meta, conteúdo em parágrafos, sidebar de artigos relacionados, CTA. Fallback "artigo não encontrado".
+- Admin: `pages/agencia/painel/admin/blog.vue` — upload de imagem PNG/JPG (converte para base64, drag & drop ou colar URL). Thumbnail na tabela. Conteúdo separado em parágrafos.
+
+### Roteamento
+- Blog items da home (`home-blog.vue`) usam `<nuxt-link>` (mesma aba, sem `target="_blank"`). URL: `/blog/${id}` para artigos do admin, `/blog` para fallback mock.
+- Artigos de redes sociais mantêm `<a target="_blank">` para URLs externas.
+
+### Stubs antigos removidos
+- `pages/blog-list.vue`, `pages/blog-grid.vue`, `pages/blog-details-2.vue`, `pages/blog-details/` (todos os arquivos)
+
+
+
 Frontend Nuxt.js 3 da plataforma de cashback Quanta Shop.
 
 ## Design System Premium (Task #80 — COMPLETO)
