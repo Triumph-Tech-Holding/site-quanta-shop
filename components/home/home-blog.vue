@@ -11,7 +11,7 @@
         <component
           v-for="(item, i) in feedItems"
           :key="i"
-          :is="item.type === 'blog' ? 'nuxt-link' : 'a'"
+          :is="item.type === 'blog' ? NuxtLinkComponent : 'a'"
           :to="item.type === 'blog' ? item.url : undefined"
           :href="item.type !== 'blog' ? item.url : undefined"
           :target="item.type !== 'blog' ? '_blank' : undefined"
@@ -42,8 +42,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, resolveComponent } from 'vue';
 import { useHomeConfig } from '@/composables/useHomeConfig';
+
+const NuxtLinkComponent = resolveComponent('NuxtLink');
 
 const { config, loadConfig } = useHomeConfig();
 
