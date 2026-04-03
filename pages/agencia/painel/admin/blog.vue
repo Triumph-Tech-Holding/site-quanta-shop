@@ -8,9 +8,9 @@
       <button class="btn btn-ag-primary" @click="abrirNovo">+ Novo Artigo</button>
     </div>
 
-    <div v-if="apiIndisponivel" class="alert alert-warning d-flex align-items-center gap-2 mb-3">
+    <div v-if="usandoLocal" class="alert alert-info d-flex align-items-center gap-2 mb-3">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      Endpoint de blog ainda não disponível no servidor. Os artigos aparecerão aqui assim que o backend for implementado.
+      Dados salvos localmente no navegador. Serão sincronizados com o servidor quando o backend estiver disponível.
     </div>
 
     <div v-if="loading" class="ag-loading"><div class="spinner-border" /></div>
@@ -143,17 +143,18 @@
 </template>
 
 <script setup lang="ts">
-import { extractApiErrorMessage } from '~/types/agencia';
 import type { BlogArtigo } from '~/types/agencia';
 
 definePageMeta({ layout: 'agencia-painel', middleware: ['agencia-auth', 'agencia-admin'] });
+
+const LS_KEY = 'qs_blog_artigos';
 
 const agenciaStore = useAgenciaStore();
 const api = useApi();
 
 const loading = ref(true);
 const saving = ref(false);
-const apiIndisponivel = ref(false);
+const usandoLocal = ref(false);
 const itens = ref<BlogArtigo[]>([]);
 const showModal = ref(false);
 const showConfirm = ref(false);
@@ -177,8 +178,14 @@ const emptyForm = () => ({
 const form = reactive(emptyForm());
 
 function authHeader() { return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } }; }
-
 function formatDate(d?: string) { return d ? new Date(d).toLocaleDateString('pt-BR') : '—'; }
+
+function lsCarregar(): BlogArtigo[] {
+  try { return JSON.parse(localStorage.getItem(LS_KEY) || '[]'); } catch { return []; }
+}
+function lsSalvar(lista: BlogArtigo[]) {
+  localStorage.setItem(LS_KEY, JSON.stringify(lista));
+}
 
 function gerarSlug() {
   form.slug = form.titulo
@@ -235,35 +242,63 @@ async function salvar() {
     publicado: form.publicado,
     destaque: form.destaque,
   };
-  try {
-    if (form.id) {
-      await api.put(`/admin/blog/artigos/${form.id}`, payload, authHeader());
-      const idx = itens.value.findIndex(i => i.id === form.id);
-      if (idx !== -1) itens.value[idx] = { ...itens.value[idx], ...payload } as BlogArtigo;
-    } else {
-      const { data } = await api.post('/admin/blog/artigos', payload, authHeader());
-      itens.value.unshift(data as BlogArtigo);
+
+  if (!usandoLocal.value) {
+    try {
+      if (form.id) {
+        await api.put(`/admin/blog/artigos/${form.id}`, payload, authHeader());
+        const idx = itens.value.findIndex(i => i.id === form.id);
+        if (idx !== -1) itens.value[idx] = { ...itens.value[idx], ...payload } as BlogArtigo;
+      } else {
+        const { data } = await api.post('/admin/blog/artigos', payload, authHeader());
+        itens.value.unshift(data as BlogArtigo);
+      }
+      saving.value = false;
+      fecharModal();
+      return;
+    } catch {
+      usandoLocal.value = true;
     }
-    fecharModal();
-  } catch (e: unknown) {
-    modalError.value = extractApiErrorMessage(e, 'Erro ao salvar artigo.');
-  } finally {
-    saving.value = false;
   }
+
+  const lista = lsCarregar();
+  if (form.id) {
+    const idx = lista.findIndex(i => i.id === form.id);
+    if (idx !== -1) lista[idx] = { ...lista[idx], ...payload } as BlogArtigo;
+    const vi = itens.value.findIndex(i => i.id === form.id);
+    if (vi !== -1) itens.value[vi] = { ...itens.value[vi], ...payload } as BlogArtigo;
+  } else {
+    const novo: BlogArtigo = { id: Date.now(), ...payload, publicado: payload.publicado, destaque: payload.destaque } as BlogArtigo;
+    lista.unshift(novo);
+    itens.value.unshift(novo);
+  }
+  lsSalvar(lista);
+  saving.value = false;
+  fecharModal();
 }
 
 async function excluir() {
   if (!itemParaExcluir.value) return;
   saving.value = true;
-  try {
-    await api.delete(`/admin/blog/artigos/${itemParaExcluir.value.id}`, authHeader());
-    itens.value = itens.value.filter(i => i.id !== itemParaExcluir.value?.id);
-    showConfirm.value = false;
-  } catch (e: unknown) {
-    console.error('Erro ao excluir artigo:', extractApiErrorMessage(e));
-  } finally {
-    saving.value = false;
+  const id = itemParaExcluir.value.id;
+
+  if (!usandoLocal.value) {
+    try {
+      await api.delete(`/admin/blog/artigos/${id}`, authHeader());
+      itens.value = itens.value.filter(i => i.id !== id);
+      showConfirm.value = false;
+      saving.value = false;
+      return;
+    } catch {
+      usandoLocal.value = true;
+    }
   }
+
+  const lista = lsCarregar().filter(i => i.id !== id);
+  lsSalvar(lista);
+  itens.value = itens.value.filter(i => i.id !== id);
+  showConfirm.value = false;
+  saving.value = false;
 }
 
 onMounted(async () => {
@@ -271,12 +306,9 @@ onMounted(async () => {
   try {
     const { data } = await api.get('/admin/blog/artigos', authHeader());
     itens.value = Array.isArray(data) ? data : (data?.items || []);
-  } catch (e: unknown) {
-    const err = e as { response?: { status?: number } };
-    if (err?.response?.status === 404 || err?.response?.status === undefined) {
-      apiIndisponivel.value = true;
-    }
-    console.error('Erro ao carregar artigos:', extractApiErrorMessage(e));
+  } catch {
+    usandoLocal.value = true;
+    itens.value = lsCarregar();
   } finally {
     loading.value = false;
   }

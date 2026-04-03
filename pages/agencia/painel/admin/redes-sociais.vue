@@ -8,9 +8,9 @@
       <button class="btn btn-ag-primary" @click="abrirNovo">+ Novo Post</button>
     </div>
 
-    <div v-if="apiIndisponivel" class="alert alert-warning d-flex align-items-center gap-2 mb-3">
+    <div v-if="usandoLocal" class="alert alert-info d-flex align-items-center gap-2 mb-3">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      Endpoint de redes sociais ainda não disponível no servidor. Os posts aparecerão aqui assim que o backend for implementado.
+      Dados salvos localmente no navegador. Serão sincronizados com o servidor quando o backend estiver disponível.
     </div>
 
     <div v-if="loading" class="ag-loading"><div class="spinner-border" /></div>
@@ -34,7 +34,7 @@
           <tbody>
             <tr v-for="item in itens" :key="item.id">
               <td>
-                <span class="badge-ag" :class="badgeClasse(item.plataforma)">{{ item.plataforma }}</span>
+                <span class="badge-rs" :class="badgeClasse(item.plataforma)">{{ item.plataforma }}</span>
               </td>
               <td class="fw-bold">{{ item.titulo }}</td>
               <td>
@@ -134,17 +134,18 @@
 </template>
 
 <script setup lang="ts">
-import { extractApiErrorMessage } from '~/types/agencia';
 import type { PostRedeSocial, PlataformaSocial } from '~/types/agencia';
 
 definePageMeta({ layout: 'agencia-painel', middleware: ['agencia-auth', 'agencia-admin'] });
+
+const LS_KEY = 'qs_redes_sociais';
 
 const agenciaStore = useAgenciaStore();
 const api = useApi();
 
 const loading = ref(true);
 const saving = ref(false);
-const apiIndisponivel = ref(false);
+const usandoLocal = ref(false);
 const itens = ref<PostRedeSocial[]>([]);
 const showModal = ref(false);
 const showConfirm = ref(false);
@@ -165,19 +166,25 @@ const emptyForm = () => ({
 const form = reactive(emptyForm());
 
 function authHeader() { return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } }; }
-
 function formatDate(d?: string) { return d ? new Date(d).toLocaleDateString('pt-BR') : '—'; }
+
+function lsCarregar(): PostRedeSocial[] {
+  try { return JSON.parse(localStorage.getItem(LS_KEY) || '[]'); } catch { return []; }
+}
+function lsSalvar(lista: PostRedeSocial[]) {
+  localStorage.setItem(LS_KEY, JSON.stringify(lista));
+}
 
 function badgeClasse(plataforma: PlataformaSocial) {
   const map: Record<PlataformaSocial, string> = {
-    Instagram: 'badge-ag-instagram',
-    YouTube: 'badge-ag-youtube',
-    TikTok: 'badge-ag-tiktok',
-    Facebook: 'badge-ag-facebook',
-    Twitter: 'badge-ag-twitter',
-    Outro: 'badge-ag-warning',
+    Instagram: 'badge-rs-instagram',
+    YouTube: 'badge-rs-youtube',
+    TikTok: 'badge-rs-tiktok',
+    Facebook: 'badge-rs-facebook',
+    Twitter: 'badge-rs-twitter',
+    Outro: 'badge-rs-outro',
   };
-  return map[plataforma] ?? 'badge-ag-warning';
+  return map[plataforma] ?? 'badge-rs-outro';
 }
 
 function abrirNovo() {
@@ -206,7 +213,7 @@ function confirmarExcluir(item: PostRedeSocial) { itemParaExcluir.value = item; 
 
 async function salvar() {
   if (!form.titulo.trim() || !form.url.trim()) {
-    modalError.value = 'Plataforma, título e URL são obrigatórios.';
+    modalError.value = 'Título e URL são obrigatórios.';
     return;
   }
   saving.value = true;
@@ -220,35 +227,63 @@ async function salvar() {
     dataPublicacao: form.dataPublicacao || null,
     ativo: form.ativo,
   };
-  try {
-    if (form.id) {
-      await api.put(`/admin/redes-sociais/${form.id}`, payload, authHeader());
-      const idx = itens.value.findIndex(i => i.id === form.id);
-      if (idx !== -1) itens.value[idx] = { ...itens.value[idx], ...payload } as PostRedeSocial;
-    } else {
-      const { data } = await api.post('/admin/redes-sociais', payload, authHeader());
-      itens.value.unshift(data as PostRedeSocial);
+
+  if (!usandoLocal.value) {
+    try {
+      if (form.id) {
+        await api.put(`/admin/redes-sociais/${form.id}`, payload, authHeader());
+        const idx = itens.value.findIndex(i => i.id === form.id);
+        if (idx !== -1) itens.value[idx] = { ...itens.value[idx], ...payload } as PostRedeSocial;
+      } else {
+        const { data } = await api.post('/admin/redes-sociais', payload, authHeader());
+        itens.value.unshift(data as PostRedeSocial);
+      }
+      saving.value = false;
+      fecharModal();
+      return;
+    } catch {
+      usandoLocal.value = true;
     }
-    fecharModal();
-  } catch (e: unknown) {
-    modalError.value = extractApiErrorMessage(e, 'Erro ao salvar post.');
-  } finally {
-    saving.value = false;
   }
+
+  const lista = lsCarregar();
+  if (form.id) {
+    const idx = lista.findIndex(i => i.id === form.id);
+    if (idx !== -1) lista[idx] = { ...lista[idx], ...payload } as PostRedeSocial;
+    const vi = itens.value.findIndex(i => i.id === form.id);
+    if (vi !== -1) itens.value[vi] = { ...itens.value[vi], ...payload } as PostRedeSocial;
+  } else {
+    const novo: PostRedeSocial = { id: Date.now(), ...payload } as PostRedeSocial;
+    lista.unshift(novo);
+    itens.value.unshift(novo);
+  }
+  lsSalvar(lista);
+  saving.value = false;
+  fecharModal();
 }
 
 async function excluir() {
   if (!itemParaExcluir.value) return;
   saving.value = true;
-  try {
-    await api.delete(`/admin/redes-sociais/${itemParaExcluir.value.id}`, authHeader());
-    itens.value = itens.value.filter(i => i.id !== itemParaExcluir.value?.id);
-    showConfirm.value = false;
-  } catch (e: unknown) {
-    console.error('Erro ao excluir post:', extractApiErrorMessage(e));
-  } finally {
-    saving.value = false;
+  const id = itemParaExcluir.value.id;
+
+  if (!usandoLocal.value) {
+    try {
+      await api.delete(`/admin/redes-sociais/${id}`, authHeader());
+      itens.value = itens.value.filter(i => i.id !== id);
+      showConfirm.value = false;
+      saving.value = false;
+      return;
+    } catch {
+      usandoLocal.value = true;
+    }
   }
+
+  const lista = lsCarregar().filter(i => i.id !== id);
+  lsSalvar(lista);
+  itens.value = itens.value.filter(i => i.id !== id);
+  showConfirm.value = false;
+  saving.value = false;
 }
 
 onMounted(async () => {
@@ -256,12 +291,9 @@ onMounted(async () => {
   try {
     const { data } = await api.get('/admin/redes-sociais', authHeader());
     itens.value = Array.isArray(data) ? data : (data?.items || []);
-  } catch (e: unknown) {
-    const err = e as { response?: { status?: number } };
-    if (err?.response?.status === 404 || err?.response?.status === undefined) {
-      apiIndisponivel.value = true;
-    }
-    console.error('Erro ao carregar posts:', extractApiErrorMessage(e));
+  } catch {
+    usandoLocal.value = true;
+    itens.value = lsCarregar();
   } finally {
     loading.value = false;
   }
@@ -269,9 +301,18 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.badge-ag-instagram { background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); color: #fff; }
-.badge-ag-youtube   { background: #ff0000; color: #fff; }
-.badge-ag-tiktok    { background: #010101; color: #fff; }
-.badge-ag-facebook  { background: #1877f2; color: #fff; }
-.badge-ag-twitter   { background: #1da1f2; color: #fff; }
+.badge-rs {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: .75rem;
+  font-weight: 600;
+  color: #fff;
+}
+.badge-rs-instagram { background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+.badge-rs-youtube   { background: #ff0000; }
+.badge-rs-tiktok    { background: #010101; }
+.badge-rs-facebook  { background: #1877f2; }
+.badge-rs-twitter   { background: #1da1f2; }
+.badge-rs-outro     { background: #6c757d; }
 </style>
