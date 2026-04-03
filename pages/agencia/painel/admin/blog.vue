@@ -303,12 +303,24 @@ async function excluir() {
 
 onMounted(async () => {
   agenciaStore.loadFromStorage();
+  const localData = lsCarregar();
+  if (localData.length > 0) {
+    itens.value = localData;
+    usandoLocal.value = true;
+    loading.value = false;
+  }
   try {
     const { data } = await api.get('/admin/blog/artigos', authHeader());
-    itens.value = Array.isArray(data) ? data : (data?.items || []);
+    const apiData: BlogArtigo[] = Array.isArray(data) ? data : (data?.items || []);
+    if (apiData.length > 0) {
+      itens.value = apiData;
+      usandoLocal.value = false;
+    } else if (localData.length === 0) {
+      usandoLocal.value = true;
+    }
   } catch {
+    if (localData.length === 0) itens.value = lsCarregar();
     usandoLocal.value = true;
-    itens.value = lsCarregar();
   } finally {
     loading.value = false;
   }

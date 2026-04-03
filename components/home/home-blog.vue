@@ -71,6 +71,7 @@ interface SocialItem {
   rede: string;
   legenda: string;
   thumb: string;
+  url?: string;
 }
 
 interface MockData {
@@ -103,20 +104,79 @@ const feedItems = computed<FeedItem[]>(() => {
       title: social.legenda,
       img: social.thumb,
       date: '',
-      url: rede === 'youtube' ? 'https://youtube.com/@quantashop' : 'https://instagram.com/quantashop',
+      url: social.url || (rede === 'youtube' ? 'https://youtube.com/@quantashop' : 'https://instagram.com/quantashop'),
     });
   }
 
   return items.slice(0, 4);
 });
 
+function lsArtigosBlog(): BlogPost[] {
+  try {
+    const raw = localStorage.getItem('qs_blog_artigos');
+    if (!raw) return [];
+    const artigos = JSON.parse(raw) as Array<{
+      id: number; titulo: string; resumo?: string; conteudo: string;
+      imagemDestaque?: string; categoria?: string; dataPublicacao?: string;
+      slug: string; publicado: boolean;
+    }>;
+    return artigos
+      .filter(a => a.publicado)
+      .sort((a, b) => {
+        const da = a.dataPublicacao ? new Date(a.dataPublicacao).getTime() : 0;
+        const db = b.dataPublicacao ? new Date(b.dataPublicacao).getTime() : 0;
+        return db - da;
+      })
+      .slice(0, 3)
+      .map(a => ({
+        slug: a.slug || String(a.id),
+        title: a.titulo,
+        excerpt: a.resumo || '',
+        tag: a.categoria || 'Blog',
+        date: a.dataPublicacao ? new Date(a.dataPublicacao).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' }) : '',
+        readTime: 0,
+        img: a.imagemDestaque || 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&q=80&auto=format&fit=crop',
+      }));
+  } catch { return []; }
+}
+
+function lsPostsSocial(): SocialItem[] {
+  try {
+    const raw = localStorage.getItem('qs_redes_sociais');
+    if (!raw) return [];
+    const posts = JSON.parse(raw) as Array<{
+      id: number; plataforma: string; titulo: string; url: string; thumbnailUrl?: string; ativo: boolean;
+    }>;
+    return posts
+      .filter(p => p.ativo)
+      .slice(0, 2)
+      .map(p => ({
+        id: p.id,
+        rede: p.plataforma,
+        legenda: p.titulo,
+        thumb: p.thumbnailUrl || 'https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=600&q=80&auto=format&fit=crop',
+        url: p.url,
+      }));
+  } catch { return []; }
+}
+
 onMounted(async () => {
   await loadConfig();
+
+  const lsBlog = lsArtigosBlog();
+  const lsSocial = lsPostsSocial();
+
+  if (lsBlog.length > 0 || lsSocial.length > 0) {
+    blogPosts.value = lsBlog;
+    socialFeed.value = lsSocial;
+    return;
+  }
+
   try {
     const data = await $fetch<MockData>('/data/mock-data.json');
     blogPosts.value = data.blog ?? [];
     socialFeed.value = data.social ?? [];
-  } catch (e) {
+  } catch {
     console.warn('[Blog] Failed to load mock-data.json');
   }
 });

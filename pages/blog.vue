@@ -73,19 +73,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 definePageMeta({ layout: 'layout-home' });
 useSeoMeta({ title: "Blog | Quanta Shop", description: "Dicas de cashback, finanças pessoais e novidades do ecossistema Quanta Shop.", canonical: "https://quantashop.com.br/blog" });
 
 const email = ref('');
 const activeCategory = ref('Todos');
-const categories = ['Todos', 'Cashback', 'Finanças', 'Parceiros', 'Novidades'];
 
-function subscribeNewsletter() {
-  email.value = '';
-}
-
-const posts = [
+const fallbackPosts = [
   {
     id: 1,
     title: 'Como maximizar seu cashback em compras do dia a dia',
@@ -148,10 +143,67 @@ const posts = [
   },
 ];
 
+interface Post {
+  id: number;
+  title: string;
+  excerpt: string;
+  img: string;
+  date: string;
+  readTime: string;
+  category: string;
+  slug: string;
+}
+
+const posts = ref<Post[]>(fallbackPosts);
+const categories = computed(() => {
+  const cats = new Set(posts.value.map(p => p.category));
+  return ['Todos', ...Array.from(cats)];
+});
+
+function subscribeNewsletter() {
+  email.value = '';
+}
+
+function formatDate(d?: string | null) {
+  if (!d) return '';
+  try { return new Date(d).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' }); } catch { return d; }
+}
+
+onMounted(() => {
+  try {
+    const raw = localStorage.getItem('qs_blog_artigos');
+    if (raw) {
+      const artigos = JSON.parse(raw) as Array<{
+        id: number; titulo: string; resumo?: string; conteudo: string;
+        imagemDestaque?: string; categoria?: string; dataPublicacao?: string;
+        slug: string; publicado: boolean;
+      }>;
+      const publicados = artigos
+        .filter(a => a.publicado)
+        .sort((a, b) => {
+          const da = a.dataPublicacao ? new Date(a.dataPublicacao).getTime() : 0;
+          const db = b.dataPublicacao ? new Date(b.dataPublicacao).getTime() : 0;
+          return db - da;
+        })
+        .map(a => ({
+          id: a.id,
+          title: a.titulo,
+          excerpt: a.resumo || a.conteudo.substring(0, 140) + '...',
+          img: a.imagemDestaque || 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&q=80&auto=format&fit=crop',
+          date: formatDate(a.dataPublicacao),
+          readTime: '',
+          category: a.categoria || 'Geral',
+          slug: '/blog',
+        }));
+      if (publicados.length > 0) posts.value = publicados;
+    }
+  } catch {}
+});
+
 const filteredPosts = computed(() =>
   activeCategory.value === 'Todos'
-    ? posts
-    : posts.filter(p => p.category === activeCategory.value)
+    ? posts.value
+    : posts.value.filter(p => p.category === activeCategory.value)
 );
 </script>
 
