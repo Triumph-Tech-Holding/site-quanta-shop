@@ -284,11 +284,7 @@ const sliderData = computed<HeroBannerSlide[]>(() => {
 .qs-hero__bg {
   position: absolute;
   inset: 0;
-  /* Foto profissional fixa — ignora item.imagem da API (colagem de logos) */
-  background-image: url('https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1600&q=85&auto=format&fit=crop');
-  background-size: cover;
-  background-position: center top;
-  background-repeat: no-repeat;
+  background: #225F6B;
 }
 
 .qs-hero__overlay {
