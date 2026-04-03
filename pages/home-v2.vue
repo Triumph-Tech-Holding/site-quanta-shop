@@ -1,11 +1,35 @@
 <template>
   <div class="v2-page">
+    <!-- 1. Hero: slides esquerda + painel produtos direita -->
     <HeroV2 />
+
+    <!-- 2. OmniSearch -->
     <OmniSearchV2 />
+
+    <!-- 3. Brands carousel -->
     <BrandsV2 />
-    <OffersV2 />
-    <LocalV2 />
-    <CeoV2 />
+
+    <!-- 4. Lojas online + Locais (lado a lado) -->
+    <section class="bg-[#F4F4F5] py-12 lg:py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-[3fr_2fr] gap-8 lg:gap-10">
+          <!-- Lojas online -->
+          <div>
+            <OnlineStoresV2 />
+          </div>
+          <!-- Locais -->
+          <div>
+            <LocalV2 />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Blog / Fankoo -->
+    <BlogSection />
+
+    <!-- 6. CTA Banner -->
+    <CtaBanner />
   </div>
 </template>
 
@@ -13,9 +37,10 @@
 import HeroV2 from '~/components/home-v2/HeroV2.vue'
 import OmniSearchV2 from '~/components/home-v2/OmniSearchV2.vue'
 import BrandsV2 from '~/components/home-v2/BrandsV2.vue'
-import OffersV2 from '~/components/home-v2/OffersV2.vue'
+import OnlineStoresV2 from '~/components/home-v2/OnlineStoresV2.vue'
 import LocalV2 from '~/components/home-v2/LocalV2.vue'
-import CeoV2 from '~/components/home-v2/CeoV2.vue'
+import BlogSection from '~/components/home-v2/BlogSection.vue'
+import CtaBanner from '~/components/home-v2/CtaBanner.vue'
 
 definePageMeta({
   layout: 'layout-home',

@@ -1,50 +1,59 @@
 <template>
-  <section class="bg-white py-12 lg:py-20 relative overflow-hidden">
-    <!-- Background Map Pattern -->
-    <div class="absolute inset-0 opacity-5">
-      <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-        <pattern id="mapPattern" patternUnits="userSpaceOnUse" width="20" height="20">
-          <circle cx="10" cy="10" r="1" fill="#2F7785" />
-          <path d="M0 10 L20 10 M10 0 L10 20" stroke="#2F7785" stroke-width="0.2" />
-        </pattern>
-        <rect fill="url(#mapPattern)" width="100%" height="100%" />
-      </svg>
+  <div>
+    <div class="flex items-center justify-between mb-7">
+      <h2 class="text-xl lg:text-2xl font-bold text-[#225F6B]">
+        Ganhe Consumindo Localmente
+      </h2>
     </div>
+    <p class="text-sm text-gray-500 mb-6">Estabelecimentos perto de você com cashback exclusivo</p>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-      <div class="flex items-center justify-between mb-8">
-        <div>
-          <h2 class="text-2xl lg:text-3xl font-bold text-[#225F6B]">
-            Ganhe Consumindo Localmente no Rio.
-          </h2>
-          <p class="text-gray-600 mt-2">Estabelecimentos perto de voce com cashback exclusivo</p>
+    <!-- Cards grid -->
+    <div class="grid grid-cols-2 gap-3">
+      <div
+        v-for="est in establishments"
+        :key="est.id"
+        class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 group border border-gray-100"
+      >
+        <div class="relative h-28 bg-gray-100 overflow-hidden">
+          <img
+            :src="est.image"
+            :alt="est.name"
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          />
+          <div class="absolute top-2 right-2 bg-[#98C73A] text-[#225F6B] text-[10px] font-bold px-2 py-0.5 rounded-full">
+            {{ est.cashbackPercent }}% CB
+          </div>
         </div>
-        <NuxtLink 
-          to="/mapa"
-          class="hidden sm:flex items-center text-[#2F7785] font-medium hover:text-[#225F6B] transition-colors"
-        >
-          Ver mapa completo
-          <svg class="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-          </svg>
-        </NuxtLink>
-      </div>
-
-      <!-- Grid -->
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <EstablishmentCard 
-          v-for="establishment in establishments" 
-          :key="establishment.id"
-          :establishment="establishment"
-        />
+        <div class="p-3">
+          <p class="text-xs font-bold text-[#225F6B] leading-snug">{{ est.name }}</p>
+          <p class="text-[10px] text-gray-400 mt-0.5">{{ est.category }}</p>
+          <p class="text-[9px] text-gray-400 mt-1 line-clamp-1">{{ est.address }}</p>
+          <a
+            :href="est.mapsLink"
+            class="mt-2 block text-center text-[10px] font-bold text-[#225F6B] bg-[#98C73A] rounded-full py-1.5 hover:bg-[#8ab832] transition-colors"
+          >
+            Ganhar Cashback
+          </a>
+        </div>
       </div>
     </div>
-  </section>
+
+    <!-- Ver todos -->
+    <div class="mt-5 text-center">
+      <NuxtLink
+        to="/mapa"
+        class="inline-flex items-center gap-2 bg-[#225F6B] text-white font-semibold text-sm px-6 py-2.5 rounded-full hover:bg-[#1a4d57] transition-colors"
+      >
+        Ver todos os parceiros locais
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </NuxtLink>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import EstablishmentCard from '~/components/home-v2/EstablishmentCard.vue'
-
 interface Establishment {
   id: number
   name: string
@@ -59,29 +68,38 @@ const establishments: Establishment[] = [
   {
     id: 1,
     name: 'Posto Shell Copacabana',
-    category: 'Combustivel',
+    category: 'Combustível',
     image: '/images/local/posto.png',
-    cashbackPercent: 3,
-    address: 'Av. Atlantica, 1702',
-    mapsLink: 'https://maps.google.com',
+    cashbackPercent: 5,
+    address: 'Av. Atlântica, 1702 - Rio de Janeiro',
+    mapsLink: '#',
   },
   {
     id: 2,
-    name: 'Drogaria Pacheco Centro',
-    category: 'Farmacia',
+    name: 'Drogasil Ipanema',
+    category: 'Farmácia',
     image: '/images/local/farmacia.png',
-    cashbackPercent: 5,
-    address: 'Rua do Ouvidor, 45',
-    mapsLink: 'https://maps.google.com',
+    cashbackPercent: 8,
+    address: 'Rua Visconde de Pirajá, 182 - Rio de Janeiro',
+    mapsLink: '#',
   },
   {
     id: 3,
-    name: 'Restaurante Marius',
-    category: 'Gastronomia',
+    name: 'Restaurante Azul Marinho',
+    category: 'Restaurante',
     image: '/images/local/restaurante.png',
-    cashbackPercent: 8,
-    address: 'Av. Atlantica, 290',
-    mapsLink: 'https://maps.google.com',
+    cashbackPercent: 10,
+    address: 'Av. Epitácio Pessoa, 1104 - Rio de Janeiro',
+    mapsLink: '#',
+  },
+  {
+    id: 4,
+    name: 'Padaria Confeitaria Leblon',
+    category: 'Padaria',
+    image: '/images/local/padaria.png',
+    cashbackPercent: 7,
+    address: 'Rua Dias Ferreira, 256 - Rio de Janeiro',
+    mapsLink: '#',
   },
 ]
 </script>

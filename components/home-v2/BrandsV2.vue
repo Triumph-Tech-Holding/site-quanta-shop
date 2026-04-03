@@ -2,7 +2,7 @@
   <section class="bg-white py-12 lg:py-16">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2 class="text-2xl lg:text-3xl font-bold text-[#225F6B] text-center mb-10">
-        Grandes Marcas Que Voce Ama, Com Cashback Quanta.
+        Grandes Marcas Com Cashback Quanta.
       </h2>
 
       <!-- Infinite Carousel -->
@@ -43,6 +43,7 @@ const brands: Brand[] = [
   { name: 'Carrefour', logo: '/images/brands/carrefour.png' },
   { name: 'C&A', logo: '/images/brands/cea.png' },
   { name: 'Samsung', logo: '/images/brands/samsung.png' },
+  { name: 'L\'Oreal', logo: '/images/brands/loreal.png' },
   { name: 'Nike', logo: '/images/brands/nike.png' },
   { name: 'Renner', logo: '/images/brands/renner.png' },
   { name: 'Riachuelo', logo: '/images/brands/riachuelo.png' },

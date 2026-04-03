@@ -108,6 +108,120 @@ uri = "file://public/images/brands/nike.png"
 type = "image"
 title = "nike-brand-logo"
 
+[[generated]]
+id = "KVZmNzZBq9r3t4JpZw4ko"
+uri = "file://public/images/blog/post1.png"
+type = "image"
+title = "blog-cashback-post"
+
+[[generated]]
+id = "I9Kvwy8TIhwucA9JYVOP6"
+uri = "file://public/images/blog/post2.png"
+type = "image"
+title = "blog-finance-post"
+
+[[generated]]
+id = "Crm30By980lWtEvfpMMcS"
+uri = "file://public/images/blog/post3.png"
+type = "image"
+title = "blog-shopping-post"
+
+[[generated]]
+id = "FkoTgd_lKoDnN-siOxeHJ"
+uri = "file://public/images/fankoo/influencer.png"
+type = "image"
+title = "fankoo-influencer"
+
+[[generated]]
+id = "whBEfIEtDwRoSjpJr0jTe"
+uri = "file://public/images/products/smartphone.png"
+type = "image"
+title = "product-smartphone"
+
+[[generated]]
+id = "06usLjGMAvbTsSy9VUqZ7"
+uri = "file://public/images/products/beleza.png"
+type = "image"
+title = "product-beauty"
+
+[[generated]]
+id = "-r9wB119fV6DW9yeHfNhx"
+uri = "file://public/images/products/airfryer.png"
+type = "image"
+title = "product-airfryer"
+
+[[generated]]
+id = "TSXQ8iio4X6jzQGI3y9I1"
+uri = "file://public/images/brands/loreal.png"
+type = "image"
+title = "loreal-logo"
+
+[[generated]]
+id = "GPn_spKY0wRob3GxD8Gr8"
+uri = "file://public/images/stores/shopee.png"
+type = "image"
+title = "shopee-logo"
+
+[[generated]]
+id = "Ge1oNs9ib-U71MaQD1xNl"
+uri = "file://public/images/stores/magalu.png"
+type = "image"
+title = "magalu-logo"
+
+[[generated]]
+id = "m3L717mKLIbU7mCAQu8_N"
+uri = "file://public/images/stores/americanas.png"
+type = "image"
+title = "americanas-logo"
+
+[[generated]]
+id = "QLBMkRIBclsPo9x-S06go"
+uri = "file://public/images/stores/amazon.png"
+type = "image"
+title = "amazon-logo"
+
+[[generated]]
+id = "cD_1vspwfh8M9baUyhoS6"
+uri = "file://public/images/stores/mercadolivre.png"
+type = "image"
+title = "mercadolivre-logo"
+
+[[generated]]
+id = "nnuFlwyjEZKeXOolS2enT"
+uri = "file://public/images/stores/netshoes.png"
+type = "image"
+title = "netshoes-logo"
+
+[[generated]]
+id = "vLh9g4M5N61gIJFeaiF9D"
+uri = "file://public/images/stores/centauro.png"
+type = "image"
+title = "centauro-logo"
+
+[[generated]]
+id = "9putoOjgOlCTZX5Reqq8T"
+uri = "file://public/images/stores/renner.png"
+type = "image"
+title = "renner-store-logo"
+
+[[generated]]
+id = "oHv8Pczkc9EifJrdsUeyE"
+uri = "file://public/images/stores/karsten.png"
+type = "image"
+title = "karsten-logo"
+
+[[generated]]
+id = "CRr8UUlWtcwEsCKI8RVKe"
+uri = "file://public/images/stores/jbl.png"
+type = "image"
+title = "jbl-logo"
+
+[[generated]]
+id = "e4OTI7u5wahyniOgB97oi"
+uri = "file://public/images/local/padaria.png"
+type = "image"
+title = "bakery-local"
+
 [[outputs]]
 id = "FhM_dR1fE8TazshjrdTy_"
 uri = "file://docs/quanta-shop-technical-spec.pdf"
