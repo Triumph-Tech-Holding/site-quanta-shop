@@ -1,22 +1,30 @@
 <template>
-  <section class="v2-brands">
-    <div class="v2-brands__container">
-      <h2 class="v2-brands__title">Grandes Marcas Que Você Ama, Com Cashback Quanta.</h2>
-      <div class="v2-brands__track-wrap">
-        <div class="v2-brands__track" ref="trackRef">
-          <div
-            v-for="(partner, index) in [...displayPartners, ...displayPartners]"
-            :key="`${partner.id}-${index}`"
-            class="v2-brands__item"
-            @click="handleClick(partner)"
-            :title="partner.nome"
+  <section class="bg-white py-12 lg:py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-2xl lg:text-3xl font-bold text-[#225F6B] text-center mb-10">
+        Grandes Marcas Que Voce Ama, Com Cashback Quanta.
+      </h2>
+
+      <!-- Infinite Carousel -->
+      <div class="relative overflow-hidden">
+        <div 
+          class="flex animate-scroll"
+          :style="{ animationDuration: `${brands.length * 3}s` }"
+        >
+          <div 
+            v-for="(brand, index) in [...brands, ...brands]" 
+            :key="`${brand.name}-${index}`"
+            class="flex-shrink-0 px-6 lg:px-10"
           >
-            <img
-              :src="partner.imagem || partner.imagemPequena"
-              :alt="partner.nome"
-              class="v2-brands__logo"
-              @error="(e) => (e.target as HTMLImageElement).style.display = 'none'"
-            />
+            <div 
+              class="grayscale hover:grayscale-0 opacity-60 hover:opacity-100 transition-all duration-300 cursor-pointer"
+            >
+              <img 
+                :src="brand.logo" 
+                :alt="brand.name"
+                class="h-10 lg:h-14 w-auto object-contain"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -25,103 +33,38 @@
 </template>
 
 <script setup lang="ts">
-import { usePartnerStore } from '@/pinia/usePartnerStore'
-import { useUserStore } from '@/pinia/useUserStore'
-
-const partnerStore = usePartnerStore()
-const userStore = useUserStore()
-const router = useRouter()
-
-onMounted(async () => {
-  if (!partnerStore.isNewPartnersLoaded) {
-    await partnerStore.fetchNewPartners()
-  }
-})
-
-const displayPartners = computed(() => {
-  const partners = partnerStore.newPartners
-  if (!partners || partners.length === 0) return []
-  return partners.filter((p: any) => p.imagem || p.imagemPequena).slice(0, 20)
-})
-
-function handleClick(partner: any) {
-  if (!userStore.isLoggedIn) {
-    router.push('/login')
-    return
-  }
-  if (partner.link) {
-    const userId = userStore.userId
-    const url = partner.link.replace ? partner.link.replace('{userId}', userId || '') : partner.link
-    window.open(url, '_blank', 'noopener,noreferrer')
-  }
+interface Brand {
+  name: string
+  logo: string
 }
+
+const brands: Brand[] = [
+  { name: 'Casas Bahia', logo: '/images/brands/casas-bahia.png' },
+  { name: 'Carrefour', logo: '/images/brands/carrefour.png' },
+  { name: 'C&A', logo: '/images/brands/cea.png' },
+  { name: 'Samsung', logo: '/images/brands/samsung.png' },
+  { name: 'Nike', logo: '/images/brands/nike.png' },
+  { name: 'Renner', logo: '/images/brands/renner.png' },
+  { name: 'Riachuelo', logo: '/images/brands/riachuelo.png' },
+  { name: 'Ponto', logo: '/images/brands/ponto.png' },
+]
 </script>
 
 <style scoped>
-.v2-brands {
-  background: white;
-  padding: 3rem 1rem;
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
-@media (min-width: 1024px) { .v2-brands { padding: 4rem 2rem; } }
-.v2-brands__container {
-  max-width: 1280px;
-  margin: 0 auto;
+
+.animate-scroll {
+  animation: scroll linear infinite;
 }
-.v2-brands__title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #225F6B;
-  text-align: center;
-  margin-bottom: 2.5rem;
+
+.animate-scroll:hover {
+  animation-play-state: paused;
 }
-@media (min-width: 1024px) { .v2-brands__title { font-size: 1.875rem; } }
-.v2-brands__track-wrap {
-  overflow: hidden;
-  position: relative;
-}
-.v2-brands__track-wrap::before,
-.v2-brands__track-wrap::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 80px;
-  z-index: 1;
-}
-.v2-brands__track-wrap::before {
-  left: 0;
-  background: linear-gradient(to right, white, transparent);
-}
-.v2-brands__track-wrap::after {
-  right: 0;
-  background: linear-gradient(to left, white, transparent);
-}
-.v2-brands__track {
-  display: flex;
-  animation: v2-scroll 40s linear infinite;
-  width: max-content;
-}
-.v2-brands__track:hover { animation-play-state: paused; }
-@keyframes v2-scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-.v2-brands__item {
-  flex-shrink: 0;
-  padding: 0 2rem;
-  cursor: pointer;
-  filter: grayscale(100%);
-  opacity: 0.5;
-  transition: filter 0.3s, opacity 0.3s;
-  display: flex;
-  align-items: center;
-}
-.v2-brands__item:hover { filter: grayscale(0); opacity: 1; }
-.v2-brands__logo {
-  height: 48px;
-  width: auto;
-  max-width: 120px;
-  object-fit: contain;
-}
-@media (min-width: 1024px) { .v2-brands__logo { height: 64px; max-width: 150px; } }
 </style>

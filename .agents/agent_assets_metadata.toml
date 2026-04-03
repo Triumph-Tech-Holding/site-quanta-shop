@@ -18,6 +18,96 @@ uri = "file://public/images/hero-agente.png"
 type = "image"
 title = "hero-agente"
 
+[[generated]]
+id = "_GwYoQfMu_wb6_FyqV4cl"
+uri = "file://public/images/brands/casas-bahia.png"
+type = "image"
+title = "casas-bahia-logo"
+
+[[generated]]
+id = "1m61CY4DWqiH2gQKShhbC"
+uri = "file://public/images/brands/carrefour.png"
+type = "image"
+title = "carrefour-logo"
+
+[[generated]]
+id = "_aipZkEQYxpXX-ZC6kEtW"
+uri = "file://public/images/brands/cea.png"
+type = "image"
+title = "cea-logo"
+
+[[generated]]
+id = "MXwDIgip3anLJ3fyelNlK"
+uri = "file://public/images/brands/samsung.png"
+type = "image"
+title = "samsung-logo"
+
+[[generated]]
+id = "j012Ee1wSYJRYzVSpc0FJ"
+uri = "file://public/images/brands/renner.png"
+type = "image"
+title = "renner-logo"
+
+[[generated]]
+id = "Q18aUzjkh1RkOiXc-Ogs5"
+uri = "file://public/images/brands/riachuelo.png"
+type = "image"
+title = "riachuelo-logo"
+
+[[generated]]
+id = "FKWIg_Y2USXc4fS7rRgWO"
+uri = "file://public/images/brands/ponto.png"
+type = "image"
+title = "ponto-logo"
+
+[[generated]]
+id = "jAOZtLVz2Uk1ru9FrW5nz"
+uri = "file://public/images/products/tv.png"
+type = "image"
+title = "smart-tv-product"
+
+[[generated]]
+id = "eOZ0TQkUGR6BAVwKXzJAI"
+uri = "file://public/images/products/tenis.png"
+type = "image"
+title = "nike-sneakers-product"
+
+[[generated]]
+id = "dBGDjAmv_O8sewzXeYFIS"
+uri = "file://public/images/products/geladeira.png"
+type = "image"
+title = "refrigerator-product"
+
+[[generated]]
+id = "xnK_MQdbnr_enNfEeI47I"
+uri = "file://public/images/products/roupas.png"
+type = "image"
+title = "clothes-product"
+
+[[generated]]
+id = "TGWwH7LrGk6OXVpJLZf7Q"
+uri = "file://public/images/local/posto.png"
+type = "image"
+title = "gas-station-local"
+
+[[generated]]
+id = "RTy9tupbWYnCnTvarWJE4"
+uri = "file://public/images/local/farmacia.png"
+type = "image"
+title = "pharmacy-local"
+
+[[generated]]
+id = "kqkObrpVDHD_VWrslyLx2"
+uri = "file://public/images/local/restaurante.png"
+type = "image"
+title = "restaurant-local"
+
+[[generated]]
+id = "CplmLlq1vOgwGux0Hc97V"
+uri = "file://public/images/brands/nike.png"
+type = "image"
+title = "nike-brand-logo"
+
 [[outputs]]
 id = "FhM_dR1fE8TazshjrdTy_"
 uri = "file://docs/quanta-shop-technical-spec.pdf"
