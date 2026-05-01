@@ -65,6 +65,7 @@ const adminLinks = [
   { to: '/agencia/painel/admin/blog', label: 'Blog', desc: 'Criar e gerenciar artigos do blog' },
   { to: '/agencia/painel/admin/redes-sociais', label: 'Redes Sociais', desc: 'Posts do Instagram, YouTube, TikTok e mais' },
   { to: '/agencia/painel/admin/docs', label: '📋 Documentação Técnica', desc: 'Arquitetura, padrões, decisões e histórico do projeto' },
+  { to: '/agencia/painel/admin/progresso', label: '🚀 Progresso do Produto', desc: 'Acompanhe o andamento das tarefas de desenvolvimento' },
 ];
 function authHeader() { return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } }; }
 onMounted(async () => {
