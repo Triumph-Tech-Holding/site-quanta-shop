@@ -1,5 +1,40 @@
 # Quanta Shop Web
 
+## Documentação Técnica + Blog API Híbrido (Tasks #102 + #103 — COMPLETO)
+
+### CLAUDE.md (raiz)
+Arquivo de contexto técnico permanente criado em `/CLAUDE.md`. Documenta stack, estrutura, padrões, paleta, proxy, LGPD e histórico de tasks. Deve ser lido antes de qualquer modificação no projeto.
+
+### Admin Docs (Task #102)
+- `pages/agencia/painel/admin/docs.vue` — painel de documentação técnica com 9 seções colapsáveis:
+  1. Arquitetura & Stack
+  2. Design System (paleta, classes, tipografia)
+  3. Páginas Públicas (tabela com status)
+  4. Painel Admin (todas as rotas)
+  5. Blog — Arquitetura Híbrida (fluxo dev/prod)
+  6. API & Proxy (env vars, endpoints, alerta LGPD)
+  7. Histórico de Tasks (sprints)
+  8. Pendentes (cards com prioridade)
+  9. Convenções de Código
+  - Botão "Baixar PDF" via `window.print()` com estilos `@media print`
+  - Botão "Copiar CLAUDE.md" via `navigator.clipboard`
+  - Badge de ambiente (dev amarelo / prod verde com animação pulse)
+- Card "📋 Documentação Técnica" adicionado ao admin index
+
+### Blog Arquitetura Híbrida (Task #103)
+**Problema mapeado:** Proxy `server/routes/api-proxy/[...path].ts` tenta API local (porta 8000) e, ao falhar, cai para `api.quantashop.com.br` (produção). Escritas de teste contaminariam banco real.
+
+**Solução implementada via `import.meta.dev`:**
+| Ação | Dev (Replit) | Produção |
+|------|-------------|---------|
+| Admin escrita (POST/PUT/DELETE) | localStorage **apenas** | API real |
+| Admin leitura (GET) | API → fallback localStorage | API real |
+| Público leitura (GET) | API → fallback localStorage | API real |
+
+**Arquivos alterados:**
+- `pages/agencia/painel/admin/blog.vue` — adicionado `isDev = import.meta.dev`. Em dev: `usandoLocal` inicia como `true` e permanece `true` (banner warning mostra motivo LGPD). `salvar()` e `excluir()` gateados com `!isDev` antes de chamar a API. Em prod: se API retorna dados, `usandoLocal = false` e escritas vão para API.
+- `pages/blog/index.vue` — `onMounted` agora tenta `api.get('/blog/artigos')` primeiro (leitura pública é segura). Se API falhar ou retornar vazio, cai para localStorage. Refatorado para `mapArtigos()` compartilhado.
+
 ## Blog Premium (Task #101 — COMPLETO + redesign Apple)
 
 ### Estrutura de páginas

@@ -135,38 +135,58 @@ const fallbackPosts: Post[] = [
 ];
 
 const posts = ref<Post[]>(fallbackPosts);
+const api = useApi();
 
 function fmt(d?: string | null) {
   if (!d) return '';
   try { return new Date(d).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' }); } catch { return d; }
 }
 
-onMounted(() => {
+function mapArtigos(artigos: Array<{
+  id: number; titulo: string; resumo?: string; conteudo: string;
+  imagemDestaque?: string; categoria?: string; dataPublicacao?: string; publicado: boolean;
+}>): Post[] {
+  return artigos
+    .filter(a => a.publicado)
+    .sort((a, b) => {
+      const da = a.dataPublicacao ? new Date(a.dataPublicacao).getTime() : 0;
+      const db = b.dataPublicacao ? new Date(b.dataPublicacao).getTime() : 0;
+      return db - da;
+    })
+    .map(a => ({
+      id: a.id,
+      title: a.titulo,
+      excerpt: a.resumo || a.conteudo.substring(0, 140) + '…',
+      img: a.imagemDestaque || 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=900&q=85&auto=format&fit=crop',
+      date: fmt(a.dataPublicacao),
+      readTime: '',
+      category: a.categoria || 'Geral',
+    }));
+}
+
+function carregarDoLocalStorage() {
   try {
     const raw = localStorage.getItem('qs_blog_artigos');
     if (!raw) return;
-    const artigos = JSON.parse(raw) as Array<{
-      id: number; titulo: string; resumo?: string; conteudo: string;
-      imagemDestaque?: string; categoria?: string; dataPublicacao?: string; publicado: boolean;
-    }>;
-    const pub = artigos
-      .filter(a => a.publicado)
-      .sort((a, b) => {
-        const da = a.dataPublicacao ? new Date(a.dataPublicacao).getTime() : 0;
-        const db = b.dataPublicacao ? new Date(b.dataPublicacao).getTime() : 0;
-        return db - da;
-      })
-      .map(a => ({
-        id: a.id,
-        title: a.titulo,
-        excerpt: a.resumo || a.conteudo.substring(0, 140) + '…',
-        img: a.imagemDestaque || 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=900&q=85&auto=format&fit=crop',
-        date: fmt(a.dataPublicacao),
-        readTime: '',
-        category: a.categoria || 'Geral',
-      }));
+    const artigos = JSON.parse(raw);
+    const pub = mapArtigos(artigos);
     if (pub.length > 0) posts.value = pub;
   } catch {}
+}
+
+onMounted(async () => {
+  // Tenta API real primeiro (leitura é segura em qualquer ambiente)
+  try {
+    const { data } = await api.get('/blog/artigos');
+    const artigos = Array.isArray(data) ? data : (data?.items || []);
+    if (artigos.length > 0) {
+      const pub = mapArtigos(artigos);
+      if (pub.length > 0) { posts.value = pub; return; }
+    }
+  } catch { /**/ }
+
+  // Fallback: localStorage (dados criados no painel admin em dev)
+  carregarDoLocalStorage();
 });
 
 const categories = computed(() => ['Todos', ...Array.from(new Set(posts.value.map(p => p.category)))]);

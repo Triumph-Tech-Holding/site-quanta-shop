@@ -8,9 +8,16 @@
       <button class="btn btn-ag-primary" @click="abrirNovo">+ Novo Artigo</button>
     </div>
 
-    <div v-if="usandoLocal" class="alert alert-info d-flex align-items-center gap-2 mb-3">
+    <div v-if="usandoLocal" class="alert d-flex align-items-center gap-2 mb-3"
+      :class="isDev ? 'alert-warning' : 'alert-info'">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      Dados salvos localmente no navegador. Serão sincronizados com o servidor quando o backend estiver disponível.
+      <span v-if="isDev">
+        <strong>Modo Dev (Replit):</strong> Escritas restritas ao localStorage para proteger o banco de produção (LGPD).
+        Em produção, os dados serão persistidos na API real.
+      </span>
+      <span v-else>
+        Dados salvos localmente no navegador. Serão sincronizados com o servidor quando o backend estiver disponível.
+      </span>
     </div>
 
     <div v-if="loading" class="ag-loading"><div class="spinner-border" /></div>
@@ -176,7 +183,8 @@ const api = useApi();
 
 const loading = ref(true);
 const saving = ref(false);
-const usandoLocal = ref(false);
+const isDev = import.meta.dev;
+const usandoLocal = ref(isDev); // Em dev: sempre localStorage para escritas (protege produção)
 const itens = ref<BlogArtigo[]>([]);
 const showModal = ref(false);
 const showConfirm = ref(false);
@@ -306,7 +314,9 @@ async function salvar() {
     destaque: form.destaque,
   };
 
-  if (!usandoLocal.value) {
+  // Em dev (Replit): nunca escreve na API — protege banco de produção (LGPD)
+  // Em produção: usa API real se não estiver em modo local
+  if (!isDev && !usandoLocal.value) {
     try {
       if (form.id) {
         await api.put(`/admin/blog/artigos/${form.id}`, payload, authHeader());
@@ -345,7 +355,8 @@ async function excluir() {
   saving.value = true;
   const id = itemParaExcluir.value.id;
 
-  if (!usandoLocal.value) {
+  // Em dev (Replit): nunca deleta via API — protege banco de produção (LGPD)
+  if (!isDev && !usandoLocal.value) {
     try {
       await api.delete(`/admin/blog/artigos/${id}`, authHeader());
       itens.value = itens.value.filter(i => i.id !== id);
@@ -367,17 +378,22 @@ async function excluir() {
 onMounted(async () => {
   agenciaStore.loadFromStorage();
   const localData = lsCarregar();
+
+  // Em dev: sempre começa em modo local (escritas nunca vão à API)
   if (localData.length > 0) {
     itens.value = localData;
-    usandoLocal.value = true;
+    usandoLocal.value = true; // forçado até confirmar via API
     loading.value = false;
   }
+
   try {
     const { data } = await api.get('/admin/blog/artigos', authHeader());
     const apiData: BlogArtigo[] = Array.isArray(data) ? data : (data?.items || []);
     if (apiData.length > 0) {
       itens.value = apiData;
-      usandoLocal.value = false;
+      // Em dev: mostra dados da API para leitura, mas escritas continuam no localStorage
+      // Em prod: desbloqueia escrita via API
+      usandoLocal.value = isDev ? true : false;
     } else if (localData.length === 0) {
       usandoLocal.value = true;
     }
