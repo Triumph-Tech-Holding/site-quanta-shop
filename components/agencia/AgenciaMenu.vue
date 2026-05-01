@@ -54,6 +54,16 @@
         FAQ
       </NuxtLink>
 
+      <template v-if="isAdmin">
+        <div class="menu-admin-divider">Admin</div>
+        <NuxtLink to="/agencia/painel/admin" class="listMenu listMenu--admin">
+          Painel Admin
+        </NuxtLink>
+        <NuxtLink to="/agencia/painel/admin/docs" class="listMenu listMenu--admin">
+          📋 Documentação
+        </NuxtLink>
+      </template>
+
       <NuxtLink to="/agencia/logout" class="listMenu logout-item">
         Logout
       </NuxtLink>

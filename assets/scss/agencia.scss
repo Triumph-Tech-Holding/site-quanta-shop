@@ -385,6 +385,26 @@ $ag-text: #272222;
     }
   }
 
+  .menu-admin-divider {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: rgba(#fff, .5);
+    padding: 10px 16px 4px;
+    border-top: 1px solid rgba(#fff, .2);
+    margin-top: 4px;
+  }
+
+  .listMenu--admin {
+    background: rgba(#000, .15);
+    font-size: 13px;
+    padding: 11px 16px;
+    &:hover, &.router-link-exact-active {
+      background: $primary-color-dark;
+    }
+  }
+
   .sub-menu-list {
     .listMenu {
       background: $secondary-color;
