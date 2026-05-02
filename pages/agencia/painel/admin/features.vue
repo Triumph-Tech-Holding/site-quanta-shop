@@ -1,6 +1,5 @@
 <template>
-  <div class="qs-features">
-    <!-- HEADER -->
+  <div class="qs-page qs-features">
     <div class="qs-page-header">
       <div class="qs-header-text">
         <div class="qs-eyebrow">Escritório Virtual · Produto</div>
@@ -11,78 +10,70 @@
         <span v-if="generatedAt" class="qs-meta">
           Atualizado em {{ formatDate(generatedAt) }}
         </span>
-        <button class="qs-btn qs-btn-outline" @click="reload" :disabled="loading">
+        <button class="qs-btn-outline" @click="reload" :disabled="loading">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
           Recarregar
         </button>
       </div>
     </div>
 
-    <div v-if="loading" class="qs-loading">
-      <div class="qs-spinner"></div>
-    </div>
+    <div v-if="loading" class="qs-loading"><div class="qs-spinner"></div></div>
 
     <template v-else-if="data">
-      <!-- KPI STRIP -->
-      <div class="qs-kpi-grid">
-        <div class="qs-kpi-card">
-          <div class="qs-kpi-label">Progresso global</div>
-          <div class="qs-kpi-value">{{ globalPct }}%</div>
-          <div class="qs-progress-track">
-            <div class="qs-progress-fill" :style="{ width: globalPct + '%' }"></div>
-          </div>
-          <div class="qs-kpi-meta">
-            {{ doneCount }} de {{ totalCount }} features prontas
-          </div>
-        </div>
-        <div class="qs-kpi-card" v-for="mvp in mvpStats" :key="mvp.id">
-          <div class="qs-kpi-label">
-            <span class="qs-kpi-dot" :style="{ background: mvp.color }"></span>
-            {{ mvp.shortName }}
-          </div>
-          <div class="qs-kpi-value">{{ mvp.pct }}%</div>
-          <div class="qs-progress-track">
-            <div class="qs-progress-fill" :style="{ width: mvp.pct + '%', background: mvp.color }"></div>
-          </div>
-          <div class="qs-kpi-meta">{{ mvp.done }}/{{ mvp.total }} features</div>
-        </div>
+      <div class="qs-grid">
+        <QsKpiCard
+          label="Progresso global"
+          :value="globalPct"
+          suffix="%"
+          :progress="globalPct"
+          :meta="`${doneCount} de ${totalCount} features prontas`"
+          dot-color="var(--qs-teal)"
+        />
+        <QsKpiCard
+          v-for="mvp in mvpStats"
+          :key="mvp.id"
+          :label="mvp.shortName"
+          :value="mvp.pct"
+          suffix="%"
+          :progress="mvp.pct"
+          :meta="`${mvp.done}/${mvp.total} features`"
+          :dot-color="mvp.color"
+        />
       </div>
 
-      <!-- FILTERS -->
-      <div class="qs-filter-bar">
+      <div class="qs-card-section qs-filter-bar">
         <div class="qs-filter-group">
           <span class="qs-filter-label">Fase</span>
-          <button
+          <QsFilterChip
             v-for="m in mvpFilters"
             :key="m.key"
-            class="qs-chip"
-            :class="{ active: activeMvp === m.key }"
+            :active="activeMvp === m.key"
+            :count="m.count"
             @click="activeMvp = m.key"
-          >{{ m.label }}<span class="qs-chip-count">{{ m.count }}</span></button>
+          >{{ m.label }}</QsFilterChip>
         </div>
         <div class="qs-filter-group">
           <span class="qs-filter-label">Status</span>
-          <button
+          <QsFilterChip
             v-for="s in statusFilters"
             :key="s.key"
-            class="qs-chip"
-            :class="{ active: activeStatus === s.key }"
+            :active="activeStatus === s.key"
+            :count="s.count"
             @click="activeStatus = s.key"
-          >{{ s.label }}<span class="qs-chip-count">{{ s.count }}</span></button>
+          >{{ s.label }}</QsFilterChip>
         </div>
         <div class="qs-filter-group">
           <span class="qs-filter-label">Público</span>
-          <button
+          <QsFilterChip
             v-for="a in audienceFilters"
             :key="a.key"
-            class="qs-chip"
-            :class="{ active: activeAudience === a.key }"
+            :active="activeAudience === a.key"
+            :count="a.count"
             @click="activeAudience = a.key"
-          >{{ a.label }}<span class="qs-chip-count">{{ a.count }}</span></button>
+          >{{ a.label }}</QsFilterChip>
         </div>
       </div>
 
-      <!-- LIST POR MVP -->
       <div v-for="mvp in groupedFeatures" :key="mvp.id" class="qs-mvp-block">
         <div class="qs-mvp-header">
           <div class="qs-mvp-header-left">
@@ -98,8 +89,8 @@
           </div>
         </div>
 
-        <div class="qs-progress-track qs-progress-thick">
-          <div class="qs-progress-fill" :style="{ width: mvp.pct + '%', background: mvp.color }"></div>
+        <div class="qs-mvp-progress">
+          <QsProgressBar :value="mvp.pct" :color="mvp.color" size="thick" />
         </div>
 
         <div class="qs-feature-list">
@@ -107,7 +98,13 @@
             v-for="feat in mvp.features"
             :key="feat.id"
             class="qs-feature-item"
+            role="button"
+            tabindex="0"
+            :aria-expanded="!!expanded[feat.id]"
+            :aria-label="`Ver detalhes da feature ${feat.id}: ${feat.title}`"
             @click="toggleExpand(feat.id)"
+            @keydown.enter.prevent="toggleExpand(feat.id)"
+            @keydown.space.prevent="toggleExpand(feat.id)"
           >
             <div class="qs-feature-icon">
               <svg v-if="feat.status === 'done'" width="20" height="20" viewBox="0 0 24 24" fill="#16a34a"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
@@ -130,14 +127,17 @@
               </div>
             </div>
             <div class="qs-feature-status">
-              <div class="qs-progress-mini-track">
-                <div class="qs-progress-mini-fill" :style="{ width: feat.progress + '%', background: feat.status === 'done' ? '#16a34a' : (mvp.color) }"></div>
+              <div class="qs-mini-progress">
+                <QsProgressBar
+                  :value="feat.progress"
+                  :color="feat.status === 'done' ? '#16a34a' : mvp.color"
+                  size="thin"
+                />
               </div>
               <span class="qs-feature-pct">{{ feat.progress }}%</span>
               <span class="qs-status-badge" :class="'badge-' + feat.status">{{ statusLabel(feat.status) }}</span>
             </div>
           </div>
-
           <div v-if="mvp.features.length === 0" class="qs-empty">
             Nenhuma feature corresponde ao filtro nesta fase.
           </div>
@@ -325,175 +325,16 @@ function formatDate(iso: string): string {
 </script>
 
 <style scoped>
-/* ──────────────── PREMIUM DESIGN SYSTEM TOKENS (locais) ──────────────── */
-.qs-features {
-  --qs-teal: #2F7785;
-  --qs-teal-dark: #225F6B;
-  --qs-lime: #98C73A;
-  --qs-bg: #F4F4F5;
-  --qs-ink: #1d1d1f;
-  --qs-gray-50: #fafafa;
-  --qs-gray-100: #f5f5f7;
-  --qs-gray-200: #e5e7eb;
-  --qs-gray-400: #9ca3af;
-  --qs-gray-500: #6b7280;
-  --qs-gray-700: #374151;
-  --qs-radius-md: 10px;
-  --qs-radius-lg: 16px;
-  --qs-radius-pill: 999px;
-  --qs-shadow-sm: 0 2px 8px rgba(15, 23, 42, .06);
-  --qs-shadow-md: 0 8px 24px rgba(15, 23, 42, .08);
-  --qs-ease: cubic-bezier(0.4, 0, 0.2, 1);
-  --qs-duration: 200ms;
-
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  color: var(--qs-ink);
-  padding-bottom: 64px;
-}
-
-/* ──────────────── PAGE HEADER ──────────────── */
-.qs-page-header {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-  padding: 0 0 32px;
-  border-bottom: 1px solid var(--qs-gray-100);
-  margin-bottom: 32px;
-}
+.qs-features { /* tokens herdados de quanta-premium.scss */ }
+.qs-header-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
 .qs-header-text { max-width: 720px; }
-.qs-eyebrow {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--qs-teal);
-  margin-bottom: 8px;
-}
-.qs-page-header h1 {
-  font-size: 36px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--qs-ink);
-  margin: 0 0 8px;
-  line-height: 1.1;
-}
-.qs-page-header p {
-  font-size: 16px;
-  color: var(--qs-gray-500);
-  margin: 0;
-  line-height: 1.55;
-}
-.qs-header-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-shrink: 0;
-}
-.qs-meta {
-  font-size: 12px;
-  color: var(--qs-gray-400);
-}
+.qs-page-header h1 { margin: 4px 0 8px; }
 
-/* ──────────────── BUTTONS ──────────────── */
-.qs-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 10px 18px;
-  font-size: 14px;
-  font-weight: 500;
-  border-radius: var(--qs-radius-md);
-  border: none;
-  cursor: pointer;
-  transition: all var(--qs-duration) var(--qs-ease);
-  font-family: inherit;
-}
-.qs-btn-outline {
-  background: #fff;
-  border: 1px solid var(--qs-teal);
-  color: var(--qs-teal);
-}
-.qs-btn-outline:hover:not(:disabled) {
-  background: var(--qs-teal);
-  color: #fff;
-  box-shadow: var(--qs-shadow-sm);
-}
-.qs-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-
-/* ──────────────── KPI GRID ──────────────── */
-.qs-kpi-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
-  margin-bottom: 40px;
-}
-.qs-kpi-card {
-  background: #fff;
-  border-radius: var(--qs-radius-lg);
-  padding: 24px;
-  box-shadow: var(--qs-shadow-sm);
-  transition: transform var(--qs-duration) var(--qs-ease), box-shadow var(--qs-duration) var(--qs-ease);
-}
-.qs-kpi-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--qs-shadow-md);
-}
-.qs-kpi-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--qs-gray-500);
-  margin-bottom: 8px;
-}
-.qs-kpi-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-}
-.qs-kpi-value {
-  font-size: 32px;
-  font-weight: 700;
-  color: var(--qs-ink);
-  letter-spacing: -0.02em;
-  line-height: 1;
-  margin-bottom: 12px;
-}
-.qs-kpi-meta {
-  font-size: 12px;
-  color: var(--qs-gray-400);
-  margin-top: 8px;
-}
-
-/* ──────────────── PROGRESS BARS ──────────────── */
-.qs-progress-track {
-  background: var(--qs-gray-200);
-  border-radius: var(--qs-radius-pill);
-  height: 6px;
-  overflow: hidden;
-}
-.qs-progress-thick { height: 8px; }
-.qs-progress-fill {
-  height: 100%;
-  background: var(--qs-lime);
-  border-radius: var(--qs-radius-pill);
-  transition: width 400ms var(--qs-ease);
-}
-
-/* ──────────────── FILTER BAR ──────────────── */
 .qs-filter-bar {
-  background: #fff;
-  border-radius: var(--qs-radius-lg);
-  padding: 20px 24px;
-  box-shadow: var(--qs-shadow-sm);
-  margin-bottom: 32px;
   display: flex;
   flex-direction: column;
   gap: 16px;
+  padding: 20px 24px;
 }
 .qs-filter-group {
   display: flex;
@@ -510,39 +351,7 @@ function formatDate(iso: string): string {
   margin-right: 4px;
   min-width: 60px;
 }
-.qs-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  padding: 6px 14px;
-  border-radius: var(--qs-radius-pill);
-  border: 1px solid var(--qs-gray-200);
-  background: var(--qs-gray-50);
-  color: var(--qs-gray-700);
-  cursor: pointer;
-  transition: all var(--qs-duration) var(--qs-ease);
-  font-family: inherit;
-  font-weight: 500;
-}
-.qs-chip:hover { border-color: var(--qs-teal); color: var(--qs-teal); }
-.qs-chip.active {
-  background: var(--qs-teal);
-  border-color: var(--qs-teal);
-  color: #fff;
-}
-.qs-chip-count {
-  background: rgba(0, 0, 0, 0.08);
-  border-radius: var(--qs-radius-pill);
-  padding: 1px 8px;
-  font-size: 11px;
-  font-weight: 600;
-}
-.qs-chip.active .qs-chip-count {
-  background: rgba(255, 255, 255, 0.25);
-}
 
-/* ──────────────── MVP BLOCKS ──────────────── */
 .qs-mvp-block {
   background: #fff;
   border-radius: var(--qs-radius-lg);
@@ -557,11 +366,7 @@ function formatDate(iso: string): string {
   gap: 16px;
   padding: 24px 28px 16px;
 }
-.qs-mvp-header-left {
-  display: flex;
-  gap: 16px;
-  align-items: flex-start;
-}
+.qs-mvp-header-left { display: flex; gap: 16px; align-items: flex-start; }
 .qs-mvp-bullet {
   width: 4px;
   align-self: stretch;
@@ -595,14 +400,9 @@ function formatDate(iso: string): string {
   color: var(--qs-gray-400);
   margin-top: 4px;
 }
-.qs-mvp-block .qs-progress-track {
-  margin: 0 28px 8px;
-}
+.qs-mvp-progress { padding: 0 28px 8px; }
 
-/* ──────────────── FEATURE LIST ──────────────── */
-.qs-feature-list {
-  padding: 8px 0 8px;
-}
+.qs-feature-list { padding: 8px 0; }
 .qs-feature-item {
   display: flex;
   align-items: center;
@@ -635,11 +435,7 @@ function formatDate(iso: string): string {
   color: var(--qs-ink);
   line-height: 1.4;
 }
-.qs-feature-aud {
-  font-size: 11px;
-  color: var(--qs-gray-400);
-  font-weight: 500;
-}
+.qs-feature-aud { font-size: 11px; color: var(--qs-gray-400); font-weight: 500; }
 .qs-feature-desc {
   font-size: 13px;
   color: var(--qs-gray-700);
@@ -675,18 +471,7 @@ function formatDate(iso: string): string {
   gap: 12px;
   flex-shrink: 0;
 }
-.qs-progress-mini-track {
-  width: 80px;
-  height: 4px;
-  background: var(--qs-gray-200);
-  border-radius: var(--qs-radius-pill);
-  overflow: hidden;
-}
-.qs-progress-mini-fill {
-  height: 100%;
-  border-radius: var(--qs-radius-pill);
-  transition: width 400ms var(--qs-ease);
-}
+.qs-mini-progress { width: 80px; }
 .qs-feature-pct {
   font-size: 12px;
   font-weight: 600;
@@ -707,27 +492,7 @@ function formatDate(iso: string): string {
 .badge-planned { background: #fef3c7; color: #d97706; }
 .badge-backlog { background: var(--qs-gray-100); color: var(--qs-gray-500); }
 
-/* ──────────────── EMPTY/LOADING/ERROR ──────────────── */
-.qs-empty {
-  text-align: center;
-  padding: 32px;
-  color: var(--qs-gray-400);
-  font-size: 14px;
-}
-.qs-loading {
-  display: flex;
-  justify-content: center;
-  padding: 80px 0;
-}
-.qs-spinner {
-  width: 36px;
-  height: 36px;
-  border: 3px solid var(--qs-gray-200);
-  border-top-color: var(--qs-teal);
-  border-radius: 50%;
-  animation: qs-spin 0.8s linear infinite;
-}
-@keyframes qs-spin { to { transform: rotate(360deg); } }
+.qs-empty { text-align: center; padding: 32px; color: var(--qs-gray-400); font-size: 14px; }
 .qs-error {
   background: #fff;
   border-radius: var(--qs-radius-lg);
@@ -744,15 +509,13 @@ function formatDate(iso: string): string {
   color: var(--qs-teal-dark);
 }
 
-/* ──────────────── RESPONSIVE ──────────────── */
 @media (max-width: 768px) {
   .qs-page-header h1 { font-size: 28px; }
-  .qs-page-header p { font-size: 15px; }
   .qs-mvp-header { flex-direction: column; align-items: stretch; padding: 20px; }
-  .qs-mvp-block .qs-progress-track { margin: 0 20px 8px; }
+  .qs-mvp-progress { padding: 0 20px 8px; }
   .qs-feature-item { padding: 14px 20px; flex-wrap: wrap; }
   .qs-feature-status { width: 100%; justify-content: flex-end; padding-top: 4px; }
-  .qs-progress-mini-track { width: 60px; }
+  .qs-mini-progress { width: 60px; }
   .qs-filter-label { min-width: 100%; }
 }
 </style>

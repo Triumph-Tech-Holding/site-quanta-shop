@@ -6,6 +6,32 @@ Todas as mudanças relevantes da plataforma. Formato baseado em [Keep a Changelo
 
 ## [Não publicado] — Mai 2026
 
+### 🌊 Sprint Power Phase 1 — Componentização premium + telas de modernização
+
+Componentes do Premium Design System extraídos como SFCs reutilizáveis e construção das primeiras telas da Fase 1 do roadmap (Sprint Power) sobre os novos tokens.
+
+#### Adicionado — Componentes premium reutilizáveis
+- **`components/qs/QsKpiCard.vue`** — card de indicador com label, valor (formatos `currency` / `percent` / `number`), badge tonal (`success`/`warn`/`danger`), barra de progresso opcional, delta com seta e meta.
+- **`components/qs/QsProgressBar.vue`** — barra linear com 3 tamanhos (`thin`/`md`/`thick`), cor customizável, label opcional, transição suave.
+- **`components/qs/QsFilterChip.vue`** — chip de filtro com estado active, contador opcional, slot de ícone.
+
+#### Adicionado — Telas Sprint Power (Fase 1)
+- **`pages/agencia/painel/admin/configuracoes-rede.vue`** — Gestão Centralizada da rede MLM. Tabela de percentuais residuais por nível com toggle de ativação, switch de compressão dinâmica, configuração de Quanta Points (R$/ponto), multiplicador Plus, quarentena, profundidade máxima e tabela separada para bônus de credenciamento. FAB bar de salvar com estado dirty. Fallback de mock quando o endpoint `/admin/configuracoes-rede` ainda não existe.
+- **`pages/agencia/painel/admin/bi-financeiro.vue`** — BI completo com switch Mês/Trimestre/Ano. KPI strip (faturamento, cashback reservado, inadimplência, margem), barras horizontais por categoria de receita, aging buckets coloridos por risco, tabela de safras de cashback com colunas gerado/estornado/liberado/a-pagar e top parceiros. Mock dataset por período enquanto `/admin/bi-financeiro` não existe.
+- **`pages/busca-inteligente.vue`** — Motor de busca premium para o consumidor. Search bar gigante, sugestões rápidas, sliders de cashback mínimo (lime) e proximidade (km), botão "Usar minha localização" via `navigator.geolocation`, filtros de categoria por chip, ordenação multi-critério, view grid/lista, badges de cashback e cálculo de cashback retornado por preço.
+
+#### Adicionado — Componentes consumer
+- **`components/login/login-social.vue`** redesenhado: Google (já funcional via GIS) + **Apple Sign In** ativo com SDK on-demand (`appleid.cdn-apple.com`), aguarda `runtimeConfig.public.appleClientId` para entrar em produção.
+- **`components/checkout/checkout-verify.vue`** redesenhado em PT-BR com 3 painéis colapsáveis: login retornante, **cupom de desconto** (validação `/cupom/validar` com fallback dev — códigos `QUANTA10` e `BEMVINDO`) e **Quanta Points** (saldo + slider de resgate com conversão em R$). Emite `coupon-applied` e `points-applied` para o checkout-area integrar.
+
+#### Atualizado — Tokens & Helpers
+- **`assets/scss/quanta-premium.scss`** ganhou aliases semânticos do `DESIGN_SYSTEM.md`: `--qs-teal`, `--qs-teal-dark`, `--qs-bg`, `--qs-ink`, escala `--qs-gray-50…700`, estados `--qs-success/warn/danger`, easings `--qs-ease`/`--qs-duration`. Também adiciona helpers `.qs-page`, `.qs-page-header`, `.qs-eyebrow`, `.qs-grid`, `.qs-card-section`, `.qs-section-title/desc`, `.qs-btn-primary/outline`, `.qs-loading/spinner`.
+- **`pages/agencia/painel/admin/features.vue`** refatorado: remove tokens inline, agora consome `QsKpiCard`/`QsProgressBar`/`QsFilterChip` e helpers `.qs-page`. Reduz duplicação e padroniza visual.
+- **`components/agencia/AgenciaMenu.vue`** + **`pages/agencia/painel/admin/index.vue`** — links e cards para as duas novas telas admin.
+- **`public/docs/features.json`** — versão `1.1.0`. Adiciona F-208 (Configurações de Rede), F-209 (BI Financeiro), F-210 (Busca Inteligente), F-211 (Login social), F-212 (Cupom + Quanta Points). Marca F-205 (Design tokens) e F-207 (Painel features) como `done`.
+
+---
+
 ### 🚀 Modernização Premium — Power Mode iniciada
 
 Esta entrada marca o início oficial da **modernização premium** da plataforma Quanta Shop, com foco em padronização visual, documentação técnica formal e visualização de progresso integrada ao painel admin.

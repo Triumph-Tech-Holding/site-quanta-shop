@@ -67,6 +67,8 @@ const adminLinks = [
   { to: '/agencia/painel/admin/docs', label: '📋 Documentação Técnica', desc: 'Arquitetura, padrões, decisões e histórico do projeto' },
   { to: '/agencia/painel/admin/progresso', label: '🚀 Progresso do Produto', desc: 'Acompanhe o andamento das tarefas de desenvolvimento' },
   { to: '/agencia/painel/admin/features', label: '🎯 Features & MVP', desc: 'Roadmap por fase, status e público (visual Q Cuida + Premium)' },
+  { to: '/agencia/painel/admin/configuracoes-rede', label: '⚙️ Configurações de Rede', desc: 'Percentuais por nível, ativação de camadas, Quanta Points, quarentena' },
+  { to: '/agencia/painel/admin/bi-financeiro', label: '📈 BI Financeiro', desc: 'Faturamento por categoria, inadimplência, cashback reservado' },
 ];
 function authHeader() { return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } }; }
 onMounted(async () => {

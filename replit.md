@@ -1,5 +1,37 @@
 # Quanta Shop Web
 
+## 🌊 Sprint Power Phase 1 (Mai 2026 — em andamento)
+
+Componentes do Premium Design System extraídos como SFCs reutilizáveis e construção das primeiras telas da Fase 1 do roadmap (Sprint Power):
+
+### Componentes premium (`components/qs/`)
+- **`QsKpiCard.vue`** — card de indicador (label, valor, badge tonal, progresso opcional, delta com seta, formatos `currency`/`percent`/`number`).
+- **`QsProgressBar.vue`** — barra linear com 3 tamanhos (`thin`/`md`/`thick`), cor customizável, label opcional.
+- **`QsFilterChip.vue`** — chip de filtro com active/count/icon slot.
+
+### Telas Sprint Power (Fase 1)
+- **`pages/agencia/painel/admin/configuracoes-rede.vue`** — gestão de percentuais residuais por nível MLM, switch de compressão dinâmica, valor do Quanta Point, multiplicador Plus, quarentena, profundidade máxima e tabela de bônus de credenciamento. FAB bar de salvar com estado dirty. Fallback para mock se `/admin/configuracoes-rede` ainda não existe na API .NET.
+- **`pages/agencia/painel/admin/bi-financeiro.vue`** — BI completo com switch Mês/Trimestre/Ano: KPI strip, faturamento por categoria (barras horizontais), aging buckets coloridos por risco, tabela de safras de cashback (gerado/estornado/liberado/a-pagar) e top parceiros. Mock dataset por período.
+- **`pages/busca-inteligente.vue`** — motor de busca consumer com sliders de cashback mínimo (lime) e proximidade (km), botão "usar minha localização" via `navigator.geolocation`, filtros de categoria por chip, ordenação multi-critério, view grid/lista, badges de cashback.
+
+### Modificações em arquivos existentes
+- **`assets/scss/quanta-premium.scss`** — aliases semânticos do `DESIGN_SYSTEM.md` (`--qs-teal`, `--qs-teal-dark`, `--qs-bg`, `--qs-ink`, escala `--qs-gray-50…700`, estados `--qs-success/warn/danger`, easings) + helpers `.qs-page`, `.qs-page-header`, `.qs-eyebrow`, `.qs-grid`, `.qs-card-section`, `.qs-section-title`, `.qs-btn-primary/outline`, `.qs-loading/spinner`.
+- **`pages/agencia/painel/admin/features.vue`** — refatorada para consumir `QsKpiCard`/`QsProgressBar`/`QsFilterChip` e helpers `.qs-page`. Adicionado `role="button"`, `tabindex`, `aria-expanded` e handlers de teclado (Enter/Space) nos items expansíveis.
+- **`components/login/login-social.vue`** — Apple Sign In ativado com SDK on-demand (`appleid.cdn-apple.com`). Aguarda `runtimeConfig.public.appleClientId` para entrar em produção.
+- **`components/checkout/checkout-verify.vue`** — redesenhado em PT-BR com 3 painéis colapsáveis: login retornante, **cupom de desconto** (validação `/cupom/validar` com fallback dev — códigos `QUANTA10` e `BEMVINDO`), **Quanta Points** (saldo + slider de resgate com conversão em R$). Emite `coupon-applied` e `points-applied`.
+- **`components/agencia/AgenciaMenu.vue`** + **`pages/agencia/painel/admin/index.vue`** — links e cards para as duas novas telas admin.
+- **`public/docs/features.json`** v1.1.0 — adiciona F-208 (Configurações de Rede), F-209 (BI Financeiro), F-210 (Busca Inteligente), F-211 (Login social), F-212 (Cupom + Quanta Points).
+
+### Endpoints API esperados (a implementar em .NET)
+- `GET/POST /admin/configuracoes-rede` — payload com `residual[]`, `credenciamento[]`, `compressao`, `valorPonto`, `multiplicadorPlus`, `quarentena`, `profundidadeMax`.
+- `GET /admin/bi-financeiro?periodo=month|quarter|year` — retorna `totals`, `categorias[]`, `aging[]`, `safras[]`, `topParceiros[]`.
+- `GET /busca-inteligente?q=&minCashback=&maxDistance=&categoria=&sort=` — retorna lista de `SearchResult`.
+- `POST /cupom/validar` `{ codigo }` — retorna `{ valido, tipo: 'percent'|'fixed', valor, mensagem }`.
+- `GET /usuario/quanta-points` — retorna `{ saldo, valorPonto }`.
+- `POST /UsuarioLogin/autenticacaoAppleCredential` `{ id_token }` — análogo ao endpoint Google existente.
+
+---
+
 ## 🚀 Modernização Premium — Power Mode (Mai 2026)
 
 ### Documentação técnica oficial criada na raiz

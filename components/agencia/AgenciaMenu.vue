@@ -65,6 +65,12 @@
         <NuxtLink to="/agencia/painel/admin/features" class="listMenu listMenu--admin">
           🎯 Features &amp; MVP
         </NuxtLink>
+        <NuxtLink to="/agencia/painel/admin/configuracoes-rede" class="listMenu listMenu--admin">
+          ⚙️ Configurações de Rede
+        </NuxtLink>
+        <NuxtLink to="/agencia/painel/admin/bi-financeiro" class="listMenu listMenu--admin">
+          📈 BI Financeiro
+        </NuxtLink>
         <NuxtLink to="/agencia/painel/admin/docs" class="listMenu listMenu--admin">
           📋 Documentação
         </NuxtLink>

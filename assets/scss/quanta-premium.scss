@@ -48,7 +48,153 @@
   /* Surfaces */
   --qs-bg-surface: #f6f8fa;
   --qs-bg-section-alt: #f0f4f6;
+
+  /* ─── ALIASES (DESIGN_SYSTEM.md) ───────────────────────────
+     Tokens semânticos compatíveis com a documentação oficial.
+     --qs-teal/--qs-teal-dark mapeiam para --qs-primary/--qs-primary-dark
+     Usar estes em todo código novo.
+  ───────────────────────────────────────────────────────────── */
+  --qs-teal:        #2F7785;
+  --qs-teal-dark:   #225F6B;
+  --qs-bg:          #F4F4F5;
+  --qs-ink:         #1d1d1f;
+
+  /* Escala de cinzas neutra (DESIGN_SYSTEM §2) */
+  --qs-gray-50:  #fafafa;
+  --qs-gray-100: #f5f5f7;
+  --qs-gray-200: #e5e7eb;
+  --qs-gray-400: #9ca3af;
+  --qs-gray-500: #6b7280;
+  --qs-gray-700: #374151;
+
+  /* Estados (DESIGN_SYSTEM §2) */
+  --qs-success: #16a34a;
+  --qs-warn:    #d97706;
+  --qs-danger:  #dc2626;
+
+  /* Easings padronizados (DESIGN_SYSTEM §7.3) */
+  --qs-ease:     cubic-bezier(0.4, 0, 0.2, 1);
+  --qs-duration: 200ms;
 }
+
+/* ─── SECTION HELPERS PARA TELAS PREMIUM ─────────────────── */
+.qs-page {
+  font-family: var(--qs-font);
+  -webkit-font-smoothing: antialiased;
+  color: var(--qs-ink);
+  padding-bottom: 64px;
+}
+
+.qs-page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  padding: 0 0 32px;
+  border-bottom: 1px solid var(--qs-gray-100);
+  margin-bottom: 32px;
+
+  & h1 {
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--qs-ink);
+    margin: 0 0 8px;
+    line-height: 1.1;
+  }
+  & p {
+    font-size: 16px;
+    color: var(--qs-gray-500);
+    margin: 0;
+    line-height: 1.55;
+  }
+}
+.qs-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--qs-teal);
+  margin-bottom: 8px;
+}
+.qs-meta { font-size: 12px; color: var(--qs-gray-400); }
+
+.qs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.qs-card-section {
+  background: #fff;
+  border-radius: var(--qs-radius-lg);
+  box-shadow: var(--qs-shadow-sm);
+  padding: 28px;
+  margin-bottom: 24px;
+}
+
+.qs-section-title {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--qs-ink);
+  margin: 0 0 4px;
+}
+.qs-section-desc {
+  font-size: 14px;
+  color: var(--qs-gray-500);
+  margin: 0 0 20px;
+  line-height: 1.55;
+}
+
+.qs-btn-primary, .qs-btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: var(--qs-radius-md);
+  cursor: pointer;
+  transition: all var(--qs-duration) var(--qs-ease);
+  font-family: inherit;
+  border: 1px solid transparent;
+}
+.qs-btn-primary {
+  background: var(--qs-teal);
+  color: #fff;
+}
+.qs-btn-primary:hover:not(:disabled) {
+  background: var(--qs-teal-dark);
+  box-shadow: var(--qs-shadow-sm);
+}
+.qs-btn-outline {
+  background: #fff;
+  border-color: var(--qs-teal);
+  color: var(--qs-teal);
+}
+.qs-btn-outline:hover:not(:disabled) {
+  background: var(--qs-teal);
+  color: #fff;
+}
+.qs-btn-primary:disabled, .qs-btn-outline:disabled { opacity: .5; cursor: not-allowed; }
+
+.qs-loading {
+  display: flex;
+  justify-content: center;
+  padding: 80px 0;
+}
+.qs-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--qs-gray-200);
+  border-top-color: var(--qs-teal);
+  border-radius: 50%;
+  animation: qs-spin 0.8s linear infinite;
+}
+@keyframes qs-spin { to { transform: rotate(360deg); } }
 
 /* ─── 3. GLOBAL BODY & FONT ───────────────────────────────── */
 body {
