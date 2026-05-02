@@ -2,7 +2,7 @@
   <div class="docs-viewer">
 
     <!-- Page Header -->
-    <div class="ag-page-header d-flex align-items-start justify-content-between flex-wrap gap-2 no-print">
+    <div class="ag-page-header d-flex align-items-start justify-content-between flex-wrap gap-2">
       <div>
         <h1>Documentação Técnica</h1>
         <p>Consulte arquitetura, padrões e decisões do projeto Quanta Shop.</p>
@@ -12,10 +12,9 @@
           <span class="docs-env-dot"></span>
           {{ isDev ? 'Dev (Replit)' : 'Produção' }}
         </span>
-        <button v-if="activeDoc" class="btn btn-ag-outline btn-sm" :disabled="gerandoPDF" @click="exportarPDF">
-          <span v-if="gerandoPDF" class="spinner-border spinner-border-sm me-1" style="width:12px;height:12px;border-width:2px"></span>
-          <svg v-else width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          {{ gerandoPDF ? 'Gerando…' : 'Baixar PDF' }}
+        <button class="btn btn-ag-outline btn-sm" :disabled="!activeDoc" @click="abrirImpressao(activeDoc!)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Baixar PDF
         </button>
       </div>
     </div>
@@ -69,10 +68,9 @@
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                 Visualizar
               </button>
-              <button class="docs-btn-action" :disabled="gerandoPDF" @click.stop="exportarPDFDoc(doc)">
-                <span v-if="gerandoPDF && gerandoPDFId === doc.id" class="spinner-border spinner-border-sm" style="width:11px;height:11px;border-width:1.5px"></span>
-                <svg v-else width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                PDF
+              <button class="docs-btn-action docs-btn-pdf" @click.stop="abrirImpressao(doc)">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                Baixar PDF
               </button>
             </div>
           </div>
@@ -95,15 +93,15 @@
 
         <!-- Preview content -->
         <template v-else-if="activeDoc">
-          <div class="docs-preview__header no-print">
+          <div class="docs-preview__header">
             <div>
               <div class="docs-preview__title">{{ activeDoc.nome }}</div>
               <div class="docs-preview__meta">{{ activeDoc.tamanho }} · Atualizado {{ activeDoc.data }}</div>
             </div>
-            <a class="btn btn-ag-primary btn-sm" :href="`/docs/${activeDoc.arquivo}`" :download="activeDoc.arquivo">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              Baixar .md
-            </a>
+            <button class="btn btn-ag-primary btn-sm" @click="abrirImpressao(activeDoc!)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              Baixar PDF
+            </button>
           </div>
           <div class="docs-preview__body" v-html="markdownRenderizado"></div>
         </template>
@@ -130,13 +128,13 @@ interface DocItem {
   conteudo?: string;
 }
 
-const hoje = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+const hoje = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
 
 const docs = ref<DocItem[]>([
   {
     id: 'claude',
-    nome: 'CLAUDE.md — Quanta Shop',
-    descricao: 'Documento Mestre de Arquitetura — atualizado automaticamente',
+    nome: 'CLAUDE.md — Arquitetura',
+    descricao: 'Documento Mestre de Arquitetura — stack, padrões e estrutura',
     arquivo: 'CLAUDE.md',
     tipo: 'ao vivo',
     tamanho: '…',
@@ -147,6 +145,42 @@ const docs = ref<DocItem[]>([
     nome: 'replit.md — Histórico Técnico',
     descricao: 'Histórico completo de features, tarefas e decisões',
     arquivo: 'replit.md',
+    tipo: 'md',
+    tamanho: '…',
+    data: hoje,
+  },
+  {
+    id: 'data-dict',
+    nome: 'DATA_DICTIONARY.md',
+    descricao: 'Dicionário de dados: entidades, campos e regras de negócio',
+    arquivo: 'DATA_DICTIONARY.md',
+    tipo: 'md',
+    tamanho: '…',
+    data: hoje,
+  },
+  {
+    id: 'design',
+    nome: 'DESIGN_SYSTEM.md',
+    descricao: 'Design system: paleta de cores, tipografia e componentes',
+    arquivo: 'DESIGN_SYSTEM.md',
+    tipo: 'md',
+    tamanho: '…',
+    data: hoje,
+  },
+  {
+    id: 'features',
+    nome: 'FEATURES.md',
+    descricao: 'Mapa de funcionalidades e status de implementação',
+    arquivo: 'FEATURES.md',
+    tipo: 'md',
+    tamanho: '…',
+    data: hoje,
+  },
+  {
+    id: 'changelog',
+    nome: 'CHANGELOG.md',
+    descricao: 'Histórico de mudanças e versões do projeto',
+    arquivo: 'CHANGELOG.md',
     tipo: 'md',
     tamanho: '…',
     data: hoje,
@@ -191,7 +225,7 @@ function formatBytes(bytes: number): string {
   return (bytes / 1024).toFixed(1) + ' KB';
 }
 
-// ── Markdown renderer (sem biblioteca externa) ──────────────
+// ── Markdown renderer ────────────────────────────────────
 const markdownRenderizado = computed(() => {
   if (!activeDoc.value?.conteudo) return '';
   return renderMd(activeDoc.value.conteudo);
@@ -227,7 +261,7 @@ function renderMd(raw: string): string {
     tableRows = [];
     inTable = false;
     const header = rows[0];
-    const body = rows.slice(2); // skip separator row
+    const body = rows.slice(2);
     const thCells = header.split('|').filter((_, i, a) => i > 0 && i < a.length - 1);
     const thead = '<tr>' + thCells.map(c => `<th>${inlineMd(c.trim())}</th>`).join('') + '</tr>';
     const tbody = body.map(r => {
@@ -247,7 +281,6 @@ function renderMd(raw: string): string {
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
 
-    // Code block
     if (line.startsWith('```')) {
       if (!inCode) {
         flushTable(); flushList();
@@ -262,7 +295,6 @@ function renderMd(raw: string): string {
     }
     if (inCode) { codeLines.push(line); continue; }
 
-    // Table
     if (line.includes('|')) {
       flushList();
       if (!inTable) inTable = true;
@@ -272,14 +304,12 @@ function renderMd(raw: string): string {
       flushTable();
     }
 
-    // Horizontal rule
     if (/^(-{3,}|\*{3,}|_{3,})$/.test(line.trim())) {
       flushList();
       out.push('<hr class="md-hr">');
       continue;
     }
 
-    // Headings
     const h4 = line.match(/^####\s+(.*)/);
     const h3 = line.match(/^###\s+(.*)/);
     const h2 = line.match(/^##\s+(.*)/);
@@ -289,14 +319,12 @@ function renderMd(raw: string): string {
     if (h2) { flushList(); out.push(`<h2 class="md-h2">${inlineMd(h2[1])}</h2>`); continue; }
     if (h1) { flushList(); out.push(`<h1 class="md-h1">${inlineMd(h1[1])}</h1>`); continue; }
 
-    // Blockquote
     if (line.startsWith('> ')) {
       flushList();
       out.push(`<blockquote class="md-blockquote">${inlineMd(line.slice(2))}</blockquote>`);
       continue;
     }
 
-    // Ordered list
     const ol = line.match(/^\d+\.\s+(.*)/);
     if (ol) {
       flushList();
@@ -304,8 +332,7 @@ function renderMd(raw: string): string {
       continue;
     }
 
-    // Unordered list
-    const ul = line.match(/^[\-\*]\s+(.*)/);
+    const ul = line.match(/^[-*]\s+(.*)/);
     if (ul) {
       listLines.push(ul[1]);
       inList = true;
@@ -314,13 +341,11 @@ function renderMd(raw: string): string {
       flushList();
     }
 
-    // Empty line → paragraph break
     if (line.trim() === '') {
       out.push('<div class="md-spacer"></div>');
       continue;
     }
 
-    // Paragraph
     out.push(`<p class="md-p">${inlineMd(line)}</p>`);
   }
 
@@ -333,80 +358,19 @@ function renderMd(raw: string): string {
   return out.join('');
 }
 
-const gerandoPDF = ref(false);
-const gerandoPDFId = ref<string | null>(null);
-
-async function gerarPDF(doc: DocItem) {
-  if (gerandoPDF.value) return;
-  if (!doc.conteudo) await selecionarDoc(doc);
-  gerandoPDF.value = true;
-  gerandoPDFId.value = doc.id;
-  try {
-    const html2pdf = (await import('html2pdf.js')).default;
-    const container = document.createElement('div');
-    container.innerHTML = `
-      <style>
-        * { box-sizing: border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Inter", sans-serif; font-size: 13px; line-height: 1.75; color: #1d1d1f; margin: 0; padding: 0; }
-        .md-h1 { font-size: 22px; font-weight: 800; color: #1d1d1f; border-bottom: 2px solid #2F7785; padding-bottom: 6px; margin: 24px 0 8px; }
-        .md-h2 { font-size: 16px; font-weight: 700; color: #2F7785; border-bottom: 1px solid rgba(47,119,133,.25); padding-bottom: 4px; margin: 20px 0 6px; }
-        .md-h3 { font-size: 13px; font-weight: 700; color: #225F6B; margin: 16px 0 4px; }
-        .md-h4 { font-size: 11px; font-weight: 700; color: #374151; text-transform: uppercase; letter-spacing: .05em; margin: 12px 0 2px; }
-        .md-p { margin: 0 0 4px; }
-        .md-spacer { height: 6px; }
-        .md-code { background: rgba(47,119,133,.1); color: #225F6B; padding: 1px 5px; border-radius: 4px; font-family: "SF Mono","Fira Code",monospace; font-size: .82em; }
-        .md-pre { background: #1d1d1f; border-radius: 8px; padding: 12px 16px; margin: 10px 0; overflow: hidden; page-break-inside: avoid; }
-        .md-codeblock { color: #98C73A; background: none; padding: 0; font-family: "SF Mono","Fira Code",monospace; font-size: .8rem; line-height: 1.6; white-space: pre-wrap; display: block; }
-        .md-blockquote { border-left: 3px solid #2F7785; background: rgba(47,119,133,.06); padding: 8px 14px; margin: 8px 0; border-radius: 0 6px 6px 0; color: #495057; }
-        .md-ul, .md-ol { padding-left: 18px; margin: 4px 0 8px; }
-        .md-ul li, .md-ol li { margin-bottom: 3px; }
-        .md-hr { border: none; border-top: 1px solid #e5e7eb; margin: 16px 0; }
-        .md-link { color: #2F7785; }
-        .md-table-wrap { overflow: hidden; margin: 10px 0; page-break-inside: avoid; }
-        .md-table { width: 100%; border-collapse: collapse; font-size: .84rem; }
-        .md-table th { background: rgba(47,119,133,.1); color: #225F6B; font-weight: 700; padding: 7px 10px; text-align: left; border-bottom: 2px solid rgba(47,119,133,.2); }
-        .md-table td { padding: 6px 10px; border-bottom: 1px solid #f3f4f6; color: #374151; }
-        .md-table tr:nth-child(even) td { background: rgba(0,0,0,.02); }
-      </style>
-      ${renderMd(doc.conteudo!)}
-    `;
-    const nomeArquivo = doc.arquivo.replace(/\.[^.]+$/, '') + '.pdf';
-    await html2pdf()
-      .set({
-        margin: [14, 14, 14, 14],
-        filename: nomeArquivo,
-        image: { type: 'jpeg', quality: 0.97 },
-        html2canvas: { scale: 2, useCORS: true, logging: false },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
-      })
-      .from(container)
-      .save();
-  } catch (e) {
-    console.error('[docs] Erro ao gerar PDF:', e);
-    alert('Não foi possível gerar o PDF. Tente novamente.');
-  } finally {
-    gerandoPDF.value = false;
-    gerandoPDFId.value = null;
-  }
+// ── PDF via janela de impressão dedicada ─────────────────
+function abrirImpressao(doc: DocItem) {
+  if (!doc) return;
+  const url = `/agencia/painel/admin/docs-print?arquivo=${encodeURIComponent(doc.arquivo)}&nome=${encodeURIComponent(doc.nome)}`;
+  window.open(url, '_blank', 'width=900,height=700,menubar=yes,toolbar=yes');
 }
 
-function exportarPDF() {
-  if (activeDoc.value) gerarPDF(activeDoc.value);
-}
-
-function exportarPDFDoc(doc: DocItem) {
-  gerarPDF(doc);
-}
-
-// Carrega CLAUDE.md automaticamente ao montar
 onMounted(async () => {
   await selecionarDoc(docs.value[0]);
 });
 </script>
 
 <style scoped>
-/* ── Layout ────────────────────────────────────────────── */
 .docs-viewer {
   font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
 }
@@ -420,7 +384,6 @@ onMounted(async () => {
   .docs-layout { grid-template-columns: 1fr; }
 }
 
-/* ── Env pill ──────────────────────────────────────────── */
 .docs-env-pill {
   display: inline-flex; align-items: center; gap: 6px;
   padding: 4px 12px; border-radius: 999px; font-size: 12px; font-weight: 600;
@@ -430,14 +393,11 @@ onMounted(async () => {
 .docs-env-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; animation: blink 1.8s infinite; }
 @keyframes blink { 0%,100%{opacity:1}50%{opacity:.3} }
 
-/* ── Sidebar ───────────────────────────────────────────── */
 .docs-sidebar {
   display: flex; flex-direction: column; gap: 12px;
 }
 
-.docs-search-wrap {
-  position: relative;
-}
+.docs-search-wrap { position: relative; }
 .docs-search-icon {
   position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #9ca3af; pointer-events: none;
 }
@@ -452,7 +412,6 @@ onMounted(async () => {
 .docs-list { display: flex; flex-direction: column; gap: 10px; }
 .docs-empty { text-align: center; color: #9ca3af; font-size: 13px; padding: 20px; }
 
-/* ── Document card ─────────────────────────────────────── */
 .docs-card {
   background: #fff;
   border: 1.5px solid rgba(0,0,0,.07);
@@ -477,7 +436,7 @@ onMounted(async () => {
 .docs-card__meta { font-size: 11px; color: #9ca3af; margin-bottom: 10px; display: flex; align-items: center; gap: 4px; }
 .docs-card__sep { color: #d1d5db; }
 
-.docs-card__actions { display: flex; gap: 8px; }
+.docs-card__actions { display: flex; gap: 8px; flex-wrap: wrap; }
 .docs-btn-action {
   display: inline-flex; align-items: center; gap: 5px;
   padding: 5px 11px; border-radius: 7px; font-size: 12px; font-weight: 500;
@@ -486,8 +445,11 @@ onMounted(async () => {
 }
 .docs-btn-action:hover { border-color: #2F7785; color: #2F7785; background: rgba(47,119,133,.05); }
 .docs-btn-action--active { border-color: #2F7785; color: #2F7785; background: rgba(47,119,133,.08); }
+.docs-btn-pdf {
+  border-color: rgba(47,119,133,.35); color: #2F7785; background: rgba(47,119,133,.06);
+}
+.docs-btn-pdf:hover { border-color: #2F7785; background: rgba(47,119,133,.12); }
 
-/* ── Preview area ──────────────────────────────────────── */
 .docs-preview {
   background: #fff;
   border: 1px solid rgba(0,0,0,.07);
@@ -521,7 +483,6 @@ onMounted(async () => {
   font-size: 14px; line-height: 1.75; color: #1d1d1f;
 }
 
-/* ── Markdown styles ───────────────────────────────────── */
 .docs-preview__body :deep(.md-h1) {
   font-size: 1.8rem; font-weight: 800; color: #1d1d1f; margin: 28px 0 6px;
   border-bottom: 2px solid rgba(47,119,133,.2); padding-bottom: 8px;
@@ -534,18 +495,12 @@ onMounted(async () => {
   font-size: 1.05rem; font-weight: 700; color: #225F6B; margin: 18px 0 4px;
 }
 .docs-preview__body :deep(.md-h4) {
-  font-size: .95rem; font-weight: 700; color: #374151; margin: 14px 0 2px;
+  font-weight: 700; color: #374151; margin: 14px 0 2px;
   text-transform: uppercase; letter-spacing: .05em; font-size: .75rem;
 }
-.docs-preview__body :deep(.md-p) {
-  margin: 0 0 4px;
-}
-.docs-preview__body :deep(.md-spacer) {
-  height: 8px;
-}
-.docs-preview__body :deep(.md-hr) {
-  border: none; border-top: 1px solid #e5e7eb; margin: 20px 0;
-}
+.docs-preview__body :deep(.md-p) { margin: 0 0 4px; }
+.docs-preview__body :deep(.md-spacer) { height: 8px; }
+.docs-preview__body :deep(.md-hr) { border: none; border-top: 1px solid #e5e7eb; margin: 20px 0; }
 .docs-preview__body :deep(.md-code) {
   background: rgba(47,119,133,.09); color: #225F6B;
   padding: 1px 6px; border-radius: 5px; font-family: 'SF Mono', 'Fira Code', monospace; font-size: .82em;
@@ -561,24 +516,12 @@ onMounted(async () => {
   border-left: 3px solid #2F7785; background: rgba(47,119,133,.05);
   padding: 10px 16px; margin: 8px 0; border-radius: 0 8px 8px 0; color: #495057;
 }
-.docs-preview__body :deep(.md-ul) {
-  padding-left: 20px; margin: 4px 0 8px;
-}
-.docs-preview__body :deep(.md-ul li) {
-  margin-bottom: 3px;
-}
-.docs-preview__body :deep(.md-ol) {
-  padding-left: 20px; margin: 4px 0 8px;
-}
-.docs-preview__body :deep(.md-link) {
-  color: #2F7785; text-decoration: underline;
-}
-.docs-preview__body :deep(.md-table-wrap) {
-  overflow-x: auto; margin: 12px 0;
-}
-.docs-preview__body :deep(.md-table) {
-  width: 100%; border-collapse: collapse; font-size: .85rem;
-}
+.docs-preview__body :deep(.md-ul) { padding-left: 20px; margin: 4px 0 8px; }
+.docs-preview__body :deep(.md-ul li) { margin-bottom: 3px; }
+.docs-preview__body :deep(.md-ol) { padding-left: 20px; margin: 4px 0 8px; }
+.docs-preview__body :deep(.md-link) { color: #2F7785; text-decoration: underline; }
+.docs-preview__body :deep(.md-table-wrap) { overflow-x: auto; margin: 12px 0; }
+.docs-preview__body :deep(.md-table) { width: 100%; border-collapse: collapse; font-size: .85rem; }
 .docs-preview__body :deep(.md-table th) {
   background: rgba(47,119,133,.08); color: #225F6B; font-weight: 700;
   padding: 8px 12px; text-align: left; border-bottom: 2px solid rgba(47,119,133,.2);
@@ -588,14 +531,4 @@ onMounted(async () => {
   padding: 7px 12px; border-bottom: 1px solid #f3f4f6; color: #374151;
 }
 .docs-preview__body :deep(.md-table tr:hover td) { background: rgba(47,119,133,.03); }
-
-/* ── Print ─────────────────────────────────────────────── */
-@media print {
-  .no-print { display: none !important; }
-  .docs-layout { grid-template-columns: 1fr; }
-  .docs-sidebar { display: none; }
-  .docs-preview { border: none; }
-  .docs-preview__header { display: none; }
-  .docs-preview__body { padding: 0; font-size: 11pt; }
-}
 </style>
