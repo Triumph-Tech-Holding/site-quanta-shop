@@ -18,6 +18,13 @@
 
     <div v-if="loading" class="qs-loading"><div class="qs-spinner"/></div>
 
+    <div v-else-if="errorMsg" class="qs-error-state">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="#dc2626"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+      <h3>Erro ao carregar configurações de rede</h3>
+      <p>{{ errorMsg }}</p>
+      <button class="qs-btn-primary" @click="loadAll">Tentar novamente</button>
+    </div>
+
     <template v-else>
       <!-- KPI strip -->
       <div class="qs-grid">
@@ -231,6 +238,11 @@
         </div>
       </section>
 
+      <div v-if="saveError" class="qs-save-error">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#dc2626"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+        <div>{{ saveError }}</div>
+      </div>
+
       <div v-if="dirty" class="qs-fab-bar">
         <div>
           <strong>Você tem alterações não salvas.</strong>
@@ -265,45 +277,47 @@ const pointValueBRL = ref(1.0);
 const plusMultiplier = ref(2.0);
 const quarantineDays = ref(30);
 const maxDepth = ref(5);
+const errorMsg = ref<string | null>(null);
+const saveError = ref<string | null>(null);
 
 const mvpColors = ['#225F6B', '#2F7785', '#3A9AAD', '#98C73A', '#7aad1f'];
 
 function authHeader() { return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } }; }
 
-const DEFAULTS = {
-  levels: [
-    { level: 1, percentual: 5.0, active: true, label: 'Indicador direto' },
-    { level: 2, percentual: 3.0, active: true, label: 'Patrocinador 2º grau' },
-    { level: 3, percentual: 2.0, active: true, label: 'Patrocinador 3º grau' },
-    { level: 4, percentual: 1.5, active: true, label: 'Patrocinador 4º grau' },
-    { level: 5, percentual: 1.0, active: false, label: 'Patrocinador 5º grau' },
-  ] as NetLevel[],
-  credLevels: [
-    { level: 1, percentual: 8.0, active: true, label: 'Direto' },
-    { level: 2, percentual: 4.0, active: true, label: '2º nível' },
-    { level: 3, percentual: 2.0, active: false, label: '3º nível' },
-  ] as NetLevel[],
-};
-
 async function loadAll() {
   loading.value = true;
   dirty.value = false;
+  errorMsg.value = null;
   try {
     const { data } = await api.get('/admin/configuracoes-rede', authHeader());
-    if (data && Array.isArray(data.residual)) {
-      levels.value = data.residual;
-      credLevels.value = data.credenciamento ?? DEFAULTS.credLevels.map(c => ({ ...c }));
-      compressionEnabled.value = !!data.compressao;
-      pointValueBRL.value = data.valorPonto ?? 1.0;
-      plusMultiplier.value = data.multiplicadorPlus ?? 2.0;
-      quarantineDays.value = data.quarentena ?? 30;
-      maxDepth.value = data.profundidadeMax ?? 5;
-    } else {
-      throw new Error('endpoint not configured');
+    if (!data || !Array.isArray(data.residualLevels)) {
+      throw new Error('Resposta inválida do servidor.');
     }
-  } catch {
-    levels.value = DEFAULTS.levels.map(l => ({ ...l }));
-    credLevels.value = DEFAULTS.credLevels.map(l => ({ ...l }));
+    levels.value = data.residualLevels.map((l: any) => ({
+      level: Number(l.level),
+      percentual: Number(l.percentual ?? 0),
+      active: !!l.active,
+      label: l.label,
+    }));
+    credLevels.value = Array.isArray(data.credenciamentoLevels)
+      ? data.credenciamentoLevels.map((l: any) => ({
+          level: Number(l.level),
+          percentual: Number(l.percentual ?? 0),
+          active: !!l.active,
+          label: l.label,
+        }))
+      : [];
+    compressionEnabled.value = !!data.compressaoDinamica;
+    pointValueBRL.value = Number(data.quantaPontoValor ?? 1.0);
+    plusMultiplier.value = Number(data.plusMultiplicador ?? 2.0);
+    quarantineDays.value = Number(data.quarentenaDias ?? 30);
+    maxDepth.value = Number(data.profundidadeMax ?? 5);
+  } catch (e: any) {
+    errorMsg.value = e?.response?.data?.message
+      || e?.message
+      || 'Não foi possível carregar as configurações de rede.';
+    levels.value = [];
+    credLevels.value = [];
   } finally {
     loading.value = false;
   }
@@ -311,22 +325,27 @@ async function loadAll() {
 
 async function saveAll() {
   saving.value = true;
+  saveError.value = null;
   try {
     await api.post('/admin/configuracoes-rede', {
-      residual: levels.value,
-      credenciamento: credLevels.value,
-      compressao: compressionEnabled.value,
-      valorPonto: pointValueBRL.value,
-      multiplicadorPlus: plusMultiplier.value,
-      quarentena: quarantineDays.value,
+      residualLevels: levels.value.map(l => ({ level: l.level, percentual: l.percentual, active: l.active })),
+      credenciamentoLevels: credLevels.value.map(l => ({ level: l.level, percentual: l.percentual, active: l.active })),
+      compressaoDinamica: compressionEnabled.value,
+      quantaPontoValor: pointValueBRL.value,
+      plusMultiplicador: plusMultiplier.value,
+      quarentenaDias: quarantineDays.value,
       profundidadeMax: maxDepth.value,
     }, authHeader());
     lastSaved.value = new Date().toISOString();
     dirty.value = false;
-  } catch (e) {
-    console.warn('[configuracoes-rede] API indisponível, alteração mantida apenas localmente.', e);
-    lastSaved.value = new Date().toISOString();
-    dirty.value = false;
+  } catch (e: any) {
+    if (e?.response?.status === 503) {
+      saveError.value = 'Edição administrativa está desabilitada neste ambiente (ALLOW_ADMIN_WRITES=false).';
+    } else {
+      saveError.value = e?.response?.data?.message
+        || e?.message
+        || 'Falha ao salvar. As alterações não foram aplicadas.';
+    }
   } finally {
     saving.value = false;
   }
@@ -565,6 +584,34 @@ function formatDate(iso: string): string {
   max-width: calc(100vw - 48px);
 }
 .qs-fab-bar strong { color: var(--qs-ink); }
+
+.qs-error-state {
+  background: #fff;
+  border: 1px solid var(--qs-gray-200);
+  border-radius: var(--qs-radius-md);
+  padding: 48px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin: 32px 0;
+}
+.qs-error-state h3 { font-size: 18px; color: var(--qs-ink); margin: 0; }
+.qs-error-state p { color: var(--qs-gray-600); margin: 0; max-width: 480px; }
+
+.qs-save-error {
+  margin-top: 24px;
+  padding: 14px 16px;
+  background: #fee2e2;
+  border-radius: var(--qs-radius-md);
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  font-size: 13px;
+  color: #991b1b;
+  line-height: 1.5;
+}
 
 @media (max-width: 768px) {
   .qs-page-header h1 { font-size: 28px; }

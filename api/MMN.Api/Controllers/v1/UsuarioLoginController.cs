@@ -183,6 +183,19 @@ namespace MMN.Api.Controllers.v1
             return await RetornoAutenticacao(usuario, parceiro, logar.Origem);
         }
 
+        [HttpPost]
+        [Route("autenticacaoAppleCredential")]
+        [EnableRateLimiting("auth-limit")]
+        public async Task<IActionResult> AutenticacaoAppleCredential([FromBody] LogarAppleCredentialViewModel logar)
+        {
+            var (usuario, parceiro) = await _negocio.AutenticacaoAppleCredentialAsync(
+                logar.IdentityToken,
+                logar.Email,
+                logar.FullName);
+
+            return await RetornoAutenticacao(usuario, parceiro, logar.Origem);
+        }
+
         [HttpGet]
         [Route("esqueciMinhaSenha/{login}")]
         public IActionResult EsqueciMinhaSenha(string login)

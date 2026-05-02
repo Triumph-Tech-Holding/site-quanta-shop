@@ -18,6 +18,7 @@ namespace MMN.INegocio.Negocio
         UsuarioViewModel Autenticacao(string login, string senha, out Parceiro parceiro, bool verificarSenha = true);
         UsuarioViewModel AutenticacaoGoogle(string code, string redirectUri, out Parceiro parceiro);
         Task<(UsuarioViewModel usuario, Parceiro parceiro)> AutenticacaoGoogleCredentialAsync(string credential);
+        Task<(UsuarioViewModel usuario, Parceiro parceiro)> AutenticacaoAppleCredentialAsync(string identityToken, string emailFallback, string fullNameFallback);
         UsuarioViewModel BuscarLoginOuEmail(string login);
         bool AlterarSenha(string idUsuario, string senha, string senhaConfirma);
         List<UsuarioViewModel> ListaUsuarioDiretos(Guid idUsuario);

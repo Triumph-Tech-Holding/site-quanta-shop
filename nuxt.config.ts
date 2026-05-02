@@ -137,6 +137,8 @@ export default defineNuxtConfig({
     public: {
       apiBaseUrl: process.env.NUXT_API_BASE_URL || '/api-proxy',
       googleClientId: process.env.GOOGLE_CLIENT_ID || '372294010028-ff1frn14fg81mn0ujhv215lk9rd5t80r.apps.googleusercontent.com',
+      appleClientId: process.env.APPLE_CLIENT_ID || '',
+      appleRedirectUri: process.env.APPLE_REDIRECT_URI || '',
     },
   },
   ssr: false,

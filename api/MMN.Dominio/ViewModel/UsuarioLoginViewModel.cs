@@ -27,6 +27,15 @@ namespace MMN.Dominio.ViewModel
             public OrigemLoginEnum? Origem { get; set; }
         }
 
+        public class LogarAppleCredentialViewModel
+        {
+            public string IdentityToken { get; set; }
+            public string AuthorizationCode { get; set; }
+            public string Email { get; set; }
+            public string FullName { get; set; }
+            public OrigemLoginEnum? Origem { get; set; }
+        }
+
         public class EsqueciMinhaSenha
         {
             public string Senha { get; set; }

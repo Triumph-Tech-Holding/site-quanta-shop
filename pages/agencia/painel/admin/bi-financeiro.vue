@@ -21,6 +21,13 @@
 
     <div v-if="loading" class="qs-loading"><div class="qs-spinner"/></div>
 
+    <div v-else-if="errorMsg" class="qs-error-state">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="#dc2626"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+      <h3>Erro ao carregar BI Financeiro</h3>
+      <p>{{ errorMsg }}</p>
+      <button class="qs-btn-primary" @click="loadData">Tentar novamente</button>
+    </div>
+
     <template v-else>
       <!-- 1. KPI principais -->
       <div class="qs-grid qs-bi-grid">
@@ -207,118 +214,41 @@ const categorias = ref<Categoria[]>([]);
 const aging = ref<AgingBucket[]>([]);
 const safras = ref<Safra[]>([]);
 const topParceiros = ref<Parceiro[]>([]);
+const errorMsg = ref<string | null>(null);
 
 function authHeader() { return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } }; }
 
-const MOCK = {
-  month: {
-    totals: { faturamento: 487_320.50, faturamentoDelta: 12.4, cashbackReservado: 41_200.00, diasMedio: 28, inadimplencia: 4.2, inadimplenciaDelta: -0.8, inadimplenciaValor: 20_467.46, margem: 21.3 },
-    categorias: [
-      { id: 'planos', name: 'Planos de carreira', valor: 152_410.00, qtd: 487, color: '#225F6B' },
-      { id: 'assinaturas', name: 'Assinatura Plus', valor: 98_220.00, qtd: 1421, color: '#2F7785' },
-      { id: 'produtos', name: 'Produtos & marketplace', valor: 134_690.50, qtd: 2104, color: '#98C73A' },
-      { id: 'comissoes', name: 'Comissões de afiliados', valor: 65_320.00, qtd: 8732, color: '#3A9AAD' },
-      { id: 'fee', name: 'Fees de credenciamento', valor: 36_680.00, qtd: 23, color: '#FFB342' },
-    ],
-    aging: [
-      { bucket: '1–15 dias', valor: 8_220.00, qtd: 41, risk: 'low' as const },
-      { bucket: '16–30 dias', valor: 5_120.00, qtd: 22, risk: 'med' as const },
-      { bucket: '31–60 dias', valor: 4_550.46, qtd: 14, risk: 'high' as const },
-      { bucket: '60+ dias', valor: 2_577.00, qtd: 7, risk: 'critical' as const },
-    ],
-    safras: [
-      { mes: 'Mai/26', qtd: 1240, gerado: 18_420.00, estornado: 320.50, liberado: 0, aPagar: 18_099.50, diasParaLiberacao: 21 },
-      { mes: 'Abr/26', qtd: 1102, gerado: 16_810.00, estornado: 510.00, liberado: 9_200.00, aPagar: 7_100.00, diasParaLiberacao: 8 },
-      { mes: 'Mar/26', qtd: 980, gerado: 14_220.00, estornado: 280.00, liberado: 13_940.00, aPagar: 0, diasParaLiberacao: 0 },
-      { mes: 'Fev/26', qtd: 870, gerado: 12_500.00, estornado: 410.00, liberado: 12_090.00, aPagar: 0, diasParaLiberacao: 0 },
-    ],
-    topParceiros: [
-      { id: 1, nome: 'Magazine Luiza', transacoes: 412, cashbackPct: 6.5, valor: 84_220.00 },
-      { id: 2, nome: 'Amazon Brasil', transacoes: 387, cashbackPct: 4.2, valor: 67_410.00 },
-      { id: 3, nome: 'Centauro', transacoes: 298, cashbackPct: 8.0, valor: 52_180.00 },
-      { id: 4, nome: 'Mercado Livre', transacoes: 521, cashbackPct: 3.5, valor: 48_900.00 },
-      { id: 5, nome: 'Renner', transacoes: 187, cashbackPct: 7.5, valor: 38_220.00 },
-    ],
-  },
-  quarter: {
-    totals: { faturamento: 1_412_180.30, faturamentoDelta: 18.2, cashbackReservado: 132_400.00, diasMedio: 30, inadimplencia: 5.1, inadimplenciaDelta: 0.2, inadimplenciaValor: 72_021.20, margem: 19.8 },
-    categorias: [
-      { id: 'planos', name: 'Planos de carreira', valor: 442_400.00, qtd: 1340, color: '#225F6B' },
-      { id: 'assinaturas', name: 'Assinatura Plus', valor: 281_220.00, qtd: 4112, color: '#2F7785' },
-      { id: 'produtos', name: 'Produtos & marketplace', valor: 391_800.30, qtd: 6310, color: '#98C73A' },
-      { id: 'comissoes', name: 'Comissões de afiliados', valor: 198_140.00, qtd: 23890, color: '#3A9AAD' },
-      { id: 'fee', name: 'Fees de credenciamento', valor: 98_620.00, qtd: 71, color: '#FFB342' },
-    ],
-    aging: [
-      { bucket: '1–15 dias', valor: 28_120.00, qtd: 142, risk: 'low' as const },
-      { bucket: '16–30 dias', valor: 18_220.00, qtd: 78, risk: 'med' as const },
-      { bucket: '31–60 dias', valor: 16_460.00, qtd: 48, risk: 'high' as const },
-      { bucket: '60+ dias', valor: 9_221.20, qtd: 22, risk: 'critical' as const },
-    ],
-    safras: [
-      { mes: 'Mai/26', qtd: 1240, gerado: 18_420.00, estornado: 320.50, liberado: 0, aPagar: 18_099.50, diasParaLiberacao: 21 },
-      { mes: 'Abr/26', qtd: 1102, gerado: 16_810.00, estornado: 510.00, liberado: 9_200.00, aPagar: 7_100.00, diasParaLiberacao: 8 },
-      { mes: 'Mar/26', qtd: 980, gerado: 14_220.00, estornado: 280.00, liberado: 13_940.00, aPagar: 0, diasParaLiberacao: 0 },
-    ],
-    topParceiros: [
-      { id: 1, nome: 'Magazine Luiza', transacoes: 1240, cashbackPct: 6.5, valor: 244_120.00 },
-      { id: 2, nome: 'Amazon Brasil', transacoes: 1170, cashbackPct: 4.2, valor: 198_400.00 },
-      { id: 3, nome: 'Mercado Livre', transacoes: 1581, cashbackPct: 3.5, valor: 145_220.00 },
-      { id: 4, nome: 'Centauro', transacoes: 891, cashbackPct: 8.0, valor: 142_180.00 },
-      { id: 5, nome: 'Renner', transacoes: 521, cashbackPct: 7.5, valor: 98_220.00 },
-    ],
-  },
-  year: {
-    totals: { faturamento: 5_421_780.00, faturamentoDelta: 32.6, cashbackReservado: 412_000.00, diasMedio: 35, inadimplencia: 6.3, inadimplenciaDelta: 1.1, inadimplenciaValor: 341_572.14, margem: 22.7 },
-    categorias: [
-      { id: 'planos', name: 'Planos de carreira', valor: 1_710_000.00, qtd: 5240, color: '#225F6B' },
-      { id: 'assinaturas', name: 'Assinatura Plus', valor: 1_092_400.00, qtd: 16210, color: '#2F7785' },
-      { id: 'produtos', name: 'Produtos & marketplace', valor: 1_482_300.00, qtd: 23890, color: '#98C73A' },
-      { id: 'comissoes', name: 'Comissões de afiliados', valor: 762_080.00, qtd: 89321, color: '#3A9AAD' },
-      { id: 'fee', name: 'Fees de credenciamento', valor: 375_000.00, qtd: 287, color: '#FFB342' },
-    ],
-    aging: [
-      { bucket: '1–15 dias', valor: 132_220.00, qtd: 542, risk: 'low' as const },
-      { bucket: '16–30 dias', valor: 88_120.00, qtd: 348, risk: 'med' as const },
-      { bucket: '31–60 dias', valor: 76_460.14, qtd: 218, risk: 'high' as const },
-      { bucket: '60+ dias', valor: 44_772.00, qtd: 89, risk: 'critical' as const },
-    ],
-    safras: [
-      { mes: 'Mai/26', qtd: 1240, gerado: 18_420.00, estornado: 320.50, liberado: 0, aPagar: 18_099.50, diasParaLiberacao: 21 },
-      { mes: 'Abr/26', qtd: 1102, gerado: 16_810.00, estornado: 510.00, liberado: 9_200.00, aPagar: 7_100.00, diasParaLiberacao: 8 },
-      { mes: 'Mar/26', qtd: 980, gerado: 14_220.00, estornado: 280.00, liberado: 13_940.00, aPagar: 0, diasParaLiberacao: 0 },
-      { mes: 'Fev/26', qtd: 870, gerado: 12_500.00, estornado: 410.00, liberado: 12_090.00, aPagar: 0, diasParaLiberacao: 0 },
-    ],
-    topParceiros: [
-      { id: 1, nome: 'Magazine Luiza', transacoes: 5421, cashbackPct: 6.5, valor: 942_180.00 },
-      { id: 2, nome: 'Amazon Brasil', transacoes: 4810, cashbackPct: 4.2, valor: 762_400.00 },
-      { id: 3, nome: 'Mercado Livre', transacoes: 6821, cashbackPct: 3.5, valor: 580_120.00 },
-      { id: 4, nome: 'Centauro', transacoes: 3210, cashbackPct: 8.0, valor: 521_220.00 },
-      { id: 5, nome: 'Renner', transacoes: 1980, cashbackPct: 7.5, valor: 380_400.00 },
-    ],
-  },
-};
-
 async function loadData() {
   loading.value = true;
+  errorMsg.value = null;
   try {
     const { data } = await api.get(`/admin/bi-financeiro?periodo=${period.value}`, authHeader());
-    if (data && data.totals) {
-      totals.value = data.totals;
-      categorias.value = data.categorias;
-      aging.value = data.aging;
-      safras.value = data.safras;
-      topParceiros.value = data.topParceiros;
-    } else {
-      throw new Error('endpoint not configured');
+    if (!data || !data.totals) {
+      throw new Error('Resposta inválida do servidor.');
     }
-  } catch {
-    const m = MOCK[period.value];
-    totals.value = m.totals;
-    categorias.value = m.categorias;
-    aging.value = m.aging;
-    safras.value = m.safras;
-    topParceiros.value = m.topParceiros;
+    totals.value = {
+      faturamento: Number(data.totals.faturamento || 0),
+      faturamentoDelta: Number(data.totals.faturamentoDelta || 0),
+      cashbackReservado: Number(data.totals.cashbackReservado || 0),
+      diasMedio: Number(data.totals.diasMedio || 30),
+      inadimplencia: Number(data.totals.inadimplencia || 0),
+      inadimplenciaDelta: Number(data.totals.inadimplenciaDelta || 0),
+      inadimplenciaValor: Number(data.totals.inadimplenciaValor || 0),
+      margem: Number(data.totals.margem || 0),
+    };
+    categorias.value = Array.isArray(data.categorias) ? data.categorias : [];
+    aging.value = Array.isArray(data.aging) ? data.aging : [];
+    safras.value = Array.isArray(data.safras) ? data.safras : [];
+    topParceiros.value = Array.isArray(data.topParceiros) ? data.topParceiros : [];
+  } catch (e: any) {
+    errorMsg.value = e?.response?.data?.message
+      || e?.message
+      || 'Não foi possível carregar o BI financeiro.';
+    totals.value = { faturamento: 0, faturamentoDelta: 0, cashbackReservado: 0, diasMedio: 30, inadimplencia: 0, inadimplenciaDelta: 0, inadimplenciaValor: 0, margem: 0 };
+    categorias.value = [];
+    aging.value = [];
+    safras.value = [];
+    topParceiros.value = [];
   } finally {
     loading.value = false;
   }
@@ -328,7 +258,7 @@ watch(period, loadData);
 onMounted(loadData);
 
 function formatBRL(v: number): string {
-  return v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  return (v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
 </script>
 
@@ -506,6 +436,21 @@ function formatBRL(v: number): string {
 }
 .badge-done { background: #dcfce7; color: #16a34a; }
 .badge-warn { background: #fef3c7; color: #d97706; }
+
+.qs-error-state {
+  background: #fff;
+  border: 1px solid var(--qs-gray-200);
+  border-radius: var(--qs-radius-md);
+  padding: 48px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin: 32px 0;
+}
+.qs-error-state h3 { font-size: 18px; color: var(--qs-ink); margin: 0; }
+.qs-error-state p { color: var(--qs-gray-600); margin: 0; max-width: 480px; }
 
 /* Top parceiros */
 .qs-toplist { display: flex; flex-direction: column; gap: 10px; }

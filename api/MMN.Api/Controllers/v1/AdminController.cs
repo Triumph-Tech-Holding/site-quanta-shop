@@ -1,6 +1,7 @@
 ﻿using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MMN.Api.Helpers;
@@ -1040,6 +1041,372 @@ namespace MMN.Api.Controllers.v1
             catch (Exception)
             {
                 return BadRequest();
+            }
+        }
+
+        // ============================================================
+        // PHASE 2 — MOTOR FINANCEIRO (READ-ONLY safe endpoints)
+        // ============================================================
+
+        private static readonly Dictionary<string, (string Valor, string Tipo, string Descricao)> _redeDefaults =
+            new Dictionary<string, (string, string, string)>
+            {
+                { "Rede.CompressaoDinamica",   ("true",  "bool",    "Compressao dinamica habilitada") },
+                { "Rede.QuantaPontoValor",     ("1.00",  "decimal", "Valor em R$ de 1 Quanta Ponto") },
+                { "Rede.PlusMultiplicador",    ("2.00",  "decimal", "Multiplicador Plus para residual") },
+                { "Rede.QuarentenaDias",       ("30",    "int",     "Dias de quarentena (aging) para liberar cashback") },
+                { "Rede.ProfundidadeMax",      ("5",     "int",     "Profundidade maxima da rede para residual") },
+                { "Rede.ResLevel.1.Percentual",("5.00",  "decimal", "Residual nivel 1 (%)") },
+                { "Rede.ResLevel.1.Active",    ("true",  "bool",    "Residual nivel 1 ativo") },
+                { "Rede.ResLevel.2.Percentual",("3.00",  "decimal", "Residual nivel 2 (%)") },
+                { "Rede.ResLevel.2.Active",    ("true",  "bool",    "Residual nivel 2 ativo") },
+                { "Rede.ResLevel.3.Percentual",("2.00",  "decimal", "Residual nivel 3 (%)") },
+                { "Rede.ResLevel.3.Active",    ("true",  "bool",    "Residual nivel 3 ativo") },
+                { "Rede.ResLevel.4.Percentual",("1.00",  "decimal", "Residual nivel 4 (%)") },
+                { "Rede.ResLevel.4.Active",    ("true",  "bool",    "Residual nivel 4 ativo") },
+                { "Rede.ResLevel.5.Percentual",("1.00",  "decimal", "Residual nivel 5 (%)") },
+                { "Rede.ResLevel.5.Active",    ("true",  "bool",    "Residual nivel 5 ativo") },
+                { "Rede.CredLevel.1.Percentual",("8.00", "decimal", "Credenciamento nivel 1 (%)") },
+                { "Rede.CredLevel.1.Active",   ("true",  "bool",    "Credenciamento nivel 1 ativo") },
+                { "Rede.CredLevel.2.Percentual",("4.00", "decimal", "Credenciamento nivel 2 (%)") },
+                { "Rede.CredLevel.2.Active",   ("true",  "bool",    "Credenciamento nivel 2 ativo") },
+                { "Rede.CredLevel.3.Percentual",("2.00", "decimal", "Credenciamento nivel 3 (%)") },
+                { "Rede.CredLevel.3.Active",   ("false", "bool",    "Credenciamento nivel 3 ativo") },
+            };
+
+        private string GetCfg(string chave)
+        {
+            var item = _configNegocio.BuscarPelaChave(chave);
+            if (item != null && !string.IsNullOrEmpty(item.Valor)) return item.Valor;
+            return _redeDefaults.TryGetValue(chave, out var def) ? def.Valor : null;
+        }
+
+        private decimal GetCfgDec(string chave)
+        {
+            var v = GetCfg(chave);
+            return decimal.TryParse(v, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var d) ? d : 0m;
+        }
+
+        private int GetCfgInt(string chave) { var v = GetCfg(chave); return int.TryParse(v, out var i) ? i : 0; }
+        private bool GetCfgBool(string chave) { var v = GetCfg(chave); return string.Equals(v, "true", StringComparison.OrdinalIgnoreCase); }
+
+        private int quarentenaPlus(int ano, int mes, DateTime hoje)
+        {
+            var quarentenaDias = GetCfgInt("Rede.QuarentenaDias");
+            if (quarentenaDias <= 0) quarentenaDias = 30;
+            var fimMes = new DateTime(ano, mes, 1).AddMonths(1).AddDays(-1);
+            var liberacao = fimMes.AddDays(quarentenaDias);
+            var dias = (liberacao - hoje).Days;
+            return dias > 0 ? dias : 0;
+        }
+
+        [HttpGet]
+        [Route("configuracoes-rede")]
+        public IActionResult GetConfiguracoesRede()
+        {
+            try
+            {
+                var resLevels = new List<object>();
+                for (int n = 1; n <= 5; n++)
+                {
+                    resLevels.Add(new
+                    {
+                        level = n,
+                        percentual = GetCfgDec($"Rede.ResLevel.{n}.Percentual"),
+                        active = GetCfgBool($"Rede.ResLevel.{n}.Active")
+                    });
+                }
+                var credLevels = new List<object>();
+                for (int n = 1; n <= 3; n++)
+                {
+                    credLevels.Add(new
+                    {
+                        level = n,
+                        percentual = GetCfgDec($"Rede.CredLevel.{n}.Percentual"),
+                        active = GetCfgBool($"Rede.CredLevel.{n}.Active")
+                    });
+                }
+
+                return Ok(new
+                {
+                    compressaoDinamica = GetCfgBool("Rede.CompressaoDinamica"),
+                    quantaPontoValor = GetCfgDec("Rede.QuantaPontoValor"),
+                    plusMultiplicador = GetCfgDec("Rede.PlusMultiplicador"),
+                    quarentenaDias = GetCfgInt("Rede.QuarentenaDias"),
+                    profundidadeMax = GetCfgInt("Rede.ProfundidadeMax"),
+                    residualLevels = resLevels,
+                    credenciamentoLevels = credLevels,
+                    fonte = "configuracao_db",
+                    atualizadoEm = DateTime.UtcNow
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "erro_carregar_configuracoes", detail = ex.Message });
+            }
+        }
+
+        public class ConfiguracoesRedeUpdateViewModel
+        {
+            public bool? CompressaoDinamica { get; set; }
+            public decimal? QuantaPontoValor { get; set; }
+            public decimal? PlusMultiplicador { get; set; }
+            public int? QuarentenaDias { get; set; }
+            public int? ProfundidadeMax { get; set; }
+            public List<NivelConfig> ResidualLevels { get; set; }
+            public List<NivelConfig> CredenciamentoLevels { get; set; }
+
+            public class NivelConfig
+            {
+                public int Level { get; set; }
+                public decimal Percentual { get; set; }
+                public bool Active { get; set; }
+            }
+        }
+
+        private void UpsertCfg(string chave, string valor)
+        {
+            var existente = _configNegocio.BuscarPelaChave(chave);
+            var defs = _redeDefaults.TryGetValue(chave, out var def) ? def : ("", "string", "");
+            if (existente != null)
+            {
+                existente.Valor = valor;
+                _configNegocio.EditarConfig(existente);
+            }
+            else
+            {
+                _configNegocio.Insert(new ConfiguracaoViewModel
+                {
+                    Chave = chave,
+                    Valor = valor,
+                    Descricao = defs.Item3,
+                    Ativo = true
+                });
+                _configNegocio.SaveChanges();
+            }
+        }
+
+        [HttpPost]
+        [Route("configuracoes-rede")]
+        public IActionResult SaveConfiguracoesRede([FromBody] ConfiguracoesRedeUpdateViewModel view)
+        {
+            var allowWrites = string.Equals(Environment.GetEnvironmentVariable("ALLOW_ADMIN_WRITES"), "true", StringComparison.OrdinalIgnoreCase);
+            if (!allowWrites)
+            {
+                return StatusCode(503, new
+                {
+                    message = "gravacao_admin_desabilitada",
+                    detail = "Em ambiente de desenvolvimento, gravacoes administrativas estao desabilitadas para proteger a base de producao. Defina ALLOW_ADMIN_WRITES=true para habilitar."
+                });
+            }
+
+            if (view == null) return BadRequest(new { message = "payload_invalido" });
+
+            try
+            {
+                if (view.CompressaoDinamica.HasValue) UpsertCfg("Rede.CompressaoDinamica", view.CompressaoDinamica.Value ? "true" : "false");
+                if (view.QuantaPontoValor.HasValue) UpsertCfg("Rede.QuantaPontoValor", view.QuantaPontoValor.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                if (view.PlusMultiplicador.HasValue) UpsertCfg("Rede.PlusMultiplicador", view.PlusMultiplicador.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                if (view.QuarentenaDias.HasValue) UpsertCfg("Rede.QuarentenaDias", view.QuarentenaDias.Value.ToString());
+                if (view.ProfundidadeMax.HasValue) UpsertCfg("Rede.ProfundidadeMax", view.ProfundidadeMax.Value.ToString());
+
+                if (view.ResidualLevels != null)
+                {
+                    foreach (var lvl in view.ResidualLevels.Where(l => l.Level >= 1 && l.Level <= 5))
+                    {
+                        UpsertCfg($"Rede.ResLevel.{lvl.Level}.Percentual", lvl.Percentual.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                        UpsertCfg($"Rede.ResLevel.{lvl.Level}.Active", lvl.Active ? "true" : "false");
+                    }
+                }
+                if (view.CredenciamentoLevels != null)
+                {
+                    foreach (var lvl in view.CredenciamentoLevels.Where(l => l.Level >= 1 && l.Level <= 3))
+                    {
+                        UpsertCfg($"Rede.CredLevel.{lvl.Level}.Percentual", lvl.Percentual.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                        UpsertCfg($"Rede.CredLevel.{lvl.Level}.Active", lvl.Active ? "true" : "false");
+                    }
+                }
+
+                return Ok(new { message = "configuracoes_salvas", atualizadoEm = DateTime.UtcNow });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "erro_salvar_configuracoes", detail = ex.Message });
+            }
+        }
+
+        [HttpGet]
+        [Route("bi-financeiro")]
+        public IActionResult GetBiFinanceiro([FromQuery] string periodo = "30d")
+        {
+            try
+            {
+                var hoje = DateTime.UtcNow.Date;
+                var dias = (periodo ?? "30d").ToLowerInvariant() switch
+                {
+                    "7d" or "week" => 7,
+                    "30d" or "month" => 30,
+                    "90d" or "quarter" => 90,
+                    "180d" or "semester" => 180,
+                    "365d" or "year" => 365,
+                    _ => 30
+                };
+                var de = hoje.AddDays(-dias);
+
+                var dePrev = de.AddDays(-dias);
+
+                var transacoes = _context.Transacao
+                    .Where(t => t.Ativo && t.IdStatus == (int)StatusTransacaoEnum.Finalizada && t.DataTransacao >= de)
+                    .Include(t => t.Anunciante).ThenInclude(a => a.CategoriaAnunciante).ThenInclude(c => c.Categoria)
+                    .AsNoTracking()
+                    .ToList();
+
+                var transacoesPrev = _context.Transacao
+                    .Where(t => t.Ativo && t.IdStatus == (int)StatusTransacaoEnum.Finalizada && t.DataTransacao >= dePrev && t.DataTransacao < de)
+                    .AsNoTracking()
+                    .Sum(t => (decimal?)t.ValorPrincipal) ?? 0m;
+
+                var lancamentos = _context.Lancamento
+                    .Where(l => l.Ativo && l.DataLancamento >= de && (l.Tipo.Chave == "CB" || l.Tipo.Chave == "DTCSH" || l.Tipo.Chave == "CHBK"))
+                    .Include(l => l.Tipo)
+                    .Include(l => l.Status)
+                    .AsNoTracking()
+                    .ToList();
+
+                var lancamentosPrev = _context.Lancamento
+                    .Where(l => l.Ativo && l.DataLancamento >= dePrev && l.DataLancamento < de && (l.Tipo.Chave == "CB" || l.Tipo.Chave == "DTCSH" || l.Tipo.Chave == "CHBK"))
+                    .Include(l => l.Tipo)
+                    .AsNoTracking()
+                    .ToList();
+
+                var totalTransacoes = transacoes.Count;
+                var faturamentoTotal = transacoes.Sum(t => t.ValorPrincipal);
+                var faturamentoDelta = transacoesPrev > 0
+                    ? Math.Round(((faturamentoTotal - transacoesPrev) / transacoesPrev) * 100m, 1)
+                    : 0m;
+
+                // Cashback gerado = somente créditos (CB + DTCSH); CHBK é estorno e não compõe o gerado bruto
+                var lancamentosCredito = lancamentos.Where(l => l.Tipo.Chave == "CB" || l.Tipo.Chave == "DTCSH").ToList();
+                var cashbackGerado = lancamentosCredito.Sum(l => l.Valor);
+                var cashbackLiberado = lancamentosCredito.Where(l => !l.Bloqueado && l.IdStatus == (int)StatusTransacaoEnum.Finalizada).Sum(l => l.Valor);
+                var cashbackAPagar = lancamentosCredito.Where(l => l.Bloqueado || (l.IdStatus.HasValue && l.IdStatus != (int)StatusTransacaoEnum.Finalizada)).Sum(l => l.Valor);
+                var cashbackResidual = lancamentos.Where(l => l.Tipo.Chave == "DTCSH").Sum(l => l.Valor);
+
+                // Inadimplência = |CHBK| sobre cashback gerado bruto (créditos), excluindo o próprio CHBK do denominador
+                var chbk = Math.Abs(lancamentos.Where(l => l.Tipo.Chave == "CHBK").Sum(l => l.Valor));
+                var lancamentosCreditoPrev = lancamentosPrev.Where(l => l.Tipo.Chave == "CB" || l.Tipo.Chave == "DTCSH").ToList();
+                var chbkPrev = Math.Abs(lancamentosPrev.Where(l => l.Tipo.Chave == "CHBK").Sum(l => l.Valor));
+                var cashbackGeradoPrev = lancamentosCreditoPrev.Sum(l => l.Valor);
+                var inadimplenciaPct = cashbackGerado > 0 ? Math.Round((chbk / cashbackGerado) * 100m, 2) : 0m;
+                var inadimplenciaPrevPct = cashbackGeradoPrev > 0 ? Math.Round((chbkPrev / cashbackGeradoPrev) * 100m, 2) : 0m;
+                var inadimplenciaDelta = Math.Round(inadimplenciaPct - inadimplenciaPrevPct, 2);
+                var margem = faturamentoTotal > 0
+                    ? Math.Round(((faturamentoTotal - cashbackGerado) / faturamentoTotal) * 100m, 1)
+                    : 0m;
+
+                var palette = new[] { "#225F6B", "#2F7785", "#3A9AAD", "#98C73A", "#FFB342", "#7aad1f", "#dc2626", "#f59e0b", "#0ea5e9", "#a855f7" };
+
+                var categoriasRaw = transacoes
+                    .Where(t => t.Anunciante != null && t.Anunciante.CategoriaAnunciante != null)
+                    .SelectMany(t => t.Anunciante.CategoriaAnunciante.Where(ca => ca.Ativo && ca.Categoria != null)
+                        .Select(ca => new { Id = ca.Categoria.IdCategoria, Nome = ca.Categoria.Nome ?? "—", Valor = t.ValorPrincipal }))
+                    .GroupBy(x => new { x.Id, x.Nome })
+                    .Select(g => new { id = g.Key.Id, nome = g.Key.Nome, valor = g.Sum(x => x.Valor), qtd = g.Count() })
+                    .OrderByDescending(x => x.valor)
+                    .Take(10)
+                    .ToList();
+
+                var categorias = categoriasRaw
+                    .Select((c, i) => new { id = c.id.ToString(), name = c.nome, valor = c.valor, qtd = c.qtd, color = palette[i % palette.Length] })
+                    .ToList();
+
+                var topParceirosRaw = transacoes
+                    .Where(t => t.Anunciante != null)
+                    .GroupBy(t => new { t.Anunciante.IdAnunciante, t.Anunciante.Nome, t.Anunciante.Cashback })
+                    .Select(g => new
+                    {
+                        id = g.Key.IdAnunciante,
+                        nome = g.Key.Nome ?? "—",
+                        valor = g.Sum(t => t.ValorPrincipal),
+                        transacoes = g.Count(),
+                        cashbackPct = (double)g.Key.Cashback
+                    })
+                    .OrderByDescending(x => x.valor)
+                    .Take(10)
+                    .ToList();
+
+                var safras = lancamentos
+                    .GroupBy(l => new { l.DataLancamento.Year, l.DataLancamento.Month })
+                    .Select(g => new
+                    {
+                        mes = $"{new DateTime(g.Key.Year, g.Key.Month, 1):MMM/yy}",
+                        ano = g.Key.Year,
+                        mesNum = g.Key.Month,
+                        qtd = g.Select(l => l.Transacao != null ? (int?)l.Transacao.IdTransacao : null).Where(id => id.HasValue).Distinct().Count(),
+                        gerado = g.Where(l => l.Tipo.Chave == "CB" || l.Tipo.Chave == "DTCSH").Sum(l => l.Valor),
+                        estornado = g.Where(l => l.Tipo.Chave == "CHBK").Sum(l => Math.Abs(l.Valor)),
+                        liberado = g.Where(l => !l.Bloqueado && l.IdStatus == (int)StatusTransacaoEnum.Finalizada && (l.Tipo.Chave == "CB" || l.Tipo.Chave == "DTCSH")).Sum(l => l.Valor),
+                        aPagar = g.Where(l => l.Bloqueado && (l.Tipo.Chave == "CB" || l.Tipo.Chave == "DTCSH")).Sum(l => l.Valor)
+                    })
+                    .OrderByDescending(s => s.ano).ThenByDescending(s => s.mesNum)
+                    .Take(6)
+                    .Select(s => new
+                    {
+                        s.mes, s.qtd, s.gerado, s.estornado, s.liberado, s.aPagar,
+                        diasParaLiberacao = quarentenaPlus(s.ano, s.mesNum, hoje)
+                    })
+                    .ToList();
+
+                // Idade computada em C# para compatibilidade com InMemory provider (USE_TEST_DATABASE=true)
+                var lancamentosBloqueadosRaw = _context.Lancamento
+                    .Where(l => l.Ativo && (l.Bloqueado || l.Tipo.Chave == "CHBK") && l.DataLancamento < hoje)
+                    .Include(l => l.Tipo)
+                    .AsNoTracking()
+                    .Select(l => new { l.Valor, l.DataLancamento })
+                    .ToList();
+
+                var lancamentosBloqueados = lancamentosBloqueadosRaw
+                    .Select(l => new { l.Valor, Idade = (int)(hoje - l.DataLancamento.Date).TotalDays })
+                    .ToList();
+
+                var aging = new[]
+                {
+                    new { bucket = "1–15 dias", valor = lancamentosBloqueados.Where(x => x.Idade >= 1 && x.Idade <= 15).Sum(x => Math.Abs(x.Valor)), qtd = lancamentosBloqueados.Count(x => x.Idade >= 1 && x.Idade <= 15), risk = "low" },
+                    new { bucket = "16–30 dias", valor = lancamentosBloqueados.Where(x => x.Idade > 15 && x.Idade <= 30).Sum(x => Math.Abs(x.Valor)), qtd = lancamentosBloqueados.Count(x => x.Idade > 15 && x.Idade <= 30), risk = "med" },
+                    new { bucket = "31–60 dias", valor = lancamentosBloqueados.Where(x => x.Idade > 30 && x.Idade <= 60).Sum(x => Math.Abs(x.Valor)), qtd = lancamentosBloqueados.Count(x => x.Idade > 30 && x.Idade <= 60), risk = "high" },
+                    new { bucket = "60+ dias", valor = lancamentosBloqueados.Where(x => x.Idade > 60).Sum(x => Math.Abs(x.Valor)), qtd = lancamentosBloqueados.Count(x => x.Idade > 60), risk = "critical" }
+                };
+
+                var inadimplenciaValor = aging.Sum(a => a.valor);
+
+                return Ok(new
+                {
+                    periodo,
+                    de = de.ToString("yyyy-MM-dd"),
+                    ate = hoje.ToString("yyyy-MM-dd"),
+                    totals = new
+                    {
+                        faturamento = faturamentoTotal,
+                        faturamentoDelta,
+                        cashbackReservado = cashbackAPagar,
+                        diasMedio = 30,
+                        inadimplencia = inadimplenciaPct,
+                        inadimplenciaDelta,
+                        inadimplenciaValor,
+                        margem
+                    },
+                    distribuicaoModelo = new { empresa = 0.50m, consumidor = 0.25m, rede = 0.25m },
+                    categorias,
+                    aging,
+                    safras,
+                    topParceiros = topParceirosRaw,
+                    fonte = "lancamento+transacao",
+                    geradoEm = DateTime.UtcNow
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "erro_bi_financeiro", detail = ex.Message });
             }
         }
     }

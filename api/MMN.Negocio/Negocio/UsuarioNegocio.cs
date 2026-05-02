@@ -633,6 +633,125 @@ namespace MMN.Negocio.Negocio
             return (usuarioViewModel, parceiro);
         }
 
+        private static readonly object _appleJwksLock = new object();
+        private static List<JsonWebKey> _appleJwksCache;
+        private static DateTime _appleJwksExpiraEm = DateTime.MinValue;
+
+        private async Task<List<JsonWebKey>> ObterAppleJwksAsync(bool forceRefresh = false)
+        {
+            if (!forceRefresh && _appleJwksCache != null && _appleJwksExpiraEm > DateTime.UtcNow)
+                return _appleJwksCache;
+
+            using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(8) };
+            var json = await client.GetStringAsync("https://appleid.apple.com/auth/keys");
+            var keySet = new JsonWebKeySet(json);
+            var keys = keySet.Keys.ToList();
+
+            lock (_appleJwksLock)
+            {
+                _appleJwksCache = keys;
+                _appleJwksExpiraEm = DateTime.UtcNow.AddHours(1);
+            }
+            return keys;
+        }
+
+        public async Task<(UsuarioViewModel usuario, Parceiro parceiro)> AutenticacaoAppleCredentialAsync(string identityToken, string emailFallback, string fullNameFallback)
+        {
+            if (string.IsNullOrEmpty(identityToken))
+                throw new UnauthorizedException("login_incorreto");
+
+            // Audience (Apple Service ID / bundle id) é obrigatório: sem isso, qualquer token Apple válido seria aceito
+            var appleAudience = _appSettings?.AppleClientId;
+            if (string.IsNullOrEmpty(appleAudience))
+                throw new UnauthorizedException("provedor_nao_configurado");
+
+            var handler = new JwtSecurityTokenHandler();
+            JwtSecurityToken jwt;
+            try { jwt = handler.ReadJwtToken(identityToken); }
+            catch { throw new UnauthorizedException("login_incorreto"); }
+
+            if (jwt.Issuer != "https://appleid.apple.com")
+                throw new UnauthorizedException("login_incorreto");
+
+            var jwks = await ObterAppleJwksAsync();
+            var signingKey = jwks.FirstOrDefault(k => k.Kid == jwt.Header.Kid);
+            if (signingKey == null)
+            {
+                // Apple pode ter rotacionado as chaves antes do TTL — tenta refresh forçado uma vez
+                jwks = await ObterAppleJwksAsync(forceRefresh: true);
+                signingKey = jwks.FirstOrDefault(k => k.Kid == jwt.Header.Kid);
+                if (signingKey == null)
+                    throw new UnauthorizedException("login_incorreto");
+            }
+
+            var validationParams = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidIssuer = "https://appleid.apple.com",
+                ValidateAudience = true,
+                ValidAudience = appleAudience,
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.FromMinutes(5),
+                IssuerSigningKey = signingKey,
+                ValidateIssuerSigningKey = true
+            };
+
+            try { handler.ValidateToken(identityToken, validationParams, out _); }
+            catch { throw new UnauthorizedException("login_incorreto"); }
+
+            var appleSub = jwt.Subject;
+            var email = jwt.Claims.FirstOrDefault(c => c.Type == "email")?.Value ?? emailFallback;
+            if (string.IsNullOrEmpty(appleSub))
+                throw new UnauthorizedException("login_incorreto");
+
+            var usuario = _autenticacaoExternaRepositorio
+                .Get(u => u.IdExterno.Equals(appleSub) && u.Ativo)
+                .Include(i => i.Usuario)
+                    .ThenInclude(t => t.Grupo)
+                .Include(i => i.Usuario)
+                    .ThenInclude(t => t.UsuarioEndereco)
+                .Include(i => i.Usuario)
+                    .ThenInclude(t => t.Credenciamento)
+                .Select(s => s.Usuario)
+                .FirstOrDefault();
+
+            if (usuario == null)
+            {
+                if (string.IsNullOrEmpty(email))
+                    throw new UnauthorizedException("usuario_nao_encontrado");
+
+                usuario = _repositorio.Get(u => u.Email.Equals(email) && u.Ativo)
+                    .Include(t => t.Grupo)
+                    .Include(t => t.UsuarioEndereco)
+                    .Include(t => t.Credenciamentos)
+                    .SingleOrDefault();
+
+                if (usuario == null)
+                    throw new UnauthorizedException("usuario_nao_encontrado");
+
+                var provedor = await _provedorAutenticacaoNegocio
+                    .FirstNoTrackingAsync(g =>
+                        g.Protocolo == (int)IdentityProviderProtocol.Oauth2 &&
+                        g.Provedor == (int)IdentityProvider.Apple);
+
+                if (provedor == null)
+                    throw new UnauthorizedException("login_incorreto");
+
+                var autenticacaoExterna = new AutenticacaoExterna
+                {
+                    IdExterno = appleSub,
+                    Ativo = true,
+                    IdProvedorAutenticacao = provedor.IdProvedorAutenticacao,
+                    IdUsuario = usuario.IdUsuario
+                };
+                _autenticacaoExternaRepositorio.Insert(autenticacaoExterna);
+                _autenticacaoExternaRepositorio.SaveChanges();
+            }
+
+            var usuarioViewModel = Autenticacao(usuario, null, out Parceiro parceiro, false);
+            return (usuarioViewModel, parceiro);
+        }
+
         private UsuarioViewModel Autenticacao(Usuario usuario, string senha, out Parceiro parceiro, bool verificarSenha = true)
         {
             parceiro = null;
