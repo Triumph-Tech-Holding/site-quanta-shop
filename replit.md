@@ -1,5 +1,23 @@
 # Quanta Shop Web
 
+## 🚀 Modernização Premium — Power Mode (Mai 2026)
+
+### Documentação técnica oficial criada na raiz
+- `DESIGN_SYSTEM.md` — padrão visual premium minimalista (paleta restrita, tipografia Inter, espaçamento 4px, componentes admin canônicos, anti-padrões)
+- `FEATURES.md` — catálogo de features por 4 fases de MVP e 3 públicos (Consumidor, Lojista, Agente)
+- `STORIES.md` — user stories com personas detalhadas (Maria, João, Carla)
+- `DATA_DICTIONARY.md` — engenharia reversa das entidades `.NET 8` com marcação LGPD (🔒) por campo sensível
+- `TESTING.md` — plano com 10 cenários canônicos do algoritmo de compensação + 7 cenários de compressão dinâmica
+- `CHANGELOG.md` — histórico semver iniciado neste sprint
+
+### Painel admin — Features & MVP (Q Cuida + Premium)
+- `pages/agencia/painel/admin/features.vue` — nova tela com KPI strip, filtros (fase / status / público), barras de progresso lineares, lista expansível por feature, totalmente aderente ao Premium Design System
+- `public/docs/features.json` — fonte de dados (4 MVPs, 4 públicos, 25 features)
+- Link em `AgenciaMenu.vue` (admin block) + card no admin index
+- `CLAUDE.md` agora referencia os novos docs como leitura prioritária
+
+---
+
 ## Documentação Técnica + Blog API Híbrido (Tasks #102 + #103 — COMPLETO)
 
 ### CLAUDE.md (raiz)

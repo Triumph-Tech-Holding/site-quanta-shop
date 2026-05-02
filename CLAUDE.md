@@ -3,6 +3,20 @@
 > Arquivo de contexto técnico permanente. Leia antes de qualquer modificação no projeto.
 > Última atualização: Mai 2026
 
+## 📚 Documentação Oficial (leitura prioritária)
+
+Antes de qualquer mudança significativa, consulte os documentos abaixo na raiz do projeto:
+
+| Arquivo | Quando ler |
+|---------|------------|
+| **`DESIGN_SYSTEM.md`** | Toda mudança visual, novo componente ou tela admin |
+| **`FEATURES.md`** | Antes de propor uma nova feature ou alterar escopo |
+| **`STORIES.md`** | Para entender a jornada por persona (Maria/João/Carla) |
+| **`DATA_DICTIONARY.md`** | Antes de tocar em entidade `.NET 8` ou expor dado de usuário (LGPD) |
+| **`TESTING.md`** | Antes de mexer no algoritmo de compensação ou compressão dinâmica |
+| **`CHANGELOG.md`** | Sempre atualizar ao final de um sprint ou PR significativo |
+| **`replit.md`** | Histórico operacional do projeto, comandos, deploy |
+
 ---
 
 ## Visão Geral

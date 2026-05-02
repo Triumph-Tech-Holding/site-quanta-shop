@@ -62,6 +62,9 @@
         <NuxtLink to="/agencia/painel/admin/progresso" class="listMenu listMenu--admin">
           🚀 Progresso
         </NuxtLink>
+        <NuxtLink to="/agencia/painel/admin/features" class="listMenu listMenu--admin">
+          🎯 Features &amp; MVP
+        </NuxtLink>
         <NuxtLink to="/agencia/painel/admin/docs" class="listMenu listMenu--admin">
           📋 Documentação
         </NuxtLink>

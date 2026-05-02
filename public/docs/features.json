@@ -1,0 +1,65 @@
+{
+  "generatedAt": "2026-05-02T08:50:00.000Z",
+  "version": "1.0.0",
+  "mvps": [
+    {
+      "id": "mvp1",
+      "name": "MVP 1 — Fundação",
+      "description": "Cashback básico, autenticação, catálogo público.",
+      "color": "#225F6B"
+    },
+    {
+      "id": "mvp2",
+      "name": "MVP 2 — Premium UI",
+      "description": "Redesign completo, experiência minimalista, blog.",
+      "color": "#2F7785"
+    },
+    {
+      "id": "mvp3",
+      "name": "MVP 3 — Rede e Compensação",
+      "description": "Plano de carreira, Quanta Amizade, residual binário.",
+      "color": "#98C73A"
+    },
+    {
+      "id": "mvp4",
+      "name": "MVP 4 — Inteligência",
+      "description": "Recomendações com IA, BI para lojista, app mobile.",
+      "color": "#9ca3af"
+    }
+  ],
+  "audiences": [
+    { "id": "consumer", "name": "Consumidor", "icon": "🛍️" },
+    { "id": "merchant", "name": "Lojista / Parceiro", "icon": "🏪" },
+    { "id": "agent", "name": "Agente de Fidelização", "icon": "🤝" },
+    { "id": "admin", "name": "Admin Interno", "icon": "🛡️" }
+  ],
+  "features": [
+    { "id": "F-101", "mvp": "mvp1", "audience": "all", "title": "Cadastro e autenticação JWT", "status": "done", "progress": 100, "stories": ["US-101"], "description": "Cadastro com CPF, e-mail e celular validados. Login social Google. Recuperação de senha com token expirável. JWT 60min + refresh 30 dias." },
+    { "id": "F-102", "mvp": "mvp1", "audience": "consumer", "title": "Catálogo de parceiros online", "status": "done", "progress": 100, "stories": ["US-102", "US-103"], "description": "Listagem com filtro por categoria, cards com cashback %, ativação 1 clique. Integração Awin / Afilio / Zanox." },
+    { "id": "F-103", "mvp": "mvp1", "audience": "consumer", "title": "Carteira de saldo", "status": "done", "progress": 100, "stories": ["US-104"], "description": "Saldo principal e bloqueado, histórico de lançamentos, solicitação de saque com taxa configurável." },
+    { "id": "F-104", "mvp": "mvp1", "audience": "agent", "title": "Painel financeiro do agente", "status": "done", "progress": 100, "stories": [], "description": "Comissões diretas e residuais, extrato detalhado por período, cadastro de conta bancária." },
+    { "id": "F-105", "mvp": "mvp1", "audience": "merchant", "title": "Credenciamento de parceiros", "status": "done", "progress": 100, "stories": ["US-105"], "description": "Formulário multi-etapa (dados, endereço, ecossistema). Aprovação manual por admin. E-mail de confirmação." },
+
+    { "id": "F-201", "mvp": "mvp2", "audience": "all", "title": "Home V1 com hero premium", "status": "done", "progress": 100, "stories": ["US-201"], "description": "Hero com Swiper, floating cards, brand strip. Seções: ofertas, online, locais, blog, CEO, footer-CTA." },
+    { "id": "F-202", "mvp": "mvp2", "audience": "all", "title": "Páginas de público (Para Você / Empresa / Agente / Quanta Amizade)", "status": "done", "progress": 100, "stories": ["US-203", "US-204"], "description": "Hero fullscreen com foto real, badge, stats. Padrão QsHero reutilizável. Layout layout-home." },
+    { "id": "F-203", "mvp": "mvp2", "audience": "all", "title": "Blog premium (Apple-style)", "status": "done", "progress": 100, "stories": ["US-202"], "description": "Listagem com hero card, grid 3-col, newsletter dark. Detalhe com tipografia generosa, sidebar de relacionados. CRUD admin com upload de imagem (base64). Arquitetura híbrida dev/prod com import.meta.dev." },
+    { "id": "F-204", "mvp": "mvp2", "audience": "admin", "title": "Painel admin redesenhado", "status": "in_progress", "progress": 60, "stories": ["US-205"], "description": "Header limpo, KPIs no topo, tabelas leves, filter chips, badges semânticas. Documentação técnica integrada (/admin/docs). Pendente: unificar telas legadas (relatórios, lançamentos)." },
+    { "id": "F-205", "mvp": "mvp2", "audience": "admin", "title": "Sistema de design tokens", "status": "in_progress", "progress": 75, "stories": [], "description": "quanta-premium.scss com tokens --qs-*. DESIGN_SYSTEM.md formalizado. Pendente: componentes QsKpiCard, QsProgressBar, QsFilterChip extraídos." },
+    { "id": "F-206", "mvp": "mvp2", "audience": "admin", "title": "Painel de Progresso (Q Cuida-style)", "status": "done", "progress": 100, "stories": ["US-206"], "description": "Lista de tarefas com checkmarks coloridos. Barra de progresso linear no topo. Filtros: Todas / Concluídas / Ativas / Rascunhos." },
+    { "id": "F-207", "mvp": "mvp2", "audience": "admin", "title": "Painel de Features e MVP", "status": "in_progress", "progress": 80, "stories": ["US-207"], "description": "Visualização de features por MVP, progresso por fase em tempo real, drill-down em estórias de usuário. Esta tela." },
+
+    { "id": "F-301", "mvp": "mvp3", "audience": "agent", "title": "Plano de carreira (graduações)", "status": "planned", "progress": 0, "stories": ["US-306"], "description": "8 níveis (Bronze → Diamante Negro). Requisitos: vendas pessoais + volume de equipe + ativação de diretos. Bonificações por promoção. Histórico na timeline." },
+    { "id": "F-302", "mvp": "mvp3", "audience": "agent", "title": "Rede MLM binária visual", "status": "planned", "progress": 0, "stories": ["US-305"], "description": "Árvore interativa com zoom (recharts ou d3). Posição binária (esquerda/direita). Indicador de pernas balanceadas. Cache de resumo binário (já existe na API)." },
+    { "id": "F-303", "mvp": "mvp3", "audience": "consumer", "title": "Quanta Amizade — programa de indicações", "status": "in_progress", "progress": 50, "stories": ["US-301"], "description": "Convite por link único. Recompensa para padrinho e afilhado quando o objetivo é atingido. Histórico em quanta-amizade.vue. Pendente: notificações push de progresso." },
+    { "id": "F-304", "mvp": "mvp3", "audience": "agent", "title": "Residual de cashback (compressão dinâmica)", "status": "planned", "progress": 10, "stories": ["US-307"], "description": "Algoritmo de compressão: pula upline inativo. Percentuais por nível (até 5 níveis). Cálculo em batch noturno + on-demand. Tabela PercentualResidualCashback existe." },
+    { "id": "F-305", "mvp": "mvp3", "audience": "consumer", "title": "Assinatura Plus", "status": "planned", "progress": 15, "stories": ["US-302"], "description": "Plano mensal recorrente (Asaas). Benefícios: cashback dobrado, suporte prioritário. Pendente: integração webhook Asaas." },
+    { "id": "F-306", "mvp": "mvp3", "audience": "consumer", "title": "Saque BTC + PIX", "status": "in_progress", "progress": 60, "stories": [], "description": "PIX implementado. BTC: campo EnderecoBTC na entidade Saque (legado). Decisão pendente: descontinuar BTC ou modernizar." },
+    { "id": "F-307", "mvp": "mvp3", "audience": "agent", "title": "Material de apoio (marketing kit)", "status": "in_progress", "progress": 40, "stories": ["US-308"], "description": "Cards, vídeos, copy prontos para o agente baixar e divulgar. material-apoio.vue existe; falta CMS para upload pelo admin." },
+    { "id": "F-308", "mvp": "mvp3", "audience": "merchant", "title": "Promoções por horário/dia", "status": "planned", "progress": 0, "stories": ["US-303"], "description": "Lojista define cashback variável (happy hour, dias específicos). Tabelas Promocao + AnuncianteCashBack já existem." },
+
+    { "id": "F-401", "mvp": "mvp4", "audience": "consumer", "title": "Recomendações personalizadas (IA)", "status": "backlog", "progress": 0, "stories": ["US-401"], "description": "Modelo collaborative filtering com histórico de compras. Parceiros que você ainda não usou na home." },
+    { "id": "F-402", "mvp": "mvp4", "audience": "merchant", "title": "BI para lojista", "status": "backlog", "progress": 0, "stories": ["US-304", "US-403"], "description": "Dashboard de faturamento, ticket médio, recompra. Cohort de clientes ativados via Quanta." },
+    { "id": "F-403", "mvp": "mvp4", "audience": "consumer", "title": "App mobile nativo", "status": "backlog", "progress": 0, "stories": ["US-402"], "description": "React Native ou Expo. Push notifications, geolocalização para parceiros locais. Carteira com QR code para pagamento offline." },
+    { "id": "F-404", "mvp": "mvp4", "audience": "all", "title": "IA conversacional (assistente Quanta)", "status": "backlog", "progress": 0, "stories": ["US-404"], "description": "Chat com perguntas sobre saldo, indicações, parceiros. Integração WhatsApp Business." }
+  ]
+}
