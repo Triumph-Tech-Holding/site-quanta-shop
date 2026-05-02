@@ -9,27 +9,12 @@
 </template>
 
 <script setup lang="ts">
-import { extractApiErrorMessage } from '~/types/agencia';
 definePageMeta({ layout: 'agencia-login' });
-const route = useRoute();
-const config = useRuntimeConfig();
-const api = useApi();
-const agenciaStore = useAgenciaStore();
-const { $toast } = useNuxtApp();
 
-onMounted(async () => {
-  const code = route.query.code as string;
-  const siteUrl = config.public.siteUrl || (typeof window !== 'undefined' ? window.location.origin : '');
-  const redirectUri = `${siteUrl}/agencia/login-social/google`;
-  try {
-    const { data } = await api.post('/UsuarioLogin/autenticacaoGoogle', { code, redirectUri });
-    if (data?.token) {
-      agenciaStore.setUser(data);
-      navigateTo('/agencia/painel');
-    }
-  } catch (e: unknown) {
-    $toast?.error('Erro ao autenticar com Google. Tente novamente.');
-    navigateTo('/agencia');
-  }
+// OAuth2 Authorization Code flow (autenticacaoGoogle) foi removido.
+// O login com Google agora é feito exclusivamente via One Tap/GSI
+// (autenticacaoGoogleCredential) via components/login/login-social.vue.
+onMounted(() => {
+  navigateTo('/agencia');
 });
 </script>

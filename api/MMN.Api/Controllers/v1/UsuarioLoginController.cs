@@ -164,16 +164,6 @@ namespace MMN.Api.Controllers.v1
         }
 
         [HttpPost]
-        [Route("autenticacaoGoogle")]
-        [EnableRateLimiting("auth-limit")]
-        public async Task<IActionResult> AutenticacaoGoogle([FromBody] LogarGoogleViewModel logar)
-        {
-            var usuario = _negocio.AutenticacaoGoogle(logar.Code, logar.RedirectUri, out Parceiro parceiro);
-
-            return await RetornoAutenticacao(usuario, parceiro, logar.Origem);
-        }
-
-        [HttpPost]
         [Route("autenticacaoGoogleCredential")]
         [EnableRateLimiting("auth-limit")]
         public async Task<IActionResult> AutenticacaoGoogleCredential([FromBody] LogarGoogleCredentialViewModel logar)

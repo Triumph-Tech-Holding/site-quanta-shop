@@ -101,6 +101,13 @@ namespace MMN.Api
 
             // configure strongly typed settings objects
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+            // Override GoogleClientId from env var so no DB mutation is needed at startup
+            services.PostConfigure<AppSettings>(opts =>
+            {
+                var clientId = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID");
+                if (!string.IsNullOrEmpty(clientId))
+                    opts.GoogleClientId = clientId;
+            });
             services.Configure<TokenManagement>(Configuration.GetSection("tokenManagement"));
             
             var token = Configuration.GetSection("tokenManagement").Get<TokenManagement>();
@@ -405,37 +412,12 @@ namespace MMN.Api
             app.UseCors("AllowMyOrigin");
             app.UseMvc();
 
-            SyncGoogleCredentialsFromEnv(app.ApplicationServices);
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHealthChecks("/health");
                 endpoints.MapHub<BuyConfirmationHub>("/buy-confirmation");
                 endpoints.MapWebHookSubscriptionEndpoints();
             });
-        }
-
-        private static void SyncGoogleCredentialsFromEnv(IServiceProvider services)
-        {
-            var clientId = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID");
-            var clientSecret = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_SECRET");
-            if (string.IsNullOrEmpty(clientId)) return;
-
-            try
-            {
-                using var scope = services.CreateScope();
-                var db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-                var record = db.ProvedorAutenticacao.FirstOrDefault(p => p.IdProvedorAutenticacao == -1);
-                if (record == null) return;
-                record.Login = clientId;
-                if (!string.IsNullOrEmpty(clientSecret))
-                    record.Senha = clientSecret;
-                db.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"[startup] Could not sync Google credentials from env: {ex.Message}");
-            }
         }
 
         private void SeedTestData(DatabaseContext db)
