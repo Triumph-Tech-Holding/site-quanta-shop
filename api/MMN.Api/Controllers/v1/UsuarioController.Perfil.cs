@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MMN.Api.Helpers;
 using MMN.Dominio.Excecao;
 using MMN.Dominio.ViewModel;
+using MMN.Util.Util;
 using Newtonsoft.Json;
 using System;
 using System.Linq;

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MMN.Dominio.Excecao;
 using MMN.Dominio.ViewModel;
 using MMN.Util.Enum;
+using MMN.Util.Extensions;
 using System;
 using System.Linq;
 using System.Security.Claims;
@@ -10,6 +11,7 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Threading.Tasks;
+using static MMN.Dominio.ViewModel.FiltroViewModel;
 
 namespace MMN.Api.Controllers.v1
 {

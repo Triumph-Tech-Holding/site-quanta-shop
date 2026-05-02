@@ -89,15 +89,22 @@ namespace MMN.Api.Controllers.v1
             }
         }
 
-        private static IActionResult ValidarFallback(string codigo, decimal? valor)
+        private static readonly (string Codigo, string Tipo, decimal Valor, string Descricao, decimal MinimoPedido)[] _fallbackCupons =
         {
-            if (codigo == "QUANTA10")
+            ("QUANTA10", "percent", 10m, "10% de desconto", 50m),
+            ("BEMVINDO", "fixed",   25m, "R$ 25 OFF",       100m),
+        };
+
+        private static IActionResult ValidarFallback(string codigo, decimal? valorPedido)
+        {
+            foreach (var c in _fallbackCupons)
             {
-                return new OkObjectResult(new { valido = true, codigo, tipo = "percent", valor = 10m, descricao = "10% de desconto" });
-            }
-            if (codigo == "BEMVINDO")
-            {
-                return new OkObjectResult(new { valido = true, codigo, tipo = "fixed", valor = 25m, descricao = "R$ 25 OFF" });
+                if (c.Codigo != codigo) continue;
+
+                if (valorPedido.HasValue && valorPedido.Value < c.MinimoPedido)
+                    return new OkObjectResult(new { valido = false, mensagem = $"Pedido minimo de R$ {c.MinimoPedido:F2} para usar este cupom." });
+
+                return new OkObjectResult(new { valido = true, codigo = c.Codigo, tipo = c.Tipo, valor = c.Valor, descricao = c.Descricao, minimoPedido = c.MinimoPedido });
             }
             return new OkObjectResult(new { valido = false, mensagem = "Cupom invalido ou expirado." });
         }

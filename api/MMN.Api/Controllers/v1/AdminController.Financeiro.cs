@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using MMN.Api.ViewModel.Pedido;
 using MMN.Dominio.Enum;
 using MMN.Dominio.Excecao;
 using MMN.Dominio.ViewModel;

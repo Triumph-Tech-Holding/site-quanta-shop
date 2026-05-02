@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using MMN.Dominio.Enum;
 using MMN.Dominio.ViewModel;
+using MMN.Util.Enum;
+using MMN.Util.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
