@@ -215,6 +215,8 @@ const viewMode = ref<'grid' | 'list'>('grid');
 const loading = ref(false);
 const geoLoading = ref(false);
 const geoActive = ref(false);
+const userLat = ref<number | null>(null);
+const userLng = ref<number | null>(null);
 
 const quickSuggestions = ['Mercado', 'Farmácia', 'Restaurantes', 'Eletrônicos', 'Moda'];
 
@@ -256,10 +258,17 @@ async function runSearch() {
       categoria: activeCategoria.value,
       sort: sortBy.value,
     });
+    if (geoActive.value && userLat.value !== null && userLng.value !== null) {
+      params.set('lat', String(userLat.value));
+      params.set('lng', String(userLng.value));
+    }
     const token = agenciaStore.getToken?.();
     const headers = token ? { Authorization: `Bearer ${token}` } : undefined;
     const { data } = await api.get(`/busca-inteligente?${params.toString()}`, { headers });
-    allResults.value = Array.isArray(data) ? data : MOCK_RESULTS;
+    // backend retorna { items, total, page, pageSize }
+    allResults.value = data?.items && Array.isArray(data.items)
+      ? data.items
+      : (Array.isArray(data) ? data : MOCK_RESULTS);
   } catch {
     allResults.value = MOCK_RESULTS;
   } finally {
@@ -274,7 +283,13 @@ function useMyLocation() {
   }
   geoLoading.value = true;
   navigator.geolocation.getCurrentPosition(
-    () => { geoActive.value = true; geoLoading.value = false; runSearch(); },
+    (pos) => {
+      userLat.value = pos.coords.latitude;
+      userLng.value = pos.coords.longitude;
+      geoActive.value = true;
+      geoLoading.value = false;
+      runSearch();
+    },
     () => { geoLoading.value = false; alert('Não foi possível obter sua localização.'); },
     { timeout: 8000, enableHighAccuracy: false }
   );

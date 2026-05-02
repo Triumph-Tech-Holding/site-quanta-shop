@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Hosting;
+using MMN.Negocio.Services;
 using MMN.Repositorio.Contexto;
 
 namespace MMN.Api.Controllers.v1
@@ -45,26 +46,10 @@ namespace MMN.Api.Controllers.v1
                 var cupom = _context.Set<Dominio.Model.Cupom>().AsQueryable()
                     .FirstOrDefault(c => c.Codigo.ToUpper() == codigo);
 
-                if (cupom == null || !cupom.Ativo)
+                var validacao = CupomValidacaoHelper.ValidarRegrasBasicas(cupom, req.ValorPedido, DateTime.UtcNow);
+                if (!validacao.Valido)
                 {
-                    return Ok(new { valido = false, mensagem = "Cupom invalido ou expirado." });
-                }
-                var hoje = DateTime.UtcNow;
-                if (cupom.ValidoDe.HasValue && cupom.ValidoDe.Value > hoje)
-                {
-                    return Ok(new { valido = false, mensagem = "Cupom ainda nao esta ativo." });
-                }
-                if (cupom.ValidoAte.HasValue && cupom.ValidoAte.Value < hoje)
-                {
-                    return Ok(new { valido = false, mensagem = "Cupom expirado." });
-                }
-                if (req.ValorPedido.HasValue && cupom.MinimoPedido.HasValue && req.ValorPedido.Value < cupom.MinimoPedido.Value)
-                {
-                    return Ok(new
-                    {
-                        valido = false,
-                        mensagem = $"Pedido minimo de R$ {cupom.MinimoPedido.Value:F2} para usar este cupom."
-                    });
+                    return Ok(new { valido = false, mensagem = validacao.Mensagem });
                 }
                 if (cupom.MaxUsosTotal.HasValue)
                 {
