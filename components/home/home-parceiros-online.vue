@@ -63,10 +63,19 @@ const isLoading = ref(true);
 
 onMounted(async () => {
   loadConfig();
+  
+  // Timeout de 5s para evitar spinner infinito
+  const timeoutPromise = new Promise((_, reject) => 
+    setTimeout(() => reject(new Error('Timeout')), 5000)
+  );
+
   try {
-    await partnerStore.fetchNewPartners();
-  } catch {
-    console.warn('[home-parceiros-online] Falha ao carregar parceiros online');
+    await Promise.race([
+      partnerStore.fetchNewPartners(),
+      timeoutPromise
+    ]);
+  } catch (err) {
+    console.warn('[home-parceiros-online] Falha ou timeout ao carregar parceiros online:', err);
   } finally {
     isLoading.value = false;
   }

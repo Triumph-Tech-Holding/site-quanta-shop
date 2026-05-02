@@ -186,8 +186,16 @@
 
 <script setup lang="ts">
 useSeoMeta({
-  title: 'Busca Inteligente · Quanta Shop',
-  description: 'Encontre produtos e lojistas com o melhor cashback perto de você.',
+  title: 'Busca Inteligente | Quanta Shop — Cashback Perto de Você',
+  description: 'Encontre produtos e lojistas com o melhor cashback perto de você. Filtre por distância, categoria e percentual de economia.',
+  ogTitle: 'Busca Inteligente | Quanta Shop — Cashback Perto de Você',
+  ogDescription: 'Encontre produtos e lojistas com o melhor cashback perto de você. Filtre por distância, categoria e percentual de economia.',
+  ogImage: '/logo.png'
+});
+useHead({
+  link: [
+    { rel: 'canonical', href: 'https://quantashop.com.br/busca-inteligente' }
+  ]
 });
 
 interface SearchResult {

@@ -44,7 +44,7 @@
           />
           <div v-if="cnpjErro" class="invalid-feedback">{{ cnpjErro }}</div>
         </div>
-        <div v-if="erroConsulta" class="alert alert-danger mt-3 py-2" style="font-size:.875rem">{{ erroConsulta }}</div>
+        <div v-if="erroConsulta" :class="situacaoIrregular ? 'alert alert-warning' : 'alert alert-danger'" class="mt-3 py-2" style="font-size:.875rem">{{ erroConsulta }}</div>
         <div class="d-flex gap-3 mt-4">
           <button class="btn btn-ag-outline flex-fill" @click="step = 1" :disabled="consultando">Voltar</button>
           <button class="btn btn-ag-primary flex-fill" @click="consultarCnpj" :disabled="consultando || cnpjInput.length < 18">
@@ -222,6 +222,20 @@ import { extractApiErrorMessage } from '~/types/agencia';
 
 definePageMeta({ layout: 'layout-home' });
 
+useSeoMeta({
+  title: 'Credenciamento de Parceiro Local | Quanta Shop',
+  description: 'Seja um parceiro local do Quanta Shop e aumente suas vendas oferecendo cashback real aos seus clientes. Cadastro simples e rápido.',
+  ogTitle: 'Credenciamento de Parceiro Local | Quanta Shop',
+  ogDescription: 'Seja um parceiro local do Quanta Shop e aumente suas vendas oferecendo cashback real aos seus clientes. Cadastro simples e rápido.',
+  ogImage: '/logo.png'
+});
+
+useHead({
+  link: [
+    { rel: 'canonical', href: 'https://quantashop.com.br/agencia/credenciar' }
+  ]
+});
+
 const api = useApi();
 const route = useRoute();
 
@@ -231,6 +245,7 @@ const cnpjInput = ref('');
 const cnpjErro = ref('');
 const erroConsulta = ref('');
 const consultando = ref(false);
+const situacaoIrregular = ref(false);
 const enviando = ref(false);
 const erroEnvio = ref('');
 const sucessoEnvio = ref(false);
@@ -392,16 +407,18 @@ async function consultarCnpj() {
   }
   consultando.value = true;
   try {
-    const resp = await fetch(`https://publica.cnpj.ws/cnpj/${cnpjNumeros}`);
+    const resp = await fetch(`https://brasilapi.com.br/api/cnpj/v1/${cnpjNumeros}`);
     if (!resp.ok) {
-      if (resp.status === 404) throw new Error('CNPJ não encontrado na Receita Federal.');
-      throw new Error('Erro ao consultar a Receita Federal. Tente novamente.');
+      if (resp.status === 404) throw new Error('CNPJ não encontrado.');
+      throw new Error('Erro ao consultar o CNPJ. Tente novamente.');
     }
     const dados = await resp.json();
-    if (dados.descricao_situacao_cadastral && dados.descricao_situacao_cadastral !== 'ATIVA') {
-      erroConsulta.value = `Este CNPJ está com situação "${dados.descricao_situacao_cadastral}" na Receita Federal. Apenas empresas ATIVAS podem se credenciar.`;
-      return;
+    situacaoIrregular.value = dados.descricao_situacao_cadastral && ['BAIXADA', 'INAPTA'].includes(dados.descricao_situacao_cadastral);
+    
+    if (situacaoIrregular.value) {
+       erroConsulta.value = `CNPJ com situação irregular: ${dados.descricao_situacao_cadastral}`;
     }
+    
     form.CNPJ = cnpjInput.value;
     form.RazaoSocial = dados.razao_social || '';
     form.NomeFantasia = dados.nome_fantasia || dados.razao_social || '';
@@ -411,7 +428,7 @@ async function consultarCnpj() {
     form.Numero = dados.numero || '';
     form.Complemento = dados.complemento || '';
     form.Bairro = dados.bairro || '';
-    const telefone = dados.ddd_telefone_1 || dados.ddd_fax || '';
+    const telefone = dados.ddd_telefone_1 || '';
     form.TelefoneEmpresa = telefone.replace(/[^\d\s\-()]/g, '');
     const uf = dados.uf || '';
     if (uf && estados.value.length > 0) {
@@ -424,9 +441,10 @@ async function consultarCnpj() {
         if (cidadeMatch) form.IdCidade = cidadeMatch.IdCidade;
       }
     }
+
     step.value = 3;
   } catch (err: unknown) {
-    erroConsulta.value = err instanceof Error ? err.message : 'Erro ao consultar a Receita Federal.';
+    erroConsulta.value = err instanceof Error ? err.message : 'Erro ao consultar o CNPJ.';
   } finally {
     consultando.value = false;
   }

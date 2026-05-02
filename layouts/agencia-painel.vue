@@ -99,6 +99,13 @@
 <script setup lang="ts">
 import { useAgenciaStore } from '~/pinia/useAgenciaStore';
 import { useApi } from '~/composables/useApi';
+
+useHead({
+  meta: [
+    { name: 'robots', content: 'noindex, nofollow' }
+  ]
+});
+
 const agenciaStore = useAgenciaStore();
 const api = useApi();
 

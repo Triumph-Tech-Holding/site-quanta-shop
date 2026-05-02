@@ -104,66 +104,119 @@
 </template>
 
 <script setup lang="ts">
-import type { PostRedeSocial, PlataformaSocial } from '~/types/agencia';
+import { useBlogStore, type PostRedeSocial } from '~/stores/blog';
+
 definePageMeta({ layout: 'agencia-painel', middleware: ['agencia-auth', 'agencia-admin'] });
-const LS_KEY = 'qs_redes_sociais';
+
+const blogStore = useBlogStore();
 const agenciaStore = useAgenciaStore();
 const api = useApi();
+
 const loading = ref(true);
 const saving = ref(false);
-const usandoLocal = ref(false);
-const itens = ref<PostRedeSocial[]>([]);
+const usandoLocal = ref(true); // Sempre forçar local por enquanto, conforme T130
+const itens = computed(() => blogStore.redesSociais);
+
 const showModal = ref(false);
 const showConfirm = ref(false);
 const modalError = ref('');
 const itemParaExcluir = ref<PostRedeSocial | null>(null);
-const emptyForm = () => ({ id: undefined as number | undefined, plataforma: 'Instagram' as PlataformaSocial, titulo: '', url: '', thumbnailUrl: '', descricao: '', dataPublicacao: '', ativo: true });
+
+const platforms = ['Instagram', 'YouTube', 'TikTok', 'Facebook', 'Twitter', 'Outro'];
+
+const emptyForm = () => ({ 
+  id: undefined as string | number | undefined, 
+  plataforma: 'Instagram' as any, 
+  titulo: '', 
+  url: '', 
+  thumbnailUrl: '', 
+  descricao: '', 
+  dataPublicacao: new Date().toISOString().substring(0, 10), 
+  ativo: true 
+});
+
 const form = reactive(emptyForm());
-function authHeader() { return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } }; }
+
 function formatDate(d?: string) { return d ? new Date(d).toLocaleDateString('pt-BR') : '—'; }
-function lsCarregar(): PostRedeSocial[] { try { return JSON.parse(localStorage.getItem(LS_KEY) || '[]'); } catch { return []; } }
-function lsSalvar(lista: PostRedeSocial[]) { localStorage.setItem(LS_KEY, JSON.stringify(lista)); }
-function badgeClasse(p: PlataformaSocial) {
-  const m: Record<PlataformaSocial, string> = { Instagram: 'rs-instagram', YouTube: 'rs-youtube', TikTok: 'rs-tiktok', Facebook: 'rs-facebook', Twitter: 'rs-twitter', Outro: 'rs-outro' };
+
+function badgeClasse(p: string) {
+  const m: Record<string, string> = { Instagram: 'rs-instagram', YouTube: 'rs-youtube', TikTok: 'rs-tiktok', Facebook: 'rs-facebook', Twitter: 'rs-twitter', Outro: 'rs-outro' };
   return m[p] ?? 'rs-outro';
 }
-function abrirNovo() { Object.assign(form, emptyForm()); modalError.value = ''; showModal.value = true; }
-function abrirEditar(item: PostRedeSocial) { Object.assign(form, { id: item.id, plataforma: item.plataforma, titulo: item.titulo, url: item.url, thumbnailUrl: item.thumbnailUrl || '', descricao: item.descricao || '', dataPublicacao: item.dataPublicacao ? item.dataPublicacao.substring(0, 10) : '', ativo: item.ativo }); modalError.value = ''; showModal.value = true; }
+
+function abrirNovo() { 
+  Object.assign(form, emptyForm()); 
+  modalError.value = ''; 
+  showModal.value = true; 
+}
+
+function abrirEditar(item: PostRedeSocial) { 
+  Object.assign(form, { 
+    id: item.id, 
+    plataforma: item.plataforma, 
+    titulo: item.titulo, 
+    url: item.url, 
+    thumbnailUrl: item.thumbnailUrl || '', 
+    descricao: item.descricao || '', 
+    dataPublicacao: item.dataPublicacao ? item.dataPublicacao.substring(0, 10) : '', 
+    ativo: item.ativo 
+  }); 
+  modalError.value = ''; 
+  showModal.value = true; 
+}
+
 function fecharModal() { showModal.value = false; }
-function confirmarExcluir(item: PostRedeSocial) { itemParaExcluir.value = item; showConfirm.value = true; }
+
+function confirmarExcluir(item: PostRedeSocial) { 
+  itemParaExcluir.value = item; 
+  showConfirm.value = true; 
+}
+
 async function salvar() {
   if (!form.titulo.trim() || !form.url.trim()) { modalError.value = 'Título e URL são obrigatórios.'; return; }
-  saving.value = true; modalError.value = '';
-  const payload = { plataforma: form.plataforma, titulo: form.titulo, url: form.url, thumbnailUrl: form.thumbnailUrl || null, descricao: form.descricao || null, dataPublicacao: form.dataPublicacao || null, ativo: form.ativo };
-  if (!usandoLocal.value) {
-    try {
-      if (form.id) { await api.put(`/admin/redes-sociais/${form.id}`, payload, authHeader()); const idx = itens.value.findIndex(i => i.id === form.id); if (idx !== -1) itens.value[idx] = { ...itens.value[idx], ...payload } as PostRedeSocial; }
-      else { const { data } = await api.post('/admin/redes-sociais', payload, authHeader()); itens.value.unshift(data as PostRedeSocial); }
-      saving.value = false; fecharModal(); return;
-    } catch { usandoLocal.value = true; }
+  saving.value = true; 
+  modalError.value = '';
+  
+  const payload = { 
+    plataforma: form.plataforma, 
+    titulo: form.titulo, 
+    url: form.url, 
+    thumbnailUrl: form.thumbnailUrl || null, 
+    descricao: form.descricao || null, 
+    dataPublicacao: form.dataPublicacao || null, 
+    ativo: form.ativo 
+  };
+
+  try {
+    if (form.id) {
+      blogStore.atualizarPostRedeSocial(form.id, payload as any);
+    } else {
+      blogStore.criarPostRedeSocial(payload as any);
+    }
+    saving.value = false; 
+    fecharModal();
+  } catch (e) {
+    modalError.value = 'Erro ao salvar o post.';
+    saving.value = false;
   }
-  const lista = lsCarregar();
-  if (form.id) { const idx = lista.findIndex(i => i.id === form.id); if (idx !== -1) lista[idx] = { ...lista[idx], ...payload } as PostRedeSocial; const vi = itens.value.findIndex(i => i.id === form.id); if (vi !== -1) itens.value[vi] = { ...itens.value[vi], ...payload } as PostRedeSocial; }
-  else { const novo: PostRedeSocial = { id: Date.now(), ...payload } as PostRedeSocial; lista.unshift(novo); itens.value.unshift(novo); }
-  lsSalvar(lista); saving.value = false; fecharModal();
 }
+
 async function excluir() {
   if (!itemParaExcluir.value) return;
   saving.value = true;
-  const id = itemParaExcluir.value.id;
-  if (!usandoLocal.value) {
-    try { await api.delete(`/admin/redes-sociais/${id}`, authHeader()); itens.value = itens.value.filter(i => i.id !== id); showConfirm.value = false; saving.value = false; return; }
-    catch { usandoLocal.value = true; }
+  try {
+    blogStore.excluirPostRedeSocial(itemParaExcluir.value.id);
+    showConfirm.value = false; 
+    saving.value = false;
+  } catch (e) {
+    saving.value = false;
   }
-  lsSalvar(lsCarregar().filter(i => i.id !== id));
-  itens.value = itens.value.filter(i => i.id !== id);
-  showConfirm.value = false; saving.value = false;
 }
-onMounted(async () => {
+
+onMounted(() => {
   agenciaStore.loadFromStorage();
-  try { const { data } = await api.get('/admin/redes-sociais', authHeader()); itens.value = Array.isArray(data) ? data : (data?.items || []); }
-  catch { usandoLocal.value = true; itens.value = lsCarregar(); }
-  finally { loading.value = false; }
+  blogStore.carregarRedesSociais();
+  loading.value = false;
 });
 </script>
 

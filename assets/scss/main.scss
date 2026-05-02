@@ -2,3 +2,12 @@
 @forward './components/index';
 @forward './layout/index';
 @import 'variables';
+
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}

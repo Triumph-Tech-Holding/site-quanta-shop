@@ -32,7 +32,7 @@
         <!-- Hero card em destaque -->
         <NuxtLink
           v-if="featuredPost && activeCategory === 'Todos'"
-          :to="`/blog/${featuredPost.id}`"
+          :to="`/blog/${featuredPost.slug}`"
           class="qb-hero-card"
         >
           <div class="qb-hero-card__img-wrap">
@@ -58,7 +58,7 @@
           <NuxtLink
             v-for="post in gridPosts"
             :key="post.id"
-            :to="`/blog/${post.id}`"
+            :to="`/blog/${post.slug}`"
             class="qb-card"
           >
             <div class="qb-card__img-wrap">
@@ -104,19 +104,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
+import { useBlogStore } from '~/stores/blog';
 
 definePageMeta({ layout: 'layout-home' });
-useSeoMeta({
-  title: 'Blog | Quanta Shop',
-  description: 'Dicas de cashback, finanças pessoais e novidades do ecossistema Quanta Shop.',
-});
 
+const blogStore = useBlogStore();
 const email = ref('');
 const activeCategory = ref('Todos');
 
 interface Post {
-  id: number;
+  id: string | number;
+  slug: string;
   title: string;
   excerpt: string;
   img: string;
@@ -125,28 +123,16 @@ interface Post {
   category: string;
 }
 
-const fallbackPosts: Post[] = [
-  { id: 1, title: 'Como maximizar seu cashback em compras do dia a dia', excerpt: 'Estratégias simples para acumular mais cashback em cada compra nas lojas parceiras.', img: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=900&q=85&auto=format&fit=crop', date: '18 mar 2026', readTime: '5 min', category: 'Cashback' },
-  { id: 2, title: 'Educação financeira: faça seu dinheiro trabalhar por você', excerpt: 'Pequenas mudanças de hábito no consumo podem gerar renda extra relevante ao longo do ano.', img: 'https://images.unsplash.com/photo-1579621970795-87facc2f976d?w=900&q=85&auto=format&fit=crop', date: '12 mar 2026', readTime: '7 min', category: 'Finanças' },
-  { id: 3, title: 'Conheça os 10 parceiros mais usados em março', excerpt: 'Os estabelecimentos que geraram mais cashback para os usuários da Quanta Shop.', img: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=900&q=85&auto=format&fit=crop', date: '05 mar 2026', readTime: '4 min', category: 'Parceiros' },
-  { id: 4, title: 'Novidade: cashback disponível em farmácias', excerpt: 'As maiores redes de farmácias do Brasil agora são parceiras da Quanta Shop.', img: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=900&q=85&auto=format&fit=crop', date: '28 fev 2026', readTime: '3 min', category: 'Novidades' },
-  { id: 5, title: '5 erros que impedem você de acumular cashback', excerpt: 'Veja os erros mais comuns e como evitá-los para maximizar seus ganhos.', img: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=900&q=85&auto=format&fit=crop', date: '20 fev 2026', readTime: '6 min', category: 'Cashback' },
-  { id: 6, title: 'Como ser agente Quanta Shop e criar renda recorrente', excerpt: 'Entenda o modelo de agentes e quanto você pode ganhar indicando lojas e consumidores.', img: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=900&q=85&auto=format&fit=crop', date: '10 fev 2026', readTime: '8 min', category: 'Novidades' },
-];
-
-const posts = ref<Post[]>(fallbackPosts);
-const api = useApi();
+const posts = ref<Post[]>([]);
 
 function fmt(d?: string | null) {
   if (!d) return '';
   try { return new Date(d).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' }); } catch { return d; }
 }
 
-function mapArtigos(artigos: Array<{
-  id: number; titulo: string; resumo?: string; conteudo: string;
-  imagemDestaque?: string; categoria?: string; dataPublicacao?: string; publicado: boolean;
-}>): Post[] {
-  return artigos
+onMounted(() => {
+  blogStore.carregarArtigos();
+  posts.value = blogStore.artigos
     .filter(a => a.publicado)
     .sort((a, b) => {
       const da = a.dataPublicacao ? new Date(a.dataPublicacao).getTime() : 0;
@@ -155,38 +141,14 @@ function mapArtigos(artigos: Array<{
     })
     .map(a => ({
       id: a.id,
+      slug: a.slug,
       title: a.titulo,
       excerpt: a.resumo || a.conteudo.substring(0, 140) + '…',
       img: a.imagemDestaque || 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=900&q=85&auto=format&fit=crop',
       date: fmt(a.dataPublicacao),
       readTime: '',
-      category: a.categoria || 'Geral',
+      category: a.category || 'Geral',
     }));
-}
-
-function carregarDoLocalStorage() {
-  try {
-    const raw = localStorage.getItem('qs_blog_artigos');
-    if (!raw) return;
-    const artigos = JSON.parse(raw);
-    const pub = mapArtigos(artigos);
-    if (pub.length > 0) posts.value = pub;
-  } catch {}
-}
-
-onMounted(async () => {
-  // Tenta API real primeiro (leitura é segura em qualquer ambiente)
-  try {
-    const { data } = await api.get('/blog/artigos');
-    const artigos = Array.isArray(data) ? data : (data?.items || []);
-    if (artigos.length > 0) {
-      const pub = mapArtigos(artigos);
-      if (pub.length > 0) { posts.value = pub; return; }
-    }
-  } catch { /**/ }
-
-  // Fallback: localStorage (dados criados no painel admin em dev)
-  carregarDoLocalStorage();
 });
 
 const categories = computed(() => ['Todos', ...Array.from(new Set(posts.value.map(p => p.category)))]);
@@ -197,6 +159,11 @@ const featuredPost = computed(() => filteredPosts.value[0] ?? null);
 const gridPosts = computed(() =>
   activeCategory.value === 'Todos' ? filteredPosts.value.slice(1) : filteredPosts.value
 );
+
+useSeoMeta({
+  title: 'Blog | Quanta Shop',
+  description: 'Dicas de cashback, finanças pessoais e novidades do ecossistema Quanta Shop.',
+});
 </script>
 
 <style scoped>

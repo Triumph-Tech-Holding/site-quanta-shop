@@ -97,18 +97,15 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
-      title: "Quanta Shop",
+      title: "Quanta Shop — Cashback Real em Centenas de Lojas",
       charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no',
-      script: [
-        {
-          src: "https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js",
-        },
+      meta: [
+        { name: 'description', content: 'Lojistas, aumentem suas vendas com o programa de cashback da Quanta Shop. Ofereça mais valor aos seus clientes e receba cashback real em centenas de lojas parceiras.' },
+        { name: 'format-detection', content: 'telephone=no' }
       ],
-      htmlAttrs: {
-        lang: 'pt-BR',
-      },
       link: [
+        { rel: 'canonical', href: 'https://quantashop.com.br' },
         {
           rel: 'preconnect',
           href: 'https://fonts.googleapis.com',
@@ -116,7 +113,7 @@ export default defineNuxtConfig({
         {
           rel: 'preconnect',
           href: 'https://fonts.gstatic.com',
-          crossorigin: true,
+          crossorigin: '',
         },
         {
           rel: 'stylesheet',

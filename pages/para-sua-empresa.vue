@@ -105,7 +105,18 @@
 
 <script setup lang="ts">
 definePageMeta({ layout: 'layout-home' });
-useSeoMeta({ title: 'Para sua Empresa | Quanta Shop', description: 'Ofereça cashback real aos seus clientes. Aumente vendas, fidelize clientes. Só paga quando vende.', canonical: 'https://quantashop.com.br/para-sua-empresa' });
+useSeoMeta({ 
+  title: 'Para sua Empresa | Quanta Shop — Aumente suas vendas', 
+  description: 'Ofereça cashback real aos seus clientes e aumente suas vendas com o Quanta Shop. Cadastro gratuito, fidelize clientes e só pague quando vender.', 
+  ogTitle: 'Para sua Empresa | Quanta Shop — Aumente suas vendas',
+  ogDescription: 'Ofereça cashback real aos seus clientes e aumente suas vendas com o Quanta Shop. Cadastro gratuito, fidelize clientes e só pague quando vender.',
+  ogImage: '/logo.png'
+});
+useHead({
+  link: [
+    { rel: 'canonical', href: 'https://quantashop.com.br/para-sua-empresa' }
+  ]
+});
 
 const salesIcon = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#98C73A" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>`;
 const customersIcon = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#98C73A" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`;

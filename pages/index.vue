@@ -17,7 +17,19 @@ definePageMeta({
 });
 
 useSeoMeta({ 
-  title: "Ganhe por minuto | Quanta Shop",
+  title: "Quanta Shop — Cashback Real em Centenas de Lojas",
+  description: "Ganhe dinheiro de volta em suas compras nas maiores lojas do Brasil. O Quanta Shop é a plataforma de cashback real que te ajuda a economizar de verdade.",
+  ogTitle: "Quanta Shop — Cashback Real em Centenas de Lojas",
+  ogDescription: "Ganhe dinheiro de volta em suas compras nas maiores lojas do Brasil. O Quanta Shop é a plataforma de cashback real que te ajuda a economizar de verdade.",
+  ogImage: "/logo.png",
+  ogType: "website",
+  twitterCard: "summary_large_image",
+});
+
+useHead({
+  link: [
+    { rel: 'canonical', href: 'https://quantashop.com.br' }
+  ],
   script: [
     {
       type: 'application/ld+json',

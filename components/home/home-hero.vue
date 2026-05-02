@@ -207,6 +207,13 @@ function getSubtitleStyle(item: HeroBannerSlide): Record<string, string> {
 onMounted(async () => {
   loadConfig();
   try {
+    const banners = await carouselStore.fetchCarousels();
+    // Se a API retornar vazia ou falhar, heroSlides.value continuará vazio e sliderData usará fallbacks
+  } catch (err) {
+    console.warn('[home-hero] Falha ao carregar banners da API:', err);
+  }
+  
+  try {
     const slides = await $fetch<HeroBannerSlide[]>('/data/hero-banners.json');
     if (Array.isArray(slides)) heroSlides.value = slides;
   } catch {

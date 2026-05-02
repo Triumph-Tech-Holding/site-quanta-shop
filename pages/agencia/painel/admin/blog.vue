@@ -72,7 +72,12 @@
             <div class="qs-field"><label class="qs-label">Título *</label><input v-model="form.titulo" type="text" class="qs-input" @input="gerarSlug" placeholder="Título do artigo" /></div>
             <div class="qs-field"><label class="qs-label">Slug</label><input v-model="form.slug" type="text" class="qs-input" /><small class="qs-field-hint">Gerado automaticamente. Edite se necessário.</small></div>
             <div class="qs-form-grid-2">
-              <div class="qs-field"><label class="qs-label">Categoria</label><input v-model="form.categoria" type="text" class="qs-input" placeholder="Ex: Cashback, Dicas" /></div>
+              <div class="qs-field">
+                <label class="qs-label">Categoria</label>
+                <select v-model="form.categoria" class="qs-select-input">
+                  <option v-for="cat in categorias" :key="cat" :value="cat">{{ cat }}</option>
+                </select>
+              </div>
               <div class="qs-field"><label class="qs-label">Autor</label><input v-model="form.autor" type="text" class="qs-input" placeholder="Nome do autor" /></div>
               <div class="qs-field"><label class="qs-label">Data de Publicação</label><input v-model="form.dataPublicacao" type="date" class="qs-input" /></div>
             </div>
@@ -121,82 +126,145 @@
 </template>
 
 <script setup lang="ts">
-import type { BlogArtigo } from '~/types/agencia';
+import { useBlogStore, type BlogArtigo } from '~/stores/blog';
+
 definePageMeta({ layout: 'agencia-painel', middleware: ['agencia-auth', 'agencia-admin'] });
-const LS_KEY = 'qs_blog_artigos';
+
+const blogStore = useBlogStore();
 const agenciaStore = useAgenciaStore();
 const api = useApi();
+
 const loading = ref(true);
 const saving = ref(false);
 const isDev = import.meta.dev;
-const usandoLocal = ref(isDev);
-const itens = ref<BlogArtigo[]>([]);
+const usandoLocal = ref(true); // Sempre forçar local por enquanto, conforme T130
+const itens = computed(() => blogStore.artigos);
+
 const showModal = ref(false);
 const showConfirm = ref(false);
 const modalError = ref('');
 const itemParaExcluir = ref<BlogArtigo | null>(null);
 const fileInputRef = ref<HTMLInputElement | null>(null);
 const urlManual = ref('');
-const emptyForm = () => ({ id: undefined as number | undefined, titulo: '', slug: '', resumo: '', conteudo: '', imagemDestaque: '', categoria: '', autor: '', dataPublicacao: '', publicado: false, destaque: false });
+
+const categorias = ['Economia', 'Cashback', 'Parceiros', 'Dicas', 'Novidades', 'Quanta Shop'];
+
+const emptyForm = () => ({ 
+  id: undefined as string | number | undefined, 
+  titulo: '', 
+  slug: '', 
+  resumo: '', 
+  conteudo: '', 
+  imagemDestaque: '', 
+  categoria: 'Economia', 
+  autor: '', 
+  dataPublicacao: new Date().toISOString().substring(0, 10), 
+  publicado: false, 
+  destaque: false 
+});
+
 const form = reactive(emptyForm());
-function authHeader() { return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } }; }
+
 function formatDate(d?: string) { return d ? new Date(d).toLocaleDateString('pt-BR') : '—'; }
-function lsCarregar(): BlogArtigo[] { try { return JSON.parse(localStorage.getItem(LS_KEY) || '[]'); } catch { return []; } }
-function lsSalvar(lista: BlogArtigo[]) { localStorage.setItem(LS_KEY, JSON.stringify(lista)); }
-function gerarSlug() { form.slug = form.titulo.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9\s-]/g, '').trim().replace(/\s+/g, '-'); }
+
+function gerarSlug() { 
+  form.slug = blogStore.generateSlug(form.titulo);
+}
+
 function triggerFileInput() { fileInputRef.value?.click(); }
 function handleFileChange(e: Event) { const file = (e.target as HTMLInputElement).files?.[0]; if (file) processFile(file); }
 function handleDrop(e: DragEvent) { const file = e.dataTransfer?.files?.[0]; if (file && (file.type === 'image/png' || file.type === 'image/jpeg')) processFile(file); }
+
 function processFile(file: File) {
   if (file.size > 5 * 1024 * 1024) { modalError.value = 'Imagem muito grande. Máximo 5 MB.'; return; }
   const reader = new FileReader();
   reader.onload = (e) => { form.imagemDestaque = e.target?.result as string; urlManual.value = ''; modalError.value = ''; };
   reader.readAsDataURL(file);
 }
+
 function aplicarUrl() { if (urlManual.value.trim()) { form.imagemDestaque = urlManual.value.trim(); urlManual.value = ''; } }
-function abrirNovo() { Object.assign(form, emptyForm()); urlManual.value = ''; modalError.value = ''; showModal.value = true; }
-function abrirEditar(item: BlogArtigo) { Object.assign(form, { id: item.id, titulo: item.titulo, slug: item.slug, resumo: item.resumo || '', conteudo: item.conteudo, imagemDestaque: item.imagemDestaque || '', categoria: item.categoria || '', autor: item.autor || '', dataPublicacao: item.dataPublicacao ? item.dataPublicacao.substring(0, 10) : '', publicado: item.publicado, destaque: item.destaque }); urlManual.value = ''; modalError.value = ''; showModal.value = true; }
+
+function abrirNovo() { 
+  Object.assign(form, emptyForm()); 
+  urlManual.value = ''; 
+  modalError.value = ''; 
+  showModal.value = true; 
+}
+
+function abrirEditar(item: BlogArtigo) { 
+  Object.assign(form, { 
+    id: item.id, 
+    titulo: item.titulo, 
+    slug: item.slug, 
+    resumo: item.resumo || '', 
+    conteudo: item.conteudo, 
+    imagemDestaque: item.imagemDestaque || '', 
+    categoria: item.categoria || 'Economia', 
+    autor: item.autor || '', 
+    dataPublicacao: item.dataPublicacao ? item.dataPublicacao.substring(0, 10) : '', 
+    publicado: item.publicado, 
+    destaque: item.destaque 
+  }); 
+  urlManual.value = ''; 
+  modalError.value = ''; 
+  showModal.value = true; 
+}
+
 function fecharModal() { showModal.value = false; }
-function confirmarExcluir(item: BlogArtigo) { itemParaExcluir.value = item; showConfirm.value = true; }
+
+function confirmarExcluir(item: BlogArtigo) { 
+  itemParaExcluir.value = item; 
+  showConfirm.value = true; 
+}
+
 async function salvar() {
   if (!form.titulo.trim() || !form.conteudo.trim()) { modalError.value = 'Título e conteúdo são obrigatórios.'; return; }
-  saving.value = true; modalError.value = '';
-  const payload = { titulo: form.titulo, slug: form.slug, resumo: form.resumo, conteudo: form.conteudo, imagemDestaque: form.imagemDestaque, categoria: form.categoria, autor: form.autor, dataPublicacao: form.dataPublicacao || null, publicado: form.publicado, destaque: form.destaque };
-  if (!isDev && !usandoLocal.value) {
-    try {
-      if (form.id) { await api.put(`/admin/blog/artigos/${form.id}`, payload, authHeader()); const idx = itens.value.findIndex(i => i.id === form.id); if (idx !== -1) itens.value[idx] = { ...itens.value[idx], ...payload } as BlogArtigo; }
-      else { const { data } = await api.post('/admin/blog/artigos', payload, authHeader()); itens.value.unshift(data as BlogArtigo); }
-      saving.value = false; fecharModal(); return;
-    } catch { usandoLocal.value = true; }
+  saving.value = true; 
+  modalError.value = '';
+  
+  const payload = { 
+    titulo: form.titulo, 
+    slug: form.slug, 
+    resumo: form.resumo, 
+    conteudo: form.conteudo, 
+    imagemDestaque: form.imagemDestaque, 
+    categoria: form.categoria, 
+    autor: form.autor, 
+    dataPublicacao: form.dataPublicacao || null, 
+    publicado: form.publicado, 
+    destaque: form.destaque 
+  };
+
+  try {
+    if (form.id) {
+      blogStore.atualizarArtigo(form.id, payload);
+    } else {
+      blogStore.criarArtigo(payload);
+    }
+    saving.value = false; 
+    fecharModal();
+  } catch (e) {
+    modalError.value = 'Erro ao salvar o artigo.';
+    saving.value = false;
   }
-  const lista = lsCarregar();
-  if (form.id) { const idx = lista.findIndex(i => i.id === form.id); if (idx !== -1) lista[idx] = { ...lista[idx], ...payload } as BlogArtigo; const vi = itens.value.findIndex(i => i.id === form.id); if (vi !== -1) itens.value[vi] = { ...itens.value[vi], ...payload } as BlogArtigo; }
-  else { const novo: BlogArtigo = { id: Date.now(), ...payload } as BlogArtigo; lista.unshift(novo); itens.value.unshift(novo); }
-  lsSalvar(lista); saving.value = false; fecharModal();
 }
+
 async function excluir() {
   if (!itemParaExcluir.value) return;
   saving.value = true;
-  const id = itemParaExcluir.value.id;
-  if (!isDev && !usandoLocal.value) {
-    try { await api.delete(`/admin/blog/artigos/${id}`, authHeader()); itens.value = itens.value.filter(i => i.id !== id); showConfirm.value = false; saving.value = false; return; }
-    catch { usandoLocal.value = true; }
-  }
-  lsSalvar(lsCarregar().filter(i => i.id !== id));
-  itens.value = itens.value.filter(i => i.id !== id);
-  showConfirm.value = false; saving.value = false;
-}
-onMounted(async () => {
-  agenciaStore.loadFromStorage();
-  const localData = lsCarregar();
-  if (localData.length > 0) { itens.value = localData; usandoLocal.value = true; loading.value = false; }
   try {
-    const { data } = await api.get('/admin/blog/artigos', authHeader());
-    const apiData: BlogArtigo[] = Array.isArray(data) ? data : (data?.items || []);
-    if (apiData.length > 0) { itens.value = apiData; usandoLocal.value = isDev; }
-    else if (localData.length === 0) usandoLocal.value = true;
-  } catch { if (localData.length === 0) itens.value = lsCarregar(); usandoLocal.value = true; }
-  finally { loading.value = false; }
+    blogStore.excluirArtigo(itemParaExcluir.value.id);
+    showConfirm.value = false; 
+    saving.value = false;
+  } catch (e) {
+    saving.value = false;
+  }
+}
+
+onMounted(() => {
+  agenciaStore.loadFromStorage();
+  blogStore.carregarArtigos();
+  loading.value = false;
 });
 </script>
 

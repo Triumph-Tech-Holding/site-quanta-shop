@@ -24,6 +24,15 @@
 </template>
 
 <script setup lang="ts">
-useSeoMeta({ title: "Página de erro | Quanta Shop" });
-defineProps(["error"]);
+useSeoMeta({ 
+  title: "Página não encontrada | Quanta Shop",
+  description: "Desculpe, a página que você está procurando não existe ou foi movida."
+});
+const props = defineProps(["error"]);
+
+onMounted(() => {
+  if (props.error?.statusCode === 404) {
+    // Nuxt 3 lida com isso se lançado via createError, mas garantimos aqui
+  }
+});
 </script>
