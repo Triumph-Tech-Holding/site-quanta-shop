@@ -1259,7 +1259,9 @@ namespace MMN.Negocio.Negocio
                     new Claim("Cultura", usuario.Cultura),
                     new Claim("Comerciante", comerciante.ToString())
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(60),
+                Issuer = _tokenManagement.Issuer,
+                Audience = _tokenManagement.Audience,
+                Expires = DateTime.UtcNow.AddMinutes(_tokenManagement.AccessExpiration > 0 ? _tokenManagement.AccessExpiration : 60),
                 SigningCredentials =
                     new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
