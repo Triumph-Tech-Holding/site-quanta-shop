@@ -192,9 +192,9 @@ const docs = ref<DocItem[]>([
   },
   {
     id: 'historias',
-    nome: 'Histórias.md — Personas e User Stories',
+    nome: 'Historia — Personas e User Stories',
     descricao: 'Personas oficiais, histórias de usuário (US-01–US-05) e regras de negócio críticas',
-    arquivo: 'Histórias.md',
+    arquivo: 'historia.md',
     tipo: 'md',
     tamanho: '…',
     data: hoje,
