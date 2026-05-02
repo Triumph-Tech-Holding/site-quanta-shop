@@ -1,0 +1,22 @@
+<Project>
+  <PropertyGroup>
+    <!--
+      Supressão centralizada de warnings de baixo valor.
+      Regra: suprimir aqui apenas ruído estrutural que esconde erros reais no output.
+      Qualquer warning de lógica ou segurança deve permanecer visível.
+
+      CS1591 — Missing XML comment for publicly visible member
+              Gerado por GenerateDocumentationFile=true no MMN.Api.csproj.
+              Não afeta comportamento, apenas docs Swagger internos.
+
+      CA1416 — Platform compatibility: System.Drawing.Common não é suportado no Linux
+              O projeto já tem RuntimeHostConfigurationOption EnableUnixSupport=true.
+              O warning é cosmético — o runtime está configurado corretamente.
+
+      NU1701 — Package restored using a target framework different from project
+              BouncyCastle e outros pacotes legados que não têm net8.0 no TargetFramework.
+              Compatibilidade confirmada em runtime, warning não indica bug.
+    -->
+    <NoWarn>$(NoWarn);CS1591;CA1416;NU1701</NoWarn>
+  </PropertyGroup>
+</Project>

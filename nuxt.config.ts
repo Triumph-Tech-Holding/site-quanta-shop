@@ -17,7 +17,7 @@ export default defineNuxtConfig({
   },
   watch: ['!api/**'],
   imports: {
-    dirs: ['pinia'],
+    dirs: ['pinia', 'composables', 'composables/**'],
   },
   modules: [
     '@nuxtjs/tailwindcss',
@@ -31,7 +31,7 @@ export default defineNuxtConfig({
       },
     ],
     "nuxt-gtag",
-    '@vite-pwa/nuxt',
+    ...(process.env.NODE_ENV !== 'development' ? ['@vite-pwa/nuxt' as any] : []),
   ],
   plugins: ['~/plugins/directives.ts', '~/plugins/filters.ts', '~/plugins/mask.ts'],
   gtag: {
