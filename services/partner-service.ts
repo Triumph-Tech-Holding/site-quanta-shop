@@ -1,6 +1,5 @@
-const { get, post } = useApi();
-
 export const getPartners = async (type = null, name = null, category = null, page = 1, limit = 12) => {
+    const { get } = useApi();
     try {
         const params = new URLSearchParams();
         if (type) params.append('type', type);
@@ -18,8 +17,8 @@ export const getPartners = async (type = null, name = null, category = null, pag
     }
 }
 
-
 export const getNewPartners = async () => {
+    const { get } = useApi();
     try {
         const response = await get("/v2/partners/get-new-partners/");
        
@@ -31,6 +30,7 @@ export const getNewPartners = async () => {
 }
 
 export const getFeaturedPartners = async () => {
+    const { get } = useApi();
     try {
         const response = await get("/v2/partners/get-featured-partners/");
        
@@ -42,6 +42,7 @@ export const getFeaturedPartners = async () => {
 }
 
 export const getTopSellersPartners = async () => {
+    const { get } = useApi();
     try {
         const response = await get("/v2/partners/get-top-sellers-partners/");
        
@@ -53,6 +54,7 @@ export const getTopSellersPartners = async () => {
 }
 
 export const getLocalPartners = async () => {
+    const { get } = useApi();
     try {
         const response = await get("/v2/partners/get-local-partners/");
        
@@ -64,6 +66,7 @@ export const getLocalPartners = async () => {
 }
 
 export const getBestDiscountsLocalPartners = async () => {
+    const { get } = useApi();
     try {
         const response = await get("/v2/partners/get-best-discounts-local-partners/");
        
@@ -75,6 +78,7 @@ export const getBestDiscountsLocalPartners = async () => {
 }
 
 export const getFeaturedLocalPartners = async () => {
+    const { get } = useApi();
     try {
         const response = await get("/v2/partners/get-featured-local-partners/");
        
@@ -86,6 +90,7 @@ export const getFeaturedLocalPartners = async () => {
 }
 
 export const getTopSellersLocalPartners = async () => {
+    const { get } = useApi();
     try {
         const response = await get("/v2/partners/get-top-sellers-local-partners/");
        

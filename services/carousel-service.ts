@@ -1,6 +1,5 @@
-const { get } = useApi();
-
 export const getCarousels = async () => {
+    const { get } = useApi();
     try {
         const response = await get("v2/carousels");
 

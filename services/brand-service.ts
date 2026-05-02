@@ -1,6 +1,5 @@
-const { get, post } = useApi();
-
 export const getBestBrands = async () => {
+    const { get } = useApi();
     try {
         const response = await get("/v2/awin-feed/get-best-brands/");
        

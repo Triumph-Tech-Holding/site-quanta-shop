@@ -1,6 +1,5 @@
-const { get, post } = useApi();
-
 export const contact = async (contactData: any) => {
+    const { post } = useApi();
     try {
         const response = await post("/contato/EnviarContato", contactData);
        

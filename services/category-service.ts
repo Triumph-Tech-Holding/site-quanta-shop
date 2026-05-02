@@ -1,6 +1,5 @@
-const { get, post } = useApi();
-
 export const getCategories = async () => {
+    const { get, post } = useApi();
     try {
         const response = await post("/Anunciante/obterCategorias/", { nome: "" });
        
@@ -12,6 +11,7 @@ export const getCategories = async () => {
 }
 
 export const getPartnersCategories = async () => {
+    const { get } = useApi();
     try {
         const response = await get("/v2/awin-feed/get-partners-categories/");
        
@@ -23,6 +23,7 @@ export const getPartnersCategories = async () => {
 }
 
 export const getProductsCategories = async () => {
+    const { get } = useApi();
     try {
         const response = await get("/v2/awin-feed/get-categories/");
        
@@ -34,6 +35,7 @@ export const getProductsCategories = async () => {
 }
 
 export const getFeaturedCategories = async () => {
+    const { get } = useApi();
     try {
         const response = await get("/v2/categories/get-featured-categories/");
        

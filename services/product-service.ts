@@ -1,6 +1,5 @@
-const { get, post } = useApi();
-
 export const getProduct = async (id: string) => {
+    const { get } = useApi();
     try {
         const params = new URLSearchParams();
         if (id) params.append('id', id);
@@ -15,6 +14,7 @@ export const getProduct = async (id: string) => {
 }
 
 export const getProducts = async (quantity = 12, page = 1, minPrice: number | null = null, maxPrice: number | null = null, order:any, category: any) => {
+    const { get } = useApi();
     try {
         const params = new URLSearchParams();
         if (quantity) params.append('quantity', quantity.toString());
@@ -34,6 +34,7 @@ export const getProducts = async (quantity = 12, page = 1, minPrice: number | nu
 }
 
 export const getSearchedProducts = async (quantity = 12, page = 1, minPrice: number | null = null, maxPrice: number | null = null, order:any, searchText: string | null = null) => {
+    const { get } = useApi();
     try {
         const params = new URLSearchParams();
         if (quantity) params.append('quantity', quantity.toString());

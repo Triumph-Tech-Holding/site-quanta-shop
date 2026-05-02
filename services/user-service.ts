@@ -1,6 +1,5 @@
-const { get, post } = useApi();
-
 export const login = async (loginData: any) => {
+    const { post } = useApi();
     try {
         const response = await post("/usuarioLogin/autenticacao", loginData);
        
@@ -12,6 +11,7 @@ export const login = async (loginData: any) => {
 }
 
 export const forgotPassword = async (login: any) => {
+    const { get } = useApi();
     try {
         const response = await get(`/usuarioLogin/esqueciMinhaSenha/${login}`);
         return response.data;
@@ -22,6 +22,7 @@ export const forgotPassword = async (login: any) => {
 }
 
 export const registerUser = async (userData: any): Promise<any> => {
+    const { post } = useApi();
     try {
         const response = await post('/user/registrar', userData);
         return response.data;
@@ -32,6 +33,7 @@ export const registerUser = async (userData: any): Promise<any> => {
 }
 
 export const confirmEmail = async (token: string): Promise<any> => {
+    const { post } = useApi();
     try {
         const response = await post(`/v2/users/confirm-email?token=${token}`, {});
         return response.data;
