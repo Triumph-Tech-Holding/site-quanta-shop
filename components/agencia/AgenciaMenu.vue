@@ -34,6 +34,14 @@
         Redi
       </a>
 
+      <NuxtLink to="/agencia/painel/social-commerce" class="listMenu">
+        Social Commerce
+      </NuxtLink>
+
+      <NuxtLink to="/agencia/painel/dashboard-rede-adf" class="listMenu">
+        Dashboard de Rede (ADF)
+      </NuxtLink>
+
       <NuxtLink to="/agencia/painel/performance" class="listMenu">
         Performance
       </NuxtLink>

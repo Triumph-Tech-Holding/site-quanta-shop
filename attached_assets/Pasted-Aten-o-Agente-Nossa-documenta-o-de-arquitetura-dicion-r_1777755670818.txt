@@ -1,0 +1,13 @@
+Atenção, Agente: Nossa documentação de arquitetura, dicionário de dados (DATA_DICTIONARY.md), jornadas (STORIES.md) e testes (TESTING.md) está impecável. Vamos construir o Frontend (Nuxt 3), mas com uma REGRA DE ARQUITETURA INEGOCIÁVEL: Zero Hardcode Visual.
+DIRETRIZ DE CMS (Painel Admin): Absolutamente TODOS os textos de destaque, banners promocionais, logos de parceiros, cores principais da marca (via injeção dinâmica de CSS variables) e tipografia devem ser construídos para serem editáveis pelo Admin.
+Utilize ou expanda o composable useHomeConfig.ts ou crie uma store Pinia (useCmsStore) para mockar esses dados de configuração global (textos, URLs de banners, hex codes de cores). O layout deve consumir dessa store, garantindo que no futuro o Admin apenas altere o banco de dados e o frontend reaja automaticamente.
+Sua missão é construir o visual das telas da Fase de Expansão (Social Commerce) nas rotas /agencia e /zee usando os componentes do nosso quanta-premium.scss:
+Módulo de Compartilhamento WhatsApp (Social Commerce): Crie a interface onde o Consumidor ou Agente (ADF) visualiza produtos/empresas e gera seu 'Link de Indicação Rastreável' com 1 clique (com botão claro do WhatsApp). Lembrete: As imagens, logos de parceiros e os textos de incentivo desta tela devem vir do CMS dinâmico.
+Dashboard de Rede e Leads (ADF): Painel visual do Agente de Fidelização com os KPI Cards: 'Novos Leads Atribuídos', 'Cliques no Link' e 'Cashback Residual Gerado'.
+UI da Assinatura Plus (Transversal): Em TODOS os dashboards (Consumidor, Agente e Lojista), integre o módulo da Assinatura Plus:
+Badge de 'Status Plus'.
+Barra de Progresso com a meta de consumo dinâmico para destravar o Cashback Residual Dobrado (lendo da variável temporária adminConfig.metaConsumoPlus).
+KPI Card de 'Ganhos Extras (Residual Dobrado)'.
+Lista visual de 'Radar de Assinaturas da Rede'.
+Bloqueio Visual (Paywall HAF): Garanta o bloqueio/upsell visual para Consumidores (Membros Base sem HAF), incentivando a compra da licença HAF para acessar a rede completa. Lembrete: O texto de venda (copy) deste Paywall deve ser lido do CMS.
+Use mock data centralizado no CMS/configuracoes para garantir que o layout renderize perfeitamente. Siga rigorosamente as regras do nosso DESIGN_SYSTEM.md. Me confirme assim que as telas estiverem prontas para validação!
