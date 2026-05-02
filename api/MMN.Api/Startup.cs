@@ -27,6 +27,7 @@ using MMN.Util.Cache;
 using MMN.Util.Jwt;
 using MMN.Util.Model;
 using MMN.Util.Translation;
+using MMN.Api.Helpers;
 using SimplesmenteSou.Configuration;
 using System;
 using System.Data;
@@ -452,6 +453,9 @@ namespace MMN.Api
             {
                 ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedFor | Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto
             });
+
+            // Block any known debug-bypass cookies/headers in ALL environments (no debug bypass exists)
+            app.UseDebugBypassGuard();
 
             app.UseExceptionHandler(ExceptionHandler.GlobalExceptionHandler);
 
