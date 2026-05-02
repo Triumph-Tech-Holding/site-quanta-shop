@@ -18,19 +18,18 @@ namespace MMN.Repositorio.Seed
                         EndpointCadastro = "api/user/registrarGoogle",
                         EndpointLogin = "api/UsuarioLogin/autenticacaoGoogle",
                         // ATENÇÃO: Este registro é para o fluxo OAuth2 Authorization Code (legado).
-                        // O novo fluxo One Tap usa o endpoint autenticacaoGoogleCredential e valida
-                        // o ID token diretamente via Google tokeninfo API.
-                        // TODO: Atualizar Login e Senha diretamente no banco de dados para usar as
-                        // credenciais corretas do Google Cloud Console (não alterar aqui por ser seed de migração).
-                        // O Client Secret (Senha) não deve ficar em código — mover para tabela de configuração protegida.
-                        Login = "123493812146-gdjfhkeguuon50kjhhd6i3hgf4v172el.apps.googleusercontent.com",
+                        // O fluxo principal é autenticacaoGoogleCredential (One Tap/GSI) que valida
+                        // o ID token via Google tokeninfo API — não usa Login/Senha deste registro.
+                        // O Client ID abaixo deve coincidir com GOOGLE_CLIENT_ID no ambiente.
+                        // Para atualizar em produção: UPDATE "ProvedorAutenticacao" SET "Login" = '<client_id>', "Senha" = '<client_secret>' WHERE "IdProvedorAutenticacao" = -1;
+                        Login = "372294010028-ff1frn14fg81mn0ujhv215lk9rd5t80r.apps.googleusercontent.com",
                         ParametrosLogin = "{" +
                             "\"scope\":\"https://www.googleapis.com/auth/userinfo.email\"," +
                             "\"grant_type\":\"authorization_code\"" +
                             "}",
                         Protocolo = (int)IdentityProviderProtocol.Oauth2,
                         Provedor = (int)IdentityProvider.Google,
-                        Senha = "69fWzUHFrkSE1HIfS8smM-Z-"
+                        Senha = ""
                     }
                 );
         }

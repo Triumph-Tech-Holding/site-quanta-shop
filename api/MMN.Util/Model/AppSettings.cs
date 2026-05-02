@@ -42,5 +42,6 @@
         public string CompraAprovada { get; set; }
         public string FaturaFechada { get; set; }
         public string AppleClientId { get; set; }
+        public string GoogleClientId { get; set; }
     }
 }

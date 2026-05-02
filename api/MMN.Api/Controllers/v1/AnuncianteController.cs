@@ -138,25 +138,34 @@ namespace MMN.Api.Controllers.v1
                 anuncios = anuncios.Where(w => w.ParceiroOnline == Convert.ToBoolean(valorEnum));
             }
 
-            if (IdUsuarioLogado == null)
-            {
-                foreach (var anuncio in anuncios)
-                    anuncio.UrlAnuncio = null;
-            }
-            else
-            {
-                var userId = IdUsuarioLogado.ToString();
-                foreach (var anuncio in anuncios)
-                    if (anuncio.UrlAnuncio != null)
-                        anuncio.UrlAnuncio = anuncio.UrlAnuncio.Replace("[IdUsuario]", userId);
-            }
+            var userId = IdUsuarioLogado != Guid.Empty ? IdUsuarioLogado.ToString() : null;
+            var total = anuncios.Count();
+            var pagedAnuncios = anuncios
+                .Skip(filtro.Quantidade * (filtro.Page - 1))
+                .Take(filtro.Quantidade)
+                .Select(a => new OrdenacaoAnuncioViewModel
+                {
+                    IdAnunciante = a.IdAnunciante,
+                    IdCredenciamento = a.IdCredenciamento,
+                    IdCategoria = a.IdCategoria,
+                    Cashback = a.Cashback,
+                    CashbackMax = a.CashbackMax,
+                    CashbackMin = a.CashbackMin,
+                    ImagemUrl = a.ImagemUrl,
+                    Nome = a.Nome,
+                    Ordenacao = a.Ordenacao,
+                    ParceiroOnline = a.ParceiroOnline,
+                    TipoCashback = a.TipoCashback,
+                    UrlAnuncio = userId == null ? null : a.UrlAnuncio?.Replace("[IdUsuario]", userId)
+                })
+                .ToList();
 
             return Ok(new
             {
-                totalPaginas = Math.Ceiling((float)anuncios.Count() / filtro.Quantidade),
+                totalPaginas = Math.Ceiling((float)total / filtro.Quantidade),
                 quantidade = filtro.Quantidade,
                 page = filtro.Page,
-                anunciantes = anuncios.Skip(filtro.Quantidade * (filtro.Page - 1)).Take(filtro.Quantidade).ToList(),
+                anunciantes = pagedAnuncios,
             });
         }
 

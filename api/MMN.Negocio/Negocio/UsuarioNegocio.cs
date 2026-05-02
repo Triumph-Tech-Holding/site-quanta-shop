@@ -589,6 +589,12 @@ namespace MMN.Negocio.Negocio
                     string.IsNullOrEmpty(googleId) ||
                     string.IsNullOrEmpty(email))
                     throw new UnauthorizedException("login_incorreto");
+
+                var expectedClientId = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID")
+                    ?? _appSettings.GoogleClientId;
+                if (!string.IsNullOrEmpty(expectedClientId) &&
+                    (!tokenInfo.TryGetValue("aud", out var aud) || aud != expectedClientId))
+                    throw new UnauthorizedException("login_incorreto");
             }
 
             var usuario = _autenticacaoExternaRepositorio
