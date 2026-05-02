@@ -34,6 +34,10 @@
         Redi
       </a>
 
+      <NuxtLink to="/agencia/links" class="listMenu">
+        Meu Link de Indicação
+      </NuxtLink>
+
       <NuxtLink to="/agencia/painel/social-commerce" class="listMenu">
         Social Commerce
       </NuxtLink>

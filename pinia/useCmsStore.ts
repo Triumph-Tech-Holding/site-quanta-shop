@@ -18,6 +18,18 @@ export interface CmsSocialCommerce {
   parceiros: CmsParceiro[];
 }
 
+export interface CmsVitrinLinks {
+  titulo: string;
+  subtitulo: string;
+  descLink: string;
+  labelLink: string;
+  whatsappCopy: string;
+  labelCliques: string;
+  labelConversoes: string;
+  labelCashback: string;
+  dicaCopy: string;
+}
+
 export interface CmsPaywallHaf {
   titulo: string;
   subtitulo: string;
@@ -45,6 +57,7 @@ export interface CmsBrand {
 
 export interface CmsConfig {
   socialCommerce: CmsSocialCommerce;
+  vitrinLinks: CmsVitrinLinks;
   paywallHaf: CmsPaywallHaf;
   plusModulo: CmsPlusModulo;
   brand: CmsBrand;
@@ -71,6 +84,18 @@ const DEFAULT_CMS: CmsConfig = {
       { id: 'netshoes', nome: 'Netshoes', logo: '/agencia/imgs/parceiros/netshoes.png', categoria: 'Esportes', cashbackPct: 6.0, destaque: false },
       { id: 'booking', nome: 'Booking', logo: '/agencia/imgs/parceiros/booking.png', categoria: 'Viagens', cashbackPct: 4.0, destaque: false },
     ],
+  },
+
+  vitrinLinks: {
+    titulo: 'Meu Link de Indicação Rastreável',
+    subtitulo: 'Compartilhe seu link único com 1 clique. Cada pessoa que comprar pelo seu link gera cashback residual direto para você.',
+    descLink: 'Link personalizado e rastreável — gerado exclusivamente para você.',
+    labelLink: 'Seu link exclusivo',
+    whatsappCopy: 'Ei! Você conhece a Quanta Shop? Compre em centenas de lojas e receba cashback na hora. Acesse meu link e cadastre-se grátis: {link}',
+    labelCliques: 'Cliques Hoje',
+    labelConversoes: 'Conversões',
+    labelCashback: 'Cashback Gerado',
+    dicaCopy: 'Dica: selecione um parceiro abaixo para gerar um link específico com oferta personalizada.',
   },
 
   paywallHaf: {
@@ -110,6 +135,7 @@ export const useCmsStore = defineStore('cms', () => {
       config.value = {
         brand: { ...DEFAULT_CMS.brand, ...(data.brand ?? {}) },
         socialCommerce: { ...DEFAULT_CMS.socialCommerce, ...(data.socialCommerce ?? {}) },
+        vitrinLinks: { ...DEFAULT_CMS.vitrinLinks, ...(data.vitrinLinks ?? {}) },
         paywallHaf: { ...DEFAULT_CMS.paywallHaf, ...(data.paywallHaf ?? {}) },
         plusModulo: { ...DEFAULT_CMS.plusModulo, ...(data.plusModulo ?? {}) },
       };

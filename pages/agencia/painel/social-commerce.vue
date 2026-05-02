@@ -94,6 +94,8 @@
 </template>
 
 <script setup lang="ts">
+import PaywallHaf from '~/components/agencia/PaywallHaf.vue';
+import PlusModulo from '~/components/agencia/PlusModulo.vue';
 import { useCmsStore } from '~/pinia/useCmsStore';
 import { useAgenciaStore } from '~/pinia/useAgenciaStore';
 import type { CmsParceiro } from '~/pinia/useCmsStore';
