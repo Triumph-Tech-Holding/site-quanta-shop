@@ -45,10 +45,12 @@ namespace MMN.Api.Helpers
                 {
                     if (_isDevelopment)
                     {
-                        // Strip the cookie and continue — avoids breaking dev workflows with stale cookies
+                        // In Development: log a warning and continue — request cookies are immutable
+                        // so we cannot remove them, but we do not block. Developers should clear
+                        // the stale cookie from their browser to eliminate this warning.
                         _logger.LogWarning(
-                            "[DebugBypassGuard] Debug-bypass cookie '{Cookie}' detected and stripped in Development. " +
-                            "Remove this cookie from your browser to eliminate this warning.", cookieName);
+                            "[DebugBypassGuard] Debug-bypass cookie '{Cookie}' detected in Development. " +
+                            "Clear this cookie from your browser to suppress this warning.", cookieName);
                     }
                     else
                     {
@@ -68,10 +70,13 @@ namespace MMN.Api.Helpers
                 {
                     if (_isDevelopment)
                     {
-                        _logger.LogWarning(
-                            "[DebugBypassGuard] Debug-bypass header '{Header}' detected and stripped in Development.",
-                            headerName);
+                        // In Development: remove from the mutable request headers collection and log.
+                        // This prevents downstream handlers from acting on the header without blocking
+                        // the request, which avoids disrupting development workflows.
                         context.Request.Headers.Remove(headerName);
+                        _logger.LogWarning(
+                            "[DebugBypassGuard] Debug-bypass header '{Header}' removed in Development.",
+                            headerName);
                     }
                     else
                     {
