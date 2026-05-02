@@ -1,54 +1,60 @@
 <template>
   <div class="p-0">
     <div class="general-content">
-      <div class="page-content">
-        <div class="header-page">
-          <h2 class="title-page">Material de apoio</h2>
+      <div class="page-content qs-page">
+
+        <div class="qs-page-header">
+          <div>
+            <div class="qs-eyebrow">Conteúdo</div>
+            <h1>Material de Apoio</h1>
+            <p>Acesse e baixe nossos materiais de apoio para sua equipe.</p>
+          </div>
         </div>
 
-        <div style="background:linear-gradient(135deg,#2f7785,#1a5c3a);padding:2rem;margin:0 1rem 1.5rem;border-radius:8px;color:#fff;">
-          <h1 style="font-size:1.4rem;font-weight:700;text-transform:uppercase;margin-bottom:.5rem;">Material de apoio</h1>
-          <h2 style="font-size:1rem;font-weight:400;margin:0;">Aqui você poderá acessar nossos materiais de apoio</h2>
-        </div>
+        <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
 
-        <div class="px-3 pb-3">
-          <div v-if="loading" class="ag-loading"><div class="spinner-border" /></div>
+        <template v-else>
+          <div v-if="items.length === 0" class="ag-empty-state">
+            <h5>Nenhum material disponível</h5>
+          </div>
 
-          <template v-else>
-            <div v-if="items.length === 0" class="ag-empty-state">
-              <h5>Nenhum material disponível</h5>
+          <div v-else class="qs-card-section ma-card">
+            <div class="ma-table-wrap">
+              <table class="qs-table">
+                <thead>
+                  <tr>
+                    <th>Categoria</th>
+                    <th>Nome</th>
+                    <th class="tc">Baixar</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(item, i) in items" :key="i">
+                    <td>
+                      <span class="ma-cat-badge">{{ item.categoria || item.tipo || 'Geral' }}</span>
+                    </td>
+                    <td>
+                      <div class="ma-nome">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/></svg>
+                        {{ item.nome || item.titulo || '—' }}
+                      </div>
+                    </td>
+                    <td class="tc">
+                      <button
+                        class="ma-download-btn"
+                        @click="baixarMaterial(String(item.urlMaterial || item.url || ''))"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                        Baixar
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
+          </div>
+        </template>
 
-            <div v-else style="background:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.06);overflow:hidden;">
-              <div style="overflow-x:auto;">
-                <table class="table-custom" style="width:100%;">
-                  <thead>
-                    <tr>
-                      <th>Categoria</th>
-                      <th>Nome</th>
-                      <th style="text-align:center;">Ações</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="(item, i) in items" :key="i">
-                      <td>{{ item.categoria || item.tipo || '—' }}</td>
-                      <td>{{ item.nome || item.titulo || '—' }}</td>
-                      <td style="text-align:center;">
-                        <button
-                          class="btn-abrir-chamado"
-                          style="font-size:.75rem;padding:.3rem .75rem;"
-                          @click="baixarMaterial(String(item.urlMaterial || item.url || ''))"
-                        >
-                          Baixar
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </template>
-        </div>
       </div>
     </div>
   </div>
@@ -56,20 +62,13 @@
 
 <script setup lang="ts">
 definePageMeta({ layout: 'agencia-painel', middleware: 'agencia-auth' });
-
 const agenciaStore = useAgenciaStore();
 const api = useApi();
 const loading = ref(true);
 const items = ref<Record<string, unknown>[]>([]);
 
-function authHeader() {
-  return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } };
-}
-
-function baixarMaterial(url: string) {
-  if (!url) return;
-  window.open(url, '_blank');
-}
+function authHeader() { return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } }; }
+function baixarMaterial(url: string) { if (!url) return; window.open(url, '_blank'); }
 
 onMounted(async () => {
   agenciaStore.loadFromStorage();
@@ -83,3 +82,47 @@ onMounted(async () => {
   }
 });
 </script>
+
+<style scoped>
+.ma-card { background: #fff; }
+.ma-table-wrap { overflow-x: auto; }
+
+.qs-table { width: 100%; border-collapse: collapse; font-size: .875rem; }
+.qs-table thead tr { border-bottom: 2px solid var(--qs-gray-100, #f5f5f7); }
+.qs-table th { padding: .625rem .875rem; font-size: .6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--qs-gray-500, #6b7280); white-space: nowrap; }
+.qs-table td { padding: .875rem; color: var(--qs-gray-700, #374151); border-bottom: 1px solid var(--qs-gray-100, #f5f5f7); }
+.qs-table tbody tr:hover td { background: var(--qs-gray-50, #fafafa); }
+.qs-table tbody tr:last-child td { border-bottom: none; }
+.tc { text-align: center !important; }
+
+.ma-cat-badge {
+  display: inline-flex;
+  padding: .2rem .6rem;
+  background: #dbeafe;
+  color: #1d4ed8;
+  border-radius: var(--qs-radius-pill, 999px);
+  font-size: .6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.ma-nome { display: flex; align-items: center; gap: .5rem; font-weight: 500; }
+.ma-nome svg { width: 16px; height: 16px; color: var(--qs-teal, #2F7785); flex-shrink: 0; }
+
+.ma-download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .375rem .875rem;
+  background: var(--qs-gradient-btn, linear-gradient(135deg, #225F6B, #2F7785));
+  color: #fff;
+  border: none;
+  border-radius: var(--qs-radius-md, 12px);
+  font-size: .75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity .2s;
+}
+.ma-download-btn:hover { opacity: .85; }
+.ma-download-btn svg { width: 13px; height: 13px; }
+</style>

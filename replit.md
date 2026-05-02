@@ -28,6 +28,38 @@ Eliminação dos 4 problemas crônicos de desenvolvimento que geravam ruído em 
 
 ---
 
+## 🎨 Migração Admin UI ag-* → qs-* (Mai 2026 — Task #107 T012) ✅
+
+Migração completa de todas as páginas admin do design system `ag-*` para `qs-*` (quanta-premium.scss).
+
+### Arquivos migrados nesta etapa
+- **`index.vue`** — KPI strip com `qs-kpi-card`, grid de navegação com `qs-nav-card` (ícones emoji, hover lift), substituindo `ag-stat-card` e `ag-card`.
+- **`rede.vue`** — `qs-page`, `qs-table`, `qs-badge`, `qs-modal-overlay`, `qs-modal-header/body/footer`, `qs-modal-close`.
+- **`carrosseis.vue`** (1091 linhas) — migração completa do template: `qs-page-header`, `qs-card-section`, `qs-table-wrap`, `qs-table`, `qs-badge-success/warn`, `qs-modal-*`, `qs-btn-primary/secondary/outline/danger`, botões de ordem como `car-order-btn`, alert de importação como `car-import-success`.
+
+### Status final admin ag-* → qs-*
+| Arquivo | Status |
+|---|---|
+| index.vue | ✅ qs-* |
+| usuarios.vue | ✅ qs-* + LGPD reveal |
+| pagamentos.vue | ✅ qs-* |
+| assinaturas.vue | ✅ qs-* |
+| compras.vue | ✅ qs-* |
+| lancamentos.vue | ✅ qs-* |
+| credenciamento.vue | ✅ qs-* |
+| suporte.vue | ✅ qs-* |
+| rede.vue | ✅ qs-* |
+| carrosseis.vue | ✅ qs-* |
+| bi-financeiro.vue | ✅ qs-* (anterior) |
+| features.vue | ✅ qs-* (anterior) |
+| configuracoes-rede.vue | ✅ qs-* (anterior) |
+| docs.vue | ⏭️ excluído por design (estilos próprios) |
+| home-cms.vue | ⏭️ excluído por design (estilos próprios) |
+
+> Zero ocorrências de `ag-page-header`, `ag-card`, `ag-table`, `ag-modal-*`, `badge-ag-*`, `btn-ag-*` em qualquer arquivo admin (exceto docs.vue/home-cms.vue excluídos).
+
+---
+
 ## 💰 Wave 2 — Motor Financeiro + LGPD (Mai 2026 — Task #107) ✅
 
 Implementação completa do motor de distribuição de cashback, busca inteligente, checkout com cupom + Quanta Points e LGPD reveal auditado.

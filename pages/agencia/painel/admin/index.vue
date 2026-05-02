@@ -1,40 +1,45 @@
 <template>
-  <div>
-    <div class="ag-page-header"><h1>Painel Administrativo</h1><p>Gerencie a plataforma Quanta Shop</p></div>
+  <div class="qs-page">
+    <div class="qs-page-header">
+      <div class="qs-header-text">
+        <div class="qs-eyebrow">Admin</div>
+        <h1>Painel Administrativo</h1>
+        <p>Gerencie a plataforma Quanta Shop</p>
+      </div>
+    </div>
 
-    <div v-if="loading" class="ag-loading"><div class="spinner-border" /></div>
+    <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
 
-    <div v-if="loadError" class="alert alert-warning" style="margin-bottom:16px">
+    <div v-if="loadError" class="qs-alert-warn">
       Não foi possível carregar o resumo do painel. Os indicadores podem estar desatualizados.
     </div>
 
-    <template v-else>
-      <div class="row g-3 mb-4">
-        <div class="col-6 col-md-3" v-for="(s, i) in stats" :key="i">
-          <div class="ag-stat-card">
-            <div class="stat-icon">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
-            </div>
-            <div>
-              <div class="stat-label">{{ s.label }}</div>
-              <div class="stat-value">{{ s.valor }}</div>
-            </div>
+    <template v-if="!loading">
+      <div class="qs-kpi-strip">
+        <div class="qs-kpi-card" v-for="(s, i) in stats" :key="i">
+          <div class="qs-kpi-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--qs-teal)"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
+          </div>
+          <div>
+            <div class="qs-kpi-label">{{ s.label }}</div>
+            <div class="qs-kpi-value">{{ s.valor }}</div>
           </div>
         </div>
       </div>
 
-      <div class="row g-3">
-        <div class="col-12 col-md-4" v-for="(link, i) in adminLinks" :key="i">
-          <NuxtLink :to="link.to" class="ag-card d-flex align-items-center gap-3 text-decoration-none" style="color:inherit">
-            <div class="stat-icon" style="flex-shrink:0">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
-            </div>
-            <div>
-              <div class="fw-bold" style="font-size:.9rem">{{ link.label }}</div>
-              <div class="text-muted" style="font-size:.8rem">{{ link.desc }}</div>
-            </div>
-          </NuxtLink>
-        </div>
+      <div class="qs-nav-grid">
+        <NuxtLink
+          v-for="(link, i) in adminLinks"
+          :key="i"
+          :to="link.to"
+          class="qs-nav-card"
+        >
+          <div class="qs-nav-icon">{{ link.icon }}</div>
+          <div>
+            <div class="qs-nav-label">{{ link.label }}</div>
+            <div class="qs-nav-desc">{{ link.desc }}</div>
+          </div>
+        </NuxtLink>
       </div>
     </template>
   </div>
@@ -53,27 +58,27 @@ const stats = ref([
   { label: 'Suporte abertos', valor: '—' },
 ]);
 const adminLinks = [
-  { to: '/agencia/painel/admin/usuarios', label: 'Usuários', desc: 'Gerenciar usuários cadastrados' },
-  { to: '/agencia/painel/admin/pagamentos', label: 'Pagamentos', desc: 'Aprovar e gerenciar pagamentos' },
-  { to: '/agencia/painel/admin/compras', label: 'Compras', desc: 'Listar e aprovar compras' },
-  { to: '/agencia/painel/admin/credenciamento', label: 'Credenciamento', desc: 'Credenciar novos parceiros' },
-  { to: '/agencia/painel/admin/categorias', label: 'Categorias', desc: 'Gerenciar categorias de lojas' },
-  { to: '/agencia/painel/admin/ecossistemas', label: 'Ecossistemas', desc: 'Gerenciar ecossistemas' },
-  { to: '/agencia/painel/admin/carrosseis', label: 'Carrosséis', desc: 'Banners e carrosséis do portal' },
-  { to: '/agencia/painel/admin/comunicados', label: 'Comunicados', desc: 'Comunicados aos usuários' },
-  { to: '/agencia/painel/admin/rede', label: 'Rede', desc: 'Visualizar rede de usuários' },
-  { to: '/agencia/painel/admin/suporte', label: 'Suporte', desc: 'Gerenciar tickets de suporte' },
-  { to: '/agencia/painel/admin/lojas-credenciados', label: 'Lojas Físicas', desc: 'Lojas físicas credenciadas' },
-  { to: '/agencia/painel/admin/relatorio-de-faturas', label: 'Relatório de Faturas', desc: 'Relatórios financeiros' },
-  { to: '/agencia/painel/admin/home-cms', label: 'CMS da Home', desc: 'Editar textos e seções da página inicial' },
-  { to: '/agencia/painel/admin/marcas-home', label: 'Marcas da Home', desc: 'Gerenciar logos do carrossel de marcas' },
-  { to: '/agencia/painel/admin/blog', label: 'Blog', desc: 'Criar e gerenciar artigos do blog' },
-  { to: '/agencia/painel/admin/redes-sociais', label: 'Redes Sociais', desc: 'Posts do Instagram, YouTube, TikTok e mais' },
-  { to: '/agencia/painel/admin/docs', label: '📋 Documentação Técnica', desc: 'Arquitetura, padrões, decisões e histórico do projeto' },
-  { to: '/agencia/painel/admin/progresso', label: '🚀 Progresso do Produto', desc: 'Acompanhe o andamento das tarefas de desenvolvimento' },
-  { to: '/agencia/painel/admin/features', label: '🎯 Features & MVP', desc: 'Roadmap por fase, status e público (visual Q Cuida + Premium)' },
-  { to: '/agencia/painel/admin/configuracoes-rede', label: '⚙️ Configurações de Rede', desc: 'Percentuais por nível, ativação de camadas, Quanta Points, quarentena' },
-  { to: '/agencia/painel/admin/bi-financeiro', label: '📈 BI Financeiro', desc: 'Faturamento por categoria, inadimplência, cashback reservado' },
+  { to: '/agencia/painel/admin/usuarios', label: 'Usuários', desc: 'Gerenciar usuários cadastrados', icon: '👤' },
+  { to: '/agencia/painel/admin/pagamentos', label: 'Pagamentos', desc: 'Aprovar e gerenciar pagamentos', icon: '💳' },
+  { to: '/agencia/painel/admin/compras', label: 'Compras', desc: 'Listar e aprovar compras', icon: '🛒' },
+  { to: '/agencia/painel/admin/credenciamento', label: 'Credenciamento', desc: 'Credenciar novos parceiros', icon: '🏪' },
+  { to: '/agencia/painel/admin/categorias', label: 'Categorias', desc: 'Gerenciar categorias de lojas', icon: '🏷️' },
+  { to: '/agencia/painel/admin/ecossistemas', label: 'Ecossistemas', desc: 'Gerenciar ecossistemas', icon: '🌐' },
+  { to: '/agencia/painel/admin/carrosseis', label: 'Carrosséis', desc: 'Banners e carrosséis do portal', icon: '🖼️' },
+  { to: '/agencia/painel/admin/comunicados', label: 'Comunicados', desc: 'Comunicados aos usuários', icon: '📢' },
+  { to: '/agencia/painel/admin/rede', label: 'Rede', desc: 'Visualizar rede de usuários', icon: '🕸️' },
+  { to: '/agencia/painel/admin/suporte', label: 'Suporte', desc: 'Gerenciar tickets de suporte', icon: '💬' },
+  { to: '/agencia/painel/admin/lojas-credenciados', label: 'Lojas Físicas', desc: 'Lojas físicas credenciadas', icon: '📍' },
+  { to: '/agencia/painel/admin/relatorio-de-faturas', label: 'Relatório de Faturas', desc: 'Relatórios financeiros', icon: '📄' },
+  { to: '/agencia/painel/admin/home-cms', label: 'CMS da Home', desc: 'Editar textos e seções da página inicial', icon: '✏️' },
+  { to: '/agencia/painel/admin/marcas-home', label: 'Marcas da Home', desc: 'Gerenciar logos do carrossel de marcas', icon: '🏅' },
+  { to: '/agencia/painel/admin/blog', label: 'Blog', desc: 'Criar e gerenciar artigos do blog', icon: '📝' },
+  { to: '/agencia/painel/admin/redes-sociais', label: 'Redes Sociais', desc: 'Posts do Instagram, YouTube, TikTok e mais', icon: '📱' },
+  { to: '/agencia/painel/admin/docs', label: 'Documentação Técnica', desc: 'Arquitetura, padrões, decisões e histórico do projeto', icon: '📋' },
+  { to: '/agencia/painel/admin/progresso', label: 'Progresso do Produto', desc: 'Acompanhe o andamento das tarefas de desenvolvimento', icon: '🚀' },
+  { to: '/agencia/painel/admin/features', label: 'Features & MVP', desc: 'Roadmap por fase, status e público', icon: '🎯' },
+  { to: '/agencia/painel/admin/configuracoes-rede', label: 'Configurações de Rede', desc: 'Percentuais por nível, Quanta Points, quarentena', icon: '⚙️' },
+  { to: '/agencia/painel/admin/bi-financeiro', label: 'BI Financeiro', desc: 'Faturamento por categoria, inadimplência, cashback reservado', icon: '📈' },
 ];
 function authHeader() { return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } }; }
 onMounted(async () => {
@@ -82,10 +87,10 @@ onMounted(async () => {
   try {
     const { data } = await api.get('/admin/painel/resumo', authHeader());
     if (data) {
-      stats.value[0].valor = data.totalUsuarios ?? '—';
-      stats.value[1].valor = data.comprasPendentes ?? '—';
-      stats.value[2].valor = data.saquesPendentes ?? '—';
-      stats.value[3].valor = data.suporteAbertos ?? '—';
+      stats.value[0].valor = String(data.totalUsuarios ?? '—');
+      stats.value[1].valor = String(data.comprasPendentes ?? '—');
+      stats.value[2].valor = String(data.saquesPendentes ?? '—');
+      stats.value[3].valor = String(data.suporteAbertos ?? '—');
     }
   } catch (e) {
     console.error('[admin/index] Falha ao carregar resumo do painel:', e);
@@ -95,3 +100,25 @@ onMounted(async () => {
   }
 });
 </script>
+
+<style scoped>
+.qs-alert-warn { background: #fefce8; color: #a16207; border: 1px solid #fde68a; border-radius: var(--qs-radius-md); padding: 12px 16px; font-size: 14px; margin-bottom: 20px; }
+
+.qs-kpi-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
+@media (max-width: 768px) { .qs-kpi-strip { grid-template-columns: repeat(2, 1fr); } }
+
+.qs-kpi-card { background: #fff; border-radius: var(--qs-radius-lg); padding: 18px 20px; box-shadow: var(--qs-shadow-xs); display: flex; align-items: center; gap: 14px; border: 1px solid var(--qs-gray-100); }
+.qs-kpi-icon { width: 40px; height: 40px; border-radius: var(--qs-radius-md); background: rgba(47,119,133,.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.qs-kpi-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--qs-gray-400); margin-bottom: 2px; }
+.qs-kpi-value { font-size: 22px; font-weight: 700; color: var(--qs-ink); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+
+.qs-nav-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+@media (max-width: 900px) { .qs-nav-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .qs-nav-grid { grid-template-columns: 1fr; } }
+
+.qs-nav-card { display: flex; align-items: center; gap: 14px; background: #fff; border-radius: var(--qs-radius-lg); padding: 16px 18px; box-shadow: var(--qs-shadow-xs); border: 1px solid var(--qs-gray-100); text-decoration: none; color: inherit; transition: box-shadow .2s, transform .2s; }
+.qs-nav-card:hover { box-shadow: var(--qs-shadow-md); transform: translateY(-1px); }
+.qs-nav-icon { font-size: 22px; width: 40px; height: 40px; background: var(--qs-gray-50); border-radius: var(--qs-radius-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.qs-nav-label { font-size: 14px; font-weight: 600; color: var(--qs-ink); margin-bottom: 2px; }
+.qs-nav-desc { font-size: 12px; color: var(--qs-gray-400); line-height: 1.3; }
+</style>

@@ -1,30 +1,49 @@
 <template>
-  <div>
-    <div class="ag-page-header d-flex align-items-center justify-content-between flex-wrap gap-2">
-      <div><h1>Credenciamento</h1><p>Solicitações de credenciamento de estabelecimentos</p></div>
-      <div>
-        <select v-model="filtroStatus" class="form-select" style="width:auto" @change="carregarDados">
-          <option value="">Todos</option>
+  <div class="qs-page">
+    <div class="qs-page-header">
+      <div class="qs-header-text">
+        <div class="qs-eyebrow">Admin · Parceiros</div>
+        <h1>Credenciamento</h1>
+        <p>Solicitações de credenciamento de estabelecimentos</p>
+      </div>
+      <div class="qs-header-actions">
+        <select v-model="filtroStatus" class="qs-select-inline" @change="carregarDados">
+          <option value="">Todos os status</option>
           <option value="Pendente">Pendente</option>
           <option value="Aprovado">Aprovado</option>
           <option value="Reprovado">Reprovado</option>
         </select>
       </div>
     </div>
-    <div v-if="loading" class="ag-loading"><div class="spinner-border" /></div>
-    <div v-else class="ag-card">
-      <div v-if="itens.length === 0" class="ag-empty-state"><h5>Nenhum credenciamento encontrado</h5></div>
-      <div v-else class="table-responsive">
-        <table class="table ag-table">
-          <thead><tr><th>Nome Fantasia</th><th>Razão Social</th><th>CNPJ</th><th>Status</th><th></th></tr></thead>
+
+    <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
+
+    <div v-else class="qs-card-section">
+      <div v-if="itens.length === 0" class="qs-empty-state">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--qs-gray-300)" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <h3>Nenhum credenciamento encontrado</h3>
+      </div>
+      <div v-else class="qs-table-wrap">
+        <table class="qs-table">
+          <thead>
+            <tr>
+              <th>Nome Fantasia</th><th>Razão Social</th><th>CNPJ</th><th>Status</th><th></th>
+            </tr>
+          </thead>
           <tbody>
             <tr v-for="item in itens" :key="item.id">
-              <td class="fw-bold">{{ item.nomeFantasia }}</td>
+              <td class="qs-cell-bold">{{ item.nomeFantasia }}</td>
               <td>{{ item.razaoSocial }}</td>
-              <td>{{ item.cnpj }}</td>
-              <td><span class="badge-ag" :class="{ 'badge-ag-success': item.status === 'Aprovado', 'badge-ag-warning': item.status === 'Pendente', 'badge-ag-danger': item.status === 'Reprovado' }">{{ item.status }}</span></td>
+              <td class="qs-cell-mono">{{ item.cnpj }}</td>
               <td>
-                <NuxtLink :to="`/agencia/finalizar-credenciamento/${item.id}`" class="btn btn-sm btn-ag-outline">Analisar</NuxtLink>
+                <span class="qs-badge" :class="{
+                  'qs-badge-success': item.status === 'Aprovado',
+                  'qs-badge-warn': item.status === 'Pendente',
+                  'qs-badge-danger': item.status === 'Reprovado'
+                }">{{ item.status }}</span>
+              </td>
+              <td>
+                <NuxtLink :to="`/agencia/finalizar-credenciamento/${item.id}`" class="qs-btn-sm-outline">Analisar</NuxtLink>
               </td>
             </tr>
           </tbody>
@@ -33,6 +52,7 @@
     </div>
   </div>
 </template>
+
 <script setup lang="ts">
 import { extractApiErrorMessage } from '~/types/agencia';
 import type { CredenciamentoAdmin } from '~/types/agencia';
@@ -57,3 +77,9 @@ onMounted(async () => {
   await carregarDados();
 });
 </script>
+
+<style scoped>
+.qs-select-inline { padding: 8px 12px; border: 1px solid var(--qs-gray-200); border-radius: var(--qs-radius-md); font-family: inherit; font-size: 14px; background: #fff; outline: none; }
+.qs-select-inline:focus { border-color: var(--qs-teal); }
+.qs-cell-mono { font-family: 'SFMono-Regular', 'Consolas', monospace; font-size: 13px; color: var(--qs-gray-600); }
+</style>

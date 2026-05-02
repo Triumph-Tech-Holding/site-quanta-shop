@@ -1,54 +1,72 @@
 <template>
-  <div>
-    <div class="ag-page-header d-flex align-items-center justify-content-between flex-wrap gap-2">
-      <div><h1>Ecossistemas</h1><p>Gerenciar ecossistemas de parceiros</p></div>
-      <button class="btn btn-ag-primary" @click="abrirNovo">+ Novo Ecossistema</button>
+  <div class="qs-page">
+    <div class="qs-page-header">
+      <div class="qs-header-text">
+        <div class="qs-eyebrow">Admin · Configurações</div>
+        <h1>Ecossistemas</h1>
+        <p>Gerenciar ecossistemas de parceiros</p>
+      </div>
+      <div class="qs-header-actions">
+        <button class="qs-btn-primary" @click="abrirNovo">+ Novo Ecossistema</button>
+      </div>
     </div>
-    <div v-if="loading" class="ag-loading"><div class="spinner-border" /></div>
-    <div v-else class="ag-card">
-      <div v-if="itens.length === 0" class="ag-empty-state"><h5>Nenhum ecossistema encontrado</h5></div>
-      <div v-else class="table-responsive">
-        <table class="table ag-table">
+
+    <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
+
+    <div v-else class="qs-card-section">
+      <div v-if="itens.length === 0" class="qs-empty-state">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--qs-gray-300)" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+        <h3>Nenhum ecossistema encontrado</h3>
+        <button class="qs-btn-primary" @click="abrirNovo">Criar primeiro ecossistema</button>
+      </div>
+      <div v-else class="qs-table-wrap">
+        <table class="qs-table">
           <thead><tr><th>Nome</th><th>Descrição</th><th></th></tr></thead>
           <tbody>
             <tr v-for="item in itens" :key="item.id">
-              <td class="fw-bold">{{ item.nome }}</td>
+              <td class="qs-cell-bold">{{ item.nome }}</td>
               <td>{{ item.descricao || '—' }}</td>
-              <td class="d-flex gap-1">
-                <button class="btn btn-sm btn-ag-outline" @click="abrirEditar(item)">Editar</button>
-                <button class="btn btn-sm btn-outline-danger" @click="confirmarExcluir(item)">Excluir</button>
+              <td class="qs-cell-actions">
+                <button class="qs-btn-sm-outline" @click="abrirEditar(item)">Editar</button>
+                <button class="qs-btn-sm-danger" @click="confirmarExcluir(item)">Excluir</button>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
-    <div v-if="showModal" class="ag-modal-overlay" @click.self="fecharModal">
-      <div class="ag-modal">
-        <div class="ag-modal-header"><h5 class="mb-0">{{ form.id ? 'Editar Ecossistema' : 'Novo Ecossistema' }}</h5><button class="btn-close" @click="fecharModal" /></div>
-        <div class="ag-modal-body">
-          <div class="mb-3"><label class="form-label fw-bold">Nome *</label><input v-model="form.nome" type="text" class="form-control" /></div>
-          <div class="mb-3"><label class="form-label fw-bold">Descrição</label><textarea v-model="form.descricao" class="form-control" rows="3" /></div>
-          <div v-if="modalError" class="alert alert-danger py-2">{{ modalError }}</div>
+
+    <div v-if="showModal" class="qs-modal-overlay" @click.self="fecharModal">
+      <div class="qs-modal">
+        <div class="qs-modal-header">
+          <h5>{{ form.id ? 'Editar Ecossistema' : 'Novo Ecossistema' }}</h5>
+          <button class="qs-modal-close" @click="fecharModal"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
         </div>
-        <div class="ag-modal-footer">
-          <button class="btn btn-secondary" @click="fecharModal">Cancelar</button>
-          <button class="btn btn-ag-primary" :disabled="saving" @click="salvar">{{ saving ? 'Salvando...' : 'Salvar' }}</button>
+        <div class="qs-modal-body">
+          <div class="qs-field"><label class="qs-label">Nome *</label><input v-model="form.nome" type="text" class="qs-input" /></div>
+          <div class="qs-field" style="margin-top:14px"><label class="qs-label">Descrição</label><textarea v-model="form.descricao" class="qs-textarea" rows="3" /></div>
+          <div v-if="modalError" class="qs-alert-danger" style="margin-top:12px">{{ modalError }}</div>
+        </div>
+        <div class="qs-modal-footer">
+          <button class="qs-btn-secondary" @click="fecharModal">Cancelar</button>
+          <button class="qs-btn-primary" :disabled="saving" @click="salvar">{{ saving ? 'Salvando...' : 'Salvar' }}</button>
         </div>
       </div>
     </div>
-    <div v-if="showConfirm" class="ag-modal-overlay" @click.self="showConfirm = false">
-      <div class="ag-modal" style="max-width:420px">
-        <div class="ag-modal-header"><h5 class="mb-0">Confirmar exclusão</h5></div>
-        <div class="ag-modal-body"><p>Excluir o ecossistema <strong>{{ itemParaExcluir?.nome }}</strong>?</p></div>
-        <div class="ag-modal-footer">
-          <button class="btn btn-secondary" @click="showConfirm = false">Cancelar</button>
-          <button class="btn btn-danger" :disabled="saving" @click="excluir">{{ saving ? 'Excluindo...' : 'Excluir' }}</button>
+
+    <div v-if="showConfirm" class="qs-modal-overlay" @click.self="showConfirm = false">
+      <div class="qs-modal" style="max-width:420px">
+        <div class="qs-modal-header"><h5>Confirmar exclusão</h5></div>
+        <div class="qs-modal-body"><p>Excluir o ecossistema <strong>{{ itemParaExcluir?.nome }}</strong>?</p></div>
+        <div class="qs-modal-footer">
+          <button class="qs-btn-secondary" @click="showConfirm = false">Cancelar</button>
+          <button class="qs-btn-danger" :disabled="saving" @click="excluir">{{ saving ? 'Excluindo...' : 'Excluir' }}</button>
         </div>
       </div>
     </div>
   </div>
 </template>
+
 <script setup lang="ts">
 import { extractApiErrorMessage } from '~/types/agencia';
 import type { EcossistemaAdmin } from '~/types/agencia';
@@ -104,3 +122,11 @@ onMounted(async () => {
   finally { loading.value = false; }
 });
 </script>
+
+<style scoped>
+.qs-field { display: flex; flex-direction: column; gap: 6px; }
+.qs-label { font-size: 13px; font-weight: 600; color: var(--qs-gray-700); }
+.qs-textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--qs-gray-200); border-radius: var(--qs-radius-md); font-size: 14px; resize: vertical; outline: none; }
+.qs-textarea:focus { border-color: var(--qs-teal); box-shadow: 0 0 0 3px rgba(47,119,133,.12); }
+.qs-alert-danger { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; border-radius: var(--qs-radius-md); padding: 10px 14px; font-size: 14px; }
+</style>

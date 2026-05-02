@@ -1,23 +1,30 @@
 <template>
-  <div>
-    <div class="ag-page-header d-flex align-items-center justify-content-between flex-wrap gap-2">
-      <div><h1>Carrosseis</h1><p>Banners do hero da home — arraste as setas para reordenar</p></div>
-      <button class="btn btn-ag-primary" @click="abrirNovo">+ Novo Banner</button>
+  <div class="qs-page">
+    <div class="qs-page-header">
+      <div class="qs-header-text">
+        <div class="qs-eyebrow">Admin · CMS</div>
+        <h1>Carrosseis</h1>
+        <p>Banners do hero da home — arraste as setas para reordenar</p>
+      </div>
+      <div class="qs-header-actions">
+        <button class="qs-btn-primary" @click="abrirNovo">+ Novo Banner</button>
+      </div>
     </div>
 
-    <div v-if="loading" class="ag-loading"><div class="spinner-border" /></div>
-    <div v-else class="ag-card">
-      <div v-if="importadoMsg" class="alert alert-success d-flex align-items-center gap-2 mb-3 py-2 px-3">
+    <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
+    <div v-else class="qs-card-section">
+      <div v-if="importadoMsg" class="car-import-success">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
         {{ importadoMsg }}
-        <button type="button" class="btn-close ms-auto" style="font-size:11px" @click="importadoMsg = ''"></button>
+        <button type="button" class="car-dismiss" @click="importadoMsg = ''">×</button>
       </div>
-      <div v-if="itens.length === 0" class="ag-empty-state">
-        <h5>Nenhum banner criado ainda</h5>
-        <p class="text-muted">Clique em <strong>+ Novo Banner</strong> para criar o primeiro slide do hero.</p>
-        <div class="mt-3 d-flex flex-column align-items-center gap-2">
-          <p class="text-muted small mb-0">Ou importe os banners que estão atualmente no ar:</p>
-          <button class="btn btn-ag-outline" :disabled="importando" @click="importarDoSistemaAntigo">
+      <div v-if="itens.length === 0" class="qs-empty-state">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--qs-gray-300)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <h3>Nenhum banner criado ainda</h3>
+        <p>Clique em <strong>+ Novo Banner</strong> para criar o primeiro slide do hero.</p>
+        <div class="car-import-wrap">
+          <p class="car-import-hint">Ou importe os banners que estão atualmente no ar:</p>
+          <button class="qs-btn-outline" :disabled="importando" @click="importarDoSistemaAntigo">
             <span v-if="importando">
               <span class="spinner-border spinner-border-sm me-1" />
               Importando...
@@ -27,11 +34,11 @@
               Importar do sistema antigo
             </span>
           </button>
-          <div v-if="importErro" class="alert alert-danger py-2 px-3 small mt-1">{{ importErro }}</div>
+          <div v-if="importErro" class="car-import-error">{{ importErro }}</div>
         </div>
       </div>
-      <div v-else class="table-responsive">
-        <table class="table ag-table">
+      <div v-else class="qs-table-wrap">
+        <table class="qs-table">
           <thead>
             <tr>
               <th style="width:70px">Ordem</th>
@@ -45,22 +52,22 @@
           <tbody>
             <tr v-for="(item, i) in itens" :key="item.id">
               <td>
-                <div class="d-flex flex-column gap-1">
+                <div class="car-order-col">
                   <button
-                    class="btn btn-xs btn-ag-outline car-order-btn"
+                    class="car-order-btn"
                     :disabled="i === 0"
                     title="Subir"
                     @click="moverItem(item, 'up')"
                   >↑</button>
                   <button
-                    class="btn btn-xs btn-ag-outline car-order-btn"
+                    class="car-order-btn"
                     :disabled="i === itens.length - 1"
                     title="Descer"
                     @click="moverItem(item, 'down')"
                   >↓</button>
                 </div>
               </td>
-              <td class="fw-bold align-middle">{{ item.titulo }}</td>
+              <td class="qs-cell-bold">{{ item.titulo }}</td>
               <td class="align-middle">
                 <img v-if="item.url" :src="item.url" alt="" style="height:40px;width:80px;object-fit:cover;border-radius:4px;" />
                 <span v-else class="text-muted">—</span>
@@ -70,14 +77,14 @@
                 <span v-else class="text-muted small">Global (CMS)</span>
               </td>
               <td class="align-middle">
-                <span class="badge-ag" :class="item.ativo ? 'badge-ag-success' : 'badge-ag-warning'">
+                <span class="qs-badge" :class="item.ativo ? 'qs-badge-success' : 'qs-badge-warn'">
                   {{ item.ativo ? 'Ativo' : 'Inativo' }}
                 </span>
               </td>
               <td class="align-middle">
-                <div class="d-flex gap-1">
-                  <button class="btn btn-sm btn-ag-outline" @click="abrirEditar(item)">Editar</button>
-                  <button class="btn btn-sm btn-outline-danger" @click="confirmarExcluir(item)">Excluir</button>
+                <div class="car-row-actions">
+                  <button class="qs-btn-sm-outline" @click="abrirEditar(item)">Editar</button>
+                  <button class="qs-btn-sm-danger" @click="confirmarExcluir(item)">Excluir</button>
                 </div>
               </td>
             </tr>
@@ -86,14 +93,16 @@
       </div>
     </div>
 
-    <div v-if="showModal" class="ag-modal-overlay" @click.self="fecharModal">
-      <div class="ag-modal car-modal-wide">
-        <div class="ag-modal-header">
-          <h5 class="mb-0">{{ form.id ? 'Editar Banner' : 'Novo Banner' }}</h5>
-          <button class="btn-close" @click="fecharModal" />
+    <div v-if="showModal" class="qs-modal-overlay" @click.self="fecharModal">
+      <div class="qs-modal car-modal-wide">
+        <div class="qs-modal-header">
+          <h5>{{ form.id ? 'Editar Banner' : 'Novo Banner' }}</h5>
+          <button class="qs-modal-close" @click="fecharModal">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </button>
         </div>
 
-        <div class="ag-modal-body car-modal-body">
+        <div class="qs-modal-body car-modal-body">
           <div class="car-editor-layout">
 
             <div class="car-editor-left">
@@ -126,8 +135,8 @@
             <div class="mb-3">
               <label class="form-label fw-bold">Imagem do Banner</label>
               <div class="d-flex gap-2 mb-2">
-                <button type="button" class="btn btn-sm" :class="modoImagem === 'url' ? 'btn-ag-primary' : 'btn-ag-outline'" @click="modoImagem = 'url'">Usar URL</button>
-                <button type="button" class="btn btn-sm" :class="modoImagem === 'arquivo' ? 'btn-ag-primary' : 'btn-ag-outline'" @click="modoImagem = 'arquivo'">Enviar Arquivo</button>
+                <button type="button" class="btn btn-sm" :class="modoImagem === 'url' ? 'qs-btn-sm-primary' : 'qs-btn-sm-outline'" @click="modoImagem = 'url'">Usar URL</button>
+                <button type="button" class="btn btn-sm" :class="modoImagem === 'arquivo' ? 'qs-btn-sm-primary' : 'qs-btn-sm-outline'" @click="modoImagem = 'arquivo'">Enviar Arquivo</button>
               </div>
 
               <div v-if="modoImagem === 'url'">
@@ -457,23 +466,28 @@
           <div v-if="modalError" class="alert alert-danger py-2 mt-3">{{ modalError }}</div>
         </div>
 
-        <div class="ag-modal-footer">
-          <button class="btn btn-secondary" @click="fecharModal">Cancelar</button>
-          <button v-if="abaAtiva === 'imagem'" class="btn btn-ag-outline" @click="abaAtiva = 'campanha'">Próximo →</button>
-          <button class="btn btn-ag-primary" :disabled="saving" @click="salvar">
+        <div class="qs-modal-footer">
+          <button class="qs-btn-secondary" @click="fecharModal">Cancelar</button>
+          <button v-if="abaAtiva === 'imagem'" class="qs-btn-outline" @click="abaAtiva = 'campanha'">Próximo →</button>
+          <button class="qs-btn-primary" :disabled="saving" @click="salvar">
             {{ saving ? 'Salvando...' : 'Salvar e Publicar' }}
           </button>
         </div>
       </div>
     </div>
 
-    <div v-if="showConfirm" class="ag-modal-overlay" @click.self="showConfirm = false">
-      <div class="ag-modal" style="max-width:420px">
-        <div class="ag-modal-header"><h5 class="mb-0">Confirmar exclusão</h5></div>
-        <div class="ag-modal-body"><p>Excluir o banner <strong>{{ itemParaExcluir?.titulo }}</strong>?</p></div>
-        <div class="ag-modal-footer">
-          <button class="btn btn-secondary" @click="showConfirm = false">Cancelar</button>
-          <button class="btn btn-danger" :disabled="saving" @click="excluir">{{ saving ? 'Excluindo...' : 'Excluir' }}</button>
+    <div v-if="showConfirm" class="qs-modal-overlay" @click.self="showConfirm = false">
+      <div class="qs-modal" style="max-width:420px">
+        <div class="qs-modal-header">
+          <h5>Confirmar exclusão</h5>
+          <button class="qs-modal-close" @click="showConfirm = false">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+        <div class="qs-modal-body"><p>Excluir o banner <strong>{{ itemParaExcluir?.titulo }}</strong>?</p></div>
+        <div class="qs-modal-footer">
+          <button class="qs-btn-secondary" @click="showConfirm = false">Cancelar</button>
+          <button class="qs-btn-danger" :disabled="saving" @click="excluir">{{ saving ? 'Excluindo...' : 'Excluir' }}</button>
         </div>
       </div>
     </div>
@@ -912,6 +926,22 @@ onMounted(async () => {
 <style scoped>
 .car-modal-wide { max-width: 1080px; width: 100%; }
 .car-modal-body { min-height: 420px; }
+
+.car-import-success { display: flex; align-items: center; gap: 8px; background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; border-radius: var(--qs-radius-md, 8px); padding: 10px 14px; font-size: 13px; margin-bottom: 16px; }
+.car-dismiss { background: none; border: none; font-size: 18px; line-height: 1; cursor: pointer; margin-left: auto; color: #166534; opacity: 0.6; }
+.car-dismiss:hover { opacity: 1; }
+.car-import-error { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; border-radius: var(--qs-radius-md, 8px); padding: 8px 14px; font-size: 13px; margin-top: 8px; }
+.car-import-wrap { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-top: 16px; }
+.car-import-hint { font-size: 13px; color: var(--qs-gray-400, #94a3b8); margin: 0; }
+.car-order-col { display: flex; flex-direction: column; gap: 4px; }
+.car-row-actions { display: flex; gap: 6px; }
+.qs-btn-sm-primary { padding: 4px 12px; font-size: 12px; font-weight: 600; border-radius: 6px; border: none; background: var(--qs-teal, #2F7785); color: #fff; cursor: pointer; }
+.qs-btn-sm-primary:hover { background: var(--qs-teal-dark, #225F6B); }
+.qs-btn-sm-danger { padding: 4px 10px; font-size: 12px; font-weight: 600; border-radius: 6px; border: 1.5px solid #ef4444; background: transparent; color: #ef4444; cursor: pointer; transition: background .15s, color .15s; }
+.qs-btn-sm-danger:hover { background: #ef4444; color: #fff; }
+.qs-btn-danger { padding: 8px 18px; font-size: 14px; font-weight: 600; border-radius: 8px; border: none; background: #ef4444; color: #fff; cursor: pointer; transition: background .15s; }
+.qs-btn-danger:hover { background: #dc2626; }
+.qs-btn-danger:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .car-editor-layout { display: flex; gap: 24px; align-items: flex-start; }
 .car-editor-left { flex: 1; min-width: 0; overflow-y: auto; max-height: calc(80vh - 120px); padding-right: 4px; }

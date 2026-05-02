@@ -1,54 +1,94 @@
 <template>
-  <div>
-    <div class="ag-page-header d-flex align-items-center justify-content-between flex-wrap gap-2">
-      <div><h1>Lançamentos</h1><p>Lançamentos financeiros da plataforma</p></div>
-      <button class="btn btn-ag-primary" @click="abrirNovo">+ Novo Lançamento</button>
+  <div class="qs-page">
+    <div class="qs-page-header">
+      <div class="qs-header-text">
+        <div class="qs-eyebrow">Admin · Financeiro</div>
+        <h1>Lançamentos</h1>
+        <p>Lançamentos financeiros da plataforma</p>
+      </div>
+      <div class="qs-header-actions">
+        <button class="qs-btn-primary" @click="abrirNovo">+ Novo Lançamento</button>
+      </div>
     </div>
-    <div v-if="loading" class="ag-loading"><div class="spinner-border" /></div>
-    <div v-else class="ag-card">
-      <div v-if="itens.length === 0" class="ag-empty-state"><h5>Nenhum lançamento encontrado</h5></div>
-      <div v-else class="table-responsive">
-        <table class="table ag-table">
-          <thead><tr><th>Descrição</th><th>Tipo</th><th>Valor</th><th>Data</th><th></th></tr></thead>
+
+    <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
+
+    <div v-else class="qs-card-section">
+      <div v-if="itens.length === 0" class="qs-empty-state">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--qs-gray-300)" stroke-width="1.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        <h3>Nenhum lançamento encontrado</h3>
+      </div>
+      <div v-else class="qs-table-wrap">
+        <table class="qs-table">
+          <thead>
+            <tr>
+              <th>Descrição</th><th>Tipo</th><th>Valor</th><th>Data</th><th></th>
+            </tr>
+          </thead>
           <tbody>
             <tr v-for="item in itens" :key="item.id">
               <td>{{ item.descricao }}</td>
-              <td><span class="badge-ag" :class="item.tipo === 'Crédito' ? 'badge-ag-success' : 'badge-ag-warning'">{{ item.tipo }}</span></td>
-              <td class="fw-bold" :class="item.tipo === 'Crédito' ? 'text-success' : 'text-danger'">{{ formatCurrency(item.valor) }}</td>
+              <td>
+                <span class="qs-badge" :class="item.tipo === 'Crédito' ? 'qs-badge-success' : 'qs-badge-warn'">{{ item.tipo }}</span>
+              </td>
+              <td class="qs-cell-bold" :class="item.tipo === 'Crédito' ? 'qs-cell-credit' : 'qs-cell-debit'">
+                {{ formatCurrency(item.valor) }}
+              </td>
               <td>{{ formatDate(item.data) }}</td>
-              <td><button class="btn btn-sm btn-ag-outline" @click="verDetalhes(item)">Ver</button></td>
+              <td><button class="qs-btn-sm-outline" @click="verDetalhes(item)">Ver</button></td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
-    <div v-if="showModal" class="ag-modal-overlay" @click.self="fecharModal">
-      <div class="ag-modal">
-        <div class="ag-modal-header"><h5 class="mb-0">{{ selecionado ? 'Detalhes do Lançamento' : 'Novo Lançamento' }}</h5><button class="btn-close" @click="fecharModal" /></div>
-        <div class="ag-modal-body">
+
+    <div v-if="showModal" class="qs-modal-overlay" @click.self="fecharModal">
+      <div class="qs-modal">
+        <div class="qs-modal-header">
+          <h5>{{ selecionado ? 'Detalhes do Lançamento' : 'Novo Lançamento' }}</h5>
+          <button class="qs-modal-close" @click="fecharModal">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+        <div class="qs-modal-body">
           <template v-if="selecionado">
-            <div class="row g-2">
-              <div class="col-12"><strong>Descrição:</strong> {{ selecionado.descricao }}</div>
-              <div class="col-6"><strong>Tipo:</strong> {{ selecionado.tipo }}</div>
-              <div class="col-6"><strong>Valor:</strong> {{ formatCurrency(selecionado.valor) }}</div>
-              <div class="col-6"><strong>Data:</strong> {{ formatDate(selecionado.data) }}</div>
+            <div class="qs-detail-grid">
+              <div class="qs-detail-item qs-col-full"><span class="qs-detail-label">Descrição</span><span class="qs-detail-value">{{ selecionado.descricao }}</span></div>
+              <div class="qs-detail-item"><span class="qs-detail-label">Tipo</span><span class="qs-badge" :class="selecionado.tipo === 'Crédito' ? 'qs-badge-success' : 'qs-badge-warn'">{{ selecionado.tipo }}</span></div>
+              <div class="qs-detail-item"><span class="qs-detail-label">Valor</span><span class="qs-detail-value">{{ formatCurrency(selecionado.valor) }}</span></div>
+              <div class="qs-detail-item"><span class="qs-detail-label">Data</span><span class="qs-detail-value">{{ formatDate(selecionado.data) }}</span></div>
             </div>
           </template>
           <template v-else>
-            <div class="mb-3"><label class="form-label fw-bold">Descrição *</label><input v-model="form.descricao" type="text" class="form-control" /></div>
-            <div class="mb-3"><label class="form-label fw-bold">Tipo</label><select v-model="form.tipo" class="form-select"><option value="Crédito">Crédito</option><option value="Débito">Débito</option></select></div>
-            <div class="mb-3"><label class="form-label fw-bold">Valor *</label><input v-model.number="form.valor" type="number" step="0.01" class="form-control" /></div>
-            <div v-if="modalError" class="alert alert-danger py-2">{{ modalError }}</div>
+            <div class="qs-field-group">
+              <label class="qs-label">Descrição *</label>
+              <input v-model="form.descricao" type="text" class="qs-input" placeholder="Ex: Pagamento fornecedor..." />
+            </div>
+            <div class="qs-field-group">
+              <label class="qs-label">Tipo</label>
+              <select v-model="form.tipo" class="qs-select">
+                <option value="Crédito">Crédito</option>
+                <option value="Débito">Débito</option>
+              </select>
+            </div>
+            <div class="qs-field-group">
+              <label class="qs-label">Valor *</label>
+              <input v-model.number="form.valor" type="number" step="0.01" class="qs-input" placeholder="0,00" />
+            </div>
+            <div v-if="modalError" class="qs-alert-danger">{{ modalError }}</div>
           </template>
         </div>
-        <div class="ag-modal-footer">
-          <button class="btn btn-secondary" @click="fecharModal">{{ selecionado ? 'Fechar' : 'Cancelar' }}</button>
-          <button v-if="!selecionado" class="btn btn-ag-primary" :disabled="saving" @click="salvar">{{ saving ? 'Salvando...' : 'Salvar' }}</button>
+        <div class="qs-modal-footer">
+          <button class="qs-btn-secondary" @click="fecharModal">{{ selecionado ? 'Fechar' : 'Cancelar' }}</button>
+          <button v-if="!selecionado" class="qs-btn-primary" :disabled="saving" @click="salvar">
+            {{ saving ? 'Salvando...' : 'Salvar' }}
+          </button>
         </div>
       </div>
     </div>
   </div>
 </template>
+
 <script setup lang="ts">
 import { extractApiErrorMessage } from '~/types/agencia';
 import type { LancamentoAdmin } from '~/types/agencia';
@@ -87,3 +127,20 @@ onMounted(async () => {
   finally { loading.value = false; }
 });
 </script>
+
+<style scoped>
+.qs-detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.qs-col-full { grid-column: 1 / -1; }
+.qs-detail-item { display: flex; flex-direction: column; gap: 4px; }
+.qs-detail-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--qs-gray-400); }
+.qs-detail-value { font-size: 14px; color: var(--qs-ink); font-weight: 500; }
+.qs-field-group { margin-bottom: 16px; }
+.qs-label { display: block; font-size: 13px; font-weight: 600; color: var(--qs-gray-700); margin-bottom: 6px; }
+.qs-input { width: 100%; padding: 10px 14px; border: 1px solid var(--qs-gray-200); border-radius: var(--qs-radius-md); font-family: inherit; font-size: 14px; outline: none; box-sizing: border-box; }
+.qs-input:focus { border-color: var(--qs-teal); box-shadow: 0 0 0 3px rgba(47,119,133,.12); }
+.qs-select { width: 100%; padding: 10px 14px; border: 1px solid var(--qs-gray-200); border-radius: var(--qs-radius-md); font-family: inherit; font-size: 14px; background: #fff; outline: none; }
+.qs-select:focus { border-color: var(--qs-teal); box-shadow: 0 0 0 3px rgba(47,119,133,.12); }
+.qs-cell-credit { color: #16a34a; }
+.qs-cell-debit { color: #dc2626; }
+.qs-alert-danger { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; border-radius: var(--qs-radius-md); padding: 10px 14px; font-size: 14px; margin-top: 8px; }
+</style>
