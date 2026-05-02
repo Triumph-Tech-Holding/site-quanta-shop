@@ -1,1 +1,1 @@
-export { useAgenciaStore } from '~/pinia/useAgenciaStore';
+export { useAgenciaStore } from '../pinia/useAgenciaStore';

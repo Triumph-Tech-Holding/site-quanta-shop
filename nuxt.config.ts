@@ -16,6 +16,9 @@ export default defineNuxtConfig({
     },
   },
   watch: ['!api/**'],
+  imports: {
+    dirs: ['pinia'],
+  },
   modules: [
     '@nuxtjs/tailwindcss',
     [

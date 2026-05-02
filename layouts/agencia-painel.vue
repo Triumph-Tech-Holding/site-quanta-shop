@@ -97,6 +97,8 @@
 </template>
 
 <script setup lang="ts">
+import { useAgenciaStore } from '~/composables/useAgenciaStore';
+import { useApi } from '~/composables/useApi';
 const agenciaStore = useAgenciaStore();
 const api = useApi();
 

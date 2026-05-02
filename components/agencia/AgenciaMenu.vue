@@ -85,6 +85,7 @@
 </template>
 
 <script setup lang="ts">
+import { useAgenciaStore } from '~/composables/useAgenciaStore';
 defineProps<{ open?: boolean }>();
 
 const agenciaStore = useAgenciaStore();

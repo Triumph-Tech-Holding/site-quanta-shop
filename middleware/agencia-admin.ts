@@ -1,3 +1,5 @@
+import { useAgenciaStore } from '~/composables/useAgenciaStore';
+
 export default defineNuxtRouteMiddleware((to) => {
   // Middleware roda somente no cliente (Pinia + localStorage)
   if (import.meta.server) return;
