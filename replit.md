@@ -22,9 +22,13 @@ Implementação completa do motor de distribuição de cashback, busca inteligen
 - **`pages/busca-inteligente.vue`** — consome `/busca-inteligente` real (mantém fallback mock).
 - **`components/checkout/checkout-verify.vue`** — consome `/cupom/validar` e `/usuario/quanta-points` reais.
 
-### Tabelas pendentes em produção (executar migration manual)
-- `Cupom`, `CupomUso`, `QuantaPontoLancamento`, `AuditoriaLgpd`.
+### Migration gerada (aplicar em produção)
+- `20260502134039_Wave2_Cupom_QuantaPontos_AuditoriaLgpd.cs` — cria tabelas `Cupom`, `CupomUso`, `QuantaPontoLancamento`, `AuditoriaLgpd` + seeds QUANTA10/BEMVINDO + AddColumn em `Usuario` e `UsuarioProduto` (campos existentes no modelo mas pendentes no DB).
 - Configurações novas em `Configuracao` (criadas automaticamente no primeiro POST do endpoint admin via `UpsertCfg`).
+- Comando para aplicar: `dotnet ef database update --project MMN.Repositorio --startup-project MMN.Api`
+
+### xUnit — 13 testes passando
+- `cd api && dotnet test MMN.Tests/MMN.Tests.csproj` → Passed: 13, Failed: 0
 
 ### Out of scope desta wave
 - Apple Sign In (re-avaliar em wave futura).
@@ -55,13 +59,14 @@ Componentes do Premium Design System extraídos como SFCs reutilizáveis e const
 - **`components/agencia/AgenciaMenu.vue`** + **`pages/agencia/painel/admin/index.vue`** — links e cards para as duas novas telas admin.
 - **`public/docs/features.json`** v1.1.0 — adiciona F-208 (Configurações de Rede), F-209 (BI Financeiro), F-210 (Busca Inteligente), F-211 (Login social), F-212 (Cupom + Quanta Points).
 
-### Endpoints API esperados (a implementar em .NET)
-- `GET/POST /admin/configuracoes-rede` — payload com `residual[]`, `credenciamento[]`, `compressao`, `valorPonto`, `multiplicadorPlus`, `quarentena`, `profundidadeMax`.
-- `GET /admin/bi-financeiro?periodo=month|quarter|year` — retorna `totals`, `categorias[]`, `aging[]`, `safras[]`, `topParceiros[]`.
-- `GET /busca-inteligente?q=&minCashback=&maxDistance=&categoria=&sort=` — retorna lista de `SearchResult`.
-- `POST /cupom/validar` `{ codigo }` — retorna `{ valido, tipo: 'percent'|'fixed', valor, mensagem }`.
-- `GET /usuario/quanta-points` — retorna `{ saldo, valorPonto }`.
-- `POST /UsuarioLogin/autenticacaoAppleCredential` `{ id_token }` — análogo ao endpoint Google existente.
+### Endpoints API implementados (Wave 2) ✅
+- `GET/POST /admin/configuracoes-rede` ✅ — payload com `residual[]`, `credenciamento[]`, `compressao`, `valorPonto`, `multiplicadorPlus`, `quarentena`, `profundidadeMax`.
+- `GET /admin/bi-financeiro?periodo=month|quarter|year` ✅ — retorna `totals`, `categorias[]`, `aging[]`, `safras[]`, `topParceiros[]`.
+- `GET /busca-inteligente?q=&minCashback=&maxDistance=&categoria=&sort=` ✅ — Haversine + filtros + sort.
+- `POST /cupom/validar` `{ codigo }` ✅ — retorna `{ valido, tipo: 'percent'|'fixed', valor, mensagem }`.
+- `GET /usuario/quanta-points` ✅ — retorna `{ saldo, valorPonto }`.
+- `POST /usuario/quanta-points/resgatar` ✅ — débito atômico com isolamento SERIALIZABLE.
+- `POST /admin/revelar-dado-sensivel` ✅ — gated por `Usuario.Master`, loga `AuditoriaLgpd`.
 
 ---
 

@@ -100,7 +100,9 @@ namespace MMN.Api
                         }));
 
                 // GlobalLimiter enforces per-IP limits on auth paths regardless of
-                // routing mode (works with legacy UseMvc / EnableEndpointRouting=false)
+                // routing mode (works with legacy UseMvc / EnableEndpointRouting=false).
+                // Uses Connection.RemoteIpAddress which is set by UseForwardedHeaders (runs
+                // earlier in the pipeline) and is not spoofable by the client.
                 options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
                 {
                     var path = context.Request.Path.Value?.ToLowerInvariant() ?? string.Empty;
@@ -113,9 +115,8 @@ namespace MMN.Api
 
                     if (isAuthPath)
                     {
-                        var ip = context.Request.Headers["X-Forwarded-For"].FirstOrDefault()
-                                 ?? context.Connection.RemoteIpAddress?.ToString()
-                                 ?? "unknown";
+                        // RemoteIpAddress is already resolved by UseForwardedHeaders
+                        var ip = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
                         return RateLimitPartition.GetFixedWindowLimiter(
                             partitionKey: ip + "|auth",
                             factory: _ => new FixedWindowRateLimiterOptions
@@ -432,6 +433,12 @@ namespace MMN.Api
                 app.UseHsts();
             }
 
+            // ForwardedHeaders must run first so RemoteIpAddress is resolved before rate limiting
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedFor | Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto
+            });
+
             app.UseExceptionHandler(ExceptionHandler.GlobalExceptionHandler);
 
             app.UseAuthentication();
@@ -443,11 +450,6 @@ namespace MMN.Api
             {
                 opt.SwaggerEndpoint("/swagger/v1/swagger.json", "MMN API V1");
                 //opt.SwaggerEndpoint("/swagger/v2/swagger.json", "MMN API V2");
-            });
-
-            app.UseForwardedHeaders(new ForwardedHeadersOptions
-            {
-                ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedFor | Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto
             });
 
             app.UseRouting();
