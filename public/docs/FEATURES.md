@@ -1,7 +1,7 @@
 # FEATURES.md — Quanta Shop
 
 > Mapeamento das funcionalidades da plataforma por **público** e por **fase de MVP**.
-> Versão 1.0 — Mai 2026
+> Versão 1.2.0 — Mai 2026
 
 ---
 
@@ -24,8 +24,8 @@ A entrega é dividida em **4 fases progressivas**, cada uma desbloqueando uma ca
 | Fase | Foco | Status | % Concluído |
 |------|------|--------|-------------|
 | **MVP 1 — Fundação** | Cashback básico, autenticação, catálogo público | 🟢 Em produção | 100% |
-| **MVP 2 — Premium UI** | Redesign completo, experiência minimalista, blog | 🟡 Em andamento | 75% |
-| **MVP 3 — Rede e Compensação** | Plano de carreira, Quanta Amizade, residual binário | 🔵 Planejado | 20% |
+| **MVP 2 — Premium UI** | Redesign completo, experiência minimalista, blog | 🟡 Em andamento | 92% |
+| **MVP 3 — Rede e Compensação** | Plano de carreira, Quanta Amizade, residual binário | 🔵 Planejado | 30% |
 | **MVP 4 — Inteligência** | Recomendações com IA, BI para lojista, app mobile | ⚪ Backlog | 0% |
 
 ---
@@ -100,10 +100,10 @@ Cada feature tem `id`, `audience`, `mvp`, `status` e `tasks` relacionadas. A fon
 - **Pendente:** unificar telas legadas (relatórios, lançamentos)
 
 #### F-205 · Sistema de design tokens
-**Público:** Interno · **Status:** 🟡 In Progress
-- `quanta-premium.scss` com tokens `--qs-*`
-- `DESIGN_SYSTEM.md` formalizado (este sprint)
-- **Pendente:** componentes `QsKpiCard`, `QsProgressBar`, `QsFilterChip` extraídos
+**Público:** Interno · **Status:** ✅ Done
+- `quanta-premium.scss` com tokens `--qs-*` e aliases semânticos
+- `DESIGN_SYSTEM.md` formalizado
+- Componentes `QsKpiCard`, `QsProgressBar`, `QsFilterChip` extraídos
 
 #### F-206 · Painel de Progresso (Q Cuida-style)
 **Público:** Admin · **Status:** ✅ Done
@@ -111,11 +111,50 @@ Cada feature tem `id`, `audience`, `mvp`, `status` e `tasks` relacionadas. A fon
 - Barra de progresso linear no topo
 - Filtros: Todas / Concluídas / Ativas / Rascunhos
 
-#### F-207 · Painel de Features e MVP (este documento + tela)
-**Público:** Admin · **Status:** 🟡 In Progress
+#### F-207 · Painel de Features e MVP
+**Público:** Admin · **Status:** ✅ Done
 - Visualização de features por MVP
 - Progresso por fase em tempo real
 - Drill-down em estórias de usuário
+- Refatorado para usar `QsKpiCard`/`QsProgressBar`/`QsFilterChip`
+
+#### F-208 · Configurações de Rede (admin)
+**Público:** Admin · **Status:** ✅ Done
+- Gestão centralizada da rede MLM: tabela de 12 percentuais residuais por nível com toggle
+- Switch de compressão dinâmica
+- Configuração de Quanta Points (R$/ponto), multiplicador Plus, quarentena, profundidade máxima
+- Endpoint `GET/POST /admin/configuracoes-rede` com persistência e validação soma=100%
+
+#### F-209 · BI Financeiro (admin)
+**Público:** Admin · **Status:** ✅ Done
+- Dashboard analítico com switch Mês/Trimestre/Ano
+- KPI strip (faturamento, cashback reservado, inadimplência, margem)
+- Faturamento por categoria (barras horizontais), aging buckets coloridos por risco
+- Tabela de safras de cashback (gerado/estornado/liberado/a-pagar) + top parceiros
+- Endpoint `GET /admin/bi-financeiro?periodo=month|quarter|year`
+
+#### F-210 · Busca Inteligente (cashback + proximidade)
+**Público:** Consumidor · **Status:** ✅ Done
+- Motor de busca com filtros minCashback / maxDistance (Haversine sobre lat/lng do credenciamento)
+- Filtro por categoria, ordenação cashback/distance/popular/price, view grid/lista, paginação 30
+- Endpoint `GET /busca-inteligente` com filtros e sort completos
+
+#### F-211 · Login social (Google)
+**Público:** Todos · **Status:** ✅ Done
+- Google funcional via GIS no consumidor e na agência
+- Apple Sign In removido do escopo (será reavaliado em fase futura)
+
+#### F-212 · Cupom + Quanta Points no checkout
+**Público:** Consumidor · **Status:** ✅ Done
+- Campo de cupom com validação backend `/cupom/validar` (entidade `Cupom` + `CupomUso`, seeds `QUANTA10`/`BEMVINDO`)
+- Saldo Quanta Points via `/usuario/quanta-points` (event-source `QuantaPontoLancamento`)
+- Slider de resgate com débito atômico em transação SERIALIZABLE
+
+#### F-213 · Máscara LGPD + reveal auditado (Master only)
+**Público:** Admin · **Status:** ✅ Done
+- Helper `LgpdMask` (CPF/CNPJ, e-mail, telefone, conta, agência) aplicado nas telas admin
+- Endpoint `POST /admin/revelar-dado-sensivel` gated por `Usuario.Master=true`
+- Registra cada acesso em `AuditoriaLgpd` (master, alvo, campo, motivo, IP, UA, timestamp)
 
 ---
 
@@ -143,17 +182,15 @@ Cada feature tem `id`, `audience`, `mvp`, `status` e `tasks` relacionadas. A fon
 - **Pendente:** notificações push de progresso
 
 #### F-304 · Residual de cashback (compressão dinâmica)
-**Público:** Agente · **Status:** 🔵 Planned
-- Algoritmo de compressão: pula upline inativo
-- Percentuais por nível (até 5 níveis profundo)
-- Cálculo em batch noturno + on-demand
-- Tabela `PercentualResidualCashback` já existe
+**Público:** Agente · **Status:** ✅ Done
+- `CashbackDistribuicaoService`: motor puro com 10% sustentabilidade + split 50/25/25 + 12 níveis residuais editáveis + compressão dinâmica (pula uplines inativos) + multiplicador Plus 2x
+- Cobertura xUnit completa (13 cenários)
+- Configurável via `/admin/configuracoes-rede`
 
 #### F-305 · Assinatura Plus
-**Público:** Consumidor · **Status:** 🔵 Planned
+**Público:** Consumidor · **Status:** 🔵 Planned (15%)
 - Plano mensal recorrente (Asaas)
 - Benefícios: cashback dobrado, suporte prioritário
-- Gestão em `/agencia/painel/assinatura`
 - **Pendente:** integração webhook Asaas
 
 #### F-306 · Saque BTC + PIX
@@ -161,6 +198,16 @@ Cada feature tem `id`, `audience`, `mvp`, `status` e `tasks` relacionadas. A fon
 - PIX já implementado
 - BTC: campo `EnderecoBTC` na entidade `Saque` (legado)
 - **Decisão pendente:** descontinuar BTC ou modernizar
+
+#### F-307 · Material de apoio (marketing kit)
+**Público:** Agente · **Status:** 🟡 In Progress (40%)
+- Cards, vídeos, copy prontos para o agente baixar e divulgar
+- `material-apoio.vue` existe; falta CMS para upload pelo admin
+
+#### F-308 · Promoções por horário/dia
+**Público:** Lojista · **Status:** 🔵 Planned
+- Lojista define cashback variável (happy hour, dias específicos)
+- Tabelas `Promocao` + `AnuncianteCashBack` já existem
 
 ---
 

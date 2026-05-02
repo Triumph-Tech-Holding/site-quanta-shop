@@ -4,11 +4,63 @@ Todas as mudanças relevantes da plataforma. Formato baseado em [Keep a Changelo
 
 ---
 
-## [Não publicado] — Mai 2026
+## [1.3.0] — Mai 2026
+
+### 🔧 Bugfixes de Sessão — Serviços e Parciais
+
+#### Corrigido
+- **`services/*.ts` (7 arquivos)** — `useApi()` era chamado no nível do módulo (linha 1, fora de qualquer função), quebrando o composable system do Nuxt 3 com `ReferenceError: useApi is not defined`. Corrigido movendo `useApi()` para dentro de cada função exportada em `product-service.ts`, `brand-service.ts`, `carousel-service.ts`, `category-service.ts`, `contact-service.ts`, `partner-service.ts` e `user-service.ts`.
+- **`AdminController` + `UsuarioController` — partial class files** (8 arquivos) — `using` directives faltando quebravam o build do workflow: `AdminController.Relatorios.cs` (EF Core), `AdminController.Usuarios.cs` (Extensions), `UsuarioController.Perfil.cs` (MMN.Util.Util), `UsuarioController.Financeiro.cs` (MMN.Util.Enum). Todos corrigidos adicionando os namespaces ausentes.
+- **`CupomController.ValidarFallback`** — não checava `MinimoPedido` quando a tabela `Cupom` estava ausente no Azure SQL (migration Wave2 pendente). Corrigido para checar valor mínimo mesmo no path fallback.
+
+---
+
+## [1.2.0] — Mai 2026
+
+### 💰 Wave 2 — Motor Financeiro + LGPD (Task #107)
+
+Implementação completa do motor de distribuição de cashback, busca inteligente, checkout com cupom + Quanta Points e máscara LGPD auditada.
+
+#### Adicionado — Backend (.NET 8)
+- **`MMN.Negocio/Services/CashbackDistribuicaoService.cs`** — motor puro com 10% sustentabilidade + split 50/25/25 + 12 níveis residuais + compressão dinâmica + multiplicador Plus 2x. Tudo configurável via banco (chaves `Rede.*`).
+- **`MMN.Tests/`** — projeto xUnit com 13 cenários: split, sustentabilidade, 12 níveis, compressão, Plus, validações.
+- **Novas entidades** em `MMN.Dominio/Model/`: `Cupom`, `CupomUso`, `QuantaPontoLancamento`, `AuditoriaLgpd` (+ mappings + seeds + DbSets).
+- **`SearchController`** → `GET /busca-inteligente` com Haversine, filtros e sort.
+- **`CupomController`** → `POST /cupom/validar` com fallback dev (seeds `QUANTA10`/`BEMVINDO`).
+- **`QuantaPointsController`** → `GET /usuario/quanta-points` + `POST .../resgatar` (transação atômica SERIALIZABLE).
+- **`AdminController`** (extendido) → `GET/POST /admin/configuracoes-rede` + `POST /admin/revelar-dado-sensivel` (gated por `Usuario.Master`, loga `AuditoriaLgpd`).
+- **`MMN.Util/Util/LgpdMask.cs`** — helpers `MaskCpfCnpj`/`MaskEmail`/`MaskTelefone`/`MaskConta`/`MaskAgencia`.
+
+#### Adicionado — Frontend (Nuxt)
+- **`utils/lgpd-mask.ts`** — espelho client-side dos helpers de mask.
+- **`pages/agencia/painel/admin/usuarios.vue`** — e-mail mascarado por padrão; botão **Revelar** só para Master.
+- **`pages/busca-inteligente.vue`** — consome `/busca-inteligente` real (mantém fallback mock).
+- **`components/checkout/checkout-verify.vue`** — consome `/cupom/validar` e `/usuario/quanta-points` reais.
+
+#### Adicionado — Migration (aplicar em produção)
+- `20260502134039_Wave2_Cupom_QuantaPontos_AuditoriaLgpd.cs` — cria tabelas `Cupom`, `CupomUso`, `QuantaPontoLancamento`, `AuditoriaLgpd` + seeds + AddColumn em `Usuario` e `UsuarioProduto`.
+- Comando: `dotnet ef database update --project MMN.Repositorio --startup-project MMN.Api`
+
+#### Atualizado
+- **`public/docs/features.json`** v1.2.0 — adiciona F-213 (Máscara LGPD), marca F-304 (Residual de cashback) como `done`.
+
+---
+
+## [1.1.0] — Mai 2026
+
+### 🧹 Sprint de Higiene 1.3.0 — Etapas 1-5 (Task #117)
+
+#### Corrigido — Infraestrutura de desenvolvimento
+- **`nuxt.config.ts`** — `imports.dirs` explicitado com `['pinia', 'composables', 'composables/**']`. Eliminou 449 `manifest-route-rule` warnings/sessão.
+- **`app.vue`** — `<VitePwaManifest />` removido. Eliminou erros `Failed to resolve component` recorrentes no browser.
+- **`api/Directory.Build.props`** (novo) — supressão centralizada de CS1591, CA1416, NU1701. Reduziu warnings do `dotnet build` de 1.553 para ~30 reais.
+- **`api/Bigcash.sln`** — removidos 3 projetos fantasma (`LojasAwin`, `LojasAfilio`, `QSTestProject`) que causavam `Build FAILED`. `MMN.Tests` registrado corretamente.
+
+#### Refatorado — Etapa 5: God classes .NET quebradas em partial classes
+- **`AdminController`** (1584 linhas) → 8 partial class files: base + `.Relatorios`, `.Blog`, `.Banners`, `.Usuarios`, `.Rede`, `.Credenciamento`, `.Dashboard`.
+- **`UsuarioController`** (1148 linhas) → 4 partial class files: base + `.Perfil`, `.Financeiro`, `.Rede`.
 
 ### 🌊 Sprint Power Phase 1 — Componentização premium + telas de modernização
-
-Componentes do Premium Design System extraídos como SFCs reutilizáveis e construção das primeiras telas da Fase 1 do roadmap (Sprint Power) sobre os novos tokens.
 
 #### Adicionado — Componentes premium reutilizáveis
 - **`components/qs/QsKpiCard.vue`** — card de indicador com label, valor (formatos `currency` / `percent` / `number`), badge tonal (`success`/`warn`/`danger`), barra de progresso opcional, delta com seta e meta.
@@ -16,48 +68,25 @@ Componentes do Premium Design System extraídos como SFCs reutilizáveis e const
 - **`components/qs/QsFilterChip.vue`** — chip de filtro com estado active, contador opcional, slot de ícone.
 
 #### Adicionado — Telas Sprint Power (Fase 1)
-- **`pages/agencia/painel/admin/configuracoes-rede.vue`** — Gestão Centralizada da rede MLM. Tabela de percentuais residuais por nível com toggle de ativação, switch de compressão dinâmica, configuração de Quanta Points (R$/ponto), multiplicador Plus, quarentena, profundidade máxima e tabela separada para bônus de credenciamento. FAB bar de salvar com estado dirty. Fallback de mock quando o endpoint `/admin/configuracoes-rede` ainda não existe.
-- **`pages/agencia/painel/admin/bi-financeiro.vue`** — BI completo com switch Mês/Trimestre/Ano. KPI strip (faturamento, cashback reservado, inadimplência, margem), barras horizontais por categoria de receita, aging buckets coloridos por risco, tabela de safras de cashback com colunas gerado/estornado/liberado/a-pagar e top parceiros. Mock dataset por período enquanto `/admin/bi-financeiro` não existe.
-- **`pages/busca-inteligente.vue`** — Motor de busca premium para o consumidor. Search bar gigante, sugestões rápidas, sliders de cashback mínimo (lime) e proximidade (km), botão "Usar minha localização" via `navigator.geolocation`, filtros de categoria por chip, ordenação multi-critério, view grid/lista, badges de cashback e cálculo de cashback retornado por preço.
+- **`pages/agencia/painel/admin/configuracoes-rede.vue`** — gestão centralizada da rede MLM com 12 níveis residuais, compressão dinâmica, Quanta Points, multiplicador Plus, quarentena e profundidade máxima. FAB bar de salvar com estado dirty.
+- **`pages/agencia/painel/admin/bi-financeiro.vue`** — BI completo com switch Mês/Trimestre/Ano, KPI strip, faturamento por categoria, aging buckets, safras de cashback e top parceiros.
+- **`pages/busca-inteligente.vue`** — motor de busca consumer com sliders de cashback mínimo e proximidade, geolocalização, filtros por chip, view grid/lista.
 
 #### Adicionado — Componentes consumer
-- **`components/login/login-social.vue`** redesenhado: Google (já funcional via GIS) + **Apple Sign In** ativo com SDK on-demand (`appleid.cdn-apple.com`), aguarda `runtimeConfig.public.appleClientId` para entrar em produção.
-- **`components/checkout/checkout-verify.vue`** redesenhado em PT-BR com 3 painéis colapsáveis: login retornante, **cupom de desconto** (validação `/cupom/validar` com fallback dev — códigos `QUANTA10` e `BEMVINDO`) e **Quanta Points** (saldo + slider de resgate com conversão em R$). Emite `coupon-applied` e `points-applied` para o checkout-area integrar.
+- **`components/login/login-social.vue`** — Google funcional via GIS; Apple Sign In preparado (aguarda `appleClientId` em produção).
+- **`components/checkout/checkout-verify.vue`** — 3 painéis colapsáveis: login retornante, cupom de desconto, Quanta Points com slider de resgate.
 
 #### Atualizado — Tokens & Helpers
-- **`assets/scss/quanta-premium.scss`** ganhou aliases semânticos do `DESIGN_SYSTEM.md`: `--qs-teal`, `--qs-teal-dark`, `--qs-bg`, `--qs-ink`, escala `--qs-gray-50…700`, estados `--qs-success/warn/danger`, easings `--qs-ease`/`--qs-duration`. Também adiciona helpers `.qs-page`, `.qs-page-header`, `.qs-eyebrow`, `.qs-grid`, `.qs-card-section`, `.qs-section-title/desc`, `.qs-btn-primary/outline`, `.qs-loading/spinner`.
-- **`pages/agencia/painel/admin/features.vue`** refatorado: remove tokens inline, agora consome `QsKpiCard`/`QsProgressBar`/`QsFilterChip` e helpers `.qs-page`. Reduz duplicação e padroniza visual.
-- **`components/agencia/AgenciaMenu.vue`** + **`pages/agencia/painel/admin/index.vue`** — links e cards para as duas novas telas admin.
-- **`public/docs/features.json`** — versão `1.1.0`. Adiciona F-208 (Configurações de Rede), F-209 (BI Financeiro), F-210 (Busca Inteligente), F-211 (Login social), F-212 (Cupom + Quanta Points). Marca F-205 (Design tokens) e F-207 (Painel features) como `done`.
-
----
-
-### 🚀 Modernização Premium — Power Mode iniciada
-
-Esta entrada marca o início oficial da **modernização premium** da plataforma Quanta Shop, com foco em padronização visual, documentação técnica formal e visualização de progresso integrada ao painel admin.
-
-### Adicionado
-
-- 📘 **`DESIGN_SYSTEM.md`** — Padrão visual premium e minimalista oficializado. Define paleta restrita (`#2F7785`, `#225F6B`, `#98C73A`, `#F4F4F5`, `#1d1d1f`), tipografia Inter com escala mobile-first, sistema de espaçamento 4px, tokens CSS `--qs-*`, componentes admin canônicos (KPI Card, Progress Bar, Filter Chips, List Item) e anti-padrões proibidos.
-- 📋 **`FEATURES.md`** — Catálogo formal de features divididas em 4 fases de MVP (Fundação, Premium UI, Rede & Compensação, Inteligência), com status (Done / In Progress / Planned / Backlog) por público (Consumidor, Lojista, Agente).
-- 👥 **`STORIES.md`** — User stories no formato canônico ("Como X, quero Y, para que Z"), com 3 personas detalhadas (Maria/Consumidora, João/Lojista, Carla/Agente) e mapeamento bidirecional com features.
-- 🗄️ **`DATA_DICTIONARY.md`** — Dicionário de dados completo com engenharia reversa das entidades `.NET 8` em `api/MMN.Dominio/Model/`. Marca explicitamente campos sensíveis LGPD (🔒) com recomendações de mascaramento, retenção e anonimização. Cobre Usuário, Transação, Pedido, Saque, Lançamento, hierarquia MLM (QuantaAmizade, Graduação, CacheResumoBinário) e operacional.
-- 🧪 **`TESTING.md`** — Plano de testes rigoroso com pirâmide xUnit + Vitest + Playwright. Foco em **10 cenários canônicos** do algoritmo de compensação (CT-COMP-01 a CT-COMP-10) e **7 cenários de compressão dinâmica** (CT-COMPR-01 a CT-COMPR-07), incluindo property-based testing, snapshot tests, k6 para carga e checklist LGPD.
-- 📊 **`public/docs/features.json`** — Fonte de dados das features para o painel admin (consumido pela tela `/admin/features`).
-- 🖥️ **`pages/agencia/painel/admin/features.vue`** — Nova tela do escritório virtual: visualização de FEATURES + STORIES + progresso de MVP em tempo real, no padrão **Q Cuida** (lista vertical com checkmarks, barras lineares, filtros por chip), totalmente aderente ao Premium Design System recém-criado.
-- 🔗 Card **"🎯 Features & MVP"** no admin index e link **"📊 Features & MVP"** em `AgenciaMenu.vue`.
-
-### Atualizado
-
-- 📄 **`CLAUDE.md`** — Adicionada referência aos novos documentos técnicos como leitura obrigatória; nota sobre ordem de prioridade dos arquivos de contexto.
-- 📓 **`replit.md`** — Histórico das modificações desta entrada do changelog.
+- **`assets/scss/quanta-premium.scss`** — aliases semânticos `--qs-teal`, `--qs-teal-dark`, `--qs-bg`, `--qs-ink`, escala `--qs-gray-50…700`, estados `--qs-success/warn/danger`, helpers `.qs-page`, `.qs-btn-primary/outline`, `.qs-loading/spinner`.
+- **`pages/agencia/painel/admin/features.vue`** — refatorado para `QsKpiCard`/`QsProgressBar`/`QsFilterChip` e helpers `.qs-page`.
+- **`public/docs/features.json`** v1.1.0 — adiciona F-208 a F-212, marca F-205 e F-207 como `done`.
 
 ---
 
 ## [Sprint 102+103] — Mai 2026
 
 ### Adicionado
-- `pages/agencia/painel/admin/docs.vue` — painel de documentação técnica integrada com 9 seções colapsáveis e botão "Baixar PDF".
+- `pages/agencia/painel/admin/docs.vue` — painel de documentação técnica com visualizador markdown, busca e download de PDF via `html2pdf.js`.
 - `CLAUDE.md` na raiz do projeto, como contexto técnico permanente.
 - Arquitetura híbrida do blog dev/prod (`import.meta.dev`): em dev, escritas vão apenas para `localStorage` para não contaminar o banco de produção (LGPD).
 

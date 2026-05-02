@@ -12,19 +12,14 @@
           <span class="docs-env-dot"></span>
           {{ isDev ? 'Dev (Replit)' : 'Produção' }}
         </span>
-        <a
-          v-if="activeDoc"
+        <button
           class="btn btn-ag-outline btn-sm"
-          :href="urlImpressao(activeDoc)"
-          target="_blank"
-          rel="noopener"
+          :disabled="!activeDoc || gerandoPdf"
+          @click="gerarPdf(activeDoc)"
         >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          Baixar PDF
-        </a>
-        <button v-else class="btn btn-ag-outline btn-sm" disabled>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          Baixar PDF
+          <span v-if="gerandoPdf" class="spinner-border spinner-border-sm me-1" style="width:12px;height:12px;border-width:2px"></span>
+          <svg v-else width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          {{ gerandoPdf ? 'Gerando...' : 'Baixar PDF' }}
         </button>
       </div>
     </div>
@@ -78,16 +73,14 @@
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                 Visualizar
               </button>
-              <a
+              <button
                 class="docs-btn-action docs-btn-pdf"
-                :href="urlImpressao(doc)"
-                target="_blank"
-                rel="noopener"
-                @click.stop
+                :disabled="gerandoPdf"
+                @click.stop="gerarPdf(doc)"
               >
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                 Baixar PDF
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -114,15 +107,15 @@
               <div class="docs-preview__title">{{ activeDoc.nome }}</div>
               <div class="docs-preview__meta">{{ activeDoc.tamanho }} · Atualizado {{ activeDoc.data }}</div>
             </div>
-            <a
+            <button
               class="btn btn-ag-primary btn-sm"
-              :href="urlImpressao(activeDoc)"
-              target="_blank"
-              rel="noopener"
+              :disabled="gerandoPdf"
+              @click="gerarPdf(activeDoc)"
             >
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-              Baixar PDF
-            </a>
+              <span v-if="gerandoPdf" class="spinner-border spinner-border-sm me-1" style="width:12px;height:12px;border-width:2px"></span>
+              <svg v-else width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              {{ gerandoPdf ? 'Gerando...' : 'Baixar PDF' }}
+            </button>
           </div>
           <div class="docs-preview__body" v-html="markdownRenderizado"></div>
         </template>
@@ -211,6 +204,7 @@ const docs = ref<DocItem[]>([
 const busca = ref('');
 const activeDoc = ref<DocItem | null>(null);
 const carregando = ref(false);
+const gerandoPdf = ref(false);
 
 const docsFiltrados = computed(() => {
   if (!busca.value.trim()) return docs.value;
@@ -228,16 +222,45 @@ async function selecionarDoc(doc: DocItem) {
   if (!doc.conteudo) {
     carregando.value = true;
     try {
-      const texto = await $fetch<string>(`/docs/${doc.arquivo}`, { responseType: 'text' });
+      const resp = await fetch(`/docs/${doc.arquivo}`);
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const texto = await resp.text();
       doc.conteudo = texto;
       doc.tamanho = formatBytes(new TextEncoder().encode(texto).length);
       const idx = docs.value.findIndex(d => d.id === doc.id);
       if (idx !== -1) docs.value[idx] = { ...doc };
-    } catch {
-      doc.conteudo = '> Erro ao carregar o documento. Verifique se o arquivo está em `public/docs/`.';
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : String(e);
+      doc.conteudo = `> ⚠️ Erro ao carregar o documento: **${msg}**\n> Verifique se o arquivo está em \`public/docs/\`.`;
     } finally {
       carregando.value = false;
     }
+  }
+}
+
+async function gerarPdf(doc: DocItem | null) {
+  if (!doc?.conteudo || gerandoPdf.value) return;
+  gerandoPdf.value = true;
+  try {
+    await nextTick();
+    const previewBody = document.querySelector('.docs-preview__body') as HTMLElement | null;
+    if (!previewBody) return;
+    const html2pdf = (await import('html2pdf.js')).default;
+    await html2pdf()
+      .set({
+        margin: [12, 14, 12, 14],
+        filename: `${doc.arquivo.replace(/\.md$/, '')}.pdf`,
+        image: { type: 'jpeg', quality: 0.95 },
+        html2canvas: { scale: 2, useCORS: true, logging: false },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
+      })
+      .from(previewBody)
+      .save();
+  } catch (e) {
+    console.error('[docs] Erro ao gerar PDF:', e);
+  } finally {
+    gerandoPdf.value = false;
   }
 }
 
@@ -377,15 +400,6 @@ function renderMd(raw: string): string {
   }
 
   return out.join('');
-}
-
-// ── URL para abrir a página de impressão em nova aba ─────
-// Usamos anchor com target="_blank" em vez de window.open(...) com
-// dimensões (que era bloqueado pelo navegador como popup quando o app
-// roda dentro do iframe sandbox do workspace do Replit).
-function urlImpressao(doc: DocItem | null): string {
-  if (!doc) return '#';
-  return `/agencia/painel/admin/docs-print?arquivo=${encodeURIComponent(doc.arquivo)}&nome=${encodeURIComponent(doc.nome)}`;
 }
 
 onMounted(async () => {

@@ -31,7 +31,7 @@ O ecossistema inclui:
 | Estilos extras | SCSS (`assets/scss/`) | — |
 | Utility CSS (scope limitado) | Tailwind CSS | — |
 | Backend API | .NET 8 (ASP.NET Core) | — |
-| Banco de Dados | PostgreSQL | — |
+| Banco de Dados | SQL Server (Azure) | — |
 | Build server | Nitro (Nuxt) | 2.7.2 |
 
 ---
@@ -185,7 +185,7 @@ Dev (Replit):
   PÚBLICO LEITURA → API primeiro → fallback localStorage
 
 Produção:
-  ADMIN ESCRITA → API real (.NET 8 + PostgreSQL)
+  ADMIN ESCRITA → API real (.NET 8 + SQL Server Azure)
   PÚBLICO LEITURA → API real
 ```
 
