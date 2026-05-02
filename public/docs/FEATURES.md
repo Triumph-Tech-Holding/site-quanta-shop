@@ -188,9 +188,10 @@ Cada feature tem `id`, `audience`, `mvp`, `status` e `tasks` relacionadas. A fon
 - Configurável via `/admin/configuracoes-rede`
 
 #### F-305 · Assinatura Plus
-**Público:** Consumidor · **Status:** 🔵 Planned (15%)
-- Plano mensal recorrente (Asaas)
+**Público:** Todos (Membro Base, Agente de Fidelização HAF e Empresa Parceira ZEE DIGITAL) · **Status:** 🔵 Planned (15%)
+- Plano mensal recorrente (Asaas) — upgrade transversal disponível para qualquer perfil
 - Benefícios: cashback dobrado, suporte prioritário
+- O **Cashback Residual Dobrado** é destravado apenas se o membro assinante atingir a **meta de consumo mínimo mensal**. Nota arquitetônica: o valor desta meta (atualmente R$ 200,00) deve ser uma **variável editável pelo Painel Admin**, nunca hardcoded no frontend.
 - **Pendente:** integração webhook Asaas
 
 #### F-306 · Saque BTC + PIX

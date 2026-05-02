@@ -203,6 +203,63 @@
                     <NuxtLink to="/agencia/painel/assinatura" class="mt-2 btn green-button-2" style="font-size:.8rem;">Aproveite agora mesmo</NuxtLink>
                   </div>
 
+                  <!-- Status Plus -->
+                  <div class="col-12 card bg-white rounded p-0">
+                    <div class="card-header-section py-2 px-3 d-flex align-items-center justify-content-between">
+                      <strong style="font-size:.9rem;color:#225f6b;">Assinatura Plus</strong>
+                      <span
+                        class="badge"
+                        :class="plusStatus === 'ativo' ? 'badge-ag-success' : 'badge-ag-warning'"
+                        style="font-size:.72rem;"
+                      >
+                        {{ plusStatus === 'ativo' ? '⭐ Assinante Plus Ativo' : '⏳ Assinatura Pendente' }}
+                      </span>
+                    </div>
+
+                    <div class="px-3 pt-3 pb-1">
+                      <p class="mb-1" style="font-size:.75rem;color:#6b7280;">Consumo Mínimo do Mês</p>
+                      <QsProgressBar
+                        :value="progressoConsumoPlus"
+                        size="md"
+                        :show-label="true"
+                        :left-label="`R$ ${consumoMes} / R$ ${adminConfig.metaConsumoPlus}`"
+                      />
+                      <p class="mt-1" style="font-size:.7rem;color:#9ca3af;">
+                        Atingir o consumo mínimo destrava seu Cashback Residual Dobrado
+                      </p>
+                    </div>
+
+                    <div class="px-3 pb-3">
+                      <QsKpiCard
+                        label="Ganhos Extras (Cashback Dobrado)"
+                        :value="ganhosCashbackDobrado"
+                        format="currency"
+                        :badge="plusStatus === 'ativo' ? '2×' : undefined"
+                        badge-tone="success"
+                        dot-color="var(--qs-lime, #98C73A)"
+                      />
+                    </div>
+
+                    <div class="px-3 pb-3">
+                      <p class="mb-2" style="font-size:.8rem;font-weight:600;color:#225f6b;">Radar da Rede Plus</p>
+                      <ul class="list-unstyled mb-0" style="font-size:.78rem;">
+                        <li
+                          v-for="(m, i) in radarRedePlus"
+                          :key="i"
+                          class="d-flex align-items-center justify-content-between py-1"
+                          style="border-bottom:1px solid #f0f0f0;"
+                        >
+                          <span style="color:#374151;">{{ m.nome }}</span>
+                          <span
+                            class="badge"
+                            :class="m.status === 'Ativo' ? 'badge-ag-success' : 'badge-ag-danger'"
+                            style="font-size:.65rem;"
+                          >{{ m.status }}</span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+
                   <!-- Canal WhatsApp -->
                   <div class="col-12 card bg-white rounded align-items-center px-4 py-4">
                     <div class="card-header-section mb-3 w-100">
@@ -285,6 +342,22 @@ const countdownTime = ref('00:00');
 let timerInterval: ReturnType<typeof setInterval> | null = null;
 
 const videoModal = ref({ show: false, url: '', title: '' });
+
+// TODO: buscar de GET /admin/configuracoes-rede (variável configurável pelo Admin, não hardcode)
+const adminConfig = { metaConsumoPlus: 200 };
+const plusStatus = ref<'ativo' | 'pendente'>('pendente');
+const consumoMes = ref(0);
+const ganhosCashbackDobrado = ref(0);
+const radarRedePlus = ref([
+  { nome: 'Ana Lima', status: 'Ativo' },
+  { nome: 'Carlos Mendes', status: 'Inadimplente' },
+  { nome: 'Fernanda Costa', status: 'Ativo' },
+  { nome: 'Roberto Silva', status: 'Inadimplente' },
+  { nome: 'Juliana Reis', status: 'Ativo' },
+]);
+const progressoConsumoPlus = computed(() =>
+  Math.min(100, Math.round((consumoMes.value / adminConfig.metaConsumoPlus) * 100))
+);
 
 const linkIndicacao = computed(() => {
   const login = user.value?.login || '';

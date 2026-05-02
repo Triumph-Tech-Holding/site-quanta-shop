@@ -1,0 +1,12 @@
+Atenção, Agente: Intervenção tática nas regras de negócio e na UI dos Dashboards. Precisamos refinar, documentar e parametrizar uma regra crítica sobre o módulo da Assinatura Plus (Cashback Dobrado).
+A Assinatura Plus é um upgrade transversal que pode ser adicionado a QUALQUER plano. O benefício do Cashback Residual Dobrado aplica-se a qualquer membro que seja assinante, inclusive aos Agentes de Fidelização habilitados com licenças HAF e às Empresas Parceiras (ZEE Digital).
+Regra de Arquitetura (Evite Hardcode): O valor da meta de consumo mínimo não pode ser fixo (hardcoded) no frontend. Ele deve ser tratado como uma variável configurável pelo Painel Admin.
+Ação 1: Atualização da Documentação (FEATURES.md) Abra o arquivo FEATURES.md e atualize a feature F-305 (ASSINATURA PLUS):
+Altere o Público-alvo para 'Todos (Membro Base, Agente de Fidelização HAF e Empresa Parceira ZEE DIGITAL)'.
+Adicione a regra: 'O Cashback Residual Dobrado é destravado apenas se o membro assinante atingir a meta de consumo mínimo mensal. Nota arquitetônica: O valor desta meta (atualmente R$ 200,00) deve ser uma variável editável pelo painel do Admin, não hardcoded.'
+Ação 2: Atualização Visual (UI dos Dashboards) Após salvar a documentação, atualize os layouts dos Dashboards (/agencia/painel e /zee/painel), garantindo que os componentes abaixo estejam visíveis para TODOS os perfis, usando nosso DESIGN_SYSTEM.md:
+Alerta de Status Plus: Um Badge indicando 'Assinante Plus Ativo' ou 'Pendente'.
+Barra de Progresso (QsProgressBar) DINÂMICA: Barra com a meta de 'Consumo Mínimo Mês'. O valor total da barra deve vir de uma variável de configuração (ex: adminConfig.metaConsumoPlus, mockada temporariamente em 200). Adicione o texto: 'Atingir o consumo mínimo destrava seu Cashback Residual Dobrado'.
+KPI Card de Multiplicador: Cartão de métrica destacado chamado 'Ganhos Extras (Cashback Dobrado)'.
+Radar de Assinaturas da Rede: Lista visual mostrando mock data de indicados com status 'Ativo' ou 'Inadimplente', permitindo que o líder atue na sua rede.
+Me confirme assim que o FEATURES.md for atualizado e o layout do dashboard estiver pronto, com a meta de consumo respeitando a regra de variável dinâmica!
