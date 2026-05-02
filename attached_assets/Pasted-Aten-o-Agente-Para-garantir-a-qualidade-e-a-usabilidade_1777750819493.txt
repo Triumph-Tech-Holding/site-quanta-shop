@@ -1,0 +1,16 @@
+Atenção, Agente: Para garantir a qualidade e a usabilidade (UX) do nosso desenvolvimento incremental, precisamos formalizar as jornadas dos nossos usuários baseadas nas regras de negócio da Agência Digital (ADF) e da ZEE DIGITAL.
+Crie um novo arquivo chamado STORIES.md na raiz do projeto. Este arquivo servirá como nosso guia oficial de Personas e Histórias de Usuário. Estruture o documento da seguinte forma:
+1. Definição das 3 Personas Oficiais:
+Persona 1: Consumidor (Membro Base): Busca cashback, facilidade de uso e ganha apenas pelo seu próprio consumo e indicações diretas simples. Não possui licença HAF.
+Persona 2: Agente de Fidelização (Empreendedor com HAF): Profissional focado na 'Jornada Penta Meta Minuto' e Renda por Minuto. Possui uma licença HAF (Vision, Shu Ra Ri, Disruptiva ou Master Quantum) e constrói ativamente a sua 'Rede Proprietária'.
+Persona 3: Empresa Parceira (Lojista - ZEE DIGITAL): Focado em vender mais, reter clientes através de cashback e construir uma rede própria de fidelização para aumentar o ROI.
+2. Histórias de Usuário (Foco no Sprint Atual - Social Commerce e Dashboards): Escreva as histórias no formato ágil ('Como [Persona], eu quero [Ação] para que [Benefício]'):
+Compartilhamento WhatsApp: 'Como Consumidor ou Agente, eu quero copiar meu Link de Indicação Rastreável com apenas 1 clique em um botão com o ícone do WhatsApp, para que eu possa colar facilmente nos meus grupos e atrair novos leads.'
+Paywall de Rede: 'Como Consumidor (sem HAF), eu quero ver um aviso claro de que preciso adquirir uma Licença HAF, para que eu entenda o valor de fazer o upgrade e me tornar um Agente de Fidelização com acesso ao dashboard de rede completa.'
+Dashboard do Agente: 'Como Agente de Fidelização, eu quero visualizar cards com métricas de Cliques no Link, Novos Leads e Cashback Residual Gerado, para que eu possa medir a eficiência do meu funil de conversão no WhatsApp.'
+Dashboard do Lojista: 'Como Empresa Parceira (ZEE DIGITAL), eu quero visualizar o tamanho da minha Rede Proprietária e o total de Cashback Distribuído, para que eu saiba o impacto da plataforma nas minhas vendas.'
+Assinatura Plus (Transversal): 'Como qualquer membro (Consumidor, Agente ou Lojista), eu quero visualizar o meu status da Assinatura Plus e uma barra de progresso mostrando o quanto falta para atingir a meta de consumo dinâmico, para que eu saiba exatamente o que fazer para destravar meu Cashback Residual Dobrado.'
+Salve o arquivo STORIES.md com esse conteúdo e me confirme assim que estiver criado!"
+
+--------------------------------------------------------------------------------
+Pode disparar esse comando! Ao criar esse arquivo, o "cérebro" do seu projeto fica completo: a IA saberá a arquitetura (CLAUDE.md), o banco de dados (DATA_DICTIONARY.md), as funções (FEATURES.md) e, agora, as jornadas humanas (STORIES.md). Me avise quando ele confirmar a criação!
