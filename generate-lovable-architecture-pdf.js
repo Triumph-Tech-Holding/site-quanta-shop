@@ -255,6 +255,12 @@ doc.moveDown(0.4);
     dados: ['Logo e nome do parceiro', '% cashback', 'Endereço e contato'],
     acoes: ['Ativar cashback na compra', 'Compartilhar link', 'Escanear QR Code'] },
 
+  { nome: 'Mais Vendas', rota: '/agencia/mais-vendas/[login]',
+    proposito: 'Landing page de um empreendedor específico, usada para atrair mais vendas na sua rede. Exibe o link de indicação personalizado, lojas parceiras do empreendedor e CTA para o visitante se cadastrar.',
+    componentes: ['Banner personalizado com foto e nome do empreendedor', 'Grid de lojas parceiras vinculadas', 'CTA de cadastro com login do empreendedor auto-preenchido', 'Contador de cashback já gerado pela rede'],
+    dados: ['Nome e login do empreendedor', 'Lojas parceiras cadastradas pelo empreendedor', 'Total de cashback gerado', 'Link de cadastro personalizado'],
+    acoes: ['Cadastrar-se usando o link do empreendedor', 'Ver lojas parceiras', 'Compartilhar a página'] },
+
   { nome: 'Privacidade (LGPD)', rota: '/agencia/privacidade',
     proposito: 'Política de privacidade e termos de uso em conformidade com a LGPD brasileira.',
     componentes: ['Documento de política formatado', 'Índice navegável', 'Data da última atualização'],
@@ -614,6 +620,12 @@ doc.moveDown(0.4);
     componentes: ['Lista de pedidos paginada', 'Status badge', 'Link de rastreamento'],
     dados: ['Número do pedido', 'Data', 'Itens', 'Total', 'Status', 'Cashback recebido'],
     acoes: ['Ver detalhes do pedido', 'Rastrear entrega', 'Solicitar devolução'] },
+
+  { nome: 'Conta do Cliente', rota: '/profile',
+    proposito: 'Área de conta do cliente da loja: dados pessoais, endereços salvos, histórico de pedidos e cashback acumulado.',
+    componentes: ['Tabs: Meus Dados / Endereços / Pedidos / Cashback', 'Formulário de dados pessoais editável', 'Lista de endereços cadastrados', 'Histórico de pedidos com status', 'Saldo de cashback da loja'],
+    dados: ['Nome', 'Email', 'Telefone', 'Endereços salvos', 'Pedidos (número, data, total, status)', 'Saldo de cashback acumulado (R$)'],
+    acoes: ['Editar dados pessoais', 'Adicionar/remover endereço', 'Ver detalhe do pedido', 'Solicitar devolução', 'Ver cashback disponível'] },
 
   { nome: 'Blog', rota: '/blog',
     proposito: 'Blog editorial com artigos sobre economia, cashback e dicas de compra.',
