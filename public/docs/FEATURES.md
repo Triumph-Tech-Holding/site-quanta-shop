@@ -9,11 +9,11 @@
 
 A Quanta Shop atende três públicos distintos. Cada um tem necessidades, métricas de sucesso e jornadas próprias.
 
-| Público | Persona | Métrica-chave |
-|---------|---------|---------------|
-| 🛍️ **Consumidor** | Pessoa física que compra em parceiros e acumula cashback | Cashback acumulado / mês |
-| 🏪 **Lojista / Parceiro** | Empresa que oferece cashback aos clientes | Faturamento mensal via plataforma |
-| 🤝 **Agente de Fidelização** | Empreendedor que constrói rede de indicações | Renda residual mensal |
+| Público | Descrição | Métrica-chave |
+|---------|-----------|---------------|
+| 🛍️ **Consumidor** | Pessoa que compra em lojas parceiras e ganha cashback. | Cashback acumulado / mês |
+| 🤝 **Agente de Fidelização** | Empreendedor independente que adquire uma Licença/Habilitação (HAF) para ativar sua ADF, construindo redes e ganhando bônus. | Renda residual mensal |
+| 🏪 **Empresa Parceira (ZEE DIGITAL)** | Empresa que oferece cashback e constrói rede. | Faturamento mensal via plataforma |
 
 ---
 

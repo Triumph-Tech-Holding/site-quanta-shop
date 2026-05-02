@@ -11,7 +11,10 @@
 
 O ecossistema é sustentado por 3 pilares operacionais:
 
-- **Agência Digital — ADF (Área do Consumidor e Agente de Fidelização):** O ambiente digital privativo onde o membro (consumidor ou empreendedor) realiza seu consumo inteligente, acumula/resgata cashback, gerencia sua Rede Proprietária, gera links de Social Commerce e acessa os treinamentos (Jornada Penta Meta Minuto). O uso da sigla **ADF** (Agência Digital de Fidelização) é encorajado.
+- **Agência Digital — ADF (Área do Consumidor e Agente de Fidelização):** Ambiente digital privativo que abriga dois perfis hierárquicos distintos, ambos na rota `/agencia`:
+  - **Consumidor (Membro Base):** Pessoa física ou jurídica que utiliza o portal para compras e acúmulo de cashback.
+  - **Agente de Fidelização (Empreendedor Independente):** É o membro consumidor que evolui de nível ao comprar uma **Licença HAF** (Habilitação para Agente de Fidelização) — como *Vision*, *Shu Ra Ri*, *Disruptiva* ou *Master Quantum*. Ao adquirir essa habilitação, ele ativa oficialmente sua **ADF (Agência Digital de Fidelização)**, ganhando o direito de construir sua Rede Proprietária, gerar links de Social Commerce e receber comissões/bônus residuais. **O Agente sempre será um Cliente/Consumidor primeiro.**
+  > ⚠️ **Regra de negócio crítica para o código:** funcionalidades avançadas de rede (links rastreáveis, dashboard de comissões, residual multinível) devem ser condicionadas à verificação de uma **Licença HAF válida** do usuário (`Usuario.Empreendedor = true` + pedido de licença ativo). Nunca expor essas funcionalidades a consumidores base.
 - **ZEE DIGITAL — Zona Econômica Especial Digital (Área do Lojista / Empresa Parceira) `[MÓDULO VITAL]`:** O back-office exclusivo do comerciante. A ZEE Digital funciona como um mini-ecossistema de prosperidade local onde a empresa monitora vendas, define cashback e constrói sua própria Rede Proprietária de clientes fidelizados.
 - **Painel Admin:** Gestão centralizada da plataforma (regras do plano de compensação, CMS, aprovação de pagamentos e suporte).
 - **API .NET 8:** Backend do motor financeiro, cálculo de distribuição em rede, LGPD e integrações.
