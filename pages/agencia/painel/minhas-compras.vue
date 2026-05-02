@@ -1,114 +1,114 @@
 <template>
   <div class="p-0">
     <div class="general-content">
-      <div class="page-content">
-        <div class="header-page">
-          <h2 class="title-page">Minhas Compras</h2>
-        </div>
+      <div class="page-content qs-page">
 
-        <div class="px-3 pb-3">
-          <div class="box-filter">
-            <h2>Filtros</h2>
-            <form @submit.prevent="buscarPedidos">
-              <div style="display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:1rem;">
-                <div style="flex:1;min-width:180px;">
-                  <label>Descrição</label>
-                  <input type="text" v-model="filtro.descricao" class="form-control" placeholder="Descrição" />
-                </div>
-                <div style="flex:1;min-width:150px;">
-                  <label>Data inicial</label>
-                  <input type="date" v-model="filtro.dataInicio" class="form-control" />
-                </div>
-                <div style="flex:1;min-width:150px;">
-                  <label>Data final</label>
-                  <input type="date" v-model="filtro.dataFim" class="form-control" />
-                </div>
-                <div style="display:flex;align-items:flex-end;">
-                  <button type="submit" class="btn-filtrar">Filtrar</button>
-                </div>
-              </div>
-            </form>
+        <div class="qs-page-header">
+          <div>
+            <div class="qs-eyebrow">CCR</div>
+            <h1>Minhas Compras</h1>
+            <p>Histórico de compras e distribuição de cashback registrados no seu perfil.</p>
           </div>
-
-          <div v-if="loading" class="ag-loading"><div class="spinner-border" /></div>
-
-          <template v-else>
-            <div style="background:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.06);overflow:hidden;">
-              <div style="padding:1rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eee;">
-                <span style="font-weight:700;color:#225f6b;">Minhas Compras</span>
-                <span style="font-size:.8rem;color:#6c757d;">{{ items.length }} registro(s)</span>
-              </div>
-
-              <div v-if="items.length === 0" class="ag-empty-state">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 7h-1V6c0-2.76-2.24-5-5-5S8 3.24 8 6v1H7c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zm-7 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM10 7V6c0-1.1.9-2 2-2s2 .9 2 2v1h-4z"/></svg>
-                <h5>Nenhuma compra encontrada</h5>
-                <p>Tente ajustar os filtros de busca</p>
-              </div>
-
-              <div v-else style="overflow-x:auto;">
-                <table class="table-custom" style="width:100%;">
-                  <thead>
-                    <tr>
-                      <th>Descrição</th>
-                      <th style="text-align:center;">Valor da compra</th>
-                      <th style="text-align:center;">Cashback a receber</th>
-                      <th style="text-align:center;">Data da compra</th>
-                      <th style="text-align:center;">Status</th>
-                      <th style="text-align:center;">Detalhes</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="(item, i) in items" :key="i">
-                      <td>{{ item.produto || '—' }}</td>
-                      <td style="text-align:right;">{{ formatCurrency(Number(item.valor)) }}</td>
-                      <td style="text-align:right;color:#98c73a;font-weight:600;">{{ item.cashbackReceber }}</td>
-                      <td style="text-align:center;">{{ formatDate(String(item.data)) }}</td>
-                      <td style="text-align:center;">
-                        <span class="status-badge" :class="statusClass(String(item.status))">{{ item.status }}</span>
-                      </td>
-                      <td style="text-align:center;">
-                        <a v-if="item.transacao || (item.detalhes && (item.detalhes as unknown[]).length)"
-                           href="javascript:void(0)" @click="abrirDetalhes(item)"
-                           style="color:#2f7785;font-weight:600;font-size:.8rem;">Mais detalhes</a>
-                        <span v-else style="color:#aaa;font-size:.8rem;">—</span>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </template>
         </div>
+
+        <!-- Filter bar -->
+        <div class="qs-filter-bar">
+          <form @submit.prevent="buscarPedidos" class="mc-filter-form">
+            <div class="mc-filter-group">
+              <label class="qs-label">Descrição</label>
+              <input type="text" v-model="filtro.descricao" class="qs-input" placeholder="Buscar por descrição" />
+            </div>
+            <div class="mc-filter-group">
+              <label class="qs-label">Data inicial</label>
+              <input type="date" v-model="filtro.dataInicio" class="qs-input" />
+            </div>
+            <div class="mc-filter-group">
+              <label class="qs-label">Data final</label>
+              <input type="date" v-model="filtro.dataFim" class="qs-input" />
+            </div>
+            <button type="submit" class="qs-btn-primary mc-btn-filtrar">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+              Filtrar
+            </button>
+          </form>
+        </div>
+
+        <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
+
+        <template v-else>
+          <div class="qs-card-section mc-results-card">
+            <div class="mc-results-header">
+              <div class="qs-section-title">Minhas Compras</div>
+              <span class="mc-count-badge">{{ items.length }} registro(s)</span>
+            </div>
+
+            <div v-if="items.length === 0" class="ag-empty-state">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="var(--qs-gray-200,#e5e7eb)"><path d="M19 7h-1V6c0-2.76-2.24-5-5-5S8 3.24 8 6v1H7c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zm-7 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zM10 7V6c0-1.1.9-2 2-2s2 .9 2 2v1h-4z"/></svg>
+              <h5>Nenhuma compra encontrada</h5>
+              <p>Tente ajustar os filtros de busca</p>
+            </div>
+
+            <div v-else class="mc-table-wrap">
+              <table class="qs-table">
+                <thead>
+                  <tr>
+                    <th>Descrição</th>
+                    <th class="tr">Valor da compra</th>
+                    <th class="tr">Cashback a receber</th>
+                    <th class="tc">Data</th>
+                    <th class="tc">Status</th>
+                    <th class="tc">Detalhes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(item, i) in items" :key="i">
+                    <td>{{ item.produto || '—' }}</td>
+                    <td class="tr">{{ formatCurrency(Number(item.valor)) }}</td>
+                    <td class="tr td-lime">{{ item.cashbackReceber }}</td>
+                    <td class="tc">{{ formatDate(String(item.data)) }}</td>
+                    <td class="tc">
+                      <span class="qs-badge" :class="badgeClass(statusClass(String(item.status)))">{{ item.status }}</span>
+                    </td>
+                    <td class="tc">
+                      <button
+                        v-if="item.transacao || (item.detalhes && (item.detalhes as unknown[]).length)"
+                        class="mc-link-btn"
+                        @click="abrirDetalhes(item)"
+                      >Detalhes</button>
+                      <span v-else class="mc-dash">—</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </template>
       </div>
     </div>
   </div>
 
   <!-- Modal Detalhes -->
   <teleport to="body">
-    <div v-if="showModal" class="ag-modal-overlay" @click.self="showModal = false">
-      <div class="ag-modal" style="max-width:750px;">
-        <div class="ag-modal-header">
+    <div v-if="showModal" class="qs-modal-overlay" @click.self="showModal = false">
+      <div class="qs-modal">
+        <div class="qs-modal-header">
           <h2>Movimentação detalhada da compra</h2>
-          <button @click="showModal = false" style="background:none;border:none;font-size:1.25rem;cursor:pointer;color:#6c757d;line-height:1;" title="Fechar">✕</button>
+          <button @click="showModal = false" class="qs-modal-close" title="Fechar">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+          </button>
         </div>
-        <div class="ag-modal-body">
+        <div class="qs-modal-body">
           <template v-if="detalhesSelecionado.length">
-            <h3 style="font-size:1rem;font-weight:700;color:#2f7785;margin-bottom:.75rem;">Movimentação detalhada da compra</h3>
-            <div style="overflow-x:auto;margin-bottom:1.5rem;">
-              <table class="table-custom" style="width:100%;">
-                <thead>
-                  <tr>
-                    <th>Descrição</th>
-                    <th style="text-align:center;">Data</th>
-                    <th style="text-align:center;">Status</th>
-                  </tr>
-                </thead>
+            <div class="qs-section-title" style="margin-bottom:.75rem;">Movimentação</div>
+            <div class="mc-table-wrap" style="margin-bottom:1.5rem;">
+              <table class="qs-table">
+                <thead><tr><th>Descrição</th><th class="tc">Data</th><th class="tc">Status</th></tr></thead>
                 <tbody>
                   <tr v-for="(d, i) in detalhesSelecionado" :key="i">
                     <td>{{ (d as Record<string,unknown>).descricao || '—' }}</td>
-                    <td style="text-align:center;">{{ formatDate(String((d as Record<string,unknown>).dataAtualizacao || '')) }}</td>
-                    <td style="text-align:center;">
-                      <span class="status-badge" :class="statusClass(String(((d as Record<string,unknown>).status as Record<string,unknown>)?.nome || ''))">
+                    <td class="tc">{{ formatDate(String((d as Record<string,unknown>).dataAtualizacao || '')) }}</td>
+                    <td class="tc">
+                      <span class="qs-badge" :class="badgeClass(statusClass(String(((d as Record<string,unknown>).status as Record<string,unknown>)?.nome || '')))">
                         {{ ((d as Record<string,unknown>).status as Record<string,unknown>)?.nome || '—' }}
                       </span>
                     </td>
@@ -119,22 +119,16 @@
           </template>
 
           <template v-if="listaDistribuicao.length">
-            <h3 style="font-size:1rem;font-weight:700;color:#2f7785;margin-bottom:.75rem;">Distribuição do cashback</h3>
-            <div style="overflow-x:auto;">
-              <table class="table-custom" style="width:100%;">
-                <thead>
-                  <tr>
-                    <th>Descrição</th>
-                    <th style="text-align:center;">Data</th>
-                    <th style="text-align:center;">Status</th>
-                  </tr>
-                </thead>
+            <div class="qs-section-title" style="margin-bottom:.75rem;">Distribuição do cashback</div>
+            <div class="mc-table-wrap">
+              <table class="qs-table">
+                <thead><tr><th>Descrição</th><th class="tc">Data</th><th class="tc">Status</th></tr></thead>
                 <tbody>
                   <tr v-for="(d, i) in listaDistribuicao" :key="i">
                     <td>{{ (d as Record<string,unknown>).descricao || '—' }}</td>
-                    <td style="text-align:center;">{{ formatDate(String((d as Record<string,unknown>).dataAtualizacao || '')) }}</td>
-                    <td style="text-align:center;">
-                      <span class="status-badge" :class="statusClass(String(((d as Record<string,unknown>).status as Record<string,unknown>)?.nome || ''))">
+                    <td class="tc">{{ formatDate(String((d as Record<string,unknown>).dataAtualizacao || '')) }}</td>
+                    <td class="tc">
+                      <span class="qs-badge" :class="badgeClass(statusClass(String(((d as Record<string,unknown>).status as Record<string,unknown>)?.nome || '')))">
                         {{ ((d as Record<string,unknown>).status as Record<string,unknown>)?.nome || '—' }}
                       </span>
                     </td>
@@ -144,7 +138,7 @@
             </div>
           </template>
 
-          <p v-if="!detalhesSelecionado.length && !listaDistribuicao.length" style="text-align:center;color:#aaa;">
+          <p v-if="!detalhesSelecionado.length && !listaDistribuicao.length" style="text-align:center;color:var(--qs-gray-400);">
             Nenhum detalhe disponível.
           </p>
         </div>
@@ -203,6 +197,12 @@ function statusClass(s: string): string {
   return 'pendente';
 }
 
+function badgeClass(cls: string): string {
+  if (cls === 'aprovado') return 'qs-badge--success';
+  if (cls === 'recusado') return 'qs-badge--danger';
+  return 'qs-badge--warn';
+}
+
 async function buscarPedidos() {
   loading.value = true;
   items.value = [];
@@ -231,7 +231,6 @@ async function buscarPedidos() {
       } else if (pd[0]) {
         descricao = String((pd[0] as Record<string, unknown>).descricao ?? '');
       }
-
       let status = 'Pendente';
       if (item.idUsuarioComerciante && tx) {
         const sv = tx.statusViewModel as Record<string, unknown> | undefined;
@@ -240,10 +239,8 @@ async function buscarPedidos() {
         const lastPd = pd[pd.length - 1] as Record<string, unknown>;
         status = String((lastPd.status as Record<string, unknown>)?.nome ?? 'Pendente');
       }
-
       const cb = item.cashbackReceber as number;
       const cashbackReceber = cb ? formatCurrency(cb) : '----';
-
       return { ...item, produto: descricao, data: item.dataPedido, valor: item.valorPedido, status, cashbackReceber };
     });
   } catch {
@@ -258,3 +255,159 @@ onMounted(() => {
   buscarPedidos();
 });
 </script>
+
+<style scoped>
+.mc-filter-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .875rem;
+  align-items: flex-end;
+}
+.mc-filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: .35rem;
+  flex: 1;
+  min-width: 160px;
+}
+.mc-btn-filtrar {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+}
+.mc-btn-filtrar svg { width: 16px; height: 16px; }
+
+.mc-results-card { background: #fff; }
+.mc-results-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+.mc-count-badge {
+  font-size: .75rem;
+  font-weight: 600;
+  background: var(--qs-gray-100, #f5f5f7);
+  color: var(--qs-gray-500, #6b7280);
+  padding: .2rem .625rem;
+  border-radius: var(--qs-radius-pill, 999px);
+}
+
+.mc-table-wrap { overflow-x: auto; }
+.mc-link-btn {
+  background: none;
+  border: none;
+  font-size: .8125rem;
+  font-weight: 600;
+  color: var(--qs-teal, #2F7785);
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+}
+.mc-link-btn:hover { color: var(--qs-teal-dark, #225F6B); }
+.mc-dash { color: var(--qs-gray-400, #9ca3af); font-size: .8125rem; }
+
+/* Shared table */
+.qs-table { width: 100%; border-collapse: collapse; font-size: .875rem; }
+.qs-table thead tr { border-bottom: 2px solid var(--qs-gray-100, #f5f5f7); }
+.qs-table th {
+  padding: .625rem .875rem;
+  font-size: .6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--qs-gray-500, #6b7280);
+  white-space: nowrap;
+}
+.qs-table td {
+  padding: .75rem .875rem;
+  color: var(--qs-gray-700, #374151);
+  border-bottom: 1px solid var(--qs-gray-100, #f5f5f7);
+}
+.qs-table tbody tr:hover td { background: var(--qs-gray-50, #fafafa); }
+.qs-table tbody tr:last-child td { border-bottom: none; }
+.tc { text-align: center !important; }
+.tr { text-align: right !important; }
+.td-lime { color: var(--qs-lime-dark, #7aad1f) !important; font-weight: 600; }
+
+/* Badges */
+.qs-badge {
+  display: inline-flex;
+  padding: .2rem .55rem;
+  border-radius: var(--qs-radius-pill, 999px);
+  font-size: .6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  white-space: nowrap;
+}
+.qs-badge--success { background: #dcfce7; color: #16a34a; }
+.qs-badge--danger  { background: #fee2e2; color: #dc2626; }
+.qs-badge--warn    { background: #fef9c3; color: #ca8a04; }
+
+/* Modal */
+.qs-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.qs-modal {
+  background: #fff;
+  border-radius: var(--qs-radius-lg, 20px);
+  width: 100%;
+  max-width: 780px;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--qs-shadow-lg, 0 8px 40px rgba(1,15,28,.16));
+}
+.qs-modal-header {
+  background: var(--qs-gradient-btn, linear-gradient(135deg, #225F6B, #2F7785));
+  color: #fff;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.qs-modal-header h2 { font-size: 1rem; font-weight: 700; margin: 0; }
+.qs-modal-close {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+.qs-modal-close svg { width: 20px; height: 20px; }
+.qs-modal-body { padding: 1.5rem; overflow-y: auto; }
+
+/* Shared inputs */
+.qs-label {
+  font-size: .75rem;
+  font-weight: 600;
+  color: var(--qs-gray-700, #374151);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.qs-input {
+  width: 100%;
+  padding: .625rem .875rem;
+  border: 1.5px solid var(--qs-gray-200, #e5e7eb);
+  border-radius: var(--qs-radius-md, 12px);
+  font-size: .875rem;
+  color: var(--qs-ink, #1d1d1f);
+  background: #fff;
+  transition: border-color .15s;
+}
+.qs-input:focus { outline: none; border-color: var(--qs-teal, #2F7785); }
+</style>

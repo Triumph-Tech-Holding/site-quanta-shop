@@ -1,90 +1,115 @@
 <template>
-  <div>
-    <div class="ag-page-header">
-      <h1>Contas Bancárias</h1>
-      <p>Gerencie suas contas para saque</p>
-    </div>
+  <div class="p-0">
+    <div class="general-content">
+      <div class="page-content qs-page">
 
-    <div class="ag-card mb-3">
-      <button class="btn btn-ag-primary" @click="showForm = !showForm">
-        {{ showForm ? 'Cancelar' : '+ Adicionar Conta' }}
-      </button>
-      <div v-if="showForm" class="mt-4">
-        <form @submit.prevent="salvarConta" class="row g-3" style="max-width:600px">
-          <div class="col-12 col-md-6 ag-form-group">
-            <label>Banco *</label>
-            <select v-model="form.banco" class="form-select" required>
-              <option value="">Selecione o banco</option>
-              <option v-for="b in bancos" :key="b.code" :value="b.name">{{ b.code }} - {{ b.name }}</option>
-            </select>
+        <div class="qs-page-header">
+          <div>
+            <div class="qs-eyebrow">Financeiro</div>
+            <h1>Contas Bancárias</h1>
+            <p>Gerencie suas contas cadastradas para realizar saques.</p>
           </div>
-          <div class="col-12 col-md-3 ag-form-group">
-            <label>Tipo de conta *</label>
-            <select v-model="form.tipoConta" class="form-select" required>
-              <option value="">Tipo</option>
-              <option value="CC">Conta Corrente</option>
-              <option value="CP">Conta Poupança</option>
-            </select>
-          </div>
-          <div class="col-12 col-md-3 ag-form-group">
-            <label>Tipo de chave PIX</label>
-            <select v-model="form.tipoChavePix" class="form-select">
-              <option value="">Nenhuma</option>
-              <option value="CPF">CPF</option>
-              <option value="CNPJ">CNPJ</option>
-              <option value="EMAIL">E-mail</option>
-              <option value="CELULAR">Celular</option>
-              <option value="ALEATORIA">Chave aleatória</option>
-            </select>
-          </div>
-          <div class="col-12 col-md-4 ag-form-group">
-            <label>Agência *</label>
-            <input v-model="form.agencia" type="text" class="form-control" required />
-          </div>
-          <div class="col-12 col-md-4 ag-form-group">
-            <label>Conta *</label>
-            <input v-model="form.conta" type="text" class="form-control" required />
-          </div>
-          <div class="col-12 col-md-4 ag-form-group" v-if="form.tipoChavePix">
-            <label>Chave PIX</label>
-            <input v-model="form.chavePix" type="text" class="form-control" />
-          </div>
-          <div class="col-12">
-            <button type="submit" class="btn btn-ag-primary" :disabled="salvando">
-              <span v-if="salvando" class="spinner-border spinner-border-sm me-1" />
-              {{ salvando ? 'Salvando...' : 'Salvar Conta' }}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+          <button class="qs-btn-primary cb-btn-add" @click="showForm = !showForm">
+            <svg v-if="!showForm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            <svg v-else xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+            {{ showForm ? 'Cancelar' : 'Adicionar conta' }}
+          </button>
+        </div>
 
-    <div class="ag-card">
-      <div v-if="loading" class="ag-loading"><div class="spinner-border" /></div>
-      <div v-else-if="contas.length === 0" class="ag-empty-state">
-        <h5>Nenhuma conta cadastrada</h5>
-        <p>Adicione uma conta bancária para realizar saques.</p>
-      </div>
-      <div v-else class="row g-3">
-        <div v-for="(c, i) in contas" :key="i" class="col-12 col-md-6">
-          <div class="p-3 border rounded bg-light position-relative">
-            <div class="fw-bold mb-1">{{ c.banco }}</div>
-            <div class="text-muted" style="font-size:.875rem">
-              Ag: {{ c.agencia }} | Conta: {{ c.conta }} — {{ c.tipoConta === 'CP' ? 'Poupança' : 'Corrente' }}
+        <!-- Form -->
+        <div v-if="showForm" class="qs-card-section cb-form-card">
+          <div class="qs-section-title" style="margin-bottom:1.25rem;">Nova conta bancária</div>
+          <form @submit.prevent="salvarConta" class="cb-form-grid">
+            <div class="cb-field cb-field--half">
+              <label class="qs-label">Banco *</label>
+              <select v-model="form.banco" class="qs-input" required>
+                <option value="">Selecione o banco</option>
+                <option v-for="b in bancos" :key="b.code" :value="b.name">{{ b.code }} — {{ b.name }}</option>
+              </select>
             </div>
-            <div v-if="c.chavePix" class="text-muted mt-1" style="font-size:.8rem">
-              PIX ({{ c.tipoChavePix }}): {{ c.chavePix }}
+            <div class="cb-field" style="flex:0 0 160px;">
+              <label class="qs-label">Tipo de conta *</label>
+              <select v-model="form.tipoConta" class="qs-input" required>
+                <option value="">Tipo</option>
+                <option value="CC">Conta Corrente</option>
+                <option value="CP">Conta Poupança</option>
+              </select>
             </div>
-            <div class="mt-2">
-              <span class="badge-ag" :class="c.principal ? 'badge-ag-success' : 'badge-ag-secondary'">
-                {{ c.principal ? 'Principal' : 'Secundária' }}
-              </span>
+            <div class="cb-field" style="flex:0 0 200px;">
+              <label class="qs-label">Tipo de chave PIX</label>
+              <select v-model="form.tipoChavePix" class="qs-input">
+                <option value="">Nenhuma</option>
+                <option value="CPF">CPF</option>
+                <option value="CNPJ">CNPJ</option>
+                <option value="EMAIL">E-mail</option>
+                <option value="CELULAR">Celular</option>
+                <option value="ALEATORIA">Chave aleatória</option>
+              </select>
             </div>
-            <button class="btn btn-sm text-danger p-0 mt-2" @click="excluirConta(c.id)" style="font-size:.8rem">
-              Remover
-            </button>
+            <div class="cb-field" style="flex:0 0 140px;">
+              <label class="qs-label">Agência *</label>
+              <input v-model="form.agencia" type="text" class="qs-input" required />
+            </div>
+            <div class="cb-field" style="flex:0 0 160px;">
+              <label class="qs-label">Conta *</label>
+              <input v-model="form.conta" type="text" class="qs-input" required />
+            </div>
+            <div v-if="form.tipoChavePix" class="cb-field cb-field--half">
+              <label class="qs-label">Chave PIX</label>
+              <input v-model="form.chavePix" type="text" class="qs-input" />
+            </div>
+            <div class="cb-field cb-field--full cb-actions">
+              <button type="submit" class="qs-btn-primary" :disabled="salvando">
+                <svg v-if="salvando" class="cb-spin" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4V2A10 10 0 0 0 2 12h2a8 8 0 0 1 8-8z"/></svg>
+                {{ salvando ? 'Salvando...' : 'Salvar Conta' }}
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Lista -->
+        <div class="qs-card-section cb-list-card">
+          <div class="qs-section-title" style="margin-bottom:1rem;">Minhas contas</div>
+          <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
+          <div v-else-if="contas.length === 0" class="ag-empty-state">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="var(--qs-gray-200,#e5e7eb)"><path d="M4 6h16v2H4zm2-4h12v2H6zm14 8H4c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-8c0-1.1-.9-2-2-2zm0 10H4v-8h16v8z"/></svg>
+            <h5>Nenhuma conta cadastrada</h5>
+            <p>Adicione uma conta bancária para realizar saques.</p>
+          </div>
+          <div v-else class="cb-cards-grid">
+            <div v-for="(c, i) in contas" :key="i" class="cb-conta-card">
+              <div class="cb-conta-card__top">
+                <div class="cb-conta-card__banco">{{ c.banco }}</div>
+                <span class="qs-badge" :class="c.principal ? 'qs-badge--success' : 'qs-badge--secondary'">
+                  {{ c.principal ? 'Principal' : 'Secundária' }}
+                </span>
+              </div>
+              <div class="cb-conta-card__info">
+                <div class="cb-conta-card__detalhe">
+                  <span class="cb-conta-card__key">Agência</span>
+                  <span class="cb-conta-card__val">{{ c.agencia }}</span>
+                </div>
+                <div class="cb-conta-card__detalhe">
+                  <span class="cb-conta-card__key">Conta</span>
+                  <span class="cb-conta-card__val">{{ c.conta }}</span>
+                </div>
+                <div class="cb-conta-card__detalhe">
+                  <span class="cb-conta-card__key">Tipo</span>
+                  <span class="cb-conta-card__val">{{ c.tipoConta === 'CP' ? 'Poupança' : 'Corrente' }}</span>
+                </div>
+                <div v-if="c.chavePix" class="cb-conta-card__detalhe">
+                  <span class="cb-conta-card__key">PIX ({{ c.tipoChavePix }})</span>
+                  <span class="cb-conta-card__val">{{ c.chavePix }}</span>
+                </div>
+              </div>
+              <button class="cb-remove-btn" @click="excluirConta(c.id)">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                Remover
+              </button>
+            </div>
           </div>
         </div>
+
       </div>
     </div>
   </div>
@@ -131,18 +156,14 @@ async function salvarConta() {
   try {
     const bancoEncontrado = bancos.find(b => b.name === form.banco);
     await api.post('/UsuarioBanco/cadastrarUsuarioBanco', {
-      Agencia: form.agencia,
-      Conta: form.conta,
-      NomeConta: form.banco,
+      Agencia: form.agencia, Conta: form.conta, NomeConta: form.banco,
       Banco: bancoEncontrado ? { Nome: bancoEncontrado.name, Febraban: parseInt(bancoEncontrado.code) } : { Nome: form.banco },
     }, authHeader());
     $toast?.success('Conta cadastrada com sucesso!');
     showForm.value = false;
     Object.assign(form, { banco: '', tipoConta: '', agencia: '', conta: '', tipoChavePix: '', chavePix: '' });
     await loadContas();
-  } catch (e: unknown) {
-    $toast?.error(extractApiErrorMessage(e, 'Erro ao salvar conta.'));
-  } finally { salvando.value = false; }
+  } catch (e: unknown) { $toast?.error(extractApiErrorMessage(e, 'Erro ao salvar conta.')); } finally { salvando.value = false; }
 }
 async function excluirConta(id: number) {
   if (!confirm('Remover esta conta?')) return;
@@ -154,3 +175,60 @@ async function excluirConta(id: number) {
 }
 onMounted(async () => { agenciaStore.loadFromStorage(); await loadContas(); });
 </script>
+
+<style scoped>
+.cb-btn-add { display: inline-flex; align-items: center; gap: .4rem; flex-shrink: 0; }
+.cb-btn-add svg { width: 16px; height: 16px; }
+
+.cb-form-card { background: #fff; }
+.cb-form-grid { display: flex; flex-wrap: wrap; gap: 1rem; }
+.cb-field { display: flex; flex-direction: column; gap: .35rem; }
+.cb-field--half { flex: 1; min-width: 200px; }
+.cb-field--full { width: 100%; }
+.cb-actions { justify-content: flex-start; }
+.cb-spin { width: 14px; height: 14px; animation: cb-spin 1s linear infinite; }
+@keyframes cb-spin { to { transform: rotate(360deg); } }
+
+.cb-list-card { background: #fff; }
+.cb-cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+.cb-conta-card {
+  border: 1.5px solid var(--qs-gray-200,#e5e7eb);
+  border-radius: var(--qs-radius-md,12px);
+  padding: 1.125rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+  transition: all .2s;
+}
+.cb-conta-card:hover { box-shadow: var(--qs-shadow-sm); border-color: var(--qs-teal,#2F7785); }
+.cb-conta-card__top { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
+.cb-conta-card__banco { font-size: .9375rem; font-weight: 700; color: var(--qs-teal-dark,#225F6B); }
+.cb-conta-card__info { display: flex; flex-direction: column; gap: .35rem; }
+.cb-conta-card__detalhe { display: flex; gap: .5rem; font-size: .8125rem; }
+.cb-conta-card__key { color: var(--qs-gray-400,#9ca3af); min-width: 70px; flex-shrink: 0; }
+.cb-conta-card__val { color: var(--qs-gray-700,#374151); font-weight: 500; }
+.cb-remove-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  background: none;
+  border: none;
+  color: var(--qs-danger,#dc2626);
+  font-size: .75rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.cb-remove-btn svg { width: 14px; height: 14px; }
+.cb-remove-btn:hover { opacity: .75; }
+
+.qs-badge { display: inline-flex; padding: .2rem .55rem; border-radius: var(--qs-radius-pill,999px); font-size: .6875rem; font-weight: 700; text-transform: uppercase; white-space: nowrap; }
+.qs-badge--success { background: #dcfce7; color: #16a34a; }
+.qs-badge--secondary { background: var(--qs-gray-100,#f5f5f7); color: var(--qs-gray-500,#6b7280); }
+
+.qs-label { font-size: .75rem; font-weight: 600; color: var(--qs-gray-700,#374151); text-transform: uppercase; letter-spacing: .04em; }
+.qs-input { width: 100%; padding: .625rem .875rem; border: 1.5px solid var(--qs-gray-200,#e5e7eb); border-radius: var(--qs-radius-md,12px); font-size: .875rem; color: var(--qs-ink,#1d1d1f); background: #fff; transition: border-color .15s; box-sizing: border-box; }
+.qs-input:focus { outline: none; border-color: var(--qs-teal,#2F7785); }
+</style>
