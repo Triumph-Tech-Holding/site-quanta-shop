@@ -1,0 +1,15 @@
+Atenção, Agente: Correção de alvo para a atualização do Histórico Técnico.
+O arquivo correto que mantém nosso histórico no formato Keep a Changelog (SemVer) é o CHANGELOG.md (refletido no nosso documento CHANGELOG QS v1). Precisamos atualizá-lo para registrar os patches de segurança e finalizações do Sprint Power.
+Abra o arquivo CHANGELOG.md e faça as seguintes atualizações mantendo a formatação SemVer rigorosa:
+Adequação de Nomenclatura Global: Faça uma varredura (Find/Replace) no Changelog. Onde houver menção genérica a painéis de usuários/agentes, atualize para Agência Digital (ADF). Onde houver menção a painel de lojista/empresa, atualize para ZEE DIGITAL.
+Na seção atual [1.3.0] — Mai 2026 (ou crie uma nova minor se preferir), adicione os seguintes blocos detalhados:
+Adicionado / Corrigido — Hardening de Segurança & Estabilidade (Tasks #30 e #116):
+Frontend (Nuxt): Correção de erro 404 crítico nas rotas do painel (/agencia/painel/**). Adicionado scan direto da pasta pinia/ via imports.dirs no nuxt.config.ts e reescrito o re-export do useAgenciaStore.ts com path relativo.
+Backend (.NET 8): Implementado CORS dinâmico com SetIsOriginAllowed.
+Backend (.NET 8): Criado middleware DebugBypassGuard (bloqueia tentativas de debug bypass em produção com 403).
+Backend (.NET 8): Rate limit de auth corrigido para usar Connection.RemoteIpAddress (prevenção absoluta contra IP Spoofing).
+Adicionado / Corrigido — Autenticação, Tracking e BI (Relatórios):
+Auth: Unificação completa do Login com Google (fluxo One Tap/GSI). Arquitetura agora é fail-closed (exige GOOGLE_CLIENT_ID válido no env). Criada nova página de fallback /agencia/cadastro-google.
+Tracking: Bugfix no ClickRef AWIN (ID injetado em tempo real por projeção, eliminando vazamento via cache compartilhado).
+Admin (BI): Refatoração completa dos relatórios de Cashback, Faturas e Anunciantes. Mapeados para os endpoints reais (GET /Compra/relatorioMensalCashback, POST /Admin/ObterFaturas, etc). Adicionados filtros funcionais, totalizadores em tempo real e exportação limpa em PDF via window.print().
+Me confirme assim que o CHANGELOG.md for salvo com essas atualizações estruturadas. Em seguida, já pode seguir com a criação do visual da Fase de Expansão (Social Commerce) que pedi anteriormente!"

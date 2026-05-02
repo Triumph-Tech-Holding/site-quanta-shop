@@ -6,6 +6,29 @@ Todas as mudanças relevantes da plataforma. Formato baseado em [Keep a Changelo
 
 ## [1.3.0] — Mai 2026
 
+### 🔒 Hardening de Segurança & Estabilidade (Tasks #30 e #116)
+
+#### Adicionado / Corrigido — Frontend (Nuxt)
+- **Erro 404 crítico nas rotas da Agência Digital (ADF) (`/agencia/painel/**`)** — corrigido adicionando scan explícito da pasta `pinia/` via `imports.dirs` em `nuxt.config.ts` e reescrevendo o re-export de `useAgenciaStore.ts` com path relativo.
+
+#### Adicionado / Corrigido — Backend (.NET 8)
+- **CORS dinâmico** implementado com `SetIsOriginAllowed` — elimina erros de preflight em origens não previstas em lista estática.
+- **Middleware `DebugBypassGuard`** — bloqueia tentativas de debug bypass em produção com HTTP 403.
+- **Rate limit de auth** corrigido para usar `Connection.RemoteIpAddress` — previne IP Spoofing via header `X-Forwarded-For` manipulado.
+
+---
+
+### 🔑 Autenticação, Tracking e BI (Sprint Power)
+
+#### Adicionado / Corrigido
+- **Login com Google (One Tap / GSI)** — fluxo unificado com arquitetura fail-closed (exige `GOOGLE_CLIENT_ID` válido no env). Nova página de fallback `/agencia/cadastro-google`.
+- **ClickRef AWIN** — bugfix no tracking: ID injetado em tempo real por projeção, eliminando vazamento via cache compartilhado entre requisições.
+- **Relatórios de BI Admin (Agência Digital — ADF)** — refatoração completa dos relatórios de Cashback, Faturas e Anunciantes:
+  - Mapeados para endpoints reais: `GET /Compra/relatorioMensalCashback`, `POST /Admin/ObterFaturas` e equivalentes.
+  - Adicionados filtros funcionais, totalizadores em tempo real e exportação limpa em PDF via `window.print()`.
+
+---
+
 ### 🔧 Bugfixes de Sessão — Serviços e Parciais
 
 #### Corrigido
