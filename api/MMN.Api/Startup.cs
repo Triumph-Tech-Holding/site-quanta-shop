@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Data.SqlClient;
@@ -85,13 +86,50 @@ namespace MMN.Api
 
             services.AddRateLimiter(options =>
             {
-                options.AddFixedWindowLimiter("auth-limit", limiterOptions =>
+                options.AddPolicy("auth-limit", httpContext =>
+                    RateLimitPartition.GetFixedWindowLimiter(
+                        partitionKey: httpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault()
+                                      ?? httpContext.Connection.RemoteIpAddress?.ToString()
+                                      ?? "unknown",
+                        factory: _ => new FixedWindowRateLimiterOptions
+                        {
+                            PermitLimit = 10,
+                            Window = TimeSpan.FromSeconds(60),
+                            QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                            QueueLimit = 0
+                        }));
+
+                // GlobalLimiter enforces per-IP limits on auth paths regardless of
+                // routing mode (works with legacy UseMvc / EnableEndpointRouting=false)
+                options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
                 {
-                    limiterOptions.PermitLimit = 10;
-                    limiterOptions.Window = TimeSpan.FromSeconds(60);
-                    limiterOptions.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
-                    limiterOptions.QueueLimit = 0;
+                    var path = context.Request.Path.Value?.ToLowerInvariant() ?? string.Empty;
+                    var isAuthPath =
+                        path.Contains("autenticacao") ||
+                        path.Contains("cadastrar") ||
+                        path.Contains("registrar") ||
+                        path.Contains("esqueciminhasenha") ||
+                        path.Contains("alterarsenha");
+
+                    if (isAuthPath)
+                    {
+                        var ip = context.Request.Headers["X-Forwarded-For"].FirstOrDefault()
+                                 ?? context.Connection.RemoteIpAddress?.ToString()
+                                 ?? "unknown";
+                        return RateLimitPartition.GetFixedWindowLimiter(
+                            partitionKey: ip + "|auth",
+                            factory: _ => new FixedWindowRateLimiterOptions
+                            {
+                                PermitLimit = 10,
+                                Window = TimeSpan.FromSeconds(60),
+                                QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                                QueueLimit = 0
+                            });
+                    }
+
+                    return RateLimitPartition.GetNoLimiter("no-limit");
                 });
+
                 options.RejectionStatusCode = 429;
             });
 

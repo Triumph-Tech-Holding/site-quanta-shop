@@ -341,6 +341,7 @@ namespace MMN.Api.Controllers.v1
         [HttpPost]
         [AllowAnonymous]
         [Route("registrar")]
+        [EnableRateLimiting("auth-limit")]
         public IActionResult Registrar(UsuarioCadastroViewModel model)
          {
             UsuarioCadastroViewModelValidator validator = new UsuarioCadastroViewModelValidator();
@@ -397,6 +398,7 @@ namespace MMN.Api.Controllers.v1
         [HttpPost]
         [AllowAnonymous]
         [Route("registrarGoogle")]
+        [EnableRateLimiting("auth-limit")]
         public async Task<IActionResult> RegistrarGoogleAsync(Oauth2CadastroViewModel model)
         {
             var validator = new OauthCadastroViewModelValidator();
@@ -415,6 +417,7 @@ namespace MMN.Api.Controllers.v1
         [HttpPost]
         [AllowAnonymous]
         [Route("registrarGoogleCredential")]
+        [EnableRateLimiting("auth-limit")]
         public async Task<IActionResult> RegistrarGoogleCredentialAsync([FromBody] Oauth2CredentialCadastroViewModel model)
         {
             var validator = new OauthCredentialCadastroViewModelValidator();
