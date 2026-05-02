@@ -101,11 +101,10 @@ namespace MMN.Api
 
             services.AddRateLimiter(options =>
             {
+                // Uses Connection.RemoteIpAddress (resolved by UseForwardedHeaders, not spoofable by client)
                 options.AddPolicy("auth-limit", httpContext =>
                     RateLimitPartition.GetFixedWindowLimiter(
-                        partitionKey: httpContext.Request.Headers["X-Forwarded-For"].FirstOrDefault()
-                                      ?? httpContext.Connection.RemoteIpAddress?.ToString()
-                                      ?? "unknown",
+                        partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
                         factory: _ => new FixedWindowRateLimiterOptions
                         {
                             PermitLimit = 10,
