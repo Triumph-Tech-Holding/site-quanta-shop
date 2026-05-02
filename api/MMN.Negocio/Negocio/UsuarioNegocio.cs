@@ -317,6 +317,71 @@ namespace MMN.Negocio.Negocio
             }
         }
 
+        public async Task<Usuario> RegistrarGoogleCredentialAsync(Oauth2CredentialCadastroViewModel model)
+        {
+            try
+            {
+                string googleId;
+                string email;
+
+                using (var client = new HttpClient())
+                {
+                    var tokenInfoUrl = $"https://oauth2.googleapis.com/tokeninfo?id_token={Uri.EscapeDataString(model.Credential)}";
+                    var response = await client.GetAsync(tokenInfoUrl);
+                    if (!response.IsSuccessStatusCode)
+                        throw new UnauthorizedException("login_incorreto");
+
+                    var json = await response.Content.ReadAsStringAsync();
+                    var tokenInfo = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+
+                    if (tokenInfo == null ||
+                        !tokenInfo.TryGetValue("sub", out googleId) ||
+                        !tokenInfo.TryGetValue("email", out email) ||
+                        string.IsNullOrEmpty(googleId) ||
+                        string.IsNullOrEmpty(email))
+                        throw new UnauthorizedException("login_incorreto");
+
+                    var expectedClientId = _appSettings.GoogleClientId;
+                    if (!string.IsNullOrEmpty(expectedClientId) &&
+                        (!tokenInfo.TryGetValue("aud", out var aud) || aud != expectedClientId))
+                        throw new UnauthorizedException("login_incorreto");
+                }
+
+                model.Documento = UtilBase.FiltrarDigitos(model.Documento);
+
+                var usuario = _mapper.Map<Usuario>(model);
+
+                var usuarioPai = _repositorio.GetByLoginOrEmail(model.LoginPatrocinador);
+                if (usuarioPai == null || usuarioPai.Ativo == false || usuarioPai.Master)
+                    throw new PadraoException("patrocinador_nao_encontrado");
+
+                usuario.IdUsuarioPai = usuarioPai.IdUsuario;
+                usuario.Email = email;
+                usuario.EmailConfirmado = true;
+                usuario.Documento = model.Documento;
+                usuario.Senha = string.IsNullOrEmpty(model.Senha) ? "" : model.Senha;
+
+                var provedorAutenticacao = await _provedorAutenticacaoNegocio
+                    .FirstNoTrackingAsync(g =>
+                        g.Protocolo == (int)IdentityProviderProtocol.Oauth2 &&
+                        g.Provedor == (int)IdentityProvider.Google);
+
+                var autenticacaoExterna = new AutenticacaoExterna
+                {
+                    IdExterno = googleId,
+                    Ativo = true,
+                    IdProvedorAutenticacao = provedorAutenticacao.IdProvedorAutenticacao
+                };
+
+                return Registrar(usuario, autenticacaoExterna);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.LogException("RegistrarGoogleCredentialAsync()", ex, "UsuarioNegocio.cs");
+                throw;
+            }
+        }
+
         private Usuario Registrar(Usuario usuario, AutenticacaoExterna autenticacaoExterna = null)
         {
             try
@@ -590,8 +655,7 @@ namespace MMN.Negocio.Negocio
                     string.IsNullOrEmpty(email))
                     throw new UnauthorizedException("login_incorreto");
 
-                var expectedClientId = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID")
-                    ?? _appSettings.GoogleClientId;
+                var expectedClientId = _appSettings.GoogleClientId;
                 if (!string.IsNullOrEmpty(expectedClientId) &&
                     (!tokenInfo.TryGetValue("aud", out var aud) || aud != expectedClientId))
                     throw new UnauthorizedException("login_incorreto");

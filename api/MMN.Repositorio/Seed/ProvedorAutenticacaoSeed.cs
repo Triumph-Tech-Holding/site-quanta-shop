@@ -15,8 +15,8 @@ namespace MMN.Repositorio.Seed
                     {
                         IdProvedorAutenticacao = -1,
                         UrlApi = "https://oauth2.googleapis.com/token",
-                        EndpointCadastro = "api/user/registrarGoogle",
-                        EndpointLogin = "api/UsuarioLogin/autenticacaoGoogle",
+                        EndpointCadastro = "api/user/registrarGoogleCredential",
+                        EndpointLogin = "api/UsuarioLogin/autenticacaoGoogleCredential",
                         // Client ID e Secret são placeholder — o Startup os substitui a partir
                         // das variáveis de ambiente GOOGLE_CLIENT_ID e GOOGLE_CLIENT_SECRET.
                         // Este registro é para o fluxo OAuth2 legado (autenticacaoGoogle).

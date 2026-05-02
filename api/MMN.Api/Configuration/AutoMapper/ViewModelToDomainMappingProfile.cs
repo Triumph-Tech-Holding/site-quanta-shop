@@ -61,6 +61,7 @@ namespace MMN.Dominio.Api.Configuration
             CreateMap<UsuarioCadastroPWAViewModel, Usuario>();
             CreateMap<UsuarioCadastroViewModel, Usuario>();
             CreateMap<Oauth2CadastroViewModel, Usuario>();
+            CreateMap<Oauth2CredentialCadastroViewModel, Usuario>();
 
             CreateMap<StatusViewModel, Status>();
             CreateMap<UsuarioConfiguracaoViewModel, UsuarioConfiguracao>();

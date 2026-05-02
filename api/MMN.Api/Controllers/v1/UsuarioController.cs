@@ -410,6 +410,24 @@ namespace MMN.Api.Controllers.v1
             return Ok(usuario.IdUsuario);
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("registrarGoogleCredential")]
+        public async Task<IActionResult> RegistrarGoogleCredentialAsync([FromBody] Oauth2CredentialCadastroViewModel model)
+        {
+            var validator = new OauthCredentialCadastroViewModelValidator();
+            var result = validator.Validate(model);
+            if (!result.IsValid)
+            {
+                throw new AggregateException(
+                    result.Errors.Select(s => new PadraoException(s.ErrorMessage)));
+            }
+
+            var usuario = await _negocio.RegistrarGoogleCredentialAsync(model);
+
+            return Ok(usuario.IdUsuario);
+        }
+
         [HttpGet]
         [AllowAnonymous]
         [Route("verificarPatrocinador/{login}")]

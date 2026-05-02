@@ -15,6 +15,37 @@ namespace MMN.Dominio.ViewModel
         public string Senha { get; set; }
     }
 
+    public class Oauth2CredentialCadastroViewModel
+    {
+        public string Credential { get; set; }
+        public string Nome { get; set; }
+        public string Login { get; set; }
+        public string Celular { get; set; }
+        public string LoginPatrocinador { get; set; }
+        public string Documento { get; set; }
+        public string Senha { get; set; }
+    }
+
+    public class OauthCredentialCadastroViewModelValidator : AbstractValidator<Oauth2CredentialCadastroViewModel>
+    {
+        public OauthCredentialCadastroViewModelValidator()
+        {
+            RuleFor(u => u.Credential).NotNull().NotEmpty();
+            RuleFor(u => u.Login).MinimumLength(5).WithMessage("login_tamanho_minimo")
+                .Must(RequisitosLogin).WithMessage("login_nao_permitido");
+            RuleFor(u => u.LoginPatrocinador).NotNull().NotEmpty();
+            RuleFor(u => u.Senha).Must(m => string.IsNullOrEmpty(m) || UtilBase.RequisitosSenha(m))
+                .WithMessage("senha_requisitos");
+        }
+
+        public bool RequisitosLogin(string login)
+        {
+            return !login.ToLower().Contains("big")
+                && !login.ToLower().Contains("cash")
+                && !login.ToLower().Contains("admin");
+        }
+    }
+
     public class OauthCadastroViewModelValidator : AbstractValidator<Oauth2CadastroViewModel>
     {
         public OauthCadastroViewModelValidator()
