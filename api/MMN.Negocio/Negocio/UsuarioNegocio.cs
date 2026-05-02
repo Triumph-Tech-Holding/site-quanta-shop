@@ -342,8 +342,9 @@ namespace MMN.Negocio.Negocio
                         throw new UnauthorizedException("login_incorreto");
 
                     var expectedClientId = _appSettings.GoogleClientId;
-                    if (!string.IsNullOrEmpty(expectedClientId) &&
-                        (!tokenInfo.TryGetValue("aud", out var aud) || aud != expectedClientId))
+                    if (string.IsNullOrEmpty(expectedClientId))
+                        throw new InvalidOperationException("GOOGLE_CLIENT_ID não configurado.");
+                    if (!tokenInfo.TryGetValue("aud", out var aud) || aud != expectedClientId)
                         throw new UnauthorizedException("login_incorreto");
                 }
 
@@ -554,82 +555,6 @@ namespace MMN.Negocio.Negocio
             return Autenticacao(usuario, senha, out parceiro, verificarSenha);
         }
 
-        public UsuarioViewModel AutenticacaoGoogle(string code, string redirectUri, out Parceiro parceiro)
-        {
-            parceiro = null;
-
-            if (string.IsNullOrEmpty(code))
-            {
-                throw new UnauthorizedException("login_incorreto");
-            }
-
-            var provedorAutenticacao = _provedorAutenticacaoNegocio
-                    .FirstNoTrackingAsync(g =>
-                        g.Protocolo == (int)IdentityProviderProtocol.Oauth2 &&
-                        g.Provedor == (int)IdentityProvider.Google).Result;
-            var autenticacao = new Oauth2Authenticate
-            {
-                ApiUrl = provedorAutenticacao.UrlApi,
-                ClientId = provedorAutenticacao.Login,
-                ClientSecret = provedorAutenticacao.Senha,
-                Code = code,
-                RedirectUri = redirectUri,
-                OptionalParameters = JsonConvert
-                    .DeserializeObject<Dictionary<string, string>>(provedorAutenticacao.ParametrosLogin)
-            };
-
-            var accessToken = Oauth2.GetAccessTokenAsync<Oauth2AccessToken>(autenticacao).Result;
-            var usuarioGoogle = GoogleApi.ObterIdUsuarioAsync(accessToken.AccessToken).Result;
-
-
-            if (string.IsNullOrEmpty(usuarioGoogle.Id))
-            {
-                throw new UnauthorizedException("login_incorreto");
-            }
-
-            var usuario = _autenticacaoExternaRepositorio
-                .Get(u => u.IdExterno.Equals(usuarioGoogle.Id) && u.Ativo)
-                .Include(i => i.Usuario)
-                    .ThenInclude(t => t.Grupo)
-                .Include(i => i.Usuario)
-                    .ThenInclude(t => t.UsuarioEndereco)
-                .Include(i => i.Usuario)
-                    .ThenInclude(t => t.Credenciamento)
-                .Select(s => s.Usuario)
-                .FirstOrDefault();
-
-            if (usuario == null)
-            {
-                usuario =
-                _repositorio.Get(u => u.Email.Equals(usuarioGoogle.Email) && u.Ativo)
-                  .Include(t => t.Grupo)
-                  .Include(t => t.UsuarioEndereco)
-                  .Include(t => t.Credenciamentos)
-                  .SingleOrDefault();
-                if (usuario != null)
-                {
-                    var autenticacaoExterna = new AutenticacaoExterna
-                    {
-                        IdExterno = usuarioGoogle.Id,
-                        Ativo = true,
-                        IdProvedorAutenticacao = provedorAutenticacao.IdProvedorAutenticacao,
-                        IdUsuario = usuario.IdUsuario
-                    };
-                    _autenticacaoExternaRepositorio.Insert(autenticacaoExterna);
-                    _autenticacaoExternaRepositorio.SaveChanges();
-                }
-                else
-                {
-                    throw new UnauthorizedException("usuario_nao_encontrado");
-                }
-
-            }
-
-
-
-            return Autenticacao(usuario, null, out parceiro, false);
-        }
-
         public async Task<(UsuarioViewModel usuario, Parceiro parceiro)> AutenticacaoGoogleCredentialAsync(string credential)
         {
             if (string.IsNullOrEmpty(credential))
@@ -656,8 +581,9 @@ namespace MMN.Negocio.Negocio
                     throw new UnauthorizedException("login_incorreto");
 
                 var expectedClientId = _appSettings.GoogleClientId;
-                if (!string.IsNullOrEmpty(expectedClientId) &&
-                    (!tokenInfo.TryGetValue("aud", out var aud) || aud != expectedClientId))
+                if (string.IsNullOrEmpty(expectedClientId))
+                    throw new InvalidOperationException("GOOGLE_CLIENT_ID não configurado.");
+                if (!tokenInfo.TryGetValue("aud", out var aud) || aud != expectedClientId)
                     throw new UnauthorizedException("login_incorreto");
             }
 
