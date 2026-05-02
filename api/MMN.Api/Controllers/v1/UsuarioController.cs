@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.Options;
 using MMN.Api.Helpers;
 using MMN.Api.Services;
@@ -93,6 +94,7 @@ namespace MMN.Api.Controllers.v1
         [HttpPost]
         [AllowAnonymous]
         [Route("cadastrar")]
+        [EnableRateLimiting("auth-limit")]
         public IActionResult Cadastrar(UsuarioCadastroPWAViewModel model)
         {
             try

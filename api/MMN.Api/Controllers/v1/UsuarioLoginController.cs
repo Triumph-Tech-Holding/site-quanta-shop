@@ -188,6 +188,7 @@ namespace MMN.Api.Controllers.v1
 
         [HttpGet]
         [Route("esqueciMinhaSenha/{login}")]
+        [EnableRateLimiting("auth-limit")]
         public IActionResult EsqueciMinhaSenha(string login)
         {
             var usuario = _negocio.BuscarLoginOuEmail(login);

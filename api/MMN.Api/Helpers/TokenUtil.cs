@@ -31,7 +31,7 @@ namespace MMN.Api.Helpers
             {
                 new Claim(JwtRegisteredClaimNames.UniqueName, userInfo.IdUsuario.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim("Exp", DateTime.UtcNow.HorarioBrasilia().AddHours(24).ToString())
+                new Claim("Exp", DateTime.UtcNow.HorarioBrasilia().AddHours(1).ToString())
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.Secret));

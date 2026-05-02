@@ -117,9 +117,9 @@ namespace MMN.Api
             {
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(appSettings.Secret)),
-                ValidateIssuer = !string.IsNullOrEmpty(token.Issuer),
+                ValidateIssuer = true,
                 ValidIssuer = token.Issuer,
-                ValidateAudience = !string.IsNullOrEmpty(token.Audience),
+                ValidateAudience = true,
                 ValidAudience = token.Audience,
                 ValidateLifetime = true,
                 ClockSkew = TimeSpan.Zero
