@@ -7,15 +7,31 @@
 
 ## Visão Geral
 
-**Quanta Shop** é uma plataforma financeira de cashback + MLM (rede de afiliados multinível) brasileira.
-O ecossistema inclui:
-- **Portal do consumidor** — encontra lojas parceiras, acumula e resgata cashback
-- **Painel do Agente** — back-office para Agentes de Fidelização gerenciarem sua rede
-- **Painel Admin** — gestão completa da plataforma (usuários, comissões, blog, banners, suporte)
-- **API .NET 8** — backend responsável por toda lógica financeira, autenticação JWT, MLM multinível e integrações
+**Quanta Shop** é uma **Plataforma Moderna de Consumo Inteligente e Marketing de Fidelização com Cashback em Rede**. O coração do negócio é a construção da **Rede Proprietária** e a geração de **Cashback Residual** distribuído em múltiplos níveis.
+
+O ecossistema é sustentado por 3 pilares operacionais:
+
+- **Agência Digital — ADF (Área do Consumidor e Agente de Fidelização):** O ambiente digital privativo onde o membro (consumidor ou empreendedor) realiza seu consumo inteligente, acumula/resgata cashback, gerencia sua Rede Proprietária, gera links de Social Commerce e acessa os treinamentos (Jornada Penta Meta Minuto). O uso da sigla **ADF** (Agência Digital de Fidelização) é encorajado.
+- **ZEE DIGITAL — Zona Econômica Especial Digital (Área do Lojista / Empresa Parceira) `[MÓDULO VITAL]`:** O back-office exclusivo do comerciante. A ZEE Digital funciona como um mini-ecossistema de prosperidade local onde a empresa monitora vendas, define cashback e constrói sua própria Rede Proprietária de clientes fidelizados.
+- **Painel Admin:** Gestão centralizada da plataforma (regras do plano de compensação, CMS, aprovação de pagamentos e suporte).
+- **API .NET 8:** Backend do motor financeiro, cálculo de distribuição em rede, LGPD e integrações.
 
 **Domínio de produção:** `https://quantashop.com.br`  
 **API de produção:** `https://api.quantashop.com.br`
+
+---
+
+## Diretriz Geral de UI/UX
+
+Todas as futuras rotas, variáveis, títulos de painéis e componentes do frontend devem respeitar a nomenclatura oficial:
+
+| Área | Rota base | Sigla/Nome |
+|------|-----------|------------|
+| Membros (consumidores e agentes) | `/agencia` | ADF / Agência Digital |
+| Empresas parceiras (lojistas) | `/zee` | ZEE DIGITAL |
+| Administração da plataforma | `/agencia/painel/admin` | Painel Admin |
+
+> As rotas `/agencia/...` já existentes no código são mantidas. A rota `/zee` será criada no módulo ZEE DIGITAL.
 
 ---
 
@@ -108,7 +124,7 @@ Não use cores hardcoded além dessas. Use sempre os tokens acima via variáveis
 │
 ├── layouts/
 │   ├── layout-home.vue              # Layout padrão das páginas públicas
-│   ├── agencia-painel.vue           # Layout do painel do agente/admin
+│   ├── agencia-painel.vue           # Layout do painel da Agência Digital (ADF) / Admin
 │   └── agencia.vue                  # Layout das páginas de landing da agência
 │
 ├── composables/
@@ -306,7 +322,7 @@ Em todas as outras páginas, use Bootstrap 5 + classes do design system Quanta (
 
 ## Diretivas de Segurança (LGPD)
 
-A Quanta Shop opera como plataforma financeira sujeita à LGPD:
+A Quanta Shop opera como Plataforma de Consumo Inteligente e Marketing de Fidelização sujeita à LGPD:
 
 1. **Dados sensíveis** (CPF, dados bancários) → apenas via API autenticada + HTTPS
 2. **Nunca** armazenar dados sensíveis em `localStorage` ou `sessionStorage`
