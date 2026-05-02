@@ -200,6 +200,15 @@ const docs = ref<DocItem[]>([
     data: hoje,
   },
   {
+    id: 'testing',
+    nome: 'TESTING.md — Diretrizes de QA',
+    descricao: 'Critérios inegociáveis de Done: Motor Financeiro (xUnit), Frontend Mobile-First e Segurança LGPD',
+    arquivo: 'TESTING.md',
+    tipo: 'md',
+    tamanho: '…',
+    data: hoje,
+  },
+  {
     id: 'changelog',
     nome: 'CHANGELOG.md',
     descricao: 'Histórico de mudanças e versões do projeto',

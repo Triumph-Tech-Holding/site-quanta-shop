@@ -1,0 +1,16 @@
+Atenção, Agente: Para completarmos nossa blindagem arquitetônica e garantirmos a integridade do Desenvolvimento Incremental, precisamos estabelecer as diretrizes oficiais de Qualidade (QA) e Testes do ecossistema.
+Crie um novo arquivo chamado TESTING.md na raiz do projeto. Este documento ditará as regras inegociáveis para a aceitação de qualquer novo código (Critérios de 'Done'). Estruture o documento da seguinte forma:
+1. Testes do Motor Financeiro (Backend .NET 8 - xUnit): O coração da plataforma não pode falhar. Exigimos a manutenção e expansão da suíte xUnit (atualmente com 13 cenários base). Os testes automatizados devem obrigatoriamente validar:
+Split Exato de Cashback: Garantir a matemática da distribuição de cada transação (50% Quanta Shop, 25% Consumidor, 25% Rede).
+Profundidade de 12 Níveis: Garantir que o residual suba corretamente os 12 níveis da rede de acordo com a licença HAF (Vision, Shu Ra Ri, Disruptiva ou Master Quantum).
+Compressão Dinâmica: Testar se o sistema pula usuários inativos e repassa o bônus para o primeiro upline ativo.
+Multiplicador Plus (2x): Garantir que a Assinatura Plus dobre estritamente o Bônus Residual, e nunca o cashback da compra direta do próprio usuário.
+Sustentabilidade: Validar a retenção inegociável de 10% dos ganhos convertidos em crédito na plataforma.
+2. Testes de Frontend e Usabilidade (Nuxt 3):
+Paywall e Controle de Acesso: Testar se Consumidores (Membros Base sem HAF) são devidamente bloqueados ao tentar acessar os dashboards avançados de rede, garantindo o funil de upsell.
+Variáveis Dinâmicas: Testar se a barra de progresso da Assinatura Plus lê corretamente a meta dinâmica do banco de dados (ex: adminConfig.metaConsumoPlus), sem hardcode.
+Responsividade (Mobile-First): As telas de Social Commerce, especialmente a 'Vitrine de Links' e os botões de compartilhamento via WhatsApp, devem ser exaustivamente testadas em resoluções de celular (iPhone SE como base).
+3. Segurança e Auditoria LGPD:
+Mascaramento de Dados: Exigir testes que comprovem que dados sensíveis nunca trafegam abertos nas respostas da API e que o mascaramento (ex: CPF 123.*.5-67) funciona perfeitamente nas telas da UI do painel.
+Fail-Closed Auth: Testar o login do Google para garantir a rejeição sumária de acesso caso o token ou o GOOGLE_CLIENT_ID sejam inválidos.
+Salve o arquivo TESTING.md com esse conteúdo e me confirme assim que estiver criado!
