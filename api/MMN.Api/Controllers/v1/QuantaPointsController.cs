@@ -36,8 +36,10 @@ namespace MMN.Api.Controllers.v1
                         .Where(q => q.Ativo && q.IdUsuario == IdUsuarioLogado)
                         .Sum(q => (int?)q.Pontos) ?? 0;
                 }
-                catch
+                catch (Exception exSaldo)
                 {
+                    // QuantaPontos table may not exist yet in environments without Wave 2 migration; default 0 + log
+                    Console.Error.WriteLine($"[QuantaPoints] Falha ao consultar saldo (usuario {IdUsuarioLogado}): {exSaldo.Message}");
                     saldo = 0;
                 }
                 if (saldo < 0) saldo = 0;
@@ -51,7 +53,10 @@ namespace MMN.Api.Controllers.v1
                         valorPonto = v;
                     }
                 }
-                catch { }
+                catch (Exception exCfg)
+                {
+                    Console.Error.WriteLine($"[QuantaPoints] Configuracao 'Rede.QuantaPontoValor' indisponivel, usando default 1.0: {exCfg.Message}");
+                }
 
                 return Ok(new
                 {

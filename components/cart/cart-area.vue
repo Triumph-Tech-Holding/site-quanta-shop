@@ -94,7 +94,8 @@ let couponCode = ref<string>('');
 
 // handleCouponSubmit
 const handleCouponSubmit = () => {
-  console.log(couponCode.value)
+  // TODO(F-211): integrar com endpoint POST /Cupom/validar quando Wave 2 estiver em produção
+  if (!couponCode.value) return;
 }
 
 // handle shipping cost 

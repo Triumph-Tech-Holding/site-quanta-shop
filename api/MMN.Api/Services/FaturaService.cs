@@ -58,12 +58,7 @@ namespace MMN.Api.Services
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            var task = Task.Factory.StartNew(() =>
-            {
-                Console.WriteLine("Stopped");
-            });
-
-            return task;
+            return Task.CompletedTask;
         }
 
         public override void TimerTick(object info)
@@ -120,9 +115,10 @@ namespace MMN.Api.Services
                         if (fatura is not null)
                             await EnviarFaturaAsync(fatura);
                     }
-                    catch (Exception)
+                    catch (Exception exFatura)
                     {
-
+                        var msg = exFatura.InnerException?.Message ?? exFatura.Message;
+                        _logger.LogError(message: $"[FaturaService] Falha ao gerar fatura para credenciado {comerciante.IdUsuario}: {msg}");
                     }
                 }
 

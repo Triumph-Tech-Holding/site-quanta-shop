@@ -82,6 +82,10 @@ onMounted(async () => {
       stats.value[2].valor = data.saquesPendentes ?? '—';
       stats.value[3].valor = data.suporteAbertos ?? '—';
     }
-  } catch { /**/ } finally { loading.value = false; }
+  } catch (e) {
+    console.error('[admin/index] Falha ao carregar resumo do painel:', e);
+  } finally {
+    loading.value = false;
+  }
 });
 </script>

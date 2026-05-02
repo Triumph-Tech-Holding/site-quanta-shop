@@ -85,7 +85,7 @@
 </template>
 
 <script setup lang="ts">
-import { useAgenciaStore } from '~/composables/useAgenciaStore';
+import { useAgenciaStore } from '~/pinia/useAgenciaStore';
 defineProps<{ open?: boolean }>();
 
 const agenciaStore = useAgenciaStore();

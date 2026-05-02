@@ -88,7 +88,7 @@
 </template>
 
 <script setup lang="ts">
-const changeHandler = (e: { value: string; text: string }, index: number) => {
-  console.log(e);
+const changeHandler = (_e: { value: string; text: string }, _index: number) => {
+  // handler reservado para futura integração de endereço/seleção
 };
 </script>

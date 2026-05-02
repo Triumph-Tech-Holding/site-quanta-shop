@@ -144,9 +144,10 @@ namespace MMN.Api.Services
 
                     _lastTask.Wait();
                 }
-                catch
+                catch (Exception ex)
                 {
-
+                    var msg = ex.InnerException?.Message ?? ex.Message;
+                    Console.Error.WriteLine($"[AdiantamentoCashback] Falha ao lancar cashback para Pedido {idPedido}: {msg}");
                 }
             }
 
