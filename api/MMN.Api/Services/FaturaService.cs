@@ -58,6 +58,8 @@ namespace MMN.Api.Services
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
+            // Para o timer imediatamente para que TimerTick nao dispare durante o shutdown.
+            Timer?.Change(Timeout.Infinite, 0);
             return Task.CompletedTask;
         }
 

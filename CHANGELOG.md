@@ -4,6 +4,31 @@ Todas as mudanças relevantes da plataforma. Formato baseado em [Keep a Changelo
 
 ---
 
+## [1.2.1] — 2026-05-02 — Sprint de Auditoria, Performance e Refatoração
+
+> Sprint focada em estabilizar a base após a Wave 2: bugs silenciosos, código duplicado e UX ruim em pontos de toque do usuário. Documento completo de débito técnico em [`AUDIT_REPORT.md`](./AUDIT_REPORT.md).
+
+### 🐛 Bugs corrigidos
+- **`composables/useAgenciaStore.ts`** removido — eliminava o warning recorrente `Duplicated imports "useAgenciaStore"` (auto-import do Nuxt encontrava dois símbolos). Single source of truth: `pinia/useAgenciaStore.ts`. Os 6 imports que apontavam para o shim foram repointados.
+- **`api/MMN.Api/Controllers/v1/QuantaPointsController.cs`** — duas falhas silenciosas (`catch{}` que zerava saldo) agora registram erro com `Console.Error.WriteLine` mantendo o fallback seguro (saldo=0, valorPonto=1).
+- **`api/MMN.Api/Services/FaturaService.cs`** — `catch (Exception){}` vazio dentro do loop de credenciados agora chama `_logger.LogError` com `IdUsuario` do credenciado afetado. `StopAsync` agora realmente para o timer (`Timer?.Change(Timeout.Infinite, 0)`) em vez de apenas retornar `Task.CompletedTask`. Removido `Console.WriteLine("Stopped")` decorativo.
+- **`api/MMN.Api/Services/AdiantamentoCashback.cs`** — `catch{}` vazio no loop de cashback agora loga `IdPedido` e mensagem da exception (incluindo `InnerException`).
+- **`pages/agencia/painel/admin/index.vue`** — `catch { /**/ }` silencioso ao carregar `/admin/painel/resumo` agora exibe alerta visual (`loadError`) e loga no console.
+- **`components/cart/cart-area.vue`** — `console.log(couponCode.value)` removido. Botão "Apply" do cupom agora dá feedback ao usuário (`couponMsg`) em vez de não fazer nada.
+- **`components/checkout/checkout-billing.vue`** — `console.log(e)` removido; handler virou placeholder explícito (`_e`/`_index`).
+
+### 🧹 Refatoração / DRY
+- **`composables/useApiError.ts`** (novo) — utility único `extractApiError(err)` para extrair mensagens pt-BR de erros axios/fetch/Error. Mensagens dedicadas para 401/403/429/5xx/timeout. Filtro de páginas HTML de proxy/CDN (Cloudflare/Nginx) e cap de 240 caracteres para não poluir UI. Substitui o pattern ad-hoc replicado em quase toda página admin.
+- **`AUDIT_REPORT.md`** (novo) — diagnóstico completo: 36 achados (4 N+1 queries, 5 chamadas síncronas que poderiam ser async, 3 fat controllers, 6 componentes >500 linhas, 5 lógicas financeiras no frontend que deveriam estar no backend, 4 chamadas que ignoram o `useApi` e perdem o interceptor 401). Cada item com arquivo:linha e priorização. Sequência de sprints recomendada antes de tocar nas N+1 queries (xUnit primeiro).
+
+### ⚠️ Não corrigido nesta sprint (documentado para próximas)
+- N+1 queries em `Awin.cs:116`, `FaturaService.cs:114`, `AdiantamentoCashback.cs:136`, `PedidoNegocio.cs:165`.
+- `.Wait()` bloqueando thread pool em `Awin.cs:80`, `FaturaService.cs:71`, `AdiantamentoCashback.cs:145`.
+- Quebra de `pages/agencia/painel/admin/carrosseis.vue` (1090 linhas), `home-cms.vue` (942) e `configuracoes-rede.vue` (727) em sub-componentes.
+- Migração de cupons hardcoded (`QUANTA10`/`BEMVINDO`) do `checkout-verify.vue:161` para o backend (já existe `/cupom/validar`).
+
+---
+
 ## [1.2.0] — 2026-05-02 — Wave 2: Motor Financeiro + LGPD reveal auditado
 
 ### 💰 Motor de distribuição de cashback (T002 — Task #107)

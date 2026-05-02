@@ -4,6 +4,10 @@
 
     <div v-if="loading" class="ag-loading"><div class="spinner-border" /></div>
 
+    <div v-if="loadError" class="alert alert-warning" style="margin-bottom:16px">
+      Não foi possível carregar o resumo do painel. Os indicadores podem estar desatualizados.
+    </div>
+
     <template v-else>
       <div class="row g-3 mb-4">
         <div class="col-6 col-md-3" v-for="(s, i) in stats" :key="i">
@@ -41,6 +45,7 @@ definePageMeta({ layout: 'agencia-painel', middleware: ['agencia-auth', 'agencia
 const agenciaStore = useAgenciaStore();
 const api = useApi();
 const loading = ref(true);
+const loadError = ref(false);
 const stats = ref([
   { label: 'Total usuários', valor: '—' },
   { label: 'Compras pendentes', valor: '—' },
@@ -84,6 +89,7 @@ onMounted(async () => {
     }
   } catch (e) {
     console.error('[admin/index] Falha ao carregar resumo do painel:', e);
+    loadError.value = true;
   } finally {
     loading.value = false;
   }

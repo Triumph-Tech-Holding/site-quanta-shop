@@ -10,7 +10,12 @@ import axios from 'axios';
 export function extractApiError(err: unknown, fallback = 'Falha inesperada. Tente novamente.'): string {
   if (axios.isAxiosError(err)) {
     const data: any = err.response?.data;
-    if (typeof data === 'string') return data;
+    if (typeof data === 'string') {
+      const trimmed = data.trim();
+      // Filtra páginas HTML de proxy/CDN (Cloudflare, Nginx 502 etc.) e textos longos demais para UI
+      const looksLikeHtml = /^<!doctype|^<html|<body[\s>]/i.test(trimmed);
+      if (!looksLikeHtml && trimmed.length > 0 && trimmed.length <= 240) return trimmed;
+    }
     if (data?.erros?.[0]?.mensagem) return String(data.erros[0].mensagem);
     if (data?.message) return String(data.message);
     if (data?.detail) return String(data.detail);
