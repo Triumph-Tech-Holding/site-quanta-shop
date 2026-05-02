@@ -73,13 +73,27 @@ namespace MMN.Api
                 };
             }
 
+            // Trusted suffixes for Replit hosted environments (dev + published)
+            var trustedSuffixes = new[] { ".replit.dev", ".replit.app", ".janeway.replit.dev" };
+
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowMyOrigin",
                 builder =>
                     builder.AllowAnyHeader()
                     .AllowAnyMethod()
-                    .WithOrigins(allowedOrigins)
+                    .SetIsOriginAllowed(origin =>
+                    {
+                        if (string.IsNullOrEmpty(origin)) return false;
+                        if (allowedOrigins.Contains(origin, StringComparer.OrdinalIgnoreCase))
+                            return true;
+                        try
+                        {
+                            var host = new Uri(origin).Host;
+                            return trustedSuffixes.Any(s => host.EndsWith(s, StringComparison.OrdinalIgnoreCase));
+                        }
+                        catch { return false; }
+                    })
                     .AllowCredentials()
                     .WithExposedHeaders("token-expired"));
             });
