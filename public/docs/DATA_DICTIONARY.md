@@ -27,8 +27,8 @@
 | Coluna | Tipo | LGPD | Descrição |
 |--------|------|------|-----------|
 | 🔑 `IdUsuario` | Guid | — | ID único |
-| 🔗 `IdUsuarioPai` | Guid? | — | Patrocinador na rede MLM (auto-relacionamento) |
-| 🔗 `IdGrupo` | int | — | Grupo de permissões (Admin, Comerciante, Cliente, Agente) |
+| 🔗 `IdUsuarioPai` | Guid? | — | Indicador/Upline na Rede Proprietária (auto-relacionamento) |
+| 🔗 `IdGrupo` | int | — | Grupo de permissões legado (Admin = Admin, Comerciante = Empresa Parceira ZEE DIGITAL, Cliente/Agente = Membro ADF) |
 | 🔒 `Nome` | string | **Sim** | Nome completo |
 | 🔒 `NomeSocial` | string | **Sim** | Nome social (Lei 14.046/2020) |
 | 🔒 `Email` | string | **Sim** | E-mail (login alternativo) |
@@ -60,7 +60,7 @@
 | `Master` | bool | — | Flag de super-admin |
 | `UrlImg` | string | — | URL da foto |
 | `Empreendedor` | bool | — | Indica se é Agente |
-| `Perfil` | char | — | Categoria: 'C' cliente / 'L' lojista / 'A' agente |
+| `Perfil` | char | — | Categoria legada: C = Consumidor (ADF) / L = Empresa Parceira (ZEE DIGITAL) / A = Agente de Fidelização (ADF) |
 | `TermosDeAceite` | bool | — | LGPD: aceite obrigatório no cadastro |
 | `PreCadastro` | bool | — | Cadastro incompleto |
 | `LoginAlterado` | bool | — | Sinaliza login customizado |
@@ -74,7 +74,7 @@
 - `Lancamento`, `Transacao`, `Saque` — financeiro
 - `UsuarioBanco` — contas bancárias
 - `UsuarioCarteira` — carteiras BTC
-- `Credenciamento` — para lojistas
+- `Credenciamento` — para Empresas Parceiras (ZEE DIGITAL)
 - `Pedido` (compras) e `Vendas` (vendas como comerciante)
 - `RefreshToken` — tokens JWT ativos
 
@@ -120,7 +120,7 @@
 | `Ativo` / `Aprovado` | bool | — | Aprovado por admin antes do primeiro saque |
 | 🕒 `DataAprovacao` | DateTime? | — | — |
 
-> 🔵 **Decisão técnica em aberto:** descontinuar BTC (poucos saques) ou modernizar para Lightning Network. Ver `FEATURES.md#F-306`.
+> ⛔ **Status: Entidade DESCONTINUADA.** A Quanta Shop não opera como corretora cripto. Saques ocorrerão estritamente em moeda corrente (PIX/TED).
 
 ---
 
@@ -222,7 +222,7 @@
 
 ---
 
-## 3. Hierarquia da Rede MLM
+## 3. Hierarquia da Rede Proprietária
 
 ### `QuantaAmizade` — programa de indicações
 **Tabela:** `QuantaAmizade` · **PK:** `IdQuantaAmizade`
@@ -257,7 +257,7 @@ Premiações pontuais para a rede.
 
 ## 4. Catálogo e Comércio
 
-### `Anunciante` — parceiro/loja
+### `Anunciante` — Empresa Parceira (Dona da ZEE DIGITAL)
 | Coluna | Tipo | Descrição |
 |--------|------|-----------|
 | 🔑 `IdAnunciante` | int | — |
@@ -283,10 +283,10 @@ Configurações de promoção e auditoria.
 Registros de pagamento (gateway).
 
 ### `Fatura`
-Faturas do lojista (mensalidade da plataforma).
+Faturas da Empresa Parceira / ZEE DIGITAL (mensalidade da plataforma).
 
 ### `Credenciamento`
-Cadastro estendido para lojistas: ecossistema, categoria, taxa, percentuais.
+Cadastro estendido para Empresas Parceiras (ZEE DIGITAL): ecossistema, categoria, taxa, percentuais.
 
 ### `CupomCashback`, `CupomCashbackDadosNF`, `CupomCashbackItemNF`, `CuponCashbackPedido`
 Sistema de cupons fiscais (NF-e) para cashback presencial.
