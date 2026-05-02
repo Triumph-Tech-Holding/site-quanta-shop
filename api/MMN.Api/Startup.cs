@@ -405,12 +405,37 @@ namespace MMN.Api
             app.UseCors("AllowMyOrigin");
             app.UseMvc();
 
+            SyncGoogleCredentialsFromEnv(app.ApplicationServices);
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHealthChecks("/health");
                 endpoints.MapHub<BuyConfirmationHub>("/buy-confirmation");
                 endpoints.MapWebHookSubscriptionEndpoints();
             });
+        }
+
+        private static void SyncGoogleCredentialsFromEnv(IServiceProvider services)
+        {
+            var clientId = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID");
+            var clientSecret = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_SECRET");
+            if (string.IsNullOrEmpty(clientId)) return;
+
+            try
+            {
+                using var scope = services.CreateScope();
+                var db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+                var record = db.ProvedorAutenticacao.FirstOrDefault(p => p.IdProvedorAutenticacao == -1);
+                if (record == null) return;
+                record.Login = clientId;
+                if (!string.IsNullOrEmpty(clientSecret))
+                    record.Senha = clientSecret;
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[startup] Could not sync Google credentials from env: {ex.Message}");
+            }
         }
 
         private void SeedTestData(DatabaseContext db)

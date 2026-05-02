@@ -12,13 +12,15 @@
 import { extractApiErrorMessage } from '~/types/agencia';
 definePageMeta({ layout: 'agencia-login' });
 const route = useRoute();
+const config = useRuntimeConfig();
 const api = useApi();
 const agenciaStore = useAgenciaStore();
 const { $toast } = useNuxtApp();
 
 onMounted(async () => {
   const code = route.query.code as string;
-  const redirectUri = window.location.origin + '/agencia/login-social/google';
+  const siteUrl = config.public.siteUrl || (typeof window !== 'undefined' ? window.location.origin : '');
+  const redirectUri = `${siteUrl}/agencia/login-social/google`;
   try {
     const { data } = await api.post('/UsuarioLogin/autenticacaoGoogle', { code, redirectUri });
     if (data?.token) {
