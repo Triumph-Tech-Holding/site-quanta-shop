@@ -12,9 +12,10 @@
           <span class="docs-env-dot"></span>
           {{ isDev ? 'Dev (Replit)' : 'Produção' }}
         </span>
-        <button v-if="activeDoc" class="btn btn-ag-outline btn-sm" @click="exportarPDF">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          Exportar PDF
+        <button v-if="activeDoc" class="btn btn-ag-outline btn-sm" :disabled="gerandoPDF" @click="exportarPDF">
+          <span v-if="gerandoPDF" class="spinner-border spinner-border-sm me-1" style="width:12px;height:12px;border-width:2px"></span>
+          <svg v-else width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          {{ gerandoPDF ? 'Gerando…' : 'Baixar PDF' }}
         </button>
       </div>
     </div>
@@ -68,10 +69,11 @@
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                 Visualizar
               </button>
-              <a class="docs-btn-action" :href="`/docs/${doc.arquivo}`" :download="doc.arquivo">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                Baixar .md
-              </a>
+              <button class="docs-btn-action" :disabled="gerandoPDF" @click.stop="exportarPDFDoc(doc)">
+                <span v-if="gerandoPDF && gerandoPDFId === doc.id" class="spinner-border spinner-border-sm" style="width:11px;height:11px;border-width:1.5px"></span>
+                <svg v-else width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                PDF
+              </button>
             </div>
           </div>
         </div>
@@ -331,8 +333,70 @@ function renderMd(raw: string): string {
   return out.join('');
 }
 
+const gerandoPDF = ref(false);
+const gerandoPDFId = ref<string | null>(null);
+
+async function gerarPDF(doc: DocItem) {
+  if (gerandoPDF.value) return;
+  if (!doc.conteudo) await selecionarDoc(doc);
+  gerandoPDF.value = true;
+  gerandoPDFId.value = doc.id;
+  try {
+    const html2pdf = (await import('html2pdf.js')).default;
+    const container = document.createElement('div');
+    container.innerHTML = `
+      <style>
+        * { box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Inter", sans-serif; font-size: 13px; line-height: 1.75; color: #1d1d1f; margin: 0; padding: 0; }
+        .md-h1 { font-size: 22px; font-weight: 800; color: #1d1d1f; border-bottom: 2px solid #2F7785; padding-bottom: 6px; margin: 24px 0 8px; }
+        .md-h2 { font-size: 16px; font-weight: 700; color: #2F7785; border-bottom: 1px solid rgba(47,119,133,.25); padding-bottom: 4px; margin: 20px 0 6px; }
+        .md-h3 { font-size: 13px; font-weight: 700; color: #225F6B; margin: 16px 0 4px; }
+        .md-h4 { font-size: 11px; font-weight: 700; color: #374151; text-transform: uppercase; letter-spacing: .05em; margin: 12px 0 2px; }
+        .md-p { margin: 0 0 4px; }
+        .md-spacer { height: 6px; }
+        .md-code { background: rgba(47,119,133,.1); color: #225F6B; padding: 1px 5px; border-radius: 4px; font-family: "SF Mono","Fira Code",monospace; font-size: .82em; }
+        .md-pre { background: #1d1d1f; border-radius: 8px; padding: 12px 16px; margin: 10px 0; overflow: hidden; page-break-inside: avoid; }
+        .md-codeblock { color: #98C73A; background: none; padding: 0; font-family: "SF Mono","Fira Code",monospace; font-size: .8rem; line-height: 1.6; white-space: pre-wrap; display: block; }
+        .md-blockquote { border-left: 3px solid #2F7785; background: rgba(47,119,133,.06); padding: 8px 14px; margin: 8px 0; border-radius: 0 6px 6px 0; color: #495057; }
+        .md-ul, .md-ol { padding-left: 18px; margin: 4px 0 8px; }
+        .md-ul li, .md-ol li { margin-bottom: 3px; }
+        .md-hr { border: none; border-top: 1px solid #e5e7eb; margin: 16px 0; }
+        .md-link { color: #2F7785; }
+        .md-table-wrap { overflow: hidden; margin: 10px 0; page-break-inside: avoid; }
+        .md-table { width: 100%; border-collapse: collapse; font-size: .84rem; }
+        .md-table th { background: rgba(47,119,133,.1); color: #225F6B; font-weight: 700; padding: 7px 10px; text-align: left; border-bottom: 2px solid rgba(47,119,133,.2); }
+        .md-table td { padding: 6px 10px; border-bottom: 1px solid #f3f4f6; color: #374151; }
+        .md-table tr:nth-child(even) td { background: rgba(0,0,0,.02); }
+      </style>
+      ${renderMd(doc.conteudo!)}
+    `;
+    const nomeArquivo = doc.arquivo.replace(/\.[^.]+$/, '') + '.pdf';
+    await html2pdf()
+      .set({
+        margin: [14, 14, 14, 14],
+        filename: nomeArquivo,
+        image: { type: 'jpeg', quality: 0.97 },
+        html2canvas: { scale: 2, useCORS: true, logging: false },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
+      })
+      .from(container)
+      .save();
+  } catch (e) {
+    console.error('[docs] Erro ao gerar PDF:', e);
+    alert('Não foi possível gerar o PDF. Tente novamente.');
+  } finally {
+    gerandoPDF.value = false;
+    gerandoPDFId.value = null;
+  }
+}
+
 function exportarPDF() {
-  window.print();
+  if (activeDoc.value) gerarPDF(activeDoc.value);
+}
+
+function exportarPDFDoc(doc: DocItem) {
+  gerarPDF(doc);
 }
 
 // Carrega CLAUDE.md automaticamente ao montar

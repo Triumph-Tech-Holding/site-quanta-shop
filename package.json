@@ -33,6 +33,7 @@
     "dayjs": "^1.11.9",
     "dotenv": "^16.4.5",
     "fs": "^0.0.1-security",
+    "html2pdf.js": "^0.14.0",
     "jsonwebtoken": "^9.0.2",
     "pdfkit": "^0.18.0",
     "pinia": "^2.1.6",
