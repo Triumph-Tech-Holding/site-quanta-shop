@@ -4,6 +4,46 @@ Todas as mudanças relevantes da plataforma. Formato baseado em [Keep a Changelo
 
 ---
 
+## [1.2.0] — 2026-05-02 — Wave 2: Motor Financeiro + LGPD reveal auditado
+
+### 💰 Motor de distribuição de cashback (T002 — Task #107)
+- **`api/MMN.Negocio/Services/CashbackDistribuicaoService.cs`** (novo) — Motor puro, sem dependência de DB. Recebe `CashbackConfig` + lista de uplines como input e retorna `CashbackResultado` com:
+  - 10% de retenção de **sustentabilidade** (default, editável no banco — chave `Rede.SustentabilidadePerc`).
+  - **Split base 50/25/25** (Empresa / Consumidor cashback / Rede MLM) editável no banco.
+  - **12 níveis residuais** (`Rede.ResLevel.{1..12}.Percentual` + `.Active`) com **compressão dinâmica** que pula uplines inativos sem deslocar percentual.
+  - **Multiplicador Plus** (default 2x) para assinantes Plus elegíveis.
+  - Validações: percentuais soma residuais ≤ 100% do pool, sustentabilidade entre 0 e 50%, split deve somar 100%.
+- **`api/MMN.Tests/`** (novo projeto xUnit) — 13 cenários cobrindo split base, sustentabilidade, 12 níveis ativos, compressão (3 inativos consecutivos), Plus 2x, rede vazia, valor zerado, split inválido, soma residual > 100%.
+
+### ⚙️ Configurações de Rede no banco (T003)
+- **`api/MMN.Api/Controllers/v1/AdminController.cs`** — endpoints `GET/POST /admin/configuracoes-rede` agora persistem **sustentabilidade**, **split base** (empresa / consumidor / rede), **12 níveis residuais**, compressão, valor do Quanta Point, multiplicador Plus, quarentena, profundidade máxima e bônus de credenciamento (3 níveis). Validações server-side (split soma 100%, sustentabilidade 0-50%, residual ≤100%).
+- Seeds default (`PERCENTUAL_RETENCAO_SUSTENTABILIDADE`, `SPLIT_*`, `Rede.ResLevel.*`, `Rede.CredLevel.*`) carregados via `_redeDefaults` e materializados no primeiro acesso ao endpoint.
+- Frontend `pages/agencia/painel/admin/configuracoes-rede.vue` — adiciona seção **Sustentabilidade** (slider 0-50%) e seção **Split base** (3 inputs com indicador de soma). Salva tudo no novo payload.
+
+### 🔎 Busca Inteligente (T004)
+- **`api/MMN.Api/Controllers/v1/SearchController.cs`** (novo) — endpoint público `GET /busca-inteligente` com filtros `q`, `minCashback`, `maxDistance` (Haversine sobre `lat`/`lng` do credenciado), `categoria`, `sort` (`cashback`/`distance`/`popular`/`price-asc`/`price-desc`). Paginação 30 default.
+- `pages/busca-inteligente.vue` — wired ao endpoint real (com fallback para mock se backend offline).
+
+### 🎟️ Cupom + Quanta Points no checkout (T005 + T006)
+- Entidades novas: **`Cupom`** (Codigo, Tipo, Valor, ValidoDe/Ate, MinimoPedido, MaxUsosTotal, MaxUsosPorCliente, Ativo) + **`CupomUso`** + **`QuantaPontoLancamento`** (event-source: Ganho/Resgate/Estorno) em `MMN.Dominio/Model/`.
+- Mappings + DbSets + seed `CupomSeed.cs` (códigos `QUANTA10` 10% e `BEMVINDO` R$25).
+- **`api/MMN.Api/Controllers/v1/CupomController.cs`** — `POST /cupom/validar` valida código, vigência, mínimo do pedido e cap de usos; com fallback dev caso a tabela ainda não exista.
+- **`api/MMN.Api/Controllers/v1/QuantaPointsController.cs`** — `GET /usuario/quanta-points` retorna `{ saldo, valorPonto }`; `POST /usuario/quanta-points/resgatar` debita atomicamente em transação (sem permitir saldo negativo).
+- `components/checkout/checkout-verify.vue` consome ambos os endpoints (mantém fallback dev).
+
+### 🛡️ LGPD — máscara + reveal auditado (T007 + T010)
+- **`api/MMN.Util/Util/LgpdMask.cs`** — helpers server-side `MaskCpfCnpj`, `MaskEmail`, `MaskTelefone`, `MaskConta`, `MaskAgencia`.
+- **`utils/lgpd-mask.ts`** (frontend) — espelho client-side dos helpers para qualquer página admin que receba dados sensíveis crus.
+- Entity nova **`AuditoriaLgpd`** (Master, IdAlvo, Campo, Motivo, IP, UserAgent, DataAcesso) + DbSet + mapping.
+- **`POST /admin/revelar-dado-sensivel`** (gated por `Usuario.Master == true`) — registra cada acesso na `AuditoriaLgpd`. Retorna 403 para não-Master.
+- `pages/agencia/painel/admin/usuarios.vue` — exibe e-mail mascarado por padrão; botão **Revelar** aparece apenas para Master, chama o endpoint e desbloqueia o campo cru no modal.
+
+### 📊 Documentação
+- `public/docs/features.json` versão **1.2.0** — F-208 a F-212 e F-304 marcados como **done**, novo **F-213** (LGPD mask + reveal auditado).
+- Apple Sign In **removido do escopo** desta wave; F-211 ajustado para "Login social (Google)" done.
+
+---
+
 ## [Não publicado] — Mai 2026
 
 ### 🌊 Sprint Power Phase 1 — Componentização premium + telas de modernização

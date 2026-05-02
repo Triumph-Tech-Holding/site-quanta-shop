@@ -86,6 +86,12 @@ namespace MMN.Repositorio.Contexto
 
         public virtual DbSet<Promocao> Promocao { get; set; }
 
+        // Wave 2 — Motor Financeiro
+        public virtual DbSet<Cupom> Cupom { get; set; }
+        public virtual DbSet<CupomUso> CupomUso { get; set; }
+        public virtual DbSet<QuantaPontoLancamento> QuantaPontoLancamento { get; set; }
+        public virtual DbSet<AuditoriaLgpd> AuditoriaLgpd { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -152,7 +158,14 @@ namespace MMN.Repositorio.Contexto
             modelBuilder.ApplyConfiguration(new PercentualResidualCashbackMapping());
             modelBuilder.ApplyConfiguration(new QuantaAmizadeMapping());
 
+            // Wave 2 — Motor Financeiro
+            modelBuilder.ApplyConfiguration(new CupomMapping());
+            modelBuilder.ApplyConfiguration(new CupomUsoMapping());
+            modelBuilder.ApplyConfiguration(new QuantaPontoLancamentoMapping());
+            modelBuilder.ApplyConfiguration(new AuditoriaLgpdMapping());
+
             modelBuilder.SeedProvedorAutenticacao();
+            modelBuilder.SeedCupons();
 
             modelBuilder.Entity<Usuario>(entry =>
             {

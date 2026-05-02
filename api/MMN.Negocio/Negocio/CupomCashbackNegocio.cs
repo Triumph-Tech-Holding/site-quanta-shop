@@ -14,7 +14,6 @@ using MMN.Integracoes.Afilio;
 using System.Linq;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 using SendGrid.Helpers.Mail;
 using Microsoft.AspNetCore.Http.HttpResults;

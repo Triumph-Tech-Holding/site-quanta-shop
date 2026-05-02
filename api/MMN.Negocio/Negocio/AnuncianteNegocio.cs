@@ -302,16 +302,16 @@ namespace MMN.Negocio.Negocio
             return credenciamentos;
         }
 
-        public async Task<IList<Cupom>> GetCuponsFromCache()
+        public async Task<IList<MMN.Integracoes.Afilio.Cupom>> GetCuponsFromCache()
         {
-            var cupons = (List<Cupom>)_cache.GetItem(CacheKeys.Cupom);
+            var cupons = (List<MMN.Integracoes.Afilio.Cupom>)_cache.GetItem(CacheKeys.Cupom);
             if (cupons != null && cupons.Count > 0) return cupons;
 
             var afilio = new AfilioBLL();
             var ret = await afilio.GetCupons();
 
             _cache.SetItem(CacheKeys.Cupom, ret);
-            cupons = (List<Cupom>)_cache.GetItem(CacheKeys.Cupom);
+            cupons = (List<MMN.Integracoes.Afilio.Cupom>)_cache.GetItem(CacheKeys.Cupom);
 
             return cupons;
         }

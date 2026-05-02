@@ -1055,17 +1055,35 @@ namespace MMN.Api.Controllers.v1
                 { "Rede.QuantaPontoValor",     ("1.00",  "decimal", "Valor em R$ de 1 Quanta Ponto") },
                 { "Rede.PlusMultiplicador",    ("2.00",  "decimal", "Multiplicador Plus para residual") },
                 { "Rede.QuarentenaDias",       ("30",    "int",     "Dias de quarentena (aging) para liberar cashback") },
-                { "Rede.ProfundidadeMax",      ("5",     "int",     "Profundidade maxima da rede para residual") },
-                { "Rede.ResLevel.1.Percentual",("5.00",  "decimal", "Residual nivel 1 (%)") },
+                { "Rede.ProfundidadeMax",      ("12",    "int",     "Profundidade maxima da rede para residual") },
+                { "Rede.SustentabilidadePerc", ("10.00", "decimal", "Percentual de retencao de sustentabilidade sobre valor bruto") },
+                { "Rede.SplitEmpresaPerc",     ("50.00", "decimal", "Split base: percentual da empresa") },
+                { "Rede.SplitConsumidorPerc",  ("25.00", "decimal", "Split base: percentual do consumidor (cashback principal)") },
+                { "Rede.SplitRedePerc",        ("25.00", "decimal", "Split base: percentual destinado a rede MLM") },
+                { "Rede.ResLevel.1.Percentual",("20.00", "decimal", "Residual nivel 1 (% do pool de rede)") },
                 { "Rede.ResLevel.1.Active",    ("true",  "bool",    "Residual nivel 1 ativo") },
-                { "Rede.ResLevel.2.Percentual",("3.00",  "decimal", "Residual nivel 2 (%)") },
+                { "Rede.ResLevel.2.Percentual",("15.00", "decimal", "Residual nivel 2 (% do pool de rede)") },
                 { "Rede.ResLevel.2.Active",    ("true",  "bool",    "Residual nivel 2 ativo") },
-                { "Rede.ResLevel.3.Percentual",("2.00",  "decimal", "Residual nivel 3 (%)") },
+                { "Rede.ResLevel.3.Percentual",("12.00", "decimal", "Residual nivel 3 (% do pool de rede)") },
                 { "Rede.ResLevel.3.Active",    ("true",  "bool",    "Residual nivel 3 ativo") },
-                { "Rede.ResLevel.4.Percentual",("1.00",  "decimal", "Residual nivel 4 (%)") },
+                { "Rede.ResLevel.4.Percentual",("10.00", "decimal", "Residual nivel 4 (% do pool de rede)") },
                 { "Rede.ResLevel.4.Active",    ("true",  "bool",    "Residual nivel 4 ativo") },
-                { "Rede.ResLevel.5.Percentual",("1.00",  "decimal", "Residual nivel 5 (%)") },
+                { "Rede.ResLevel.5.Percentual",("8.00",  "decimal", "Residual nivel 5 (% do pool de rede)") },
                 { "Rede.ResLevel.5.Active",    ("true",  "bool",    "Residual nivel 5 ativo") },
+                { "Rede.ResLevel.6.Percentual",("7.00",  "decimal", "Residual nivel 6 (% do pool de rede)") },
+                { "Rede.ResLevel.6.Active",    ("true",  "bool",    "Residual nivel 6 ativo") },
+                { "Rede.ResLevel.7.Percentual",("6.00",  "decimal", "Residual nivel 7 (% do pool de rede)") },
+                { "Rede.ResLevel.7.Active",    ("true",  "bool",    "Residual nivel 7 ativo") },
+                { "Rede.ResLevel.8.Percentual",("5.00",  "decimal", "Residual nivel 8 (% do pool de rede)") },
+                { "Rede.ResLevel.8.Active",    ("true",  "bool",    "Residual nivel 8 ativo") },
+                { "Rede.ResLevel.9.Percentual",("5.00",  "decimal", "Residual nivel 9 (% do pool de rede)") },
+                { "Rede.ResLevel.9.Active",    ("true",  "bool",    "Residual nivel 9 ativo") },
+                { "Rede.ResLevel.10.Percentual",("4.00", "decimal", "Residual nivel 10 (% do pool de rede)") },
+                { "Rede.ResLevel.10.Active",   ("true",  "bool",    "Residual nivel 10 ativo") },
+                { "Rede.ResLevel.11.Percentual",("4.00", "decimal", "Residual nivel 11 (% do pool de rede)") },
+                { "Rede.ResLevel.11.Active",   ("true",  "bool",    "Residual nivel 11 ativo") },
+                { "Rede.ResLevel.12.Percentual",("4.00", "decimal", "Residual nivel 12 (% do pool de rede)") },
+                { "Rede.ResLevel.12.Active",   ("true",  "bool",    "Residual nivel 12 ativo") },
                 { "Rede.CredLevel.1.Percentual",("8.00", "decimal", "Credenciamento nivel 1 (%)") },
                 { "Rede.CredLevel.1.Active",   ("true",  "bool",    "Credenciamento nivel 1 ativo") },
                 { "Rede.CredLevel.2.Percentual",("4.00", "decimal", "Credenciamento nivel 2 (%)") },
@@ -1107,7 +1125,7 @@ namespace MMN.Api.Controllers.v1
             try
             {
                 var resLevels = new List<object>();
-                for (int n = 1; n <= 5; n++)
+                for (int n = 1; n <= 12; n++)
                 {
                     resLevels.Add(new
                     {
@@ -1129,6 +1147,13 @@ namespace MMN.Api.Controllers.v1
 
                 return Ok(new
                 {
+                    sustentabilidadePerc = GetCfgDec("Rede.SustentabilidadePerc"),
+                    splitBase = new
+                    {
+                        empresa = GetCfgDec("Rede.SplitEmpresaPerc"),
+                        consumidor = GetCfgDec("Rede.SplitConsumidorPerc"),
+                        rede = GetCfgDec("Rede.SplitRedePerc"),
+                    },
                     compressaoDinamica = GetCfgBool("Rede.CompressaoDinamica"),
                     quantaPontoValor = GetCfgDec("Rede.QuantaPontoValor"),
                     plusMultiplicador = GetCfgDec("Rede.PlusMultiplicador"),
@@ -1148,6 +1173,8 @@ namespace MMN.Api.Controllers.v1
 
         public class ConfiguracoesRedeUpdateViewModel
         {
+            public decimal? SustentabilidadePerc { get; set; }
+            public SplitBaseConfig SplitBase { get; set; }
             public bool? CompressaoDinamica { get; set; }
             public decimal? QuantaPontoValor { get; set; }
             public decimal? PlusMultiplicador { get; set; }
@@ -1161,6 +1188,13 @@ namespace MMN.Api.Controllers.v1
                 public int Level { get; set; }
                 public decimal Percentual { get; set; }
                 public bool Active { get; set; }
+            }
+
+            public class SplitBaseConfig
+            {
+                public decimal Empresa { get; set; }
+                public decimal Consumidor { get; set; }
+                public decimal Rede { get; set; }
             }
         }
 
@@ -1202,8 +1236,37 @@ namespace MMN.Api.Controllers.v1
 
             if (view == null) return BadRequest(new { message = "payload_invalido" });
 
+            // Validacoes
+            if (view.SplitBase != null)
+            {
+                var soma = view.SplitBase.Empresa + view.SplitBase.Consumidor + view.SplitBase.Rede;
+                if (Math.Abs(soma - 100m) > 0.01m)
+                {
+                    return BadRequest(new { message = "split_invalido", detail = $"Soma do split base deve ser 100% (atual: {soma}%)." });
+                }
+            }
+            if (view.SustentabilidadePerc.HasValue && (view.SustentabilidadePerc < 0m || view.SustentabilidadePerc > 50m))
+            {
+                return BadRequest(new { message = "sustentabilidade_invalida", detail = "Percentual de sustentabilidade deve estar entre 0 e 50." });
+            }
+            if (view.ResidualLevels != null)
+            {
+                var somaRes = view.ResidualLevels.Where(l => l.Active).Sum(l => l.Percentual);
+                if (somaRes > 100m)
+                {
+                    return BadRequest(new { message = "soma_residual_excede_teto", detail = $"Soma dos niveis residuais ativos excede 100% do pool de rede (atual: {somaRes}%)." });
+                }
+            }
+
             try
             {
+                if (view.SustentabilidadePerc.HasValue) UpsertCfg("Rede.SustentabilidadePerc", view.SustentabilidadePerc.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                if (view.SplitBase != null)
+                {
+                    UpsertCfg("Rede.SplitEmpresaPerc", view.SplitBase.Empresa.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                    UpsertCfg("Rede.SplitConsumidorPerc", view.SplitBase.Consumidor.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                    UpsertCfg("Rede.SplitRedePerc", view.SplitBase.Rede.ToString(System.Globalization.CultureInfo.InvariantCulture));
+                }
                 if (view.CompressaoDinamica.HasValue) UpsertCfg("Rede.CompressaoDinamica", view.CompressaoDinamica.Value ? "true" : "false");
                 if (view.QuantaPontoValor.HasValue) UpsertCfg("Rede.QuantaPontoValor", view.QuantaPontoValor.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
                 if (view.PlusMultiplicador.HasValue) UpsertCfg("Rede.PlusMultiplicador", view.PlusMultiplicador.Value.ToString(System.Globalization.CultureInfo.InvariantCulture));
@@ -1212,7 +1275,7 @@ namespace MMN.Api.Controllers.v1
 
                 if (view.ResidualLevels != null)
                 {
-                    foreach (var lvl in view.ResidualLevels.Where(l => l.Level >= 1 && l.Level <= 5))
+                    foreach (var lvl in view.ResidualLevels.Where(l => l.Level >= 1 && l.Level <= 12))
                     {
                         UpsertCfg($"Rede.ResLevel.{lvl.Level}.Percentual", lvl.Percentual.ToString(System.Globalization.CultureInfo.InvariantCulture));
                         UpsertCfg($"Rede.ResLevel.{lvl.Level}.Active", lvl.Active ? "true" : "false");
@@ -1233,6 +1296,114 @@ namespace MMN.Api.Controllers.v1
             {
                 return StatusCode(500, new { message = "erro_salvar_configuracoes", detail = ex.Message });
             }
+        }
+
+        // ============================================================
+        // LGPD — Reveal de dado sensivel (gated por Usuario.Master)
+        // ============================================================
+
+        public class RevelarDadoSensivelRequest
+        {
+            public Guid IdUsuarioAlvo { get; set; }
+            public string Campo { get; set; }
+            public string Motivo { get; set; }
+        }
+
+        [HttpPost]
+        [Route("revelar-dado-sensivel")]
+        public IActionResult RevelarDadoSensivel([FromBody] RevelarDadoSensivelRequest req)
+        {
+            if (req == null || req.IdUsuarioAlvo == Guid.Empty || string.IsNullOrWhiteSpace(req.Campo))
+            {
+                return BadRequest(new { message = "payload_invalido" });
+            }
+
+            var solicitante = _usuarioNegocio.GetById(IdUsuarioLogado);
+            if (solicitante == null || !solicitante.Master)
+            {
+                return StatusCode(403, new { message = "acesso_negado_lgpd", detail = "Apenas Admin Master pode revelar dados sensiveis." });
+            }
+
+            var alvo = _usuarioNegocio.GetById(req.IdUsuarioAlvo);
+            if (alvo == null)
+            {
+                return NotFound(new { message = "usuario_alvo_nao_encontrado" });
+            }
+
+            string valorRevelado = null;
+            var campo = (req.Campo ?? string.Empty).Trim().ToUpperInvariant();
+            try
+            {
+                switch (campo)
+                {
+                    case "CPF":
+                    case "CPFCNPJ":
+                    case "DOCUMENTO":
+                        valorRevelado = alvo.Documento;
+                        break;
+                    case "EMAIL":
+                        valorRevelado = alvo.Email;
+                        break;
+                    case "TELEFONE":
+                    case "CELULAR":
+                        valorRevelado = alvo.Celular;
+                        break;
+                    case "CONTA":
+                    case "CONTA_BANCARIA":
+                    {
+                        var ub = _context.UsuarioBanco.AsNoTracking().FirstOrDefault(u => u.IdUsuario == req.IdUsuarioAlvo);
+                        valorRevelado = ub?.Conta;
+                        break;
+                    }
+                    case "AGENCIA":
+                    {
+                        var ub = _context.UsuarioBanco.AsNoTracking().FirstOrDefault(u => u.IdUsuario == req.IdUsuarioAlvo);
+                        valorRevelado = ub?.Agencia;
+                        break;
+                    }
+                    default:
+                        return BadRequest(new { message = "campo_nao_suportado", detail = "Campos validos: CPF, EMAIL, TELEFONE, CONTA, AGENCIA." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "erro_revelar", detail = ex.Message });
+            }
+
+            // Auditoria OBRIGATORIA (fail-closed): se nao conseguir gravar, NAO revela.
+            try
+            {
+                var ip = HttpContext?.Connection?.RemoteIpAddress?.ToString();
+                var ua = Request?.Headers["User-Agent"].ToString();
+                _context.AuditoriaLgpd.Add(new Dominio.Model.AuditoriaLgpd
+                {
+                    IdUsuarioMaster = IdUsuarioLogado,
+                    IdUsuarioAlvo = req.IdUsuarioAlvo,
+                    Campo = campo,
+                    Motivo = req.Motivo,
+                    IpOrigem = ip,
+                    UserAgent = ua,
+                    DataAcesso = DateTime.UtcNow,
+                });
+                _context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(503, new
+                {
+                    message = "auditoria_lgpd_indisponivel",
+                    detail = "Reveal bloqueado: trilha de auditoria obrigatoria nao pode ser gravada. Aplique a migration AuditoriaLgpd em producao.",
+                    inner = ex.Message,
+                });
+            }
+
+            return Ok(new
+            {
+                campo,
+                valor = valorRevelado,
+                idUsuarioAlvo = req.IdUsuarioAlvo,
+                reveladoEm = DateTime.UtcNow,
+            });
         }
 
         [HttpGet]

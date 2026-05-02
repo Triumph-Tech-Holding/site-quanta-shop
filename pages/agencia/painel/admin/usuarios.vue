@@ -16,7 +16,7 @@
           <tbody>
             <tr v-for="item in itens" :key="item.id">
               <td class="fw-bold">{{ item.username || item.login }}</td>
-              <td>{{ item.email }}</td>
+              <td><span :title="isMaster ? item.email : 'Mascarado por LGPD'">{{ maskEmail(item.email) }}</span></td>
               <td>{{ item.login }}</td>
               <td>{{ item.perfil || '—' }}</td>
               <td><span class="badge-ag" :class="item.status === 'Ativo' ? 'badge-ag-success' : 'badge-ag-warning'">{{ item.status || 'Ativo' }}</span></td>
@@ -33,10 +33,22 @@
           <div class="row g-3">
             <div class="col-6"><strong>Nome:</strong><br/>{{ selecionado.username }}</div>
             <div class="col-6"><strong>Login:</strong><br/>{{ selecionado.login }}</div>
-            <div class="col-12"><strong>E-mail:</strong><br/>{{ selecionado.email }}</div>
+            <div class="col-12">
+              <strong>E-mail:</strong>
+              <button v-if="isMaster" type="button" class="btn btn-sm btn-link p-0 ms-2" @click="revelar('email')">
+                {{ revelados.email ? 'Ocultar' : 'Revelar' }}
+              </button>
+              <span v-else class="text-muted small ms-2" title="Apenas Master pode revelar">🔒 mascarado</span>
+              <br/>
+              <span class="font-monospace">{{ revelados.email ? selecionado.email : maskEmail(selecionado.email) }}</span>
+            </div>
             <div class="col-6"><strong>Perfil:</strong><br/>{{ selecionado.perfil || '—' }}</div>
             <div class="col-6"><strong>Status:</strong><br/>{{ selecionado.status || 'Ativo' }}</div>
           </div>
+          <div class="alert alert-info py-2 mt-3 mb-0" v-if="isMaster">
+            <small>🔓 Você é Master. Cada revelação é registrada na auditoria LGPD.</small>
+          </div>
+          <div v-if="revelarError" class="alert alert-warning py-2 mt-3 mb-0">{{ revelarError }}</div>
           <div class="mt-4 d-flex gap-2 flex-wrap">
             <button class="btn btn-ag-outline btn-sm" @click="alterarStatus(selecionado, 'Ativo')">Ativar</button>
             <button class="btn btn-outline-warning btn-sm" @click="alterarStatus(selecionado, 'Inativo')">Desativar</button>
@@ -52,6 +64,7 @@
 <script setup lang="ts">
 import { extractApiErrorMessage } from '~/types/agencia';
 import type { UsuarioAdmin } from '~/types/agencia';
+import { maskEmail } from '~/utils/lgpd-mask';
 definePageMeta({ layout: 'agencia-painel', middleware: ['agencia-auth', 'agencia-admin'] });
 const agenciaStore = useAgenciaStore();
 const api = useApi();
@@ -61,8 +74,24 @@ const showModal = ref(false);
 const modalError = ref('');
 const busca = ref('');
 const selecionado = ref<UsuarioAdmin | null>(null);
+const revelarError = ref('');
+const revelados = reactive<{ email: boolean; cpf: boolean; telefone: boolean }>({ email: false, cpf: false, telefone: false });
+
+const isMaster = computed<boolean>(() => {
+  const adm: any = agenciaStore.userAdmin || {};
+  return adm.master === true || adm.Master === true || adm.perfil === 'Master';
+});
+
 function authHeader() { return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } }; }
-function verUsuario(item: UsuarioAdmin) { selecionado.value = item; modalError.value = ''; showModal.value = true; }
+function verUsuario(item: UsuarioAdmin) {
+  selecionado.value = item;
+  modalError.value = '';
+  revelarError.value = '';
+  revelados.email = false;
+  revelados.cpf = false;
+  revelados.telefone = false;
+  showModal.value = true;
+}
 function fecharModal() { showModal.value = false; selecionado.value = null; }
 async function buscarUsuarios() {
   loading.value = true;
@@ -81,6 +110,25 @@ async function alterarStatus(item: UsuarioAdmin, novoStatus: string) {
     if (idx !== -1) itens.value[idx] = { ...itens.value[idx], status: novoStatus };
     if (selecionado.value?.id === item.id) selecionado.value = { ...selecionado.value, status: novoStatus };
   } catch (e: unknown) { modalError.value = extractApiErrorMessage(e, 'Erro ao alterar status.'); }
+}
+async function revelar(campo: 'email' | 'cpf' | 'telefone') {
+  if (!selecionado.value) return;
+  if (revelados[campo]) { revelados[campo] = false; return; }
+  if (!isMaster.value) {
+    revelarError.value = 'Apenas usuários Master podem revelar dados sensíveis.';
+    return;
+  }
+  revelarError.value = '';
+  try {
+    await api.post('/admin/revelar-dado-sensivel', {
+      idUsuarioAlvo: selecionado.value.id,
+      campo,
+      motivo: 'Consulta admin painel',
+    }, authHeader());
+    revelados[campo] = true;
+  } catch (e: any) {
+    revelarError.value = extractApiErrorMessage(e, 'Falha ao registrar/autorizar revelação.');
+  }
 }
 onMounted(async () => {
   agenciaStore.loadFromStorage();

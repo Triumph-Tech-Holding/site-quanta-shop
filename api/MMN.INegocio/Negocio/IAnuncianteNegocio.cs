@@ -12,7 +12,7 @@ namespace MMN.INegocio.Negocio
     {
         Task<object> BuscarAnunciantes(FiltroViewModel.AnunciantePaginado filtro);
         IEnumerable<AnuncianteViewModel> BuscarAnunciantesAleatorio();
-        Task<IList<Cupom>> GetCuponsFromCache();
+        Task<IList<MMN.Integracoes.Afilio.Cupom>> GetCuponsFromCache();
         List<AnuncianteViewModel> BuscarCashback(List<AnuncianteViewModel> anunciantes);
         AnuncianteViewModel BuscarCashbackAnunciante(AnuncianteViewModel anunciante);
         void EditarAnunciante(AnuncianteViewModel viewModel, Guid IdUsuarioLogado);

@@ -1,5 +1,38 @@
 # Quanta Shop Web
 
+## 💰 Wave 2 — Motor Financeiro + LGPD (Mai 2026 — Task #107) ✅
+
+Implementação completa do motor de distribuição de cashback, busca inteligente, checkout com cupom + Quanta Points e LGPD reveal auditado.
+
+### Backend (.NET 8 / `api/`)
+- **`MMN.Negocio/Services/CashbackDistribuicaoService.cs`** — motor puro (sem DB) com 10% sustentabilidade + split 50/25/25 + 12 níveis residuais + compressão dinâmica + multiplicador Plus 2x. Tudo configurável via banco (chaves `Rede.*`).
+- **`MMN.Tests/`** — projeto xUnit com 13 cenários cobrindo split, sustentabilidade, 12 níveis, compressão, Plus, validações.
+- **`MMN.Dominio/Model/`** novas entidades: `Cupom`, `CupomUso`, `QuantaPontoLancamento`, `AuditoriaLgpd` (+ mappings + seeds + DbSets).
+- **`MMN.Api/Controllers/v1/`** novos:
+  - `SearchController` → `GET /busca-inteligente` (Haversine + filtros + sort).
+  - `CupomController` → `POST /cupom/validar` (com fallback dev).
+  - `QuantaPointsController` → `GET /usuario/quanta-points` + `POST .../resgatar` (transação atômica).
+  - `AdminController` (extendido) → `GET/POST /admin/configuracoes-rede` com sustentabilidade + split base + 12 níveis; `POST /admin/revelar-dado-sensivel` gated por Master que loga `AuditoriaLgpd`.
+- **`MMN.Util/Util/LgpdMask.cs`** — helpers `MaskCpfCnpj`/`MaskEmail`/`MaskTelefone`/`MaskConta`/`MaskAgencia`.
+
+### Frontend (Nuxt)
+- **`utils/lgpd-mask.ts`** — espelho client-side dos helpers de mask.
+- **`pages/agencia/painel/admin/configuracoes-rede.vue`** — UI nova para sustentabilidade (slider 0-50%) e split base (3 inputs com badge de soma=100%). Persiste 12 níveis (era 5).
+- **`pages/agencia/painel/admin/usuarios.vue`** — e-mail mascarado por padrão; botão **Revelar** aparece só para Master, chama `/admin/revelar-dado-sensivel` e exibe o cru no modal.
+- **`pages/busca-inteligente.vue`** — consome `/busca-inteligente` real (mantém fallback mock).
+- **`components/checkout/checkout-verify.vue`** — consome `/cupom/validar` e `/usuario/quanta-points` reais.
+
+### Tabelas pendentes em produção (executar migration manual)
+- `Cupom`, `CupomUso`, `QuantaPontoLancamento`, `AuditoriaLgpd`.
+- Configurações novas em `Configuracao` (criadas automaticamente no primeiro POST do endpoint admin via `UpsertCfg`).
+
+### Out of scope desta wave
+- Apple Sign In (re-avaliar em wave futura).
+- CRUD admin de cupons (admin gera apenas via seed/migration por ora).
+- Criptografia em repouso de CPF.
+
+---
+
 ## 🌊 Sprint Power Phase 1 (Mai 2026 — em andamento)
 
 Componentes do Premium Design System extraídos como SFCs reutilizáveis e construção das primeiras telas da Fase 1 do roadmap (Sprint Power):

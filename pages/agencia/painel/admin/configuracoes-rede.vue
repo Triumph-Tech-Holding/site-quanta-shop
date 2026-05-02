@@ -59,6 +59,60 @@
         />
       </div>
 
+      <!-- 0a. Sustentabilidade -->
+      <section class="qs-card-section">
+        <div class="qs-section-head">
+          <div>
+            <h2 class="qs-section-title">Retenção de Sustentabilidade</h2>
+            <p class="qs-section-desc">
+              Percentual retido sobre o cashback bruto antes de qualquer divisão. Default 10%.
+              Vai para o caixa estratégico da Quanta Shop e é editável aqui sem novo deploy.
+            </p>
+          </div>
+          <div class="qs-cashback-display" style="text-align:right">
+            <span class="qs-cashback-value">{{ sustentabilidadePerc.toFixed(2) }}<small>%</small></span>
+          </div>
+        </div>
+        <input type="range" :min="0" :max="50" step="0.5" v-model.number="sustentabilidadePerc" @input="dirty = true" class="qs-range" />
+        <div class="qs-range-marks"><span>0%</span><span>10%</span><span>25%</span><span>50%</span></div>
+      </section>
+
+      <!-- 0b. Split base -->
+      <section class="qs-card-section">
+        <div class="qs-section-head">
+          <div>
+            <h2 class="qs-section-title">Split base (após sustentabilidade)</h2>
+            <p class="qs-section-desc">
+              Como o saldo restante é dividido entre Empresa, Consumidor (cashback) e Rede MLM (residuais).
+              <strong>Soma deve ser 100%</strong>.
+            </p>
+          </div>
+          <div class="qs-cashback-display" style="text-align:right">
+            <span class="qs-cashback-value" :style="{ color: splitSomaOk ? 'var(--qs-teal-dark)' : '#dc2626' }">
+              {{ splitSoma.toFixed(2) }}<small>%</small>
+            </span>
+            <span class="qs-cashback-label">{{ splitSomaOk ? 'OK' : 'precisa somar 100%' }}</span>
+          </div>
+        </div>
+        <div class="qs-split-grid">
+          <label class="qs-split-cell">
+            <span class="qs-split-label">Empresa</span>
+            <input type="number" step="0.5" min="0" max="100" v-model.number="splitEmpresa" @input="dirty = true" class="qs-pct-input" />
+            <span class="qs-pct-symbol">%</span>
+          </label>
+          <label class="qs-split-cell">
+            <span class="qs-split-label">Consumidor (cashback)</span>
+            <input type="number" step="0.5" min="0" max="100" v-model.number="splitConsumidor" @input="dirty = true" class="qs-pct-input" />
+            <span class="qs-pct-symbol">%</span>
+          </label>
+          <label class="qs-split-cell">
+            <span class="qs-split-label">Rede MLM (residuais)</span>
+            <input type="number" step="0.5" min="0" max="100" v-model.number="splitRede" @input="dirty = true" class="qs-pct-input" />
+            <span class="qs-pct-symbol">%</span>
+          </label>
+        </div>
+      </section>
+
       <!-- 1. Percentuais por nível -->
       <section class="qs-card-section">
         <div class="qs-section-head">
@@ -276,9 +330,16 @@ const compressionEnabled = ref(true);
 const pointValueBRL = ref(1.0);
 const plusMultiplier = ref(2.0);
 const quarantineDays = ref(30);
-const maxDepth = ref(5);
+const maxDepth = ref(12);
+const sustentabilidadePerc = ref(10);
+const splitEmpresa = ref(50);
+const splitConsumidor = ref(25);
+const splitRede = ref(25);
 const errorMsg = ref<string | null>(null);
 const saveError = ref<string | null>(null);
+
+const splitSoma = computed(() => splitEmpresa.value + splitConsumidor.value + splitRede.value);
+const splitSomaOk = computed(() => Math.abs(splitSoma.value - 100) < 0.01);
 
 const mvpColors = ['#225F6B', '#2F7785', '#3A9AAD', '#98C73A', '#7aad1f'];
 
@@ -311,7 +372,13 @@ async function loadAll() {
     pointValueBRL.value = Number(data.quantaPontoValor ?? 1.0);
     plusMultiplier.value = Number(data.plusMultiplicador ?? 2.0);
     quarantineDays.value = Number(data.quarentenaDias ?? 30);
-    maxDepth.value = Number(data.profundidadeMax ?? 5);
+    maxDepth.value = Number(data.profundidadeMax ?? 12);
+    sustentabilidadePerc.value = Number(data.sustentabilidadePerc ?? 10);
+    if (data.splitBase) {
+      splitEmpresa.value = Number(data.splitBase.empresa ?? 50);
+      splitConsumidor.value = Number(data.splitBase.consumidor ?? 25);
+      splitRede.value = Number(data.splitBase.rede ?? 25);
+    }
   } catch (e: any) {
     errorMsg.value = e?.response?.data?.message
       || e?.message
@@ -326,8 +393,15 @@ async function loadAll() {
 async function saveAll() {
   saving.value = true;
   saveError.value = null;
+  if (!splitSomaOk.value) {
+    saveError.value = `O split base precisa somar 100% (atual: ${splitSoma.value.toFixed(2)}%).`;
+    saving.value = false;
+    return;
+  }
   try {
     await api.post('/admin/configuracoes-rede', {
+      sustentabilidadePerc: sustentabilidadePerc.value,
+      splitBase: { empresa: splitEmpresa.value, consumidor: splitConsumidor.value, rede: splitRede.value },
       residualLevels: levels.value.map(l => ({ level: l.level, percentual: l.percentual, active: l.active })),
       credenciamentoLevels: credLevels.value.map(l => ({ level: l.level, percentual: l.percentual, active: l.active })),
       compressaoDinamica: compressionEnabled.value,
@@ -362,7 +436,7 @@ function levelName(n: number): string {
   return `Nível ${n}`;
 }
 function ordinal(n: number): string {
-  return ['', 'direto', '2º', '3º', '4º', '5º'][n] || `${n}º`;
+  return ['', 'direto', '2º', '3º', '4º', '5º', '6º', '7º', '8º', '9º', '10º', '11º', '12º'][n] || `${n}º`;
 }
 function formatDate(iso: string): string {
   try {
@@ -471,6 +545,36 @@ function formatDate(iso: string): string {
 }
 .qs-pct-input:disabled { background: #f3f4f6; color: var(--qs-gray-400); }
 .qs-pct-symbol { color: var(--qs-gray-500); font-size: 13px; }
+
+.qs-split-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 12px;
+}
+.qs-split-cell {
+  background: #fff;
+  border: 1px solid var(--qs-gray-200);
+  border-radius: var(--qs-radius-md);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  cursor: default;
+}
+.qs-split-label {
+  flex: 1 1 100%;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--qs-gray-700);
+  margin-bottom: 4px;
+}
+@media (max-width: 720px) {
+  .qs-split-grid { grid-template-columns: 1fr; }
+}
 
 .qs-cell-vis { padding: 0 8px; }
 
