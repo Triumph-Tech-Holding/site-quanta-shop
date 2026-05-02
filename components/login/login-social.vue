@@ -65,7 +65,13 @@ onMounted(() => {
       });
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
-        alert(err?.message || 'Erro ao autenticar com Google. Verifique se seu cadastro já existe.');
+        const msg: string = err?.message || err?.errorCode || '';
+        if (msg.includes('usuario_nao_encontrado') || res.status === 401) {
+          sessionStorage.setItem('google_credential_pending', response.credential);
+          router.push('/agencia/cadastro-google');
+          return;
+        }
+        alert(err?.message || 'Erro ao autenticar com Google. Tente novamente.');
         return;
       }
       const data = await res.json();

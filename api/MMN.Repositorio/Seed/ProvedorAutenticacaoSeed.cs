@@ -14,13 +14,13 @@ namespace MMN.Repositorio.Seed
                     new ProvedorAutenticacao
                     {
                         IdProvedorAutenticacao = -1,
-                        UrlApi = "https://oauth2.googleapis.com/token",
+                        // UrlApi do tokeninfo do Google (One Tap/GSI — não usa OAuth2 token exchange).
+                        // O Client Secret não é necessário no fluxo de credential (ID token).
+                        UrlApi = "https://oauth2.googleapis.com/tokeninfo",
                         EndpointCadastro = "api/user/registrarGoogleCredential",
                         EndpointLogin = "api/UsuarioLogin/autenticacaoGoogleCredential",
-                        // Client ID e Secret são placeholder — o Startup os substitui a partir
-                        // das variáveis de ambiente GOOGLE_CLIENT_ID e GOOGLE_CLIENT_SECRET.
-                        // Este registro é para o fluxo OAuth2 legado (autenticacaoGoogle).
-                        // O fluxo principal é autenticacaoGoogleCredential (One Tap/GSI).
+                        // GOOGLE_CLIENT_ID é injetado via IOptions<AppSettings> (PostConfigure no Startup).
+                        // Client Secret não é usado — fluxo credential valida via tokeninfo, sem troca de código.
                         Login = "",
                         ParametrosLogin = "{" +
                             "\"scope\":\"https://www.googleapis.com/auth/userinfo.email\"," +
