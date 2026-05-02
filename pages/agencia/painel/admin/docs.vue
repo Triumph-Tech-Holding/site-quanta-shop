@@ -12,7 +12,17 @@
           <span class="docs-env-dot"></span>
           {{ isDev ? 'Dev (Replit)' : 'Produção' }}
         </span>
-        <button class="btn btn-ag-outline btn-sm" :disabled="!activeDoc" @click="abrirImpressao(activeDoc!)">
+        <a
+          v-if="activeDoc"
+          class="btn btn-ag-outline btn-sm"
+          :href="urlImpressao(activeDoc)"
+          target="_blank"
+          rel="noopener"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Baixar PDF
+        </a>
+        <button v-else class="btn btn-ag-outline btn-sm" disabled>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
           Baixar PDF
         </button>
@@ -68,10 +78,16 @@
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                 Visualizar
               </button>
-              <button class="docs-btn-action docs-btn-pdf" @click.stop="abrirImpressao(doc)">
+              <a
+                class="docs-btn-action docs-btn-pdf"
+                :href="urlImpressao(doc)"
+                target="_blank"
+                rel="noopener"
+                @click.stop
+              >
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                 Baixar PDF
-              </button>
+              </a>
             </div>
           </div>
         </div>
@@ -98,10 +114,15 @@
               <div class="docs-preview__title">{{ activeDoc.nome }}</div>
               <div class="docs-preview__meta">{{ activeDoc.tamanho }} · Atualizado {{ activeDoc.data }}</div>
             </div>
-            <button class="btn btn-ag-primary btn-sm" @click="abrirImpressao(activeDoc!)">
+            <a
+              class="btn btn-ag-primary btn-sm"
+              :href="urlImpressao(activeDoc)"
+              target="_blank"
+              rel="noopener"
+            >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
               Baixar PDF
-            </button>
+            </a>
           </div>
           <div class="docs-preview__body" v-html="markdownRenderizado"></div>
         </template>
@@ -358,11 +379,13 @@ function renderMd(raw: string): string {
   return out.join('');
 }
 
-// ── PDF via janela de impressão dedicada ─────────────────
-function abrirImpressao(doc: DocItem) {
-  if (!doc) return;
-  const url = `/agencia/painel/admin/docs-print?arquivo=${encodeURIComponent(doc.arquivo)}&nome=${encodeURIComponent(doc.nome)}`;
-  window.open(url, '_blank', 'width=900,height=700,menubar=yes,toolbar=yes');
+// ── URL para abrir a página de impressão em nova aba ─────
+// Usamos anchor com target="_blank" em vez de window.open(...) com
+// dimensões (que era bloqueado pelo navegador como popup quando o app
+// roda dentro do iframe sandbox do workspace do Replit).
+function urlImpressao(doc: DocItem | null): string {
+  if (!doc) return '#';
+  return `/agencia/painel/admin/docs-print?arquivo=${encodeURIComponent(doc.arquivo)}&nome=${encodeURIComponent(doc.nome)}`;
 }
 
 onMounted(async () => {
