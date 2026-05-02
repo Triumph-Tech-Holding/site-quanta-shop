@@ -375,7 +375,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import type { HomeConfig, HeroCard } from '@/composables/useHomeConfig';
-import { useAgenciaStore } from '@/composables/useAgenciaStore';
+import { useAgenciaStore } from '~/pinia/useAgenciaStore';
 
 const DEFAULT_HERO_CARDS: HeroCard[] = [
   { ativo: true, label: 'PIX INSTANTÂNEO', value: 'Saque em segundos ✓', valueColor: 'green', icon: 'card', iconBg: 'teal' },

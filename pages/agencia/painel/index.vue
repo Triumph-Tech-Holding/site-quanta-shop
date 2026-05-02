@@ -225,13 +225,13 @@
                         :left-label="`R$ ${consumoMes} / R$ ${adminConfig.metaConsumoPlus}`"
                       />
                       <p class="mt-1" style="font-size:.7rem;color:#9ca3af;">
-                        Atingir o consumo mínimo destrava seu Cashback Residual Dobrado
+                        Atingir o consumo mínimo destrava o seu Cashback Residual Dobrado na rede.
                       </p>
                     </div>
 
                     <div class="px-3 pb-3">
                       <QsKpiCard
-                        label="Ganhos Extras (Cashback Dobrado)"
+                        label="Ganhos Extras (Residual Dobrado)"
                         :value="ganhosCashbackDobrado"
                         format="currency"
                         :badge="plusStatus === 'ativo' ? '2×' : undefined"
