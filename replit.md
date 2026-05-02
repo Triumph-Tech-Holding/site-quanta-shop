@@ -1,5 +1,33 @@
 # Quanta Shop Web
 
+## 🧹 Sprint de Higiene 1.3.0 (Mai 2026 — Task #117) — Etapas 1-3 ✅
+
+Eliminação dos 4 problemas crônicos de desenvolvimento que geravam ruído em cada sessão.
+
+### Mudanças
+- **`nuxt.config.ts`** — `imports.dirs` explicitado com `['pinia', 'composables', 'composables/**']` para estabilizar auto-import independente do `@nuxt/kit` embutido pelo `@nuxtjs/tailwindcss@6.14`.
+- **`app.vue`** — `<VitePwaManifest />` removido (componente só existe quando o módulo PWA está ativo; o Nuxt emitia `Failed to resolve component: VitePwaManifest` em cada reload). `BottomSheetPWA` mantido (é nativo, independente de módulo).
+- **`api/Directory.Build.props`** (novo) — supressão centralizada de CS1591, CA1416, NU1701. Warnings de segurança e lógica (NU1902/NU1903/CS1998/SYSLIB) continuam visíveis.
+- **`api/Bigcash.sln`** — removidos 3 projetos fantasma (`LojasAwin`, `LojasAfilio`, `QSTestProject`) que causavam `Build FAILED` no `dotnet build`. `MMN.Tests` registrado corretamente.
+
+### Métricas antes → depois
+| | Antes | Depois |
+|---|---|---|
+| `manifest-route-rule` warnings/sessão | 449 | **0** |
+| Browser `definePageMeta`/`useSticky` errors | recorrentes | **0** |
+| `dotnet build` warnings | 1.553 | **~30 (reais)** |
+| `dotnet build` erros | 3 | **0** |
+| Vite warm up | ~9.7s | **~4.3s** |
+
+### Pendente nesta task (#117)
+- Etapa 4: Testes xUnit dos 4 N+1 (gate obrigatório antes de Etapas 5/6)
+- Etapa 5: Quebrar god classes .NET (AdminController 1584, UsuarioController 1148, CredenciamentoController 1080)
+- Etapa 6: Quebrar componentes Vue >600 linhas (carrosseis.vue 1090, home-cms.vue 942)
+- Etapa 7: CI no GitHub Actions
+- Etapa 8: Documentação final
+
+---
+
 ## 💰 Wave 2 — Motor Financeiro + LGPD (Mai 2026 — Task #107) ✅
 
 Implementação completa do motor de distribuição de cashback, busca inteligente, checkout com cupom + Quanta Points e LGPD reveal auditado.

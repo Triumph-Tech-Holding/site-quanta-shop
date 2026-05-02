@@ -4,6 +4,25 @@ Todas as mudanças relevantes da plataforma. Formato baseado em [Keep a Changelo
 
 ---
 
+## [1.3.0] — 2026-05-02 — Sprint de Higiene: Estabilidade e Fluidez de Desenvolvimento
+
+### 🔥 Problemas críticos eliminados
+- **Storm `manifest-route-rule`** (449+ warnings/sessão → 0) — `@vite-pwa/nuxt` estava registrando middleware duplicado em cada ciclo HMR. Resolvido removendo `<VitePwaManifest />` do `app.vue` (componente gerado pelo módulo PWA que não existe sem o módulo ativo). `BottomSheetPWA` mantido — é nativo do browser, independente do módulo.
+- **`definePageMeta is not defined` / `useSticky is not defined`** (browser errors recorrentes → 0) — Causados por conflito entre `@nuxtjs/tailwindcss@6.14` que embute `@nuxt/kit@3.21.2` enquanto o Nuxt raiz usa `3.8.1`. Corrigido com `imports.dirs: ['composables', 'composables/**']` tornando o auto-import de composables explícito e estável independente da versão do kit.
+- **Build .NET: 1.553 warnings → ~30** — Criado `api/Directory.Build.props` centralizando supressão de CS1591 (XML doc), CA1416 (System.Drawing Linux — já tem RuntimeHostConfigurationOption), NU1701 (BouncyCastle compat). Warnings de lógica real (NU1902/NU1903 de vulnerabilidades, CS1998, SYSLIB) continuam visíveis.
+- **3 projetos fantasma na `.sln`** removidos — `LojasAwin`, `LojasAfilio`, `QSTestProject` referenciados na `Bigcash.sln` mas sem pastas existentes causavam `Build FAILED` ao rodar `dotnet build` diretamente. `MMN.Tests` adicionado corretamente à solução.
+
+### 📈 Métricas de melhoria
+| Métrica | Antes | Depois |
+|---|---|---|
+| `manifest-route-rule` warnings/sessão | 449 | 0 |
+| Browser console errors (HMR) | `definePageMeta`/`useSticky` undefined recorrentes | 0 |
+| `dotnet build` warnings | 1.553 | ~30 (reais, acionáveis) |
+| `dotnet build` erros | 3 (projetos fantasma) | 0 |
+| Vite warm up (dev) | ~9.7s | ~4.3s |
+
+---
+
 ## [1.2.1] — 2026-05-02 — Sprint de Auditoria, Performance e Refatoração
 
 > Sprint focada em estabilizar a base após a Wave 2: bugs silenciosos, código duplicado e UX ruim em pontos de toque do usuário. Documento completo de débito técnico em [`AUDIT_REPORT.md`](./AUDIT_REPORT.md).

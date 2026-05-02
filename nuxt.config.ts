@@ -31,7 +31,7 @@ export default defineNuxtConfig({
       },
     ],
     "nuxt-gtag",
-    ...(process.env.NODE_ENV !== 'development' ? ['@vite-pwa/nuxt' as any] : []),
+    '@vite-pwa/nuxt',
   ],
   plugins: ['~/plugins/directives.ts', '~/plugins/filters.ts', '~/plugins/mask.ts'],
   gtag: {
