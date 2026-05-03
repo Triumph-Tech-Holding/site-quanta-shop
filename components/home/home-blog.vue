@@ -8,7 +8,6 @@
       </div>
 
       <div class="qs-livefeed">
-        <!-- Coluna principal: artigos de blog -->
         <div class="qs-livefeed__main">
           <NuxtLink
             v-for="post in blogPosts.slice(0, 2)"
@@ -43,7 +42,6 @@
           </div>
         </div>
 
-        <!-- Coluna lateral: redes sociais -->
         <div class="qs-livefeed__sidebar">
           <p class="qs-livefeed__sidebar-title">Redes Sociais</p>
           <div class="qs-social-thumbs">
@@ -69,7 +67,6 @@
               <p class="qs-social-thumb__caption">{{ item.legenda }}</p>
             </a>
 
-            <!-- Fallback se não houver posts sociais -->
             <template v-if="socialFeed.length === 0">
               <a
                 v-for="fallback in fallbackSocial"

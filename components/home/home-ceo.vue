@@ -11,7 +11,7 @@
           <div style="display: flex; gap: 14px; flex-wrap: wrap; align-items: center;">
             <button @click="openModal" class="qs-ceo__btn" style="background: #98C73A; color: #225F6B; border: 0;">
               <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/></svg>
-              {{ config.ceo.ctaText }}
+              Iniciar Conversa com IA
             </button>
             <a
               :href="config.ceo.whatsappLink || 'https://wa.me/5511999999999'"
@@ -24,7 +24,6 @@
             </a>
           </div>
         </div>
-        <!-- Mobile: badges à esquerda + foto à direita -->
         <div v-if="config.ceo.imagemFundo" class="qs-ceo__mobile-row">
           <div class="qs-ceo__mobile-badges">
             <div class="qs-ceo__mbadge">
@@ -48,7 +47,6 @@
           </div>
         </div>
 
-        <!-- Desktop: badges originais -->
         <div class="qs-ceo__badges">
           <div class="qs-ceo__badge">
             <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#2F7785" stroke-width="2"><path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
@@ -69,7 +67,6 @@
       </div>
     </div>
 
-    <!-- Modal IA Chat -->
     <div v-if="showModal" class="qs-modal-overlay" @click="closeModal">
       <div class="qs-modal" @click.stop>
         <div class="qs-modal-header">
@@ -80,6 +77,11 @@
           <div class="qs-chat">
             <div v-for="(msg, i) in chatMessages" :key="i" :class="['qs-chat-msg', msg.type]">
               {{ msg.text }}
+            </div>
+            <div v-if="isTyping" class="qs-chat-msg bot qs-chat-typing">
+              <span class="qs-chat-typing-dot"></span>
+              <span class="qs-chat-typing-dot"></span>
+              <span class="qs-chat-typing-dot"></span>
             </div>
           </div>
           <div v-if="currentStep === 0" class="qs-form-group">
@@ -114,7 +116,8 @@ onMounted(() => loadConfig());
 
 const showModal = ref(false);
 const currentStep = ref(0);
-const chatMessages = ref([
+const isTyping = ref(false);
+const chatMessages = ref<Array<{ type: 'bot' | 'user'; text: string }>>([
   { type: 'bot', text: 'Olá! Qual é seu nome?' }
 ]);
 const userResponses = ref({
@@ -131,6 +134,7 @@ const questions = [
 function openModal() {
   showModal.value = true;
   currentStep.value = 0;
+  isTyping.value = false;
   userResponses.value = { name: '', interest: '', email: '' };
   chatMessages.value = [{ type: 'bot', text: 'Olá! Qual é seu nome?' }];
 }
@@ -139,25 +143,32 @@ function closeModal() {
   showModal.value = false;
 }
 
-function nextStep() {
+async function pushBotMessageWithTyping(text: string, delay = 900) {
+  isTyping.value = true;
+  await new Promise(resolve => setTimeout(resolve, delay));
+  isTyping.value = false;
+  chatMessages.value.push({ type: 'bot', text });
+}
+
+async function nextStep() {
   if (currentStep.value === 0 && !userResponses.value.name) return;
   if (currentStep.value === 1 && !userResponses.value.interest) return;
 
   if (currentStep.value === 0) {
     chatMessages.value.push({ type: 'user', text: userResponses.value.name });
-    chatMessages.value.push({ type: 'bot', text: questions[0] });
+    currentStep.value++;
+    await pushBotMessageWithTyping(questions[0]);
   } else if (currentStep.value === 1) {
     chatMessages.value.push({ type: 'user', text: userResponses.value.interest });
-    chatMessages.value.push({ type: 'bot', text: questions[1] });
+    currentStep.value++;
+    await pushBotMessageWithTyping(questions[1]);
   }
-  
-  currentStep.value++;
 }
 
-function submitChat() {
+async function submitChat() {
   if (!userResponses.value.email) return;
   chatMessages.value.push({ type: 'user', text: userResponses.value.email });
-  chatMessages.value.push({ type: 'bot', text: 'Obrigado! Em breve entraremos em contato.' });
+  await pushBotMessageWithTyping('Obrigado! Em breve entraremos em contato.');
   setTimeout(() => closeModal(), 2000);
 }
 </script>
@@ -527,6 +538,41 @@ function submitChat() {
   border-left: 3px solid #2F7785;
   margin-left: auto;
   max-width: 80%;
+}
+
+.qs-chat-typing {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 14px;
+}
+
+.qs-chat-typing-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #98C73A;
+  display: inline-block;
+  animation: qs-typing-bounce 1.2s infinite ease-in-out;
+}
+
+.qs-chat-typing-dot:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.qs-chat-typing-dot:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes qs-typing-bounce {
+  0%, 60%, 100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  30% {
+    transform: translateY(-5px);
+    opacity: 1;
+  }
 }
 
 .qs-form-group {

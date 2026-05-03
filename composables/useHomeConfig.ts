@@ -74,6 +74,7 @@ export interface CeoSection {
   desc: string;
   ctaText: string;
   whatsappLink: string;
+  whatsappText?: string;
   badge1Label?: string;
   badge1Value?: string;
   badge2Label?: string;
@@ -203,8 +204,9 @@ export const DEFAULT_CONFIG: HomeConfig = {
     pre: 'Fale com o CEO',
     name: 'Mauro Triumph',
     desc: 'Clareza estratégica sem rodeios, sem burocracia, sem perda de tempo.',
-    ctaText: 'Iniciar Conversa',
+    ctaText: 'Iniciar Conversa com IA',
     whatsappLink: 'https://api.whatsapp.com/send/?phone=552140404866&text&type=phone_number&app_absent=0',
+    whatsappText: 'Falar no WhatsApp',
     badge1Label: 'Respostas',
     badge1Value: 'Em até 24h',
     badge2Label: 'Parcerias',
