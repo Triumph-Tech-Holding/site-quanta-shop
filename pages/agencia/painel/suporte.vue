@@ -138,10 +138,10 @@ const STATUS_MAP: Record<number, { label: string; cls: string }> = {
 function statusLabel(code: number): string { return STATUS_MAP[code]?.label ?? String(code || '—'); }
 function statusBadgeClass(code: number): string { return STATUS_MAP[code]?.cls ?? 'warn'; }
 function badgeClass(cls: string): string {
-  if (cls === 'success') return 'qs-badge--success';
-  if (cls === 'danger') return 'qs-badge--danger';
-  if (cls === 'info') return 'qs-badge--info';
-  return 'qs-badge--warn';
+  if (cls === 'success') return 'qs-badge-success';
+  if (cls === 'danger') return 'qs-badge-danger';
+  if (cls === 'info') return 'qs-badge-info';
+  return 'qs-badge-warn';
 }
 
 async function buscarSuporte() {
@@ -194,12 +194,6 @@ onMounted(() => { agenciaStore.loadFromStorage(); buscarSuporte(); });
 .sup-id { color: var(--qs-gray-400,#9ca3af); font-size: .8125rem; font-variant-numeric: tabular-nums; }
 .sup-link { color: var(--qs-teal,#2F7785); font-weight: 600; font-size: .8125rem; text-decoration: none; }
 .sup-link:hover { text-decoration: underline; }
-
-.qs-badge { display: inline-flex; padding: .2rem .55rem; border-radius: var(--qs-radius-pill,999px); font-size: .6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; white-space: nowrap; }
-.qs-badge--success { background: #dcfce7; color: #16a34a; }
-.qs-badge--danger  { background: #fee2e2; color: #dc2626; }
-.qs-badge--warn    { background: #fef9c3; color: #ca8a04; }
-.qs-badge--info    { background: #dbeafe; color: #1d4ed8; }
 
 .qs-label { font-size: .75rem; font-weight: 600; color: var(--qs-gray-700,#374151); text-transform: uppercase; letter-spacing: .04em; }
 .qs-input { width: 100%; padding: .625rem .875rem; border: 1.5px solid var(--qs-gray-200,#e5e7eb); border-radius: var(--qs-radius-md,12px); font-size: .875rem; color: var(--qs-ink,#1d1d1f); background: #fff; transition: border-color .15s; box-sizing: border-box; }

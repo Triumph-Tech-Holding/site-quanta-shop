@@ -2,27 +2,28 @@
   <div class="agencia-login-page">
     <div class="login-box">
       <img src="/agencia/imgs/quanta-shop.png" alt="Quanta Shop" class="logo-login" />
-      <h5 class="text-center mb-4" style="color:#2f7785">Recuperar Senha</h5>
+      <h5 class="rs-title">Recuperar Senha</h5>
       <form @submit.prevent="enviar" v-if="!enviado" autocomplete="off">
-        <div class="mb-3">
-          <label class="form-label">Seu e-mail ou login</label>
-          <input v-model="email" type="text" class="form-control" placeholder="E-mail ou login" required :disabled="loading" />
+        <div class="rs-field">
+          <label class="rs-label">Seu e-mail ou login</label>
+          <input v-model="email" type="text" class="qs-input" placeholder="E-mail ou login" required :disabled="loading" />
         </div>
-        <div v-if="errorMsg" class="qs-alert-danger mb-3" style="font-size:.875rem">{{ errorMsg }}</div>
+        <div v-if="errorMsg" class="qs-alert-danger" style="font-size:.875rem">{{ errorMsg }}</div>
         <button type="submit" class="btn-login" :disabled="loading">
           <span v-if="loading" class="rs-spinner" />
           {{ loading ? 'Aguarde...' : 'Enviar link de recuperação' }}
         </button>
       </form>
-      <div v-else class="text-center">
-        <div class="qs-alert-success mb-3">Link enviado! Verifique seu e-mail.</div>
+      <div v-else class="rs-center">
+        <div class="qs-alert-success">Link enviado! Verifique seu e-mail.</div>
       </div>
-      <div class="text-center mt-4">
+      <div class="rs-footer">
         <NuxtLink to="/agencia/login" style="font-size:.85rem; color:#2f7785">← Voltar para login</NuxtLink>
       </div>
     </div>
   </div>
 </template>
+
 <script setup lang="ts">
 import { extractApiErrorMessage } from '~/types/agencia';
 definePageMeta({ layout: 'agencia-login' });
@@ -46,6 +47,11 @@ async function enviar() {
 </script>
 
 <style scoped>
+.rs-title { text-align: center; margin-bottom: 1.5rem; color: #2f7785; font-size: 1.125rem; font-weight: 700; }
+.rs-field { margin-bottom: .875rem; }
+.rs-label { display: block; font-size: .8125rem; font-weight: 600; color: #374151; margin-bottom: .375rem; }
+.rs-center { text-align: center; }
+.rs-footer { text-align: center; margin-top: 1.25rem; }
 .rs-spinner {
   display: inline-block;
   width: 14px; height: 14px;

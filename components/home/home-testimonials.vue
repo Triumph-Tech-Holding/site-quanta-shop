@@ -29,39 +29,19 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useHomeConfig } from '@/composables/useHomeConfig';
+import { DEFAULT_TESTIMONIALS } from '@/composables/useHomeConfig';
 
 const { config, loadConfig } = useHomeConfig();
 
 onMounted(() => loadConfig());
 
-const testimonials = [
-  {
-    name: 'Marina Costa',
-    initials: 'MC',
-    role: 'Usuária há 8 meses',
-    stars: 5,
-    highlight: 'Já recebi mais de R$ 1.240 de cashback',
-    text: ' em apenas 6 meses. Nunca mais compro sem a Quanta!',
-  },
-  {
-    name: 'Rafael Oliveira',
-    initials: 'RO',
-    role: 'Usuário há 1 ano',
-    stars: 5,
-    highlight: 'A cada compra, o dinheiro volta.',
-    text: ' Já acumulei R$ 890 sem nenhum esforço extra. Recomendo demais.',
-  },
-  {
-    name: 'Juliana Santos',
-    initials: 'JS',
-    role: 'Usuária há 1 ano',
-    stars: 5,
-    highlight: 'Minha família economizou R$ 2.100 no último ano.',
-    text: ' É dinheiro de verdade voltando pro bolso.',
-  },
-];
+const testimonials = computed(() =>
+  config.value.testimonials?.items?.length
+    ? config.value.testimonials.items
+    : DEFAULT_TESTIMONIALS
+);
 </script>
 
 <style scoped>

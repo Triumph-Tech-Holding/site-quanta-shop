@@ -1,53 +1,49 @@
 <template>
   <div class="credenciar-page">
     <div class="credenciar-container">
-      <div class="text-center mb-4">
+      <div class="cred-head-wrap">
         <img src="/agencia/imgs/quanta-shop.png" alt="Quanta Shop" style="height:48px" />
-        <h2 class="mt-3 mb-1 credenciar-titulo">QUERO ME TORNAR UM PARCEIRO LOCAL</h2>
+        <h2 class="credenciar-titulo">QUERO ME TORNAR UM PARCEIRO LOCAL</h2>
         <p class="credenciar-subtitulo">BEM-VINDO AO PROCESSO DE CREDENCIAMENTO DE UM PARCEIRO LOCAL JUNTO AO QUANTA SHOP.</p>
-        <p class="text-muted" style="font-size:.9rem; max-width:740px; margin:0 auto">
+        <p style="color:#6b7280; font-size:.9rem; max-width:740px; margin:0 auto">
           O credenciamento é o primeiro passo para estabelecer uma colaboração bem-sucedida entre sua empresa e a nossa.
           Ao se tornar um parceiro credenciado, você terá acesso a uma variedade de oportunidades e benefícios exclusivos.
         </p>
       </div>
 
-      <div v-if="step === 1" class="row g-4 justify-content-center mt-2">
-        <div class="col-12 col-md-5">
-          <button class="credenciar-tipo-card w-100" @click="selecionarTipo('pf')">
-            <span class="credenciar-tipo-icon">👤</span>
-            <span>Sou pessoa física</span>
-          </button>
-        </div>
-        <div class="col-12 col-md-5">
-          <button class="credenciar-tipo-card w-100" @click="selecionarTipo('pj')">
-            <span class="credenciar-tipo-icon">🏢</span>
-            <span>Sou pessoa jurídica</span>
-          </button>
-        </div>
+      <div v-if="step === 1" class="cred-tipo-row">
+        <button class="credenciar-tipo-card" @click="selecionarTipo('pf')">
+          <span class="credenciar-tipo-icon">👤</span>
+          <span>Sou pessoa física</span>
+        </button>
+        <button class="credenciar-tipo-card" @click="selecionarTipo('pj')">
+          <span class="credenciar-tipo-icon">🏢</span>
+          <span>Sou pessoa jurídica</span>
+        </button>
       </div>
 
-      <div v-if="step === 2 && tipo === 'pj'" class="credenciar-card mt-2">
-        <p class="text-muted mb-3" style="font-size:.9rem">
+      <div v-if="step === 2 && tipo === 'pj'" class="credenciar-card">
+        <p class="cred-hint" style="font-size:.9rem">
           Para começar, informe seu CNPJ! Vamos consultar os dados da sua empresa na Receita Federal.
         </p>
-        <div class="ag-form-group">
+        <div class="cred-field">
           <label>CNPJ</label>
           <input
             v-model="cnpjInput"
             type="text"
-            class="form-control"
+            class="qs-input"
             placeholder="00.000.000/0000-00"
             maxlength="18"
             :disabled="consultando"
             @input="mascararCnpj"
-            :class="{ 'is-invalid': cnpjErro, 'is-valid': cnpjInput.length === 18 }"
+            :class="{ 'cred-has-error': cnpjErro }"
           />
-          <div v-if="cnpjErro" class="invalid-feedback">{{ cnpjErro }}</div>
+          <div v-if="cnpjErro" class="cred-field-error">{{ cnpjErro }}</div>
         </div>
-        <div v-if="erroConsulta" :class="situacaoIrregular ? 'qs-alert-warn' : 'qs-alert-danger'" class="mt-3" style="font-size:.875rem">{{ erroConsulta }}</div>
-        <div class="d-flex gap-3 mt-4">
-          <button class="btn btn-ag-outline flex-fill" @click="step = 1" :disabled="consultando">Voltar</button>
-          <button class="btn btn-ag-primary flex-fill" @click="consultarCnpj" :disabled="consultando || cnpjInput.length < 18">
+        <div v-if="erroConsulta" :class="situacaoIrregular ? 'qs-alert-warn' : 'qs-alert-danger'" style="font-size:.875rem">{{ erroConsulta }}</div>
+        <div class="cred-actions">
+          <button class="btn-ag-outline cred-fill-btn" @click="step = 1" :disabled="consultando">Voltar</button>
+          <button class="btn-ag-primary cred-fill-btn" @click="consultarCnpj" :disabled="consultando || cnpjInput.length < 18">
             <span v-if="consultando" class="cr-spinner" />
             {{ consultando ? 'Consultando...' : 'Consultar CNPJ' }}
           </button>
@@ -55,142 +51,142 @@
       </div>
 
       <form v-if="step === 3" @submit.prevent="enviar" autocomplete="off">
-        <div class="credenciar-card mt-2">
+        <div class="credenciar-card">
           <h5 class="credenciar-section-title">DADOS DA EMPRESA</h5>
-          <div class="row g-3">
-            <div v-if="tipo === 'pj'" class="col-12 col-md-6 ag-form-group">
+          <div class="cred-row">
+            <div v-if="tipo === 'pj'" class="cred-col-6 cred-field">
               <label>CNPJ</label>
-              <input v-model="form.CNPJ" type="text" class="form-control" disabled />
+              <input v-model="form.CNPJ" type="text" class="qs-input" disabled />
             </div>
-            <div v-else class="col-12 col-md-6 ag-form-group">
+            <div v-else class="cred-col-6 cred-field">
               <label>CPF do responsável / Documento *</label>
-              <input v-model="form.CNPJ" type="text" class="form-control" placeholder="000.000.000-00" maxlength="14" required :disabled="enviando" @input="mascararCpf" />
+              <input v-model="form.CNPJ" type="text" class="qs-input" placeholder="000.000.000-00" maxlength="14" required :disabled="enviando" @input="mascararCpf" />
             </div>
-            <div class="col-12 col-md-6 ag-form-group">
+            <div class="cred-col-6 cred-field">
               <label>{{ tipo === 'pj' ? 'Razão Social' : 'Nome completo' }} *</label>
-              <input v-model="form.RazaoSocial" type="text" class="form-control" required :disabled="enviando" />
+              <input v-model="form.RazaoSocial" type="text" class="qs-input" required :disabled="enviando" />
             </div>
-            <div class="col-12 col-md-6 ag-form-group">
+            <div class="cred-col-6 cred-field">
               <label>{{ tipo === 'pj' ? 'Nome Fantasia' : 'Nome do negócio' }} *</label>
-              <input v-model="form.NomeFantasia" type="text" class="form-control" required :disabled="enviando" />
+              <input v-model="form.NomeFantasia" type="text" class="qs-input" required :disabled="enviando" />
             </div>
-            <div class="col-12 col-md-4 ag-form-group">
+            <div class="cred-col-4 cred-field">
               <label>CEP *</label>
-              <input v-model="form.CEP" type="text" class="form-control" placeholder="00000-000" maxlength="9" required :disabled="enviando" @blur="buscarCep" />
+              <input v-model="form.CEP" type="text" class="qs-input" placeholder="00000-000" maxlength="9" required :disabled="enviando" @blur="buscarCep" />
             </div>
-            <div class="col-12 col-md-8 ag-form-group">
+            <div class="cred-col-8 cred-field">
               <label>Logradouro (Rua/Av.) *</label>
-              <input v-model="form.Logradouro" type="text" class="form-control" required :disabled="enviando" />
+              <input v-model="form.Logradouro" type="text" class="qs-input" required :disabled="enviando" />
             </div>
-            <div class="col-6 col-md-3 ag-form-group">
+            <div class="cred-col-3 cred-field">
               <label>Número *</label>
-              <input v-model="form.Numero" type="text" class="form-control" required :disabled="enviando" />
+              <input v-model="form.Numero" type="text" class="qs-input" required :disabled="enviando" />
             </div>
-            <div class="col-6 col-md-4 ag-form-group">
+            <div class="cred-col-4 cred-field">
               <label>Complemento</label>
-              <input v-model="form.Complemento" type="text" class="form-control" :disabled="enviando" />
+              <input v-model="form.Complemento" type="text" class="qs-input" :disabled="enviando" />
             </div>
-            <div class="col-12 col-md-5 ag-form-group">
+            <div class="cred-col-6 cred-field">
               <label>Bairro *</label>
-              <input v-model="form.Bairro" type="text" class="form-control" required :disabled="enviando" />
+              <input v-model="form.Bairro" type="text" class="qs-input" required :disabled="enviando" />
             </div>
-            <div class="col-12 col-md-4 ag-form-group">
+            <div class="cred-col-4 cred-field">
               <label>Estado *</label>
-              <select v-model="form.IdEstado" class="form-select" required :disabled="enviando" @change="carregarCidades">
+              <select v-model="form.IdEstado" class="qs-select" required :disabled="enviando" @change="carregarCidades">
                 <option value="">Selecione o estado</option>
                 <option v-for="e in estados" :key="e.IdEstado" :value="e.IdEstado">{{ e.Nome }} ({{ e.Uf }})</option>
               </select>
             </div>
-            <div class="col-12 col-md-4 ag-form-group">
+            <div class="cred-col-4 cred-field">
               <label>Cidade *</label>
-              <select v-model="form.IdCidade" class="form-select" required :disabled="enviando || !form.IdEstado">
+              <select v-model="form.IdCidade" class="qs-select" required :disabled="enviando || !form.IdEstado">
                 <option value="">{{ form.IdEstado ? (carregandoCidades ? 'Carregando...' : 'Selecione a cidade') : 'Selecione o estado primeiro' }}</option>
                 <option v-for="c in cidades" :key="c.IdCidade" :value="c.IdCidade">{{ c.Nome }}</option>
               </select>
             </div>
-            <div class="col-12 col-md-4 ag-form-group">
+            <div class="cred-col-4 cred-field">
               <label>Telefone da Empresa *</label>
-              <input v-model="form.TelefoneEmpresa" type="text" class="form-control" placeholder="(00) 00000-0000" required :disabled="enviando" />
+              <input v-model="form.TelefoneEmpresa" type="text" class="qs-input" placeholder="(00) 00000-0000" required :disabled="enviando" />
             </div>
-            <div class="col-12 ag-form-group">
+            <div class="cred-col-12 cred-field">
               <label>Logomarca (imagem PNG ou JPG)</label>
-              <input type="file" class="form-control" accept="image/png,image/jpeg,image/jpg" :disabled="enviando" @change="processarImagem" />
-              <div v-if="form.Logomarca" class="mt-2">
+              <input type="file" class="qs-input" accept="image/png,image/jpeg,image/jpg" :disabled="enviando" @change="processarImagem" />
+              <div v-if="form.Logomarca" style="margin-top:.5rem">
                 <img :src="form.Logomarca" alt="Pré-visualização da logo" style="height:64px; border-radius:6px; border:1px solid #dee2e6" />
               </div>
             </div>
           </div>
         </div>
 
-        <div class="credenciar-card mt-3">
+        <div class="credenciar-card">
           <h5 class="credenciar-section-title">DADOS DO RESPONSÁVEL</h5>
-          <div class="row g-3">
-            <div class="col-12 col-md-6 ag-form-group">
+          <div class="cred-row">
+            <div class="cred-col-6 cred-field">
               <label>Nome do responsável *</label>
-              <input v-model="form.NomeResponsavel" type="text" class="form-control" required :disabled="enviando" />
+              <input v-model="form.NomeResponsavel" type="text" class="qs-input" required :disabled="enviando" />
             </div>
-            <div class="col-12 col-md-6 ag-form-group">
+            <div class="cred-col-6 cred-field">
               <label>Data de nascimento *</label>
-              <input v-model="form.DataNascimento" type="date" class="form-control" required :disabled="enviando" />
+              <input v-model="form.DataNascimento" type="date" class="qs-input" required :disabled="enviando" />
             </div>
-            <div class="col-12 col-md-6 ag-form-group">
+            <div class="cred-col-6 cred-field">
               <label>CPF do responsável *</label>
-              <input v-model="form.CPFResponsavel" type="text" class="form-control" placeholder="000.000.000-00" maxlength="14" required :disabled="enviando" />
+              <input v-model="form.CPFResponsavel" type="text" class="qs-input" placeholder="000.000.000-00" maxlength="14" required :disabled="enviando" />
             </div>
-            <div class="col-12 col-md-6 ag-form-group">
+            <div class="cred-col-6 cred-field">
               <label>WhatsApp/Celular *</label>
-              <input v-model="form.TelefoneResponsavel" type="text" class="form-control" placeholder="(00) 00000-0000" required :disabled="enviando" />
+              <input v-model="form.TelefoneResponsavel" type="text" class="qs-input" placeholder="(00) 00000-0000" required :disabled="enviando" />
             </div>
-            <div class="col-12 col-md-6 ag-form-group">
+            <div class="cred-col-6 cred-field">
               <label>E-mail *</label>
-              <input v-model="form.EmailResponsavel" type="email" class="form-control" required :disabled="enviando" />
+              <input v-model="form.EmailResponsavel" type="email" class="qs-input" required :disabled="enviando" />
             </div>
-            <div class="col-12 col-md-6 ag-form-group">
+            <div class="cred-col-6 cred-field">
               <label>Login (nome de usuário) *</label>
-              <input v-model="form.Indicador" type="text" class="form-control" placeholder="Mínimo 5 caracteres, sem espaços" :disabled="enviando" />
-              <small class="text-muted" style="font-size:.78rem">Este será seu login de acesso à plataforma</small>
+              <input v-model="form.Indicador" type="text" class="qs-input" placeholder="Mínimo 5 caracteres, sem espaços" :disabled="enviando" />
+              <small style="color:#6b7280; font-size:.78rem">Este será seu login de acesso à plataforma</small>
             </div>
-            <div class="col-12 col-md-6 ag-form-group">
+            <div class="cred-col-6 cred-field">
               <label>Senha *</label>
-              <input v-model="form.SenhaResponsavel" type="password" class="form-control" placeholder="Mínimo 8 caracteres (letras e números)" required :disabled="enviando" />
+              <input v-model="form.SenhaResponsavel" type="password" class="qs-input" placeholder="Mínimo 8 caracteres (letras e números)" required :disabled="enviando" />
             </div>
-            <div class="col-12 col-md-6 ag-form-group">
+            <div class="cred-col-6 cred-field">
               <label>Confirmar senha *</label>
-              <input v-model="confirmarSenha" type="password" class="form-control" :class="{ 'is-invalid': confirmarSenha && confirmarSenha !== form.SenhaResponsavel }" required :disabled="enviando" />
-              <div class="invalid-feedback">As senhas não conferem.</div>
+              <input v-model="confirmarSenha" type="password" class="qs-input" :class="{ 'cred-has-error': confirmarSenha && confirmarSenha !== form.SenhaResponsavel }" required :disabled="enviando" />
+              <div v-if="confirmarSenha && confirmarSenha !== form.SenhaResponsavel" class="cred-field-error">As senhas não conferem.</div>
             </div>
-            <div class="col-12 ag-form-group">
+            <div class="cred-col-12 cred-field">
               <label>Código de quem indicou (opcional)</label>
-              <input v-model="loginIndicador" type="text" class="form-control" placeholder="Login do seu indicador" :disabled="enviando" />
+              <input v-model="loginIndicador" type="text" class="qs-input" placeholder="Login do seu indicador" :disabled="enviando" />
             </div>
           </div>
         </div>
 
-        <div class="credenciar-card mt-3">
+        <div class="credenciar-card">
           <h5 class="credenciar-section-title">DADOS DO CREDENCIAMENTO</h5>
-          <div class="row g-3">
-            <div class="col-12 col-md-4 ag-form-group">
+          <div class="cred-row">
+            <div class="cred-col-4 cred-field">
               <label>Percentual de cashback (%) *</label>
-              <select v-model="form.PercentualCashback" class="form-select" required :disabled="enviando">
+              <select v-model="form.PercentualCashback" class="qs-select" required :disabled="enviando">
                 <option value="">Selecione</option>
                 <option v-for="p in percentuais" :key="p" :value="p">{{ p }}%</option>
               </select>
             </div>
-            <div class="col-12 col-md-4 ag-form-group">
+            <div class="cred-col-4 cred-field">
               <label>Categoria *</label>
-              <select v-model="form.IdCategoria" class="form-select" required :disabled="enviando">
+              <select v-model="form.IdCategoria" class="qs-select" required :disabled="enviando">
                 <option value="">Selecione a categoria</option>
                 <option v-for="cat in categorias" :key="cat.key" :value="cat.key">{{ cat.value }}</option>
               </select>
             </div>
-            <div class="col-12 col-md-4 ag-form-group">
+            <div class="cred-col-4 cred-field">
               <label>Localização (Latitude, Longitude)</label>
-              <div class="d-flex gap-2">
-                <input v-model="form.Latitude" type="number" step="any" class="form-control" placeholder="Lat." :disabled="enviando" />
-                <input v-model="form.Longitude" type="number" step="any" class="form-control" placeholder="Long." :disabled="enviando" />
+              <div class="cred-geo-row">
+                <input v-model="form.Latitude" type="number" step="any" class="qs-input" placeholder="Lat." :disabled="enviando" />
+                <input v-model="form.Longitude" type="number" step="any" class="qs-input" placeholder="Long." :disabled="enviando" />
               </div>
-              <small class="text-muted" style="font-size:.78rem">
-                <button type="button" class="btn btn-link p-0" style="font-size:.78rem" @click="obterLocalizacao" :disabled="buscandoGeo">
+              <small style="color:#6b7280; font-size:.78rem">
+                <button type="button" class="cred-geo-btn" @click="obterLocalizacao" :disabled="buscandoGeo">
                   {{ buscandoGeo ? 'Obtendo...' : '📍 Usar minha localização atual' }}
                 </button>
               </small>
@@ -198,16 +194,16 @@
           </div>
         </div>
 
-        <div v-if="erroEnvio" class="qs-alert-danger mt-3" style="font-size:.875rem">{{ erroEnvio }}</div>
-        <div v-if="sucessoEnvio" class="qs-alert-success mt-3" style="font-size:.875rem">
+        <div v-if="erroEnvio" class="qs-alert-danger" style="font-size:.875rem">{{ erroEnvio }}</div>
+        <div v-if="sucessoEnvio" class="qs-alert-success" style="font-size:.875rem">
           <strong>Formulário enviado com sucesso!</strong><br/>
           Sua solicitação de credenciamento foi recebida e está em análise. Você receberá um e-mail de confirmação em breve.
-          <div class="mt-2"><NuxtLink to="/agencia" class="btn btn-ag-outline btn-sm">Ir para o início</NuxtLink></div>
+          <div style="margin-top:.5rem"><NuxtLink to="/agencia" class="btn-ag-outline">Ir para o início</NuxtLink></div>
         </div>
 
-        <div class="d-flex gap-3 mt-4 mb-5">
-          <button type="button" class="btn btn-ag-outline" @click="voltarStep" :disabled="enviando">Voltar</button>
-          <button type="submit" class="btn btn-ag-primary flex-fill" :disabled="enviando || !!sucessoEnvio">
+        <div class="cred-actions cred-actions--final">
+          <button type="button" class="btn-ag-outline" @click="voltarStep" :disabled="enviando">Voltar</button>
+          <button type="submit" class="btn-ag-primary cred-fill-btn" :disabled="enviando || !!sucessoEnvio">
             <span v-if="enviando" class="cr-spinner" />
             {{ enviando ? 'Enviando...' : 'Enviar para análise' }}
           </button>
@@ -622,6 +618,34 @@ async function enviar() {
   padding-bottom: .5rem;
   margin-bottom: 1rem;
 }
+/* ─── Layout helpers (Bootstrap removal) ─── */
+.cred-head-wrap { text-align: center; margin-bottom: 2rem; }
+.cred-tipo-row { display: flex; gap: 1rem; justify-content: center; margin-top: .75rem; flex-wrap: wrap; }
+.cred-tipo-row .credenciar-tipo-card { flex: 0 1 calc(50% - .5rem); min-width: 160px; }
+/* ─── CSS Grid (replaces Bootstrap col-*) ─── */
+.cred-row { display: grid; grid-template-columns: repeat(12, 1fr); gap: 1rem; }
+.cred-col-12 { grid-column: span 12; }
+.cred-col-8  { grid-column: span 8; }
+.cred-col-6  { grid-column: span 6; }
+.cred-col-4  { grid-column: span 4; }
+.cred-col-3  { grid-column: span 3; }
+@media (max-width: 767px) {
+  .cred-col-8, .cred-col-6, .cred-col-4, .cred-col-3 { grid-column: span 12; }
+}
+/* ─── Field & Validation ─── */
+.cred-field { display: flex; flex-direction: column; }
+.cred-field label { font-size: .82rem; font-weight: 600; color: #444; margin-bottom: .25rem; display: block; }
+.cred-hint { color: #6b7280; font-size: .9rem; margin-bottom: .875rem; }
+.cred-has-error { border-color: #dc2626 !important; }
+.cred-field-error { font-size: .8rem; color: #dc2626; margin-top: .25rem; }
+/* ─── Actions ─── */
+.cred-actions { display: flex; gap: .75rem; margin-top: 1.25rem; }
+.cred-actions--final { margin-bottom: 2rem; }
+.cred-fill-btn { flex: 1; }
+/* ─── Geo ─── */
+.cred-geo-row { display: flex; gap: .5rem; }
+.cred-geo-btn { background: none; border: none; cursor: pointer; color: #2f7785; font-size: .78rem; padding: 0; text-decoration: underline; }
+.cred-geo-btn:disabled { opacity: .6; cursor: not-allowed; }
 .ag-form-group label {
   font-size: .82rem;
   font-weight: 600;

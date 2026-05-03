@@ -65,7 +65,7 @@
                     <td class="tr com-valor">{{ formatCurrency(v.valor) }}</td>
                     <td class="tr com-cashback">{{ formatCurrency(v.cashback) }}</td>
                     <td class="tc">
-                      <span class="qs-badge" :class="v.status === 'Aprovado' ? 'qs-badge--success' : 'qs-badge--warn'">{{ v.status }}</span>
+                      <span class="qs-badge" :class="v.status === 'Aprovado' ? 'qs-badge-success' : 'qs-badge-warn'">{{ v.status }}</span>
                     </td>
                   </tr>
                 </tbody>
@@ -135,7 +135,4 @@ onMounted(async () => {
 .com-valor { font-weight: 600; }
 .com-cashback { color: var(--qs-lime-dark,#7aad1f) !important; font-weight: 700; }
 
-.qs-badge { display: inline-flex; padding: .2rem .55rem; border-radius: var(--qs-radius-pill,999px); font-size: .6875rem; font-weight: 700; text-transform: uppercase; white-space: nowrap; }
-.qs-badge--success { background: #dcfce7; color: #16a34a; }
-.qs-badge--warn { background: #fef9c3; color: #ca8a04; }
 </style>

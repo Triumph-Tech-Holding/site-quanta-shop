@@ -51,7 +51,7 @@
                   <td class="dir-login">{{ d.login }}</td>
                   <td class="tc">{{ formatDate(d.dataCadastro) }}</td>
                   <td class="tc">
-                    <span class="qs-badge" :class="d.ativo ? 'qs-badge--success' : 'qs-badge--secondary'">
+                    <span class="qs-badge" :class="d.ativo ? 'qs-badge-success' : 'qs-badge-secondary'">
                       {{ d.ativo ? 'Ativo' : 'Inativo' }}
                     </span>
                   </td>
@@ -127,7 +127,4 @@ onMounted(async () => {
 .dir-member { display: flex; align-items: center; gap: .625rem; }
 .dir-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--qs-gradient-btn,linear-gradient(135deg,#225F6B,#2F7785)); color: #fff; font-size: .75rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 
-.qs-badge { display: inline-flex; padding: .2rem .55rem; border-radius: var(--qs-radius-pill,999px); font-size: .6875rem; font-weight: 700; text-transform: uppercase; white-space: nowrap; }
-.qs-badge--success { background: #dcfce7; color: #16a34a; }
-.qs-badge--secondary { background: var(--qs-gray-100,#f5f5f7); color: var(--qs-gray-500,#6b7280); }
 </style>

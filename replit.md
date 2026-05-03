@@ -35,6 +35,38 @@ Páginas públicas `pages/*.vue` usam classes `tp-*` (tema original Bootstrap-ba
 
 ---
 
+## 🎨 Fase 5 — Bootstrap Removal Auth/Onboarding ✅ (Mai 2026)
+
+### Resumo
+Remoção de Bootstrap residual em **8 páginas** de auth/onboarding da agência + confirmação de e-mail pública.
+
+### Design system — novas classes globais (quanta-premium.scss)
+- `qs-input` / `qs-select` — form elements globais com foco e disabled states
+- `qs-alert-*` agora com `display: block` + `margin-bottom: .75rem` (não precisam mais de `mb-*`)
+
+### agencia.scss — `btn-ag-*` agora auto-suficientes
+`btn-ag-primary`, `btn-ag-secondary`, `btn-ag-outline` incluem: `display: inline-block`, `cursor: pointer`, `text-align: center`, `text-decoration: none`, `font-size: .9rem`, `transition` — sem dependência do `.btn` Bootstrap.
+
+### Páginas corrigidas (Fase 5)
+| Página | Antes | Depois |
+|---|---|---|
+| `agencia/recuperar-senha.vue` | `form-label`, `form-control`, `mb-3`, `text-center` | `qs-input`, `rs-*` scoped |
+| `agencia/reset-password/[token].vue` | `form-control`, `btn btn-ag-*`, `mb-3`, `text-muted` | `qs-input`, `btn-ag-*`, `rp-*` scoped |
+| `agencia/confirm-email/[token].vue` | `btn btn-ag-*`, `mt-2`, `text-muted`, `text-center` | `btn-ag-*`, `ce-*` scoped |
+| `agencia/no-permission.vue` | `btn btn-ag-*`, `mt-2`, `text-muted`, `text-center` | `btn-ag-*`, `np-*` scoped |
+| `agencia/finalizar-credenciamento/[id].vue` | `btn btn-ag-*`, `w-100`, `mt-3`, `text-muted` | `btn-ag-*`, `fc-*` scoped |
+| `agencia/cadastro-google.vue` | `row g-2`, `col-*`, `form-control`, `text-center` | CSS grid `cgg-grid`, `qs-input`, `cgg-*` scoped |
+| `agencia/credenciar.vue` (656 linhas) | `row g-3`, `col-*`, `form-control`, `form-select`, `btn btn-ag-*`, `d-flex`, `is-invalid` | `cred-row`, `cred-col-*`, `qs-input`, `qs-select`, `cred-*` scoped |
+| `pages/confirm-email/[token].vue` | `d-flex`, `container`, `row`, `col-12`, `tp-error-*` | `cem-*` scoped com `qs-btn-primary` |
+
+### Páginas já limpas (mantidas intactas)
+`agencia/login.vue` (`agl-*`), `agencia/cadastro.vue` (`agc-*`), `pages/login.vue`, `pages/register/`, `pages/forgot.vue`, `pages/register/[loginPatrocinador].vue` — delegam para components.
+
+### Não alterado (escopo futuro)
+`pages/primeira-compra/[[cnpj]].vue` — usa framework `pb_*` próprio + layout `primeira-compra`; deixado para sessão dedicada.
+
+---
+
 ## 🎨 Padronização qs-* Completa — Fases 5-8 ✅ (Mai 2026 — sessão anterior)
 
 ### Resumo

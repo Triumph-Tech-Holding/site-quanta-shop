@@ -1,6 +1,6 @@
 <template>
   <div class="hcon">
-    <QsPageHeader eyebrow="Admin · CMS" title="Conteúdo da Home" description="Edite os textos das seções da página inicial. As alterações ficam visíveis imediatamente após salvar.">
+    <QsPageHeader eyebrow="Admin · CMS" title="Conteúdo da Home" description="Edite os textos e conteúdo das seções da página inicial. As alterações ficam visíveis após salvar.">
       <template v-if="form">
         <nuxt-link to="/" target="_blank" class="qs-btn-outline">Ver Home ↗</nuxt-link>
         <button class="qs-btn-outline" @click="reset" :disabled="saving">Descartar</button>
@@ -32,7 +32,7 @@
         >{{ tab.label }}</button>
       </div>
 
-      <!-- Hero -->
+      <!-- ─── Hero ─────────────────────────────────────────────── -->
       <div v-show="activeTab === 'hero'" class="hcon__section">
         <h2 class="hcon__section-title">Seção Hero</h2>
         <div class="hcon__field">
@@ -48,17 +48,19 @@
           <label class="hcon__label">Subtítulo</label>
           <textarea v-model="form.hero.subtitle" class="hcon__textarea" rows="2"></textarea>
         </div>
-        <div class="hcon__field">
-          <label class="hcon__label">Texto do Botão Principal</label>
-          <input v-model="form.hero.ctaPrimaryText" class="hcon__input" />
-        </div>
-        <div class="hcon__field">
-          <label class="hcon__label">Link do Botão Principal</label>
-          <input v-model="form.hero.ctaPrimaryLink" class="hcon__input" placeholder="/register" />
+        <div class="hcon__row">
+          <div class="hcon__field">
+            <label class="hcon__label">Botão Principal — Texto</label>
+            <input v-model="form.hero.ctaPrimaryText" class="hcon__input" />
+          </div>
+          <div class="hcon__field">
+            <label class="hcon__label">Botão Principal — Link</label>
+            <input v-model="form.hero.ctaPrimaryLink" class="hcon__input" placeholder="/register" />
+          </div>
         </div>
       </div>
 
-      <!-- Testimonials -->
+      <!-- ─── Testemunhos ───────────────────────────────────────── -->
       <div v-show="activeTab === 'testimonials'" class="hcon__section">
         <h2 class="hcon__section-title">Seção Depoimentos</h2>
         <div class="hcon__field">
@@ -69,9 +71,39 @@
           <label class="hcon__label">Subtítulo da Seção</label>
           <input v-model="form.testimonials.subtitle" class="hcon__input" />
         </div>
+
+        <div v-for="(t, idx) in form.testimonials.items" :key="idx" class="hcon__card-editor">
+          <div class="hcon__card-editor-header">
+            <strong>Depoimento {{ idx + 1 }}</strong>
+          </div>
+          <div class="hcon__card-editor-body">
+            <div class="hcon__row">
+              <div class="hcon__field">
+                <label class="hcon__label">Nome</label>
+                <input v-model="t.name" class="hcon__input" placeholder="Ex: Marina Costa" />
+              </div>
+              <div class="hcon__field">
+                <label class="hcon__label">Iniciais (avatar)</label>
+                <input v-model="t.initials" class="hcon__input" placeholder="Ex: MC" maxlength="3" style="text-transform:uppercase" />
+              </div>
+            </div>
+            <div class="hcon__field">
+              <label class="hcon__label">Cargo / Descrição</label>
+              <input v-model="t.role" class="hcon__input" placeholder="Ex: Usuária há 8 meses" />
+            </div>
+            <div class="hcon__field">
+              <label class="hcon__label">Trecho em destaque</label>
+              <input v-model="t.highlight" class="hcon__input" placeholder="Ex: Já recebi mais de R$ 1.240 de cashback" />
+            </div>
+            <div class="hcon__field">
+              <label class="hcon__label">Continuação do texto</label>
+              <textarea v-model="t.text" class="hcon__textarea" rows="2" placeholder="Ex:  em apenas 6 meses. Nunca mais compro sem a Quanta!"></textarea>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- Blog -->
+      <!-- ─── Blog ──────────────────────────────────────────────── -->
       <div v-show="activeTab === 'blog'" class="hcon__section">
         <h2 class="hcon__section-title">Seção Blog & Redes Sociais</h2>
         <div class="hcon__field">
@@ -86,9 +118,44 @@
           <label class="hcon__label">Subtítulo da Seção</label>
           <input v-model="form.blog.subtitle" class="hcon__input" />
         </div>
+
+        <p class="hcon__hint" style="margin-bottom:16px">Os posts abaixo são exibidos quando não há artigos cadastrados no Blog Admin ou posts de redes sociais.</p>
+
+        <div v-for="(post, idx) in form.blog.posts" :key="idx" class="hcon__card-editor">
+          <div class="hcon__card-editor-header">
+            <strong>Post {{ idx + 1 }}</strong>
+          </div>
+          <div class="hcon__card-editor-body">
+            <div class="hcon__field">
+              <label class="hcon__label">Título</label>
+              <input v-model="post.title" class="hcon__input" />
+            </div>
+            <div class="hcon__field">
+              <label class="hcon__label">Resumo</label>
+              <textarea v-model="post.excerpt" class="hcon__textarea" rows="2"></textarea>
+            </div>
+            <div class="hcon__row">
+              <div class="hcon__field">
+                <label class="hcon__label">Data</label>
+                <input v-model="post.date" class="hcon__input" placeholder="Ex: 01 Mai 2025" />
+              </div>
+              <div class="hcon__field">
+                <label class="hcon__label">Slug (URL)</label>
+                <input v-model="post.slug" class="hcon__input" placeholder="ex: titulo-do-post" />
+              </div>
+            </div>
+            <div class="hcon__field">
+              <label class="hcon__label">URL da Imagem</label>
+              <input v-model="post.img" class="hcon__input" placeholder="https://..." />
+              <div v-if="post.img" style="margin-top:8px">
+                <img :src="post.img" alt="preview" style="height:80px;object-fit:cover;border-radius:6px;border:1px solid #e5e7eb;" />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- CEO -->
+      <!-- ─── CEO ───────────────────────────────────────────────── -->
       <div v-show="activeTab === 'ceo'" class="hcon__section">
         <h2 class="hcon__section-title">Seção CEO</h2>
         <div class="hcon__field">
@@ -98,12 +165,12 @@
           </label>
         </div>
         <div class="hcon__field">
-          <label class="hcon__label">Tag (ex: CEO & Founder)</label>
-          <input v-model="form.ceo.tag" class="hcon__input" />
+          <label class="hcon__label">Tag</label>
+          <input v-model="form.ceo.tag" class="hcon__input" placeholder="CEO & Founder" />
         </div>
         <div class="hcon__field">
           <label class="hcon__label">Pré-título</label>
-          <input v-model="form.ceo.pre" class="hcon__input" />
+          <input v-model="form.ceo.pre" class="hcon__input" placeholder="Fale com o CEO" />
         </div>
         <div class="hcon__field">
           <label class="hcon__label">Nome</label>
@@ -139,7 +206,7 @@
         </div>
       </div>
 
-      <!-- Footer CTA -->
+      <!-- ─── Footer CTA ─────────────────────────────────────────── -->
       <div v-show="activeTab === 'footerCta'" class="hcon__section">
         <h2 class="hcon__section-title">Banner Final (Footer CTA)</h2>
         <div class="hcon__field">
@@ -227,9 +294,14 @@ async function load() {
   loadError.value = false;
   try {
     await homeCmsStore.fetchConfig();
-    const data: HomeConfig = homeCmsStore.config
-      ? JSON.parse(JSON.stringify(homeCmsStore.config))
-      : JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+    const src = homeCmsStore.config ?? DEFAULT_CONFIG;
+    const data: HomeConfig = JSON.parse(JSON.stringify(src));
+    if (!data.testimonials?.items?.length) {
+      data.testimonials = { ...DEFAULT_CONFIG.testimonials };
+    }
+    if (!data.blog?.posts?.length) {
+      data.blog = { ...DEFAULT_CONFIG.blog };
+    }
     form.value = data;
     originalJson.value = JSON.stringify(data);
   } catch {
@@ -244,12 +316,7 @@ async function save() {
   saveError.value = false;
   try {
     const token = agenciaStore.getToken();
-    await $fetch('/home-cms', {
-      method: 'PUT',
-      body: form.value,
-      headers: token ? { Authorization: `Bearer ${token}` } : {},
-    });
-    homeCmsStore.config = form.value;
+    await homeCmsStore.saveConfig(form.value, token);
     originalJson.value = JSON.stringify(form.value);
     saveSuccess.value = true;
     setTimeout(() => { saveSuccess.value = false; }, 4000);
@@ -373,6 +440,29 @@ onMounted(() => load());
   margin-top: 6px;
   font-size: 12px;
   color: #6b7280;
+}
+
+.hcon__card-editor {
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.hcon__card-editor-header {
+  background: #f9fafb;
+  padding: 10px 16px;
+  border-bottom: 1px solid #e5e7eb;
+  font-family: 'Inter', 'Jost', sans-serif;
+  font-size: 13px;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hcon__card-editor-body {
+  padding: 16px;
 }
 
 .hcon__footer-actions {

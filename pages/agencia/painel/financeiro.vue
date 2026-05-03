@@ -73,7 +73,7 @@
                         {{ formatCurrency(Number(m.valor || 0)) }}
                       </td>
                       <td class="tc">
-                        <span class="qs-badge" :class="Number(m.valor) >= 0 ? 'qs-badge--success' : 'qs-badge--danger'">
+                        <span class="qs-badge" :class="Number(m.valor) >= 0 ? 'qs-badge-success' : 'qs-badge-danger'">
                           {{ Number(m.valor) >= 0 ? 'Crédito' : 'Débito' }}
                         </span>
                       </td>
@@ -205,10 +205,10 @@ function statusClass(s: string): string {
 }
 
 function badgeClass(cls: string): string {
-  if (cls === 'aprovado') return 'qs-badge--success';
-  if (cls === 'recusado') return 'qs-badge--danger';
-  if (cls === 'processando') return 'qs-badge--info';
-  return 'qs-badge--warn';
+  if (cls === 'aprovado') return 'qs-badge-success';
+  if (cls === 'recusado') return 'qs-badge-danger';
+  if (cls === 'processando') return 'qs-badge-info';
+  return 'qs-badge-warn';
 }
 
 async function solicitarSaque() {
@@ -394,11 +394,6 @@ onMounted(async () => {
   letter-spacing: .04em;
   white-space: nowrap;
 }
-.qs-badge--success { background: #dcfce7; color: #16a34a; }
-.qs-badge--danger  { background: #fee2e2; color: #dc2626; }
-.qs-badge--warn    { background: #fef9c3; color: #ca8a04; }
-.qs-badge--info    { background: #dbeafe; color: #1d4ed8; }
-
 /* Saque */
 .fin-saque-wrap { display: flex; flex-direction: column; gap: 1rem; }
 .fin-saque-form { display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-end; }

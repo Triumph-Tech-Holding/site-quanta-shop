@@ -178,6 +178,21 @@ onMounted(async () => {
     return;
   }
 
+  const cmsPosts = config.value.blog?.posts;
+  if (cmsPosts && cmsPosts.length > 0) {
+    blogPosts.value = cmsPosts.map(p => ({
+      id: p.id,
+      slug: p.slug,
+      title: p.title,
+      excerpt: p.excerpt,
+      tag: 'Blog',
+      date: p.date,
+      readTime: 0,
+      img: p.img,
+    }));
+    return;
+  }
+
   try {
     const data = await $fetch<MockData>('/data/mock-data.json');
     blogPosts.value = data.blog ?? [];

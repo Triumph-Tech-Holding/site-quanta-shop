@@ -192,9 +192,9 @@ function statusClass(s: string): string {
 }
 
 function badgeClass(cls: string): string {
-  if (cls === 'aprovado') return 'qs-badge--success';
-  if (cls === 'recusado') return 'qs-badge--danger';
-  return 'qs-badge--warn';
+  if (cls === 'aprovado') return 'qs-badge-success';
+  if (cls === 'recusado') return 'qs-badge-danger';
+  return 'qs-badge-warn';
 }
 
 async function buscarPedidos() {
@@ -338,10 +338,6 @@ onMounted(() => {
   letter-spacing: .04em;
   white-space: nowrap;
 }
-.qs-badge--success { background: #dcfce7; color: #16a34a; }
-.qs-badge--danger  { background: #fee2e2; color: #dc2626; }
-.qs-badge--warn    { background: #fef9c3; color: #ca8a04; }
-
 /* Modal */
 .qs-modal-overlay {
   position: fixed;

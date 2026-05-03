@@ -2,27 +2,28 @@
   <div class="agencia-login-page">
     <div class="login-box">
       <img src="/agencia/imgs/quanta-shop.png" alt="Quanta Shop" class="logo-login" />
-      <div v-if="loading" class="text-center"><div class="qs-spinner" style="margin:16px auto" /></div>
+      <div v-if="loading" class="fc-center"><div class="qs-spinner" style="margin:16px auto" /></div>
       <div v-else-if="credenciamento">
-        <h5 class="text-center mb-3">Finalizar Credenciamento</h5>
-        <div class="qs-alert-warn mb-3" style="font-size:.875rem">
+        <h5 class="fc-title">Finalizar Credenciamento</h5>
+        <div class="qs-alert-warn" style="font-size:.875rem">
           <strong>Parceiro:</strong> {{ credenciamento.nome || credenciamento.nomeEmpresa }}<br/>
           <strong>CNPJ:</strong> {{ credenciamento.cnpj }}
         </div>
-        <div class="text-center mt-3">
-          <button class="btn btn-ag-primary w-100" @click="finalizar" :disabled="finalizando">
+        <div class="fc-actions">
+          <button class="btn-ag-primary fc-btn-block" @click="finalizar" :disabled="finalizando">
             <span v-if="finalizando" class="fc-spinner" />
             {{ finalizando ? 'Finalizando...' : 'Confirmar Credenciamento' }}
           </button>
         </div>
       </div>
-      <div v-else class="text-center">
-        <p class="text-muted">Credenciamento não encontrado ou expirado.</p>
-        <NuxtLink to="/agencia" class="btn btn-ag-outline">Voltar</NuxtLink>
+      <div v-else class="fc-center">
+        <p class="fc-hint">Credenciamento não encontrado ou expirado.</p>
+        <NuxtLink to="/agencia" class="btn-ag-outline fc-link">Voltar</NuxtLink>
       </div>
     </div>
   </div>
 </template>
+
 <script setup lang="ts">
 import { extractApiErrorMessage } from '~/types/agencia';
 definePageMeta({ layout: 'agencia-login' });
@@ -52,6 +53,12 @@ async function finalizar() {
 </script>
 
 <style scoped>
+.fc-center { text-align: center; }
+.fc-title { text-align: center; margin-bottom: .875rem; font-size: 1.125rem; font-weight: 700; color: #225f6b; }
+.fc-actions { margin-top: .875rem; }
+.fc-btn-block { display: block; width: 100%; text-align: center; cursor: pointer; }
+.fc-hint { color: #6b7280; font-size: .9rem; margin-bottom: .75rem; }
+.fc-link { margin-top: .5rem; }
 .fc-spinner {
   display: inline-block;
   width: 14px; height: 14px;

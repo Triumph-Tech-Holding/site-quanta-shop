@@ -175,7 +175,7 @@
               <div class="qs-card-section idx-card idx-card--no-gap">
                 <div class="idx-plus-header">
                   <div class="idx-section-label">Assinatura Plus</div>
-                  <span class="qs-badge" :class="plusStatus === 'ativo' ? 'qs-badge--success' : 'qs-badge--warn'">
+                  <span class="qs-badge" :class="plusStatus === 'ativo' ? 'qs-badge-success' : 'qs-badge-warn'">
                     {{ plusStatus === 'ativo' ? '⭐ Plus Ativo' : '⏳ Pendente' }}
                   </span>
                 </div>
@@ -200,7 +200,7 @@
                   <ul class="idx-radar-list">
                     <li v-for="(m, i) in radarRedePlus" :key="i" class="idx-radar-item">
                       <span class="idx-radar-nome">{{ m.nome }}</span>
-                      <span class="qs-badge" :class="m.status === 'Ativo' ? 'qs-badge--success' : 'qs-badge--danger'">{{ m.status }}</span>
+                      <span class="qs-badge" :class="m.status === 'Ativo' ? 'qs-badge-success' : 'qs-badge-danger'">{{ m.status }}</span>
                     </li>
                   </ul>
                 </div>
@@ -650,10 +650,6 @@ onUnmounted(() => {
   letter-spacing: .04em;
   white-space: nowrap;
 }
-.qs-badge--success { background: #dcfce7; color: #16a34a; }
-.qs-badge--danger  { background: #fee2e2; color: #dc2626; }
-.qs-badge--warn    { background: #fef9c3; color: #ca8a04; }
-
 /* Modal */
 .qs-modal-overlay {
   position: fixed;

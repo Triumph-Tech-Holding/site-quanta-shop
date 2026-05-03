@@ -75,7 +75,7 @@
             <div v-for="(c, i) in contas" :key="i" class="cb-conta-card">
               <div class="cb-conta-card__top">
                 <div class="cb-conta-card__banco">{{ c.banco }}</div>
-                <span class="qs-badge" :class="c.principal ? 'qs-badge--success' : 'qs-badge--secondary'">
+                <span class="qs-badge" :class="c.principal ? 'qs-badge-success' : 'qs-badge-secondary'">
                   {{ c.principal ? 'Principal' : 'Secundária' }}
                 </span>
               </div>
@@ -218,10 +218,6 @@ onMounted(async () => { agenciaStore.loadFromStorage(); await loadContas(); });
 }
 .cb-remove-btn svg { width: 14px; height: 14px; }
 .cb-remove-btn:hover { opacity: .75; }
-
-.qs-badge { display: inline-flex; padding: .2rem .55rem; border-radius: var(--qs-radius-pill,999px); font-size: .6875rem; font-weight: 700; text-transform: uppercase; white-space: nowrap; }
-.qs-badge--success { background: #dcfce7; color: #16a34a; }
-.qs-badge--secondary { background: var(--qs-gray-100,#f5f5f7); color: var(--qs-gray-500,#6b7280); }
 
 .qs-label { font-size: .75rem; font-weight: 600; color: var(--qs-gray-700,#374151); text-transform: uppercase; letter-spacing: .04em; }
 .qs-input { width: 100%; padding: .625rem .875rem; border: 1.5px solid var(--qs-gray-200,#e5e7eb); border-radius: var(--qs-radius-md,12px); font-size: .875rem; color: var(--qs-ink,#1d1d1f); background: #fff; transition: border-color .15s; box-sizing: border-box; }

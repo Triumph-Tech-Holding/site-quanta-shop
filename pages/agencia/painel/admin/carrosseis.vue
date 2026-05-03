@@ -23,7 +23,7 @@
               Importando...
             </span>
             <span v-else>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
               Importar do sistema antigo
             </span>
           </button>
@@ -46,35 +46,23 @@
             <tr v-for="(item, i) in itens" :key="item.id">
               <td>
                 <div class="car-order-col">
-                  <button
-                    class="car-order-btn"
-                    :disabled="i === 0"
-                    title="Subir"
-                    @click="moverItem(item, 'up')"
-                  >↑</button>
-                  <button
-                    class="car-order-btn"
-                    :disabled="i === itens.length - 1"
-                    title="Descer"
-                    @click="moverItem(item, 'down')"
-                  >↓</button>
+                  <button class="car-order-btn" :disabled="i === 0" title="Subir" @click="moverItem(item, 'up')">↑</button>
+                  <button class="car-order-btn" :disabled="i === itens.length - 1" title="Descer" @click="moverItem(item, 'down')">↓</button>
                 </div>
               </td>
               <td class="qs-cell-bold">{{ item.titulo }}</td>
-              <td class="align-middle">
+              <td>
                 <img v-if="item.url" :src="item.url" alt="" style="height:40px;width:80px;object-fit:cover;border-radius:4px;" />
-                <span v-else class="text-muted">—</span>
+                <span v-else class="qs-meta">—</span>
               </td>
-              <td class="align-middle">
-                <span v-if="item.headline" class="text-truncate d-block" style="max-width:160px">{{ item.headline }}</span>
-                <span v-else class="text-muted small">Global (CMS)</span>
+              <td>
+                <span v-if="item.headline" style="max-width:160px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ item.headline }}</span>
+                <span v-else class="qs-meta">Global (CMS)</span>
               </td>
-              <td class="align-middle">
-                <span class="qs-badge" :class="item.ativo ? 'qs-badge-success' : 'qs-badge-warn'">
-                  {{ item.ativo ? 'Ativo' : 'Inativo' }}
-                </span>
+              <td>
+                <span class="qs-badge" :class="item.ativo ? 'qs-badge-success' : 'qs-badge-warn'">{{ item.ativo ? 'Ativo' : 'Inativo' }}</span>
               </td>
-              <td class="align-middle">
+              <td>
                 <div class="car-row-actions">
                   <button class="qs-btn-sm-outline" @click="abrirEditar(item)">Editar</button>
                   <button class="qs-btn-sm-danger" @click="confirmarExcluir(item)">Excluir</button>
@@ -100,13 +88,7 @@
 
             <div class="car-editor-left">
               <div class="car-tabs">
-                <button
-                  v-for="tab in tabs"
-                  :key="tab.key"
-                  class="car-tab-btn"
-                  :class="{ active: abaAtiva === tab.key }"
-                  @click="abaAtiva = tab.key"
-                >
+                <button v-for="tab in tabs" :key="tab.key" class="car-tab-btn" :class="{ active: abaAtiva === tab.key }" @click="abaAtiva = tab.key">
                   <span class="car-tab-icon" v-html="tab.icon"></span>
                   {{ tab.label }}
                 </button>
@@ -114,299 +96,266 @@
 
               <div class="car-editor-form">
 
-          <div v-if="abaAtiva === 'imagem'">
-            <div class="car-dim-info mb-3">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-              <span>Dimensões recomendadas: <strong>1920 × 600 px</strong> — formato horizontal, JPG ou WEBP comprimido</span>
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label fw-bold">Título interno *</label>
-              <input v-model="form.titulo" type="text" class="form-control" placeholder="Ex: Campanha Natal 2025" />
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label fw-bold">Imagem do Banner</label>
-              <div class="d-flex gap-2 mb-2">
-                <button type="button" class="btn btn-sm" :class="modoImagem === 'url' ? 'qs-btn-sm-primary' : 'qs-btn-sm-outline'" @click="modoImagem = 'url'">Usar URL</button>
-                <button type="button" class="btn btn-sm" :class="modoImagem === 'arquivo' ? 'qs-btn-sm-primary' : 'qs-btn-sm-outline'" @click="modoImagem = 'arquivo'">Enviar Arquivo</button>
-              </div>
-
-              <div v-if="modoImagem === 'url'">
-                <input v-model="form.url" type="url" class="form-control" placeholder="https://..." />
-                <img v-if="form.url" :src="form.url" alt="preview" class="mt-2 rounded" style="max-height:120px;max-width:100%;object-fit:contain;border:1px solid #dee2e6;" />
-              </div>
-
-              <div v-else>
-                <div
-                  class="upload-drop-area"
-                  :class="{ 'drag-over': isDragging }"
-                  @dragover.prevent="isDragging = true"
-                  @dragleave="isDragging = false"
-                  @drop.prevent="onDrop"
-                  @click="!arquivoPreview && !uploadingFile ? triggerFileInput() : undefined"
-                >
-                  <input ref="fileInputRef" type="file" accept="image/*" style="display:none" @change="onFileChange" />
-                  <div v-if="uploadingFile" class="upload-drop-placeholder">
-                    <div class="qs-spinner" style="margin-bottom:8px" />
-                    <p class="mb-0 text-muted">Enviando imagem...</p>
+                <div v-if="abaAtiva === 'imagem'">
+                  <div class="car-dim-info car-field">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    <span>Dimensões recomendadas: <strong>1920 × 600 px</strong> — formato horizontal, JPG ou WEBP comprimido</span>
                   </div>
-                  <div v-else-if="!arquivoPreview" class="upload-drop-placeholder">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                    <p class="mb-1 mt-2">Arraste uma imagem ou <strong>clique para selecionar</strong></p>
-                    <small class="text-muted">PNG, JPG, WEBP — máx. 5MB — ideal 1920×600px</small>
+
+                  <div class="car-field">
+                    <label class="qs-label">Título interno *</label>
+                    <input v-model="form.titulo" type="text" class="qs-input" placeholder="Ex: Campanha Natal 2025" />
                   </div>
-                  <div v-else class="position-relative">
-                    <img :src="arquivoPreview" alt="preview" style="max-height:140px;max-width:100%;object-fit:contain;border-radius:4px;" />
-                    <button type="button" class="btn btn-sm btn-outline-danger mt-2" @click.stop="limparArquivo">Remover</button>
+
+                  <div class="car-field">
+                    <label class="qs-label">Imagem do Banner</label>
+                    <div style="display:flex;gap:8px;margin-bottom:8px;">
+                      <button type="button" :class="modoImagem === 'url' ? 'qs-btn-sm-primary' : 'qs-btn-sm-outline'" @click="modoImagem = 'url'">Usar URL</button>
+                      <button type="button" :class="modoImagem === 'arquivo' ? 'qs-btn-sm-primary' : 'qs-btn-sm-outline'" @click="modoImagem = 'arquivo'">Enviar Arquivo</button>
+                    </div>
+
+                    <div v-if="modoImagem === 'url'">
+                      <input v-model="form.url" type="url" class="qs-input" placeholder="https://..." />
+                      <img v-if="form.url" :src="form.url" alt="preview" style="margin-top:8px;border-radius:4px;max-height:120px;max-width:100%;object-fit:contain;border:1px solid var(--qs-gray-200);" />
+                    </div>
+
+                    <div v-else>
+                      <div class="upload-drop-area" :class="{ 'drag-over': isDragging }"
+                        @dragover.prevent="isDragging = true" @dragleave="isDragging = false"
+                        @drop.prevent="onDrop"
+                        @click="!arquivoPreview && !uploadingFile ? triggerFileInput() : undefined"
+                      >
+                        <input ref="fileInputRef" type="file" accept="image/*" style="display:none" @change="onFileChange" />
+                        <div v-if="uploadingFile" class="upload-drop-placeholder">
+                          <div class="qs-spinner" style="margin-bottom:8px" />
+                          <p style="margin:0;color:var(--qs-gray-400);">Enviando imagem...</p>
+                        </div>
+                        <div v-else-if="!arquivoPreview" class="upload-drop-placeholder">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                          <p style="margin:4px 0 2px;">Arraste uma imagem ou <strong>clique para selecionar</strong></p>
+                          <small class="qs-meta">PNG, JPG, WEBP — máx. 5MB — ideal 1920×600px</small>
+                        </div>
+                        <div v-else style="position:relative;">
+                          <img :src="arquivoPreview" alt="preview" style="max-height:140px;max-width:100%;object-fit:contain;border-radius:4px;" />
+                          <button type="button" class="qs-btn-sm-danger" style="margin-top:8px;" @click.stop="limparArquivo">Remover</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div v-if="form.url" class="car-field">
+                    <label class="qs-label">Ajustar posição da imagem</label>
+                    <small class="qs-meta" style="display:block;margin-bottom:8px;">Arraste para reposicionar o ponto focal do banner.</small>
+                    <div ref="posAdjusterRef" class="pos-adjuster" :class="{ 'pos-adjuster--dragging': isDraggingPos }"
+                      :style="{ backgroundImage: `url(${form.url})`, backgroundPosition: form.objectPosition || '50% 50%' }"
+                      @mousedown.prevent="onPosMouseDown" @mousemove="onPosMouseMove" @mouseup="onPosMouseUp" @mouseleave="onPosMouseUp"
+                    >
+                      <div class="pos-adjuster-hint">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 9l-3 3 3 3M9 5l3-3 3 3M15 19l-3 3-3-3M19 9l3 3-3 3M2 12h20M12 2v20"/></svg>
+                        Arraste para reposicionar
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="car-field">
+                    <label class="qs-label">URL de Destino</label>
+                    <input v-model="form.urlDestino" type="url" class="qs-input" placeholder="https://..." />
+                  </div>
+
+                  <div class="car-field">
+                    <label class="qs-checkbox-label">
+                      <input v-model="form.ativo" type="checkbox" class="qs-checkbox" id="car-ativo" />
+                      <span>Ativo (aparece na home)</span>
+                    </label>
                   </div>
                 </div>
-              </div>
-            </div>
 
-            <div v-if="form.url" class="mb-3">
-              <label class="form-label fw-bold">Ajustar posição da imagem</label>
-              <small class="text-muted d-block mb-2">Arraste para reposicionar o ponto focal do banner.</small>
-              <div
-                ref="posAdjusterRef"
-                class="pos-adjuster"
-                :class="{ 'pos-adjuster--dragging': isDraggingPos }"
-                :style="{
-                  backgroundImage: `url(${form.url})`,
-                  backgroundPosition: form.objectPosition || '50% 50%',
-                }"
-                @mousedown.prevent="onPosMouseDown"
-                @mousemove="onPosMouseMove"
-                @mouseup="onPosMouseUp"
-                @mouseleave="onPosMouseUp"
-              >
-                <div class="pos-adjuster-hint">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 9l-3 3 3 3M9 5l3-3 3 3M15 19l-3 3-3-3M19 9l3 3-3 3M2 12h20M12 2v20"/></svg>
-                  Arraste para reposicionar
+                <div v-if="abaAtiva === 'campanha'">
+                  <div class="car-dim-info car-field">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    <span>Campos opcionais. Se vazios, os textos do <strong>CMS Global</strong> serão usados no hero.</span>
+                  </div>
+
+                  <div style="display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:16px;">
+                    <div>
+                      <label class="qs-label">Badge (etiqueta)</label>
+                      <input v-model="form.badge" type="text" class="qs-input" placeholder="Ex: +12.000 usuários economizando" />
+                      <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;">
+                        <button v-for="preset in BADGE_PRESETS" :key="preset" type="button"
+                          class="car-badge-preset" :class="{ active: form.badge === preset }"
+                          @click="form.badge = preset">{{ preset }}</button>
+                      </div>
+                    </div>
+                    <div>
+                      <label class="qs-label">Cor do Badge</label>
+                      <div style="display:flex;align-items:center;gap:8px;">
+                        <input v-model="form.badgeCor" type="color" class="car-color-input" />
+                        <input v-model="form.badgeCor" type="text" class="qs-input" placeholder="padrão" style="font-family:monospace;" />
+                      </div>
+                      <small class="qs-meta">Deixe vazio para cor padrão.</small>
+                    </div>
+                  </div>
+
+                  <div class="car-field">
+                    <label class="qs-label">Headline (título principal)</label>
+                    <textarea v-model="form.headline" class="qs-textarea" rows="3" placeholder="Ex: Seu dinheiro volta&#10;a cada compra"></textarea>
+                    <small class="qs-meta">Use &lt;highlight&gt;palavra&lt;/highlight&gt; para destacar em verde. Enter para quebrar linha.</small>
+                  </div>
+
+                  <div class="car-field-row">
+                    <div>
+                      <label class="qs-label">Cor da Headline</label>
+                      <div style="display:flex;align-items:center;gap:8px;">
+                        <input v-model="form.headlineCor" type="color" class="car-color-input" />
+                        <input v-model="form.headlineCor" type="text" class="qs-input" placeholder="padrão (branco/escuro)" style="font-family:monospace;" />
+                      </div>
+                      <small class="qs-meta">Deixe vazio para usar a cor global (Claro/Escuro).</small>
+                    </div>
+                    <div>
+                      <label class="qs-label">Espaçamento entre linhas</label>
+                      <div style="display:flex;gap:8px;">
+                        <button type="button" class="car-font-btn" :class="{ active: (form.headlineEspacamento || 'compacto') === 'compacto' }" @click="form.headlineEspacamento = 'compacto'">Compacto</button>
+                        <button type="button" class="car-font-btn" :class="{ active: form.headlineEspacamento === 'normal' }" @click="form.headlineEspacamento = 'normal'">Normal</button>
+                        <button type="button" class="car-font-btn" :class="{ active: form.headlineEspacamento === 'amplo' }" @click="form.headlineEspacamento = 'amplo'">Amplo</button>
+                      </div>
+                      <small class="qs-meta">Compacto = 0.90 · Normal = 1.02 · Amplo = 1.18</small>
+                    </div>
+                  </div>
+
+                  <div class="car-field">
+                    <label class="qs-label">Subtítulo</label>
+                    <textarea v-model="form.subtitulo" class="qs-textarea" rows="2" placeholder="Ex: Cashback real em centenas de lojas parceiras.&#10;Enter para quebrar linha."></textarea>
+                    <small class="qs-meta">Enter para quebrar linha.</small>
+                  </div>
+
+                  <div class="car-field-row">
+                    <div>
+                      <label class="qs-label">Cor do Subtítulo</label>
+                      <div style="display:flex;align-items:center;gap:8px;">
+                        <input v-model="form.subtituloCor" type="color" class="car-color-input" />
+                        <input v-model="form.subtituloCor" type="text" class="qs-input" placeholder="padrão" style="font-family:monospace;" />
+                      </div>
+                      <small class="qs-meta">Deixe vazio para usar a cor global.</small>
+                    </div>
+                    <div>
+                      <label class="qs-label">Tamanho do Subtítulo</label>
+                      <div style="display:flex;gap:8px;">
+                        <button type="button" class="car-font-btn" :class="{ active: (form.subtituloFontSize || 'medio') === 'pequeno' }" @click="form.subtituloFontSize = 'pequeno'">Pequeno</button>
+                        <button type="button" class="car-font-btn" :class="{ active: (form.subtituloFontSize || 'medio') === 'medio' }" @click="form.subtituloFontSize = 'medio'">Médio</button>
+                        <button type="button" class="car-font-btn" :class="{ active: (form.subtituloFontSize || 'medio') === 'grande' }" @click="form.subtituloFontSize = 'grande'">Grande</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="car-field-row">
+                    <div>
+                      <label class="qs-label">Texto do Botão CTA</label>
+                      <input v-model="form.ctaTexto" type="text" class="qs-input" placeholder="Ex: Criar Conta Grátis" />
+                    </div>
+                    <div>
+                      <label class="qs-label">Link do Botão CTA</label>
+                      <input v-model="form.ctaLink" type="text" class="qs-input" placeholder="/register" />
+                    </div>
+                  </div>
+
+                  <div class="car-field-row">
+                    <div>
+                      <label class="qs-label">Cor do Botão</label>
+                      <div style="display:flex;align-items:center;gap:8px;">
+                        <input v-model="form.ctaCor" type="color" class="car-color-input" />
+                        <input v-model="form.ctaCor" type="text" class="qs-input" placeholder="#98C73A" style="font-family:monospace;" />
+                      </div>
+                    </div>
+                    <div>
+                      <label class="qs-label">Cor do Texto do Botão</label>
+                      <div style="display:flex;align-items:center;gap:8px;">
+                        <input v-model="form.ctaTextoCor" type="color" class="car-color-input" />
+                        <input v-model="form.ctaTextoCor" type="text" class="qs-input" placeholder="automático" style="font-family:monospace;" />
+                      </div>
+                      <small class="qs-meta">Deixe vazio para cor automática (claro/escuro).</small>
+                    </div>
+                  </div>
+
+                  <div class="car-field">
+                    <label class="qs-label">Tamanho do Botão</label>
+                    <div style="display:flex;gap:8px;">
+                      <button type="button" class="car-font-btn" :class="{ active: (form.ctaTamanho || 'medio') === 'pequeno' }" @click="form.ctaTamanho = 'pequeno'">Pequeno</button>
+                      <button type="button" class="car-font-btn" :class="{ active: (form.ctaTamanho || 'medio') === 'medio' }" @click="form.ctaTamanho = 'medio'">Médio</button>
+                      <button type="button" class="car-font-btn" :class="{ active: (form.ctaTamanho || 'medio') === 'grande' }" @click="form.ctaTamanho = 'grande'">Grande</button>
+                    </div>
+                  </div>
+
+                  <div class="car-field">
+                    <label class="qs-label">Cor do Texto</label>
+                    <div style="display:flex;gap:8px;">
+                      <button type="button" class="car-text-claro" :class="{ active: form.textoCor === 'light' }" @click="form.textoCor = 'light'">☀ Claro (branco)</button>
+                      <button type="button" class="car-text-escuro" :class="{ active: form.textoCor === 'dark' }" @click="form.textoCor = 'dark'">◑ Escuro (preto)</button>
+                    </div>
+                  </div>
+
+                  <div class="car-field">
+                    <label class="qs-label">Tamanho da Fonte do Título</label>
+                    <div style="display:flex;gap:8px;">
+                      <button type="button" class="car-font-btn" :class="{ active: (form.tituloFontSize || 'medio') === 'pequeno' }" @click="form.tituloFontSize = 'pequeno'"><span style="font-size:10px;font-weight:800">Aa</span> Pequeno</button>
+                      <button type="button" class="car-font-btn" :class="{ active: (form.tituloFontSize || 'medio') === 'medio' }" @click="form.tituloFontSize = 'medio'"><span style="font-size:13px;font-weight:800">Aa</span> Médio</button>
+                      <button type="button" class="car-font-btn" :class="{ active: (form.tituloFontSize || 'medio') === 'grande' }" @click="form.tituloFontSize = 'grande'"><span style="font-size:16px;font-weight:800">Aa</span> Grande</button>
+                    </div>
+                  </div>
+
+                  <div class="car-field">
+                    <label class="qs-label">Intensidade do Overlay: {{ form.overlayIntensidade }}%</label>
+                    <input v-model.number="form.overlayIntensidade" type="range" class="qs-range" min="0" max="95" step="5" />
+                    <div style="display:flex;justify-content:space-between;">
+                      <small class="qs-meta">Transparente (0%)</small>
+                      <small class="qs-meta">Opaco (95%)</small>
+                    </div>
+                  </div>
+
+                  <div class="car-field">
+                    <label class="qs-label">Cor do Overlay</label>
+                    <div style="display:flex;align-items:center;gap:8px;">
+                      <input v-model="form.overlayCor" type="color" class="car-color-input" />
+                      <input v-model="form.overlayCor" type="text" class="qs-input" placeholder="padrão (escuro)" style="font-family:monospace;" />
+                    </div>
+                    <small class="qs-meta">Deixe vazio para o overlay escuro padrão. Use <strong>#2F7785</strong> para a cor da marca.</small>
+                  </div>
+
+                  <div class="car-field">
+                    <label class="qs-label">Direção do Overlay</label>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                      <button type="button" class="car-dir-btn" :class="{ active: (form.overlayDirecao || 'esquerda') === 'esquerda' }" @click="form.overlayDirecao = 'esquerda'">
+                        <span class="car-dir-icon car-dir-icon--esquerda"></span> Esquerda
+                      </button>
+                      <button type="button" class="car-dir-btn" :class="{ active: form.overlayDirecao === 'direita' }" @click="form.overlayDirecao = 'direita'">
+                        <span class="car-dir-icon car-dir-icon--direita"></span> Direita
+                      </button>
+                      <button type="button" class="car-dir-btn" :class="{ active: form.overlayDirecao === 'centro' }" @click="form.overlayDirecao = 'centro'">
+                        <span class="car-dir-icon car-dir-icon--centro"></span> Centro
+                      </button>
+                      <button type="button" class="car-dir-btn" :class="{ active: form.overlayDirecao === 'uniforme' }" @click="form.overlayDirecao = 'uniforme'">
+                        <span class="car-dir-icon car-dir-icon--uniforme"></span> Uniforme
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="car-field">
+                    <label class="qs-label">Alinhamento do Botão CTA</label>
+                    <div style="display:flex;gap:8px;">
+                      <button type="button" class="car-align-btn" :class="{ active: (form.ctaAlinhamento || 'esquerda') === 'esquerda' }" @click="form.ctaAlinhamento = 'esquerda'">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/><line x1="3" y1="18" x2="18" y2="18"/></svg>
+                        Esquerda
+                      </button>
+                      <button type="button" class="car-align-btn" :class="{ active: form.ctaAlinhamento === 'centro' }" @click="form.ctaAlinhamento = 'centro'">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+                        Centro
+                      </button>
+                      <button type="button" class="car-align-btn" :class="{ active: form.ctaAlinhamento === 'direita' }" @click="form.ctaAlinhamento = 'direita'">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="9" y1="12" x2="21" y2="12"/><line x1="6" y1="18" x2="21" y2="18"/></svg>
+                        Direita
+                      </button>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label fw-bold">URL de Destino</label>
-              <input v-model="form.urlDestino" type="url" class="form-control" placeholder="https://..." />
-            </div>
-
-            <div class="mb-3">
-              <div class="form-check">
-                <input v-model="form.ativo" type="checkbox" class="form-check-input" id="car-ativo" />
-                <label class="form-check-label" for="car-ativo">Ativo (aparece na home)</label>
-              </div>
-            </div>
-          </div>
-
-          <div v-if="abaAtiva === 'campanha'">
-            <div class="car-dim-info mb-3">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-              <span>Campos opcionais. Se vazios, os textos do <strong>CMS Global</strong> serão usados no hero.</span>
-            </div>
-
-            <div class="row g-3 mb-3">
-              <div class="col-md-8">
-                <label class="form-label fw-bold">Badge (etiqueta)</label>
-                <input v-model="form.badge" type="text" class="form-control" placeholder="Ex: +12.000 usuários economizando" />
-                <div class="d-flex flex-wrap gap-1 mt-2">
-                  <button v-for="preset in BADGE_PRESETS" :key="preset" type="button"
-                    class="btn btn-sm car-badge-preset"
-                    :class="{ active: form.badge === preset }"
-                    @click="form.badge = preset">
-                    {{ preset }}
-                  </button>
-                </div>
-              </div>
-              <div class="col-md-4">
-                <label class="form-label fw-bold">Cor do Badge</label>
-                <div class="d-flex align-items-center gap-2">
-                  <input v-model="form.badgeCor" type="color" class="form-control form-control-color" style="width:48px;height:38px;padding:2px;" />
-                  <input v-model="form.badgeCor" type="text" class="form-control form-control-sm" placeholder="padrão" style="font-family:monospace;" />
-                </div>
-                <small class="text-muted">Deixe vazio para cor padrão.</small>
-              </div>
-            </div>
-
-            <div class="mb-2">
-              <label class="form-label fw-bold">Headline (título principal)</label>
-              <textarea v-model="form.headline" class="form-control" rows="3" placeholder="Ex: Seu dinheiro volta&#10;a cada compra"></textarea>
-              <small class="text-muted">Use &lt;highlight&gt;palavra&lt;/highlight&gt; para destacar em verde. Enter para quebrar linha.</small>
-            </div>
-            <div class="row g-3 mb-3">
-              <div class="col-md-6">
-                <label class="form-label fw-bold">Cor da Headline</label>
-                <div class="d-flex align-items-center gap-2">
-                  <input v-model="form.headlineCor" type="color" class="form-control form-control-color" style="width:48px;height:38px;padding:2px;" />
-                  <input v-model="form.headlineCor" type="text" class="form-control form-control-sm" placeholder="padrão (branco/escuro)" style="font-family:monospace;" />
-                </div>
-                <small class="text-muted">Deixe vazio para usar a cor global (Claro/Escuro).</small>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label fw-bold">Espaçamento entre linhas</label>
-                <div class="d-flex gap-2">
-                  <button type="button" class="btn btn-sm car-font-btn" :class="{ active: (form.headlineEspacamento || 'compacto') === 'compacto' }" @click="form.headlineEspacamento = 'compacto'">Compacto</button>
-                  <button type="button" class="btn btn-sm car-font-btn" :class="{ active: form.headlineEspacamento === 'normal' }" @click="form.headlineEspacamento = 'normal'">Normal</button>
-                  <button type="button" class="btn btn-sm car-font-btn" :class="{ active: form.headlineEspacamento === 'amplo' }" @click="form.headlineEspacamento = 'amplo'">Amplo</button>
-                </div>
-                <small class="text-muted">Compacto = 0.90 · Normal = 1.02 · Amplo = 1.18</small>
-              </div>
-            </div>
-
-            <div class="mb-2">
-              <label class="form-label fw-bold">Subtítulo</label>
-              <textarea v-model="form.subtitulo" class="form-control" rows="2" placeholder="Ex: Cashback real em centenas de lojas parceiras.&#10;Enter para quebrar linha." />
-              <small class="text-muted">Enter para quebrar linha.</small>
-            </div>
-            <div class="row g-3 mb-3">
-              <div class="col-md-6">
-                <label class="form-label fw-bold">Cor do Subtítulo</label>
-                <div class="d-flex align-items-center gap-2">
-                  <input v-model="form.subtituloCor" type="color" class="form-control form-control-color" style="width:48px;height:38px;padding:2px;" />
-                  <input v-model="form.subtituloCor" type="text" class="form-control form-control-sm" placeholder="padrão" style="font-family:monospace;" />
-                </div>
-                <small class="text-muted">Deixe vazio para usar a cor global.</small>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label fw-bold">Tamanho do Subtítulo</label>
-                <div class="d-flex gap-2">
-                  <button type="button" class="btn btn-sm car-font-btn" :class="{ active: (form.subtituloFontSize || 'medio') === 'pequeno' }" @click="form.subtituloFontSize = 'pequeno'">Pequeno</button>
-                  <button type="button" class="btn btn-sm car-font-btn" :class="{ active: (form.subtituloFontSize || 'medio') === 'medio' }" @click="form.subtituloFontSize = 'medio'">Médio</button>
-                  <button type="button" class="btn btn-sm car-font-btn" :class="{ active: (form.subtituloFontSize || 'medio') === 'grande' }" @click="form.subtituloFontSize = 'grande'">Grande</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="row g-3 mb-3">
-              <div class="col-md-6">
-                <label class="form-label fw-bold">Texto do Botão CTA</label>
-                <input v-model="form.ctaTexto" type="text" class="form-control" placeholder="Ex: Criar Conta Grátis" />
-              </div>
-              <div class="col-md-6">
-                <label class="form-label fw-bold">Link do Botão CTA</label>
-                <input v-model="form.ctaLink" type="text" class="form-control" placeholder="/register" />
-              </div>
-            </div>
-
-            <div class="row g-3 mb-3">
-              <div class="col-md-6">
-                <label class="form-label fw-bold">Cor do Botão</label>
-                <div class="d-flex align-items-center gap-2">
-                  <input v-model="form.ctaCor" type="color" class="form-control form-control-color" style="width:48px;height:38px;padding:2px;" />
-                  <input v-model="form.ctaCor" type="text" class="form-control form-control-sm" placeholder="#98C73A" style="font-family:monospace;" />
-                </div>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label fw-bold">Cor do Texto do Botão</label>
-                <div class="d-flex align-items-center gap-2">
-                  <input v-model="form.ctaTextoCor" type="color" class="form-control form-control-color" style="width:48px;height:38px;padding:2px;" />
-                  <input v-model="form.ctaTextoCor" type="text" class="form-control form-control-sm" placeholder="automático" style="font-family:monospace;" />
-                </div>
-                <small class="text-muted">Deixe vazio para cor automática (claro/escuro).</small>
-              </div>
-            </div>
-
-            <div class="row g-3 mb-3">
-              <div class="col-md-6">
-                <label class="form-label fw-bold">Tamanho do Botão</label>
-                <div class="d-flex gap-2">
-                  <button type="button" class="btn btn-sm car-font-btn" :class="{ active: (form.ctaTamanho || 'medio') === 'pequeno' }" @click="form.ctaTamanho = 'pequeno'">
-                    Pequeno
-                  </button>
-                  <button type="button" class="btn btn-sm car-font-btn" :class="{ active: (form.ctaTamanho || 'medio') === 'medio' }" @click="form.ctaTamanho = 'medio'">
-                    Médio
-                  </button>
-                  <button type="button" class="btn btn-sm car-font-btn" :class="{ active: (form.ctaTamanho || 'medio') === 'grande' }" @click="form.ctaTamanho = 'grande'">
-                    Grande
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div class="row g-3 mb-3">
-              <div class="col-md-6">
-                <label class="form-label fw-bold">Cor do Texto</label>
-                <div class="d-flex gap-2">
-                  <button type="button" class="btn btn-sm car-text-claro" :class="{ active: form.textoCor === 'light' }" @click="form.textoCor = 'light'">
-                    ☀ Claro (branco)
-                  </button>
-                  <button type="button" class="btn btn-sm car-text-escuro" :class="{ active: form.textoCor === 'dark' }" @click="form.textoCor = 'dark'">
-                    ◑ Escuro (preto)
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label fw-bold">Tamanho da Fonte do Título</label>
-              <div class="d-flex gap-2">
-                <button type="button" class="btn btn-sm car-font-btn" :class="{ active: (form.tituloFontSize || 'medio') === 'pequeno' }" @click="form.tituloFontSize = 'pequeno'">
-                  <span style="font-size:10px;font-weight:800">Aa</span> Pequeno
-                </button>
-                <button type="button" class="btn btn-sm car-font-btn" :class="{ active: (form.tituloFontSize || 'medio') === 'medio' }" @click="form.tituloFontSize = 'medio'">
-                  <span style="font-size:13px;font-weight:800">Aa</span> Médio
-                </button>
-                <button type="button" class="btn btn-sm car-font-btn" :class="{ active: (form.tituloFontSize || 'medio') === 'grande' }" @click="form.tituloFontSize = 'grande'">
-                  <span style="font-size:16px;font-weight:800">Aa</span> Grande
-                </button>
-              </div>
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label fw-bold">Intensidade do Overlay: {{ form.overlayIntensidade }}%</label>
-              <input v-model.number="form.overlayIntensidade" type="range" class="form-range" min="0" max="95" step="5" />
-              <div class="d-flex justify-content-between">
-                <small class="text-muted">Transparente (0%)</small>
-                <small class="text-muted">Opaco (95%)</small>
-              </div>
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label fw-bold">Cor do Overlay</label>
-              <div class="d-flex align-items-center gap-2">
-                <input v-model="form.overlayCor" type="color" class="form-control form-control-color" style="width:48px;height:38px;padding:2px;" />
-                <input v-model="form.overlayCor" type="text" class="form-control form-control-sm" placeholder="padrão (escuro)" style="font-family:monospace;" />
-              </div>
-              <small class="text-muted">Deixe vazio para o overlay escuro padrão. Use <strong>#2F7785</strong> para a cor da marca.</small>
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label fw-bold">Direção do Overlay</label>
-              <div class="d-flex gap-2 flex-wrap">
-                <button type="button" class="btn btn-sm car-dir-btn" :class="{ active: (form.overlayDirecao || 'esquerda') === 'esquerda' }" @click="form.overlayDirecao = 'esquerda'">
-                  <span class="car-dir-icon car-dir-icon--esquerda"></span> Esquerda
-                </button>
-                <button type="button" class="btn btn-sm car-dir-btn" :class="{ active: form.overlayDirecao === 'direita' }" @click="form.overlayDirecao = 'direita'">
-                  <span class="car-dir-icon car-dir-icon--direita"></span> Direita
-                </button>
-                <button type="button" class="btn btn-sm car-dir-btn" :class="{ active: form.overlayDirecao === 'centro' }" @click="form.overlayDirecao = 'centro'">
-                  <span class="car-dir-icon car-dir-icon--centro"></span> Centro
-                </button>
-                <button type="button" class="btn btn-sm car-dir-btn" :class="{ active: form.overlayDirecao === 'uniforme' }" @click="form.overlayDirecao = 'uniforme'">
-                  <span class="car-dir-icon car-dir-icon--uniforme"></span> Uniforme
-                </button>
-              </div>
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label fw-bold">Alinhamento do Botão CTA</label>
-              <div class="d-flex gap-2">
-                <button type="button" class="btn btn-sm car-align-btn" :class="{ active: (form.ctaAlinhamento || 'esquerda') === 'esquerda' }" @click="form.ctaAlinhamento = 'esquerda'">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="15" y2="12"/><line x1="3" y1="18" x2="18" y2="18"/></svg>
-                  Esquerda
-                </button>
-                <button type="button" class="btn btn-sm car-align-btn" :class="{ active: form.ctaAlinhamento === 'centro' }" @click="form.ctaAlinhamento = 'centro'">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="6" y1="12" x2="18" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
-                  Centro
-                </button>
-                <button type="button" class="btn btn-sm car-align-btn" :class="{ active: form.ctaAlinhamento === 'direita' }" @click="form.ctaAlinhamento = 'direita'">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="9" y1="12" x2="21" y2="12"/><line x1="6" y1="18" x2="21" y2="18"/></svg>
-                  Direita
-                </button>
-              </div>
-            </div>
-          </div>
 
               </div>
             </div>
@@ -456,7 +405,7 @@
 
           </div>
 
-          <div v-if="modalError" class="qs-alert-danger mt-3">{{ modalError }}</div>
+          <div v-if="modalError" class="qs-alert-danger" style="margin-top:12px">{{ modalError }}</div>
         </div>
 
         <div class="qs-modal-footer">
@@ -919,6 +868,10 @@ onMounted(async () => {
 <style scoped>
 .car-modal-wide { max-width: 1080px; width: 100%; }
 .car-modal-body { min-height: 420px; }
+
+.car-field { margin-bottom: 16px; }
+.car-field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+.car-color-input { width: 48px; height: 38px; padding: 2px; border: 1px solid var(--qs-gray-200, #e2e8f0); border-radius: var(--qs-radius-md, 8px); cursor: pointer; flex-shrink: 0; }
 
 .car-import-success { display: flex; align-items: center; gap: 8px; background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; border-radius: var(--qs-radius-md, 8px); padding: 10px 14px; font-size: 13px; margin-bottom: 16px; }
 .car-dismiss { background: none; border: none; font-size: 18px; line-height: 1; cursor: pointer; margin-left: auto; color: #166534; opacity: 0.6; }

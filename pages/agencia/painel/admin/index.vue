@@ -9,16 +9,14 @@
     </div>
 
     <template v-if="!loading">
-      <div class="qs-kpi-strip">
-        <div class="qs-kpi-card" v-for="(s, i) in stats" :key="i">
-          <div class="qs-kpi-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="var(--qs-teal)"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
-          </div>
-          <div>
-            <div class="qs-kpi-label">{{ s.label }}</div>
-            <div class="qs-kpi-value">{{ s.valor }}</div>
-          </div>
-        </div>
+      <div class="qs-grid">
+        <QsKpiCard
+          v-for="(s, i) in stats"
+          :key="i"
+          :label="s.label"
+          :value="s.valor"
+          dot-color="var(--qs-teal)"
+        />
       </div>
 
       <!-- Atalho discreto para o LAB (cockpit técnico interno) -->
@@ -105,14 +103,6 @@ onMounted(async () => {
 
 <style scoped>
 .qs-alert-warn { background: #fefce8; color: #a16207; border: 1px solid #fde68a; border-radius: var(--qs-radius-md); padding: 12px 16px; font-size: 14px; margin-bottom: 20px; }
-
-.qs-kpi-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
-@media (max-width: 768px) { .qs-kpi-strip { grid-template-columns: repeat(2, 1fr); } }
-
-.qs-kpi-card { background: #fff; border-radius: var(--qs-radius-lg); padding: 18px 20px; box-shadow: var(--qs-shadow-xs); display: flex; align-items: center; gap: 14px; border: 1px solid var(--qs-gray-100); }
-.qs-kpi-icon { width: 40px; height: 40px; border-radius: var(--qs-radius-md); background: rgba(47,119,133,.1); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.qs-kpi-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--qs-gray-400); margin-bottom: 2px; }
-.qs-kpi-value { font-size: 22px; font-weight: 700; color: var(--qs-ink); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
 
 .qs-nav-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
 @media (max-width: 900px) { .qs-nav-grid { grid-template-columns: repeat(2, 1fr); } }

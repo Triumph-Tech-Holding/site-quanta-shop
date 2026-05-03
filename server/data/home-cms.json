@@ -30,12 +30,61 @@
   },
   "testimonials": {
     "title": "Testemunhos de Usuários Reais",
-    "subtitle": "Veja quanto nossos usuários já economizaram."
+    "subtitle": "Veja quanto nossos usuários já economizaram.",
+    "items": [
+      {
+        "name": "Marina Costa",
+        "initials": "MC",
+        "role": "Usuária há 8 meses",
+        "highlight": "Já recebi mais de R$ 1.240 de cashback",
+        "text": " em apenas 6 meses. Nunca mais compro sem a Quanta!"
+      },
+      {
+        "name": "Rafael Oliveira",
+        "initials": "RO",
+        "role": "Usuário há 1 ano",
+        "highlight": "A cada compra, o dinheiro volta.",
+        "text": " Já acumulei R$ 890 sem nenhum esforço extra. Recomendo demais."
+      },
+      {
+        "name": "Juliana Santos",
+        "initials": "JS",
+        "role": "Usuária há 1 ano",
+        "highlight": "Minha família economizou R$ 2.100 no último ano.",
+        "text": " É dinheiro de verdade voltando pro bolso."
+      }
+    ]
   },
   "blog": {
     "label": "SEMPRE CONECTADO",
     "title": "Quanta em Tempo Real: Blog e Redes Sociais",
-    "subtitle": "Fique por dentro das últimas novidades, promoções e conteúdos exclusivos."
+    "subtitle": "Fique por dentro das últimas novidades, promoções e conteúdos exclusivos.",
+    "posts": [
+      {
+        "id": 1,
+        "title": "Como maximizar seu cashback nas compras online",
+        "excerpt": "Dicas e estratégias para acumular mais cashback toda semana.",
+        "img": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&q=80&auto=format&fit=crop",
+        "date": "01 Mai 2025",
+        "slug": "como-maximizar-cashback"
+      },
+      {
+        "id": 2,
+        "title": "Quanta Shop: 3 anos transformando compras em economia real",
+        "excerpt": "Conheça nossa trajetória e o impacto gerado para milhares de usuários.",
+        "img": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&q=80&auto=format&fit=crop",
+        "date": "15 Abr 2025",
+        "slug": "quanta-shop-3-anos"
+      },
+      {
+        "id": 3,
+        "title": "PIX instantâneo: saque seu cashback em segundos",
+        "excerpt": "Veja como funciona o saque via PIX e por que ele é o favorito dos usuários.",
+        "img": "https://images.unsplash.com/photo-1563986768494-4dee2763ff3f?w=600&q=80&auto=format&fit=crop",
+        "date": "02 Abr 2025",
+        "slug": "pix-instantaneo-cashback"
+      }
+    ]
   },
   "ceo": {
     "ativo": true,

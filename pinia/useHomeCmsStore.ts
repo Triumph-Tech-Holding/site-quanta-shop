@@ -18,8 +18,12 @@ export const useHomeCmsStore = defineStore('homeCms', () => {
     }
   }
 
-  async function saveConfig(data: HomeConfig): Promise<void> {
-    await $fetch('/home-cms', { method: 'PUT', body: data });
+  async function saveConfig(data: HomeConfig, token?: string | null): Promise<void> {
+    await $fetch('/home-cms', {
+      method: 'PUT',
+      body: data,
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
     config.value = data;
   }
 

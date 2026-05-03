@@ -34,7 +34,7 @@
                   <td class="tr mc-valor">{{ formatCurrency(c.valor || c.valorCashback || 0) }}</td>
                   <td class="tc">{{ formatDate(c.dataCriacao || c.data) }}</td>
                   <td class="tc">
-                    <span class="qs-badge" :class="c.aprovado ? 'qs-badge--success' : 'qs-badge--warn'">
+                    <span class="qs-badge" :class="c.aprovado ? 'qs-badge-success' : 'qs-badge-warn'">
                       {{ c.aprovado ? 'Aprovado' : 'Aguardando' }}
                     </span>
                   </td>
@@ -86,7 +86,4 @@ onMounted(async () => {
 .mc-code { font-family: monospace; font-size: .875rem; color: var(--qs-teal-dark, #225F6B); background: var(--qs-gray-50, #fafafa); padding: .15rem .4rem; border-radius: 4px; }
 .mc-valor { color: var(--qs-lime-dark, #7aad1f) !important; font-weight: 700; }
 
-.qs-badge { display: inline-flex; padding: .2rem .55rem; border-radius: var(--qs-radius-pill, 999px); font-size: .6875rem; font-weight: 700; text-transform: uppercase; white-space: nowrap; }
-.qs-badge--success { background: #dcfce7; color: #16a34a; }
-.qs-badge--warn { background: #fef9c3; color: #ca8a04; }
 </style>

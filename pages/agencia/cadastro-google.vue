@@ -2,52 +2,50 @@
   <div class="agencia-login-page">
     <div class="login-box" style="max-width:520px">
       <img src="/agencia/imgs/quanta-shop.png" alt="Quanta Shop" class="logo-login" />
-      <h5 class="text-center mb-1" style="color:#2f7785">Cadastro com Google</h5>
-      <p class="text-center text-muted mb-4" style="font-size:.875rem">
-        Complete os dados abaixo para criar sua conta.
-      </p>
-      <div v-if="!credential" class="qs-alert-warn mb-3" style="font-size:.875rem">
+      <h5 class="cgg-title">Cadastro com Google</h5>
+      <p class="cgg-sub">Complete os dados abaixo para criar sua conta.</p>
+      <div v-if="!credential" class="qs-alert-warn" style="font-size:.875rem">
         Sessão expirada. <NuxtLink to="/agencia">Volte e tente novamente.</NuxtLink>
       </div>
       <form v-else @submit.prevent="cadastrar" autocomplete="off">
-        <div class="row g-2 mb-2">
-          <div class="col-12 ag-form-group">
-            <label>Nome completo</label>
-            <input v-model="form.nome" type="text" class="form-control" required :disabled="loading" />
+        <div class="cgg-grid">
+          <div class="cgg-field cgg-field--full">
+            <label class="cgg-label">Nome completo</label>
+            <input v-model="form.nome" type="text" class="qs-input" required :disabled="loading" />
           </div>
-          <div class="col-12 col-md-6 ag-form-group">
-            <label>Login</label>
-            <input v-model="form.login" type="text" class="form-control" required :disabled="loading" />
+          <div class="cgg-field">
+            <label class="cgg-label">Login</label>
+            <input v-model="form.login" type="text" class="qs-input" required :disabled="loading" />
           </div>
-          <div class="col-12 col-md-6 ag-form-group">
-            <label>CPF</label>
-            <input v-model="form.documento" type="text" class="form-control" maxlength="14" required :disabled="loading" />
+          <div class="cgg-field">
+            <label class="cgg-label">CPF</label>
+            <input v-model="form.documento" type="text" class="qs-input" maxlength="14" required :disabled="loading" />
           </div>
-          <div class="col-12 ag-form-group">
-            <label>Celular</label>
-            <input v-model="form.celular" type="text" class="form-control" :disabled="loading" />
+          <div class="cgg-field cgg-field--full">
+            <label class="cgg-label">Celular</label>
+            <input v-model="form.celular" type="text" class="qs-input" :disabled="loading" />
           </div>
-          <div class="col-12 ag-form-group">
-            <label>Código do patrocinador</label>
-            <input v-model="form.loginPatrocinador" type="text" class="form-control" required :disabled="loading" />
+          <div class="cgg-field cgg-field--full">
+            <label class="cgg-label">Código do patrocinador</label>
+            <input v-model="form.loginPatrocinador" type="text" class="qs-input" required :disabled="loading" />
           </div>
-          <div class="col-12 col-md-6 ag-form-group">
-            <label>Senha (opcional)</label>
-            <input v-model="form.senha" type="password" class="form-control" :disabled="loading" />
+          <div class="cgg-field">
+            <label class="cgg-label">Senha (opcional)</label>
+            <input v-model="form.senha" type="password" class="qs-input" :disabled="loading" />
           </div>
-          <div class="col-12 col-md-6 ag-form-group">
-            <label>Confirmar senha</label>
-            <input v-model="form.confirmarSenha" type="password" class="form-control" :disabled="loading" />
+          <div class="cgg-field">
+            <label class="cgg-label">Confirmar senha</label>
+            <input v-model="form.confirmarSenha" type="password" class="qs-input" :disabled="loading" />
           </div>
         </div>
-        <div v-if="errorMsg" class="qs-alert-danger mb-3" style="font-size:.875rem">{{ errorMsg }}</div>
-        <div v-if="successMsg" class="qs-alert-success mb-3" style="font-size:.875rem">{{ successMsg }}</div>
+        <div v-if="errorMsg" class="qs-alert-danger" style="font-size:.875rem">{{ errorMsg }}</div>
+        <div v-if="successMsg" class="qs-alert-success" style="font-size:.875rem">{{ successMsg }}</div>
         <button type="submit" class="btn-login" :disabled="loading">
           <span v-if="loading" class="cg-spinner" />
           {{ loading ? 'Aguarde...' : 'Criar conta' }}
         </button>
       </form>
-      <div class="text-center mt-3">
+      <div class="cgg-footer">
         <NuxtLink to="/agencia" style="font-size:.85rem; color:#2f7785">← Voltar ao login</NuxtLink>
       </div>
     </div>
@@ -112,6 +110,14 @@ async function cadastrar() {
 </script>
 
 <style scoped>
+.cgg-title { text-align: center; margin-bottom: .375rem; color: #2f7785; font-size: 1.125rem; font-weight: 700; }
+.cgg-sub { text-align: center; color: #6b7280; font-size: .875rem; margin-bottom: 1.25rem; }
+.cgg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .625rem; margin-bottom: .75rem; }
+@media (max-width: 480px) { .cgg-grid { grid-template-columns: 1fr; } }
+.cgg-field { display: flex; flex-direction: column; }
+.cgg-field--full { grid-column: 1 / -1; }
+.cgg-label { font-size: .8125rem; font-weight: 600; color: #374151; margin-bottom: .375rem; }
+.cgg-footer { text-align: center; margin-top: .875rem; }
 .cg-spinner {
   display: inline-block;
   width: 14px; height: 14px;

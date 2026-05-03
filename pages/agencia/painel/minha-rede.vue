@@ -77,7 +77,7 @@
                     <td class="tc"><span class="mr-nivel-badge">N{{ m.nivel || 1 }}</span></td>
                     <td class="tc">{{ formatDate(m.dataCadastro || m.createdAt) }}</td>
                     <td class="tc">
-                      <span class="qs-badge" :class="m.ativo ? 'qs-badge--success' : 'qs-badge--secondary'">
+                      <span class="qs-badge" :class="m.ativo ? 'qs-badge-success' : 'qs-badge-secondary'">
                         {{ m.ativo ? 'Ativo' : 'Inativo' }}
                       </span>
                     </td>
@@ -277,6 +277,4 @@ onMounted(async () => {
   letter-spacing: .04em;
   white-space: nowrap;
 }
-.qs-badge--success { background: #dcfce7; color: #16a34a; }
-.qs-badge--secondary { background: var(--qs-gray-100, #f5f5f7); color: var(--qs-gray-500, #6b7280); }
 </style>

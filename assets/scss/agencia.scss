@@ -929,18 +929,22 @@ $ag-text: #272222;
 
 /* Buttons */
 .btn-ag-primary {
+  display: inline-block; cursor: pointer; text-align: center; text-decoration: none;
   background: $primary-color; color: #fff; border: none; border-radius: 8px;
-  padding: .5rem 1.25rem; font-weight: 600;
+  padding: .5rem 1.25rem; font-size: .9rem; font-weight: 600; transition: background .2s;
   &:hover { background: $primary-color-dark; color: #fff; }
+  &:disabled { opacity: .65; cursor: not-allowed; }
 }
 .btn-ag-secondary {
+  display: inline-block; cursor: pointer; text-align: center; text-decoration: none;
   background: $secondary-color; color: #fff; border: none; border-radius: 8px;
-  padding: .5rem 1.25rem; font-weight: 600;
+  padding: .5rem 1.25rem; font-size: .9rem; font-weight: 600; transition: background .2s;
   &:hover { background: darken($secondary-color, 10%); color: #fff; }
 }
 .btn-ag-outline {
+  display: inline-block; cursor: pointer; text-align: center; text-decoration: none;
   background: transparent; border: 2px solid $primary-color; color: $primary-color;
-  border-radius: 8px; padding: .5rem 1.25rem; font-weight: 600;
+  border-radius: 8px; padding: .5rem 1.25rem; font-size: .9rem; font-weight: 600; transition: all .2s;
   &:hover { background: $primary-color; color: #fff; }
 }
 

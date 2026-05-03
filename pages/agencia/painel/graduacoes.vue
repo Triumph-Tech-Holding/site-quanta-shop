@@ -58,7 +58,7 @@
                     <td class="grad-req-cell">{{ g.requisito || '—' }}</td>
                     <td class="grad-ben-cell">{{ g.beneficio || '—' }}</td>
                     <td class="tc">
-                      <span class="qs-badge" :class="g.atingida ? 'qs-badge--success' : 'qs-badge--secondary'">
+                      <span class="qs-badge" :class="g.atingida ? 'qs-badge-success' : 'qs-badge-secondary'">
                         {{ g.atingida ? '✓ Atingida' : 'Pendente' }}
                       </span>
                     </td>
@@ -157,7 +157,4 @@ onMounted(async () => {
 .grad-ben-cell { color: var(--qs-lime-dark, #7aad1f); font-weight: 500; }
 .grad-req-cell { color: var(--qs-gray-500, #6b7280); font-size: .8125rem; }
 
-.qs-badge { display: inline-flex; padding: .2rem .55rem; border-radius: var(--qs-radius-pill, 999px); font-size: .6875rem; font-weight: 700; text-transform: uppercase; white-space: nowrap; }
-.qs-badge--success { background: #dcfce7; color: #16a34a; }
-.qs-badge--secondary { background: var(--qs-gray-100, #f5f5f7); color: var(--qs-gray-500, #6b7280); }
 </style>

@@ -196,9 +196,23 @@
 }
 @keyframes qs-spin { to { transform: rotate(360deg); } }
 
-.qs-alert-danger  { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; border-radius: var(--qs-radius-md, 8px); padding: 10px 14px; font-size: 14px; }
-.qs-alert-success { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; border-radius: var(--qs-radius-md, 8px); padding: 10px 14px; font-size: 14px; }
-.qs-alert-warn    { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; border-radius: var(--qs-radius-md, 8px); padding: 10px 14px; font-size: 14px; }
+.qs-alert-danger  { display: block; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; border-radius: var(--qs-radius-md, 8px); padding: 10px 14px; font-size: 14px; margin-bottom: .75rem; }
+.qs-alert-success { display: block; background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; border-radius: var(--qs-radius-md, 8px); padding: 10px 14px; font-size: 14px; margin-bottom: .75rem; }
+.qs-alert-warn    { display: block; background: #fffbeb; color: #b45309; border: 1px solid #fde68a; border-radius: var(--qs-radius-md, 8px); padding: 10px 14px; font-size: 14px; margin-bottom: .75rem; }
+
+/* ─── FORM ELEMENTS ───────────────────────────────────────── */
+.qs-input, .qs-select {
+  display: block; width: 100%;
+  padding: .65rem 1rem;
+  border: 1.5px solid var(--qs-gray-200, #e5e7eb);
+  border-radius: var(--qs-radius-md, 12px);
+  font-size: .9375rem; color: var(--qs-ink, #1d1d1f);
+  background: #f9fafb; box-sizing: border-box;
+  outline: none; transition: border-color .15s;
+}
+.qs-input:focus, .qs-select:focus { border-color: var(--qs-teal, #2F7785); box-shadow: 0 0 0 3px rgba(47,119,133,.1); background: #fff; }
+.qs-input:disabled, .qs-select:disabled { opacity: .6; cursor: not-allowed; }
+.qs-select { -webkit-appearance: none; appearance: none; cursor: pointer; }
 
 /* ─── BADGE PILLS ─────────────────────────────────────────── */
 .qs-badge { font-size: .72rem; font-weight: 600; padding: .22rem .65rem; border-radius: 999px; white-space: nowrap; display: inline-flex; align-items: center; }
@@ -207,7 +221,9 @@
 .qs-badge-danger  { background: #fee2e2; color: #991b1b; }
 .qs-badge-neutral { background: var(--qs-gray-100, #f3f4f6); color: var(--qs-gray-500, #6b7280); }
 .qs-badge-teal    { background: rgba(47,119,133,.12); color: var(--qs-teal-dark, #225F6B); border: 1px solid rgba(47,119,133,.2); }
-.qs-badge-lime    { background: rgba(152,199,58,.12); color: #3d6606; border: 1px solid rgba(152,199,58,.3); }
+.qs-badge-lime      { background: rgba(152,199,58,.12); color: #3d6606; border: 1px solid rgba(152,199,58,.3); }
+.qs-badge-secondary { background: var(--qs-gray-100, #f3f4f6); color: var(--qs-gray-500, #6b7280); }
+.qs-badge-info      { background: #dbeafe; color: #1d4ed8; }
 
 /* ─── 3. GLOBAL BODY & FONT ───────────────────────────────── */
 body {

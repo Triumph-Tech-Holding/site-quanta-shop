@@ -108,10 +108,10 @@ function formatDate(d: string | null | undefined): string { if (!d) return 'Nenh
 function formatCurrency(v: number | null | undefined): string { return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v || 0); }
 function statusBadge(s: string | number | null | undefined): string {
   const str = String(s || '').toLowerCase();
-  if (str === 'aprovado' || str === '1') return 'qs-badge--success';
-  if (str === 'pendente' || str === '0') return 'qs-badge--warn';
-  if (str === 'recusado' || str === '2') return 'qs-badge--danger';
-  return 'qs-badge--secondary';
+  if (str === 'aprovado' || str === '1') return 'qs-badge-success';
+  if (str === 'pendente' || str === '0') return 'qs-badge-warn';
+  if (str === 'recusado' || str === '2') return 'qs-badge-danger';
+  return 'qs-badge-secondary';
 }
 async function copiarLink() {
   try { await navigator.clipboard.writeText(linkIndicacao.value); copiado.value = true; setTimeout(() => { copiado.value = false; }, 2000); } catch { /**/ }
@@ -154,12 +154,6 @@ onMounted(async () => { agenciaStore.loadFromStorage(); await Promise.allSettled
 .cred-card__key { color: var(--qs-gray-400,#9ca3af); min-width: 90px; flex-shrink: 0; }
 .cred-card__val { color: var(--qs-gray-700,#374151); font-weight: 500; }
 .cred-card__val--lime { color: var(--qs-lime-dark,#7aad1f) !important; font-weight: 700; }
-
-.qs-badge { display: inline-flex; padding: .2rem .55rem; border-radius: var(--qs-radius-pill,999px); font-size: .6875rem; font-weight: 700; text-transform: uppercase; white-space: nowrap; flex-shrink: 0; }
-.qs-badge--success { background: #dcfce7; color: #16a34a; }
-.qs-badge--warn { background: #fef9c3; color: #ca8a04; }
-.qs-badge--danger { background: #fee2e2; color: #dc2626; }
-.qs-badge--secondary { background: var(--qs-gray-100,#f5f5f7); color: var(--qs-gray-500,#6b7280); }
 
 .qs-label { font-size: .75rem; font-weight: 600; color: var(--qs-gray-700,#374151); text-transform: uppercase; letter-spacing: .04em; }
 .qs-input { width: 100%; padding: .625rem .875rem; border: 1.5px solid var(--qs-gray-200,#e5e7eb); border-radius: var(--qs-radius-md,12px); font-size: .875rem; color: var(--qs-ink,#1d1d1f); background: #fff; transition: border-color .15s; box-sizing: border-box; }

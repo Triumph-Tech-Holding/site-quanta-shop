@@ -21,7 +21,7 @@
               <td><span class="qs-badge qs-badge-neutral">{{ item.tipo }}</span></td>
               <td>
                 <a v-if="item.url" :href="item.url" target="_blank" class="qs-link qs-link-truncate">{{ item.url }}</a>
-                <span v-else class="qs-text-muted">—</span>
+                <span v-else class="qs-meta">—</span>
               </td>
               <td class="qs-cell-actions">
                 <button class="qs-btn-sm-outline" @click="abrirEditar(item)">Editar</button>
