@@ -83,7 +83,7 @@
         <NuxtLink to="/agencia/painel/admin/bi-financeiro" class="listMenu listMenu--admin">
           📈 BI Financeiro
         </NuxtLink>
-        <NuxtLink to="/agencia/painel/admin/docs" class="listMenu listMenu--admin">
+        <NuxtLink to="/lab/docs" class="listMenu listMenu--admin">
           📋 Documentação
         </NuxtLink>
         <div class="menu-admin-divider">LAB</div>

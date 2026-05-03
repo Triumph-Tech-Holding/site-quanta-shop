@@ -81,7 +81,7 @@ const adminLinks = [
   { to: '/agencia/painel/admin/marcas-home', label: 'Marcas da Home', desc: 'Gerenciar logos do carrossel de marcas', icon: '🏅' },
   { to: '/agencia/painel/admin/blog', label: 'Blog', desc: 'Criar e gerenciar artigos do blog', icon: '📝' },
   { to: '/agencia/painel/admin/redes-sociais', label: 'Redes Sociais', desc: 'Posts do Instagram, YouTube, TikTok e mais', icon: '📱' },
-  { to: '/agencia/painel/admin/docs', label: 'Documentação Técnica', desc: 'Arquitetura, padrões, decisões e histórico do projeto', icon: '📋' },
+  { to: '/lab/docs', label: 'Documentação Técnica', desc: 'Arquitetura, padrões, decisões e histórico do projeto (LAB)', icon: '📋' },
   { to: '/agencia/painel/admin/progresso', label: 'Progresso do Produto', desc: 'Acompanhe o andamento das tarefas de desenvolvimento', icon: '🚀' },
   { to: '/agencia/painel/admin/features', label: 'Features & MVP', desc: 'Roadmap por fase, status e público', icon: '🎯' },
   { to: '/agencia/painel/admin/configuracoes-rede', label: 'Configurações de Rede', desc: 'Percentuais por nível, Quanta Points, quarentena', icon: '⚙️' },
