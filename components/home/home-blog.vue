@@ -96,7 +96,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { useHomeConfig, DEFAULT_BLOG_POSTS } from '@/composables/useHomeConfig';
+import { useHomeConfig, DEFAULT_BLOG_POSTS, type BlogPostCms } from '@/composables/useHomeConfig';
 
 const { config, loadConfig } = useHomeConfig();
 
@@ -189,62 +189,43 @@ onMounted(async () => {
 
   const lsBlog = lsArtigosBlog();
   const lsSocial = lsPostsSocial();
-
-  if (lsBlog.length > 0 || lsSocial.length > 0) {
-    blogPosts.value = lsBlog;
-    socialFeed.value = lsSocial;
-    return;
-  }
-
   const cmsPosts = config.value.blog?.posts;
-  if (cmsPosts && cmsPosts.length > 0) {
-    blogPosts.value = cmsPosts.map(p => ({
-      id: p.id,
-      slug: p.slug,
-      title: p.title,
-      excerpt: p.excerpt,
-      tag: 'Blog',
-      date: p.date,
-      readTime: 0,
-      img: p.img,
-    }));
+
+  let mockData: MockData | null = null;
+  const needsMock = lsBlog.length === 0 || lsSocial.length === 0;
+  if (needsMock) {
     try {
-      const data = await $fetch<MockData>('/data/mock-data.json');
-      socialFeed.value = data.social ?? [];
-    } catch {}
-    return;
+      mockData = await $fetch<MockData>('/data/mock-data.json');
+    } catch {
+      console.warn('[Blog] Failed to load mock-data.json');
+    }
   }
 
-  try {
-    const data = await $fetch<MockData>('/data/mock-data.json');
-    const mockBlog = (data.blog ?? []);
-    if (mockBlog.length > 0) {
-      blogPosts.value = mockBlog;
-    } else {
-      blogPosts.value = DEFAULT_BLOG_POSTS.map(p => ({
-        id: p.id,
-        slug: p.slug,
-        title: p.title,
-        excerpt: p.excerpt,
-        tag: 'Blog',
-        date: p.date,
-        readTime: 0,
-        img: p.img,
-      }));
-    }
-    socialFeed.value = data.social ?? [];
-  } catch {
-    console.warn('[Blog] Failed to load mock-data.json, using DEFAULT_BLOG_POSTS');
-    blogPosts.value = DEFAULT_BLOG_POSTS.map(p => ({
-      id: p.id,
-      slug: p.slug,
-      title: p.title,
-      excerpt: p.excerpt,
-      tag: 'Blog',
-      date: p.date,
-      readTime: 0,
-      img: p.img,
-    }));
+  const mapCms = (p: BlogPostCms): BlogPost => ({
+    id: p.id,
+    slug: p.slug,
+    title: p.title,
+    excerpt: p.excerpt,
+    tag: 'Blog',
+    date: p.date,
+    readTime: 0,
+    img: p.img,
+  });
+
+  if (lsBlog.length > 0) {
+    blogPosts.value = lsBlog;
+  } else if (cmsPosts && cmsPosts.length > 0) {
+    blogPosts.value = cmsPosts.map(mapCms);
+  } else if (mockData?.blog?.length) {
+    blogPosts.value = mockData.blog;
+  } else {
+    blogPosts.value = DEFAULT_BLOG_POSTS.map(mapCms);
+  }
+
+  if (lsSocial.length > 0) {
+    socialFeed.value = lsSocial;
+  } else {
+    socialFeed.value = mockData?.social ?? [];
   }
 });
 </script>
