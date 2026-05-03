@@ -2,7 +2,7 @@
   <div class="agencia-login-page">
     <div class="login-box text-center">
       <img src="/agencia/imgs/quanta-shop.png" alt="Quanta Shop" class="logo-login" />
-      <div class="spinner-border text-secondary mt-3" />
+      <div class="qs-spinner" style="margin:12px auto" />
       <p class="mt-2 text-muted">Autenticando com Google...</p>
     </div>
   </div>

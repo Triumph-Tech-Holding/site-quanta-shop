@@ -10,7 +10,7 @@
           <div class="col-12 col-md-3"><button type="submit" class="btn btn-ag-primary w-100">Buscar</button></div>
         </form>
       </div>
-      <div v-if="loading" class="ag-loading"><div class="spinner-border" /></div>
+      <div v-if="loading" class="ag-loading"><div class="qs-spinner" style="margin:0 auto" /></div>
       <template v-else>
         <div v-if="lojas.length === 0" class="ag-empty-state"><h5>Nenhuma loja encontrada</h5></div>
         <div class="row g-3" v-else>

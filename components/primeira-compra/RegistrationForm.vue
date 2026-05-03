@@ -112,7 +112,7 @@
     <div class="form-group">
       <button type="submit" class="btn btn-primary btn-lg btn-block" :disabled="loading">
         <span v-if="loading">
-          <span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>
+          <span class="pc-spinner"></span>
           Enviando...
         </span>
         <span v-else>Cadastrar</span>
@@ -219,3 +219,17 @@ async function handleSubmit() {
 }
 
 </script>
+
+<style scoped>
+.pc-spinner {
+  display: inline-block;
+  width: 14px; height: 14px;
+  border: 2px solid rgba(255,255,255,.4);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: pc-spin .7s linear infinite;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+@keyframes pc-spin { to { transform: rotate(360deg); } }
+</style>

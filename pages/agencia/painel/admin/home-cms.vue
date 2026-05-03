@@ -1,31 +1,40 @@
 <template>
   <div class="hcms">
-    <div class="hcms__header">
-      <h1 class="hcms__title">CMS — Home Page</h1>
-      <p class="hcms__sub">Edite os textos e links exibidos na página inicial. As alterações ficam visíveis imediatamente após salvar.</p>
+    <div class="qs-page-header">
+      <div class="qs-header-text">
+        <div class="qs-eyebrow">Admin · CMS</div>
+        <h1>CMS — Home Page</h1>
+        <p>Edite os textos e links exibidos na página inicial. As alterações ficam visíveis imediatamente após salvar.</p>
+      </div>
+      <div class="qs-header-actions" v-if="form">
+        <button class="qs-btn-outline" @click="reset" :disabled="saving">Descartar</button>
+        <button class="qs-btn-primary" :disabled="saving" @click="save">
+          <span v-if="saving" class="hcms__spinner-sm" />
+          {{ saving ? 'Salvando...' : 'Salvar Alterações' }}
+        </button>
+      </div>
     </div>
 
-    <div v-if="loadError" class="hcms__alert hcms__alert--error">
+    <div v-if="loadError" class="qs-alert-danger" style="margin-bottom:16px">
       Erro ao carregar configuração. Verifique se o arquivo <code>home-config.json</code> existe.
     </div>
 
-    <div v-if="saveSuccess" class="hcms__alert hcms__alert--success">
+    <div v-if="saveSuccess" class="qs-alert-success" style="margin-bottom:16px">
       Configuração salva com sucesso!
     </div>
 
-    <div v-if="saveError" class="hcms__alert hcms__alert--error">
+    <div v-if="saveError" class="qs-alert-danger" style="margin-bottom:16px">
       Erro ao salvar. Tente novamente.
     </div>
 
-    <ul class="nav nav-tabs hcms__tabs" v-if="form">
-      <li class="nav-item" v-for="tab in tabs" :key="tab.key">
-        <button
-          class="nav-link"
-          :class="{ active: activeTab === tab.key }"
-          @click="activeTab = tab.key"
-        >{{ tab.label }}</button>
-      </li>
-    </ul>
+    <div class="hcms__tab-bar" v-if="form">
+      <button
+        v-for="tab in tabs" :key="tab.key"
+        class="hcms__tab"
+        :class="{ active: activeTab === tab.key }"
+        @click="activeTab = tab.key"
+      >{{ tab.label }}</button>
+    </div>
 
     <div v-if="form" class="hcms__form-wrap">
 
@@ -60,7 +69,7 @@
       <!-- Hero Cards -->
       <div v-show="activeTab === 'heroCards'" class="hcms__section">
         <h2 class="hcms__section-title">Cartões Flutuantes do Hero</h2>
-        <p class="hcms__sub" style="margin-bottom:20px;">Os 3 cartões que aparecem à direita do banner hero. Você pode ativar/desativar, alterar textos, ícone e cor.</p>
+        <p style="font-size:14px;color:#6b7280;margin-bottom:20px;">Os 3 cartões que aparecem à direita do banner hero. Você pode ativar/desativar, alterar textos, ícone e cor.</p>
         <div v-for="(card, idx) in form.heroCards" :key="idx" class="hcms__card-editor">
           <div class="hcms__card-editor-header">
             <strong>Cartão {{ idx + 1 }}</strong>
@@ -355,19 +364,17 @@
       </div>
 
       <div class="hcms__actions">
-        <button class="hcms__btn-save" :disabled="saving" @click="save">
+        <button class="qs-btn-outline" @click="reset" :disabled="saving">Descartar Alterações</button>
+        <button class="qs-btn-primary" :disabled="saving" @click="save" style="display:inline-flex;align-items:center;gap:8px">
           <svg v-if="!saving" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-          <span v-if="saving" class="hcms__spinner"></span>
+          <span v-if="saving" class="hcms__spinner-sm" />
           {{ saving ? 'Salvando...' : 'Salvar Todas as Alterações' }}
-        </button>
-        <button class="hcms__btn-reset" @click="reset" :disabled="saving">
-          Descartar Alterações
         </button>
       </div>
     </div>
 
-    <div v-else-if="!loadError" class="hcms__loading">
-      <span class="hcms__spinner"></span> Carregando configuração...
+    <div v-else-if="!loadError" class="qs-loading">
+      <div class="qs-spinner" /> Carregando configuração...
     </div>
   </div>
 </template>
@@ -526,52 +533,15 @@ onMounted(() => load());
   padding: 32px 24px 80px;
 }
 
-.hcms__header {
-  margin-bottom: 28px;
-}
-
-.hcms__title {
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 24px;
-  font-weight: 800;
-  color: #111827;
-  letter-spacing: -0.02em;
-  margin-bottom: 6px;
-}
-
-.hcms__sub {
-  font-size: 14px;
-  color: #6b7280;
-}
-
-.hcms__alert {
-  padding: 12px 16px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 20px;
-}
-
-.hcms__alert--success {
-  background: #d1fae5;
-  color: #065f46;
-  border: 1px solid #6ee7b7;
-}
-
-.hcms__alert--error {
-  background: #fee2e2;
-  color: #991b1b;
-  border: 1px solid #fca5a5;
-}
-
-.hcms__tabs {
-  border-bottom: 2px solid #e5e7eb;
-  margin-bottom: 28px;
+.hcms__tab-bar {
+  display: flex;
   flex-wrap: wrap;
   gap: 2px;
+  border-bottom: 2px solid #e5e7eb;
+  margin-bottom: 28px;
 }
 
-.hcms__tabs .nav-link {
+.hcms__tab {
   font-family: 'Inter', 'Jost', sans-serif;
   font-size: 13px;
   font-weight: 600;
@@ -586,11 +556,11 @@ onMounted(() => load());
   border-radius: 0;
 }
 
-.hcms__tabs .nav-link:hover {
+.hcms__tab:hover {
   color: #2F7785;
 }
 
-.hcms__tabs .nav-link.active {
+.hcms__tab.active {
   color: #2F7785;
   border-bottom-color: #2F7785;
   background: transparent;
@@ -761,81 +731,6 @@ onMounted(() => load());
   flex-wrap: wrap;
 }
 
-.hcms__btn-save {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: #98C73A;
-  color: #fff;
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  padding: 12px 28px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 16px rgba(152, 199, 58, 0.3);
-}
-
-.hcms__btn-save:hover:not(:disabled) {
-  background: #7aad1f;
-  transform: translateY(-1px);
-}
-
-.hcms__btn-save:disabled {
-  opacity: 0.65;
-  cursor: not-allowed;
-}
-
-.hcms__btn-reset {
-  display: inline-flex;
-  align-items: center;
-  background: transparent;
-  color: #6b7280;
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  padding: 12px 20px;
-  border-radius: 8px;
-  border: 1.5px solid #e5e7eb;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.hcms__btn-reset:hover:not(:disabled) {
-  border-color: #d1d5db;
-  color: #374151;
-}
-
-.hcms__btn-reset:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.hcms__loading {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: #6b7280;
-  font-size: 14px;
-  padding: 32px 0;
-}
-
-.hcms__spinner {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  border: 2px solid rgba(47, 119, 133, 0.25);
-  border-top-color: #2F7785;
-  border-radius: 50%;
-  animation: hcms-spin 0.7s linear infinite;
-  flex-shrink: 0;
-}
-
-@keyframes hcms-spin {
-  to { transform: rotate(360deg); }
-}
 
 .hcms__card-editor {
   border: 1.5px solid #e5e7eb;

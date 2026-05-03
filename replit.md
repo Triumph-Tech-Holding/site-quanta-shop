@@ -1,5 +1,41 @@
 # Quanta Shop Web
 
+## 🎨 Padronização qs-* Completa — Fases 5-8 ✅ (Mai 2026)
+
+### Resumo
+Eliminação de **todas** as classes Bootstrap legadas (`spinner-border`, `alert alert-*`) de páginas e components. 17 páginas legadas deletadas. Sidebars de filtro simplificados para rotear apenas para `/shop` e `/shop-full-width`.
+
+### Fases concluídas
+| Fase | Escopo | Status |
+|---|---|---|
+| Fase 1 — LAB | 6 páginas | ✅ |
+| Fase 2 — Admin operacional | 10 páginas | ✅ |
+| Fase 3 — Admin gestão | 16 páginas | ✅ (zero mudanças) |
+| Fase 4 — Painel empreendedor | 26 páginas | ✅ (zero mudanças) |
+| Fase 5 — Auth/onboarding | ~12 arquivos | ✅ |
+| Fase 6 — Marketing agência | ~8 páginas | ✅ |
+| Fase 7 — Páginas públicas | ~15 páginas | ✅ (zero mudanças) |
+| Fase 8 — Limpeza | 17 páginas deletadas | ✅ |
+
+### Páginas deletadas (Fase 8)
+`home-2/3/4/v2.vue`, `shop-1600/list/no-sidebar/right-sidebar/load-more/filter-dropdown/filter-offcanvas.vue`, `product-details-countdown/gallery/list/slider/swatches/video.vue`
+
+### Sidebars simplificados
+`components/partners/sidebar/{filter-brand,filter-categories,filter-status,price-filter,reset-filter}.vue` e `components/shop/sidebar/` idem — props legados removidos, roteamento consolidado em `/shop`.
+
+### Design system — classes globais adicionadas
+`qs-alert-danger`, `qs-alert-success`, `qs-alert-warn` em `quanta-premium.scss` (linhas 202-204).
+
+### Padrão spinner scoped adotado
+```css
+display:inline-block; width:14px; height:14px;
+border:2px solid rgba(255,255,255,.4); border-top-color:currentColor;
+border-radius:50%; animation:.7s linear infinite;
+```
+Prefixos usados: `cg-`, `rs-`, `fc-`, `rp-`, `cr-`, `pc-`.
+
+---
+
 ## 🧹 Sprint de Higiene 1.3.0 (Mai 2026 — Task #117) — Etapas 1-3 ✅
 
 Eliminação dos 4 problemas crônicos de desenvolvimento que geravam ruído em cada sessão.

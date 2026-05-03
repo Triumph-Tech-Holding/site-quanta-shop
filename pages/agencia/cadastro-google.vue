@@ -6,7 +6,7 @@
       <p class="text-center text-muted mb-4" style="font-size:.875rem">
         Complete os dados abaixo para criar sua conta.
       </p>
-      <div v-if="!credential" class="alert alert-warning py-2" style="font-size:.875rem">
+      <div v-if="!credential" class="qs-alert-warn mb-3" style="font-size:.875rem">
         Sessão expirada. <NuxtLink to="/agencia">Volte e tente novamente.</NuxtLink>
       </div>
       <form v-else @submit.prevent="cadastrar" autocomplete="off">
@@ -40,10 +40,10 @@
             <input v-model="form.confirmarSenha" type="password" class="form-control" :disabled="loading" />
           </div>
         </div>
-        <div v-if="errorMsg" class="alert alert-danger py-2 mb-3" style="font-size:.875rem">{{ errorMsg }}</div>
-        <div v-if="successMsg" class="alert alert-success py-2 mb-3" style="font-size:.875rem">{{ successMsg }}</div>
+        <div v-if="errorMsg" class="qs-alert-danger mb-3" style="font-size:.875rem">{{ errorMsg }}</div>
+        <div v-if="successMsg" class="qs-alert-success mb-3" style="font-size:.875rem">{{ successMsg }}</div>
         <button type="submit" class="btn-login" :disabled="loading">
-          <span v-if="loading" class="spinner-border spinner-border-sm me-2" />
+          <span v-if="loading" class="cg-spinner" />
           {{ loading ? 'Aguarde...' : 'Criar conta' }}
         </button>
       </form>
@@ -110,3 +110,17 @@ async function cadastrar() {
   }
 }
 </script>
+
+<style scoped>
+.cg-spinner {
+  display: inline-block;
+  width: 14px; height: 14px;
+  border: 2px solid rgba(255,255,255,.4);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: cg-spin .7s linear infinite;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+@keyframes cg-spin { to { transform: rotate(360deg); } }
+</style>

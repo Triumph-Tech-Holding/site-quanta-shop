@@ -2,23 +2,24 @@
   <div class="docs-viewer">
 
     <!-- Page Header -->
-    <div class="ag-page-header d-flex align-items-start justify-content-between flex-wrap gap-2">
-      <div>
+    <div class="qs-page-header">
+      <div class="qs-header-text">
+        <div class="qs-eyebrow">LAB · Arquitetura</div>
         <h1>Documentação Técnica</h1>
         <p>Consulte arquitetura, padrões e decisões do projeto Quanta Shop.</p>
       </div>
-      <div class="d-flex gap-2 flex-wrap align-items-center">
+      <div class="qs-header-actions">
         <span class="docs-env-pill" :class="isDev ? 'docs-env-pill--dev' : 'docs-env-pill--prod'">
           <span class="docs-env-dot"></span>
           {{ isDev ? 'Dev (Replit)' : 'Produção' }}
         </span>
         <button
-          class="btn btn-ag-outline btn-sm"
+          class="qs-btn-outline"
           :disabled="!activeDoc || gerandoPdf"
           @click="gerarPdf(activeDoc)"
         >
-          <span v-if="gerandoPdf" class="spinner-border spinner-border-sm me-1" style="width:12px;height:12px;border-width:2px"></span>
-          <svg v-else width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <span v-if="gerandoPdf" class="qs-spinner-sm"></span>
+          <svg v-else width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
           {{ gerandoPdf ? 'Gerando...' : 'Baixar PDF' }}
         </button>
       </div>
@@ -96,7 +97,7 @@
 
         <!-- Loading -->
         <div v-else-if="carregando" class="docs-preview__loading">
-          <div class="spinner-border spinner-border-sm" style="color:#2F7785"></div>
+          <div class="qs-spinner-sm"></div>
           <span>Carregando documento...</span>
         </div>
 
@@ -108,12 +109,12 @@
               <div class="docs-preview__meta">{{ activeDoc.tamanho }} · Atualizado {{ activeDoc.data }}</div>
             </div>
             <button
-              class="btn btn-ag-primary btn-sm"
+              class="qs-btn-primary"
               :disabled="gerandoPdf"
               @click="gerarPdf(activeDoc)"
             >
-              <span v-if="gerandoPdf" class="spinner-border spinner-border-sm me-1" style="width:12px;height:12px;border-width:2px"></span>
-              <svg v-else width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="me-1"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              <span v-if="gerandoPdf" class="qs-spinner-sm"></span>
+              <svg v-else width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
               {{ gerandoPdf ? 'Gerando...' : 'Baixar PDF' }}
             </button>
           </div>
@@ -445,8 +446,20 @@ onMounted(async () => {
 
 <style scoped>
 .docs-viewer {
-  font-family: -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+  font-family: var(--qs-font, 'Inter', sans-serif);
 }
+.qs-header-text h1 { font-size: 1.6rem; font-weight: 700; color: var(--qs-ink); margin: .25rem 0 .4rem; }
+.qs-header-text p  { font-size: .9rem; color: var(--qs-gray-400); margin: 0; }
+.qs-header-actions { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
+.qs-spinner-sm {
+  display: inline-block;
+  width: 14px; height: 14px;
+  border: 2px solid rgba(255,255,255,.4);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: docs-spin 0.7s linear infinite;
+}
+@keyframes docs-spin { to { transform: rotate(360deg); } }
 .docs-layout {
   display: grid;
   grid-template-columns: 300px 1fr;

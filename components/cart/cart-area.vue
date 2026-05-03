@@ -1,7 +1,7 @@
 <template>
   <section class="tp-cart-area pb-120">
     <div class="container">
-      <div v-if="couponMsg" class="alert alert-info" style="margin-bottom:16px">{{ couponMsg }}</div>
+      <div v-if="couponMsg" class="qs-alert-warn" style="margin-bottom:16px">{{ couponMsg }}</div>
       <div v-if="cartStore.cart_products.length === 0" className='text-center pt-50'>
         <h3>No Cart Items Found</h3>
         <nuxt-link href="/shop" className="tp-cart-checkout-btn mt-20">Continue Shipping</nuxt-link>

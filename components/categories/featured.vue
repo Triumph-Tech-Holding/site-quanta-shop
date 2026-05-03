@@ -30,7 +30,7 @@
       <div class="row">
         <div class="col-xl-12">
           <div v-if="featuredCategories.length === 0" class="text-center py-5">
-            <div class="spinner-border text-primary" role="status">
+            <div class="qs-spinner" style="margin:0 auto">
               <span class="visually-hidden">Carregando...</span>
             </div>
             <p class="mt-3 text-muted">Carregando categorias...</p>

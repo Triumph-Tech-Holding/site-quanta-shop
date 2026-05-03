@@ -2,7 +2,7 @@
   <div class="agencia-login-page" style="align-items:flex-start; padding:2rem 1rem; background:#ecf2f7; min-height:100vh">
     <div class="login-box" style="max-width:560px; margin:2rem auto">
       <img src="/agencia/imgs/quanta-shop.png" alt="Quanta Shop" class="logo-login" />
-      <div v-if="loading" class="ag-loading"><div class="spinner-border" /></div>
+      <div v-if="loading" class="text-center"><div class="qs-spinner" style="margin:16px auto" /></div>
       <template v-else-if="parceiro">
         <h3 class="text-center mt-3 mb-1" style="color:#2f7785">{{ parceiro.username || parceiro.nome }}</h3>
         <p class="text-center text-muted mb-4">te convida para a Quanta Shop</p>

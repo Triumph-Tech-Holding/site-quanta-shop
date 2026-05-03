@@ -2,16 +2,16 @@
   <div class="agencia-login-page">
     <div class="login-box">
       <img src="/agencia/imgs/quanta-shop.png" alt="Quanta Shop" class="logo-login" />
-      <div v-if="loading" class="text-center"><div class="spinner-border text-secondary mt-3" /></div>
+      <div v-if="loading" class="text-center"><div class="qs-spinner" style="margin:16px auto" /></div>
       <div v-else-if="credenciamento">
         <h5 class="text-center mb-3">Finalizar Credenciamento</h5>
-        <div class="alert alert-info" style="font-size:.875rem">
+        <div class="qs-alert-warn mb-3" style="font-size:.875rem">
           <strong>Parceiro:</strong> {{ credenciamento.nome || credenciamento.nomeEmpresa }}<br/>
           <strong>CNPJ:</strong> {{ credenciamento.cnpj }}
         </div>
         <div class="text-center mt-3">
           <button class="btn btn-ag-primary w-100" @click="finalizar" :disabled="finalizando">
-            <span v-if="finalizando" class="spinner-border spinner-border-sm me-2" />
+            <span v-if="finalizando" class="fc-spinner" />
             {{ finalizando ? 'Finalizando...' : 'Confirmar Credenciamento' }}
           </button>
         </div>
@@ -50,3 +50,17 @@ async function finalizar() {
   } finally { finalizando.value = false; }
 }
 </script>
+
+<style scoped>
+.fc-spinner {
+  display: inline-block;
+  width: 14px; height: 14px;
+  border: 2px solid rgba(255,255,255,.4);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: fc-spin .7s linear infinite;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+@keyframes fc-spin { to { transform: rotate(360deg); } }
+</style>

@@ -70,8 +70,8 @@ const route = useRoute();
 
 const handleFilterReset = () => {
   filterStore.handleResetFilter();
-  store.handleOpenFilterOffcanvas()
-  router.push("/shop-filter-offcanvas");
+  store.handleOpenFilterOffcanvas();
+  router.push("/shop");
 };
 
 watch(

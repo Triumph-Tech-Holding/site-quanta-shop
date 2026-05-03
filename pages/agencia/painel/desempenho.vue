@@ -5,5 +5,5 @@ onMounted(() => { router.replace('/agencia/painel/performance'); });
 </script>
 
 <template>
-  <div class="ag-loading"><div class="spinner-border" /></div>
+  <div class="ag-loading"><div class="qs-spinner" style="margin:0 auto" /></div>
 </template>

@@ -3,7 +3,7 @@
     <div class="login-box text-center">
       <img src="/agencia/imgs/quanta-shop.png" alt="Quanta Shop" class="logo-login" />
       <div v-if="loading">
-        <div class="spinner-border text-secondary mt-3" />
+        <div class="qs-spinner" style="margin:16px auto" />
         <p class="mt-2 text-muted">Confirmando seu e-mail...</p>
       </div>
       <div v-else-if="success">

@@ -26,7 +26,7 @@
           <p class="car-import-hint">Ou importe os banners que estão atualmente no ar:</p>
           <button class="qs-btn-outline" :disabled="importando" @click="importarDoSistemaAntigo">
             <span v-if="importando">
-              <span class="spinner-border spinner-border-sm me-1" />
+              <span class="car-spinner-sm" />
               Importando...
             </span>
             <span v-else>
@@ -155,7 +155,7 @@
                 >
                   <input ref="fileInputRef" type="file" accept="image/*" style="display:none" @change="onFileChange" />
                   <div v-if="uploadingFile" class="upload-drop-placeholder">
-                    <div class="spinner-border spinner-border-sm text-secondary mb-2" />
+                    <div class="qs-spinner" style="margin-bottom:8px" />
                     <p class="mb-0 text-muted">Enviando imagem...</p>
                   </div>
                   <div v-else-if="!arquivoPreview" class="upload-drop-placeholder">
@@ -463,7 +463,7 @@
 
           </div>
 
-          <div v-if="modalError" class="alert alert-danger py-2 mt-3">{{ modalError }}</div>
+          <div v-if="modalError" class="qs-alert-danger mt-3">{{ modalError }}</div>
         </div>
 
         <div class="qs-modal-footer">
@@ -949,6 +949,17 @@ onMounted(async () => {
 .car-editor-form { padding-top: 12px; }
 .car-preview-label { font-size: 11px; font-weight: 700; color: #6c757d; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
 .car-preview-hint { font-size: 11px; color: #adb5bd; text-align: center; margin-top: 6px; margin-bottom: 0; }
+
+.car-spinner-sm {
+  display: inline-block;
+  width: 12px; height: 12px;
+  border: 2px solid rgba(255,255,255,.35);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: car-spin 0.7s linear infinite;
+  vertical-align: middle;
+}
+@keyframes car-spin { to { transform: rotate(360deg); } }
 
 .car-order-btn {
   padding: 0 6px;

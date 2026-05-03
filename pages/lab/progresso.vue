@@ -123,7 +123,7 @@ function formatDate(iso: string): string {
 .qs-tasks-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 20px; border-bottom: 1px solid var(--qs-gray-100); flex-wrap: wrap; }
 .qs-tasks-title { font-size: 14px; font-weight: 600; color: var(--qs-teal-dark); }
 .qs-filter-chips { display: flex; gap: 6px; flex-wrap: wrap; }
-.qs-filter-chip-sm { font-size: 12px; padding: 4px 10px; border-radius: 99px; border: 1px solid var(--qs-gray-200); background: var(--qs-gray-50); color: var(--qs-gray-600); cursor: pointer; transition: all 0.15s; }
+.qs-filter-chip-sm { font-size: 12px; padding: 4px 10px; border-radius: 99px; border: 1px solid var(--qs-gray-200); background: var(--qs-gray-50); color: var(--qs-gray-500); cursor: pointer; transition: all 0.15s; }
 .qs-filter-chip-sm:hover, .qs-filter-chip-sm.active { background: var(--qs-teal); color: #fff; border-color: var(--qs-teal); }
 .qs-tasks-list { max-height: 65vh; overflow-y: auto; }
 .qs-task-item { display: flex; align-items: center; gap: 12px; padding: 11px 20px; border-bottom: 1px solid var(--qs-gray-50); transition: background 0.1s; }

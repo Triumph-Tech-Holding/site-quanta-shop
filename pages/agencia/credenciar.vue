@@ -44,11 +44,11 @@
           />
           <div v-if="cnpjErro" class="invalid-feedback">{{ cnpjErro }}</div>
         </div>
-        <div v-if="erroConsulta" :class="situacaoIrregular ? 'alert alert-warning' : 'alert alert-danger'" class="mt-3 py-2" style="font-size:.875rem">{{ erroConsulta }}</div>
+        <div v-if="erroConsulta" :class="situacaoIrregular ? 'qs-alert-warn' : 'qs-alert-danger'" class="mt-3" style="font-size:.875rem">{{ erroConsulta }}</div>
         <div class="d-flex gap-3 mt-4">
           <button class="btn btn-ag-outline flex-fill" @click="step = 1" :disabled="consultando">Voltar</button>
           <button class="btn btn-ag-primary flex-fill" @click="consultarCnpj" :disabled="consultando || cnpjInput.length < 18">
-            <span v-if="consultando" class="spinner-border spinner-border-sm me-2" />
+            <span v-if="consultando" class="cr-spinner" />
             {{ consultando ? 'Consultando...' : 'Consultar CNPJ' }}
           </button>
         </div>
@@ -198,8 +198,8 @@
           </div>
         </div>
 
-        <div v-if="erroEnvio" class="alert alert-danger mt-3 py-2" style="font-size:.875rem">{{ erroEnvio }}</div>
-        <div v-if="sucessoEnvio" class="alert alert-success mt-3" style="font-size:.875rem">
+        <div v-if="erroEnvio" class="qs-alert-danger mt-3" style="font-size:.875rem">{{ erroEnvio }}</div>
+        <div v-if="sucessoEnvio" class="qs-alert-success mt-3" style="font-size:.875rem">
           <strong>Formulário enviado com sucesso!</strong><br/>
           Sua solicitação de credenciamento foi recebida e está em análise. Você receberá um e-mail de confirmação em breve.
           <div class="mt-2"><NuxtLink to="/agencia" class="btn btn-ag-outline btn-sm">Ir para o início</NuxtLink></div>
@@ -208,7 +208,7 @@
         <div class="d-flex gap-3 mt-4 mb-5">
           <button type="button" class="btn btn-ag-outline" @click="voltarStep" :disabled="enviando">Voltar</button>
           <button type="submit" class="btn btn-ag-primary flex-fill" :disabled="enviando || !!sucessoEnvio">
-            <span v-if="enviando" class="spinner-border spinner-border-sm me-2" />
+            <span v-if="enviando" class="cr-spinner" />
             {{ enviando ? 'Enviando...' : 'Enviar para análise' }}
           </button>
         </div>
@@ -552,6 +552,17 @@ async function enviar() {
 </script>
 
 <style scoped>
+.cr-spinner {
+  display: inline-block;
+  width: 14px; height: 14px;
+  border: 2px solid rgba(255,255,255,.4);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: cr-spin .7s linear infinite;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+@keyframes cr-spin { to { transform: rotate(360deg); } }
 .credenciar-page {
   background: #ecf2f7;
   min-height: 100vh;

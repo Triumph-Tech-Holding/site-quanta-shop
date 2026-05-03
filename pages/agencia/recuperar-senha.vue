@@ -8,14 +8,14 @@
           <label class="form-label">Seu e-mail ou login</label>
           <input v-model="email" type="text" class="form-control" placeholder="E-mail ou login" required :disabled="loading" />
         </div>
-        <div v-if="errorMsg" class="alert alert-danger py-2 mb-3" style="font-size:.875rem">{{ errorMsg }}</div>
+        <div v-if="errorMsg" class="qs-alert-danger mb-3" style="font-size:.875rem">{{ errorMsg }}</div>
         <button type="submit" class="btn-login" :disabled="loading">
-          <span v-if="loading" class="spinner-border spinner-border-sm me-2" />
+          <span v-if="loading" class="rs-spinner" />
           {{ loading ? 'Aguarde...' : 'Enviar link de recuperação' }}
         </button>
       </form>
       <div v-else class="text-center">
-        <p class="text-success mb-3">Link enviado! Verifique seu e-mail.</p>
+        <div class="qs-alert-success mb-3">Link enviado! Verifique seu e-mail.</div>
       </div>
       <div class="text-center mt-4">
         <NuxtLink to="/agencia/login" style="font-size:.85rem; color:#2f7785">← Voltar para login</NuxtLink>
@@ -44,3 +44,17 @@ async function enviar() {
   }
 }
 </script>
+
+<style scoped>
+.rs-spinner {
+  display: inline-block;
+  width: 14px; height: 14px;
+  border: 2px solid rgba(255,255,255,.4);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: rs-spin .7s linear infinite;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+@keyframes rs-spin { to { transform: rotate(360deg); } }
+</style>
