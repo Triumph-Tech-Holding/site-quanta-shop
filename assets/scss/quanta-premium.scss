@@ -1176,3 +1176,75 @@ a:focus-visible {
   .qs-invite-wrap { flex-direction: column; gap: 36px; }
   .qs-invite-ui { flex: none; width: 100%; }
 }
+
+/* ─── 21. HEADING SIZES PREMIUM ───────────────────────────── */
+@media (min-width: 992px) {
+  .tp-section-title {
+    font-size: 40px !important;
+  }
+
+  .tp-slider-title {
+    font-size: 54px !important;
+  }
+
+  /* Section h2 that are not section-titles */
+  section h2:not(.tp-section-title):not(.qs-section-header h2) {
+    font-size: 36px;
+    letter-spacing: -0.025em;
+  }
+
+  /* Hero-banner old component */
+  .tp-slider-content h3.tp-slider-title {
+    font-size: 52px !important;
+  }
+}
+
+/* ─── 22. HERO ALL SLIDES — DARK GRADIENT ─────────────────── */
+/* Default slide (is-light without inline bg override) gets gradient */
+.tp-slider-area .tp-slider-item.is-light {
+  background: linear-gradient(135deg, #1a4a54 0%, #225F6B 40%, #2F7785 100%) !important;
+}
+
+/* Ensure text is white on all gradient slides */
+.tp-slider-area .tp-slider-item.is-light .tp-slider-content > span,
+.tp-slider-area .tp-slider-item.is-light .tp-slider-title,
+.tp-slider-area .tp-slider-item.is-light .tp-slider-content > p {
+  color: #fff !important;
+}
+
+/* ─── 23. FOOTER COLUMN ALIGNMENT ─────────────────────────── */
+/* Ensure 4-column layout balances properly */
+.tp-footer-top .row .col-xl-3 {
+  flex: 0 0 auto;
+  width: 25%;
+}
+
+@media (max-width: 991px) {
+  .tp-footer-top .row .col-xl-3 {
+    width: auto;
+  }
+}
+
+/* ─── 24. PARTNER CARD IMG ASPECT RATIO ────────────────────── */
+/* Ensure consistent image rendering without layout shift */
+.tp-product-thumb img,
+.qs-partner-thumb img {
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+}
+
+/* ─── 25. SECTION SPACING — tp-section-area ───────────────── */
+/* Catch remaining section types not covered in rule 20 */
+.tp-section-area,
+section.tp-banner-area {
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+
+@media (max-width: 991px) {
+  .tp-section-area,
+  section.tp-banner-area {
+    padding-top: 48px;
+    padding-bottom: 48px;
+  }
+}

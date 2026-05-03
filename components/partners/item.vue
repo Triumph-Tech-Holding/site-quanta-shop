@@ -2,11 +2,11 @@
   <div class="mb-25 tp-product-item transition-3 text-center">
     <div class="tp-product-thumb p-relative fix m-img">
       <nuxt-link :href="item.link" v-if="isAuthenticated" target="_blank">
-        <img :src="item.Icone" alt="product-electronic" />
+        <img :src="item.Icone" alt="product-electronic" loading="lazy" />
       </nuxt-link>
 
       <nuxt-link href="/login?redirect=/" v-else>
-        <img :src="item.Icone" alt="product-electronic" />
+        <img :src="item.Icone" alt="product-electronic" loading="lazy" />
       </nuxt-link>
 
       <div class="qs-cashback-badge qs-card-badge">

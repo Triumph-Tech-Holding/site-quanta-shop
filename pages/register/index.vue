@@ -1,12 +1,6 @@
 <template>
   <div>
-      <!-- breadcrumb start -->
-      <breadcrumb-4 title="Cadastre-se" subtitle="Cadastre-se" :center="true" />
-      <!-- breadcrumb end -->
-
-      <!-- register area start -->
-      <register-area/>
-      <!-- register area end -->
+    <register-area/>
   </div>
 </template>
 

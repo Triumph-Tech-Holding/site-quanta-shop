@@ -52,17 +52,17 @@
                 </div>
               </div>
             </div>
-            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 d-none">
+            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
               <div class="tp-footer-widget footer-col-4 mb-50">
-                <h4 class="tp-footer-widget-title">Fale conosco</h4>
+                <h4 class="tp-footer-widget-title">Atendimento</h4>
                 <div class="tp-footer-widget-content">
-                  <div class="tp-footer-talk mb-20">
-                    <span>Tem perguntas? Ligue para nós</span>
-                    <h4><a href="https://api.whatsapp.com/send/?phone=552140404866&text&type=phone_number&app_absent=0" target="_blank">+55 (21) 4040-4866</a></h4>
-                  </div>
-                  <!-- footer contact start -->
-                  <footer-contact/>
-                  <!-- footer contact end -->
+                  <ul>
+                    <li><a href="https://api.whatsapp.com/send/?phone=552140404866&text&type=phone_number&app_absent=0" target="_blank">WhatsApp</a></li>
+                    <li><nuxt-link to="/contato">Central de ajuda</nuxt-link></li>
+                    <li><nuxt-link to="/agencia/faq">Perguntas frequentes</nuxt-link></li>
+                    <li><nuxt-link to="/agencia/privacidade">Política de privacidade</nuxt-link></li>
+                    <li><a href="https://bigcash.blob.core.windows.net/documentos/QB%20-%20TERMOS%20DE%20USO%20E%20BONIFICA%C3%87%C3%83O%20ESPEC%C3%8DFICA%20v102023.pdf" target="_blank">Termos de uso</a></li>
+                  </ul>
                 </div>
               </div>
             </div>

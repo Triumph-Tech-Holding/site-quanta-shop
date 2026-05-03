@@ -1,12 +1,6 @@
 <template>
   <div>
-      <!-- breadcrumb start -->
-      <breadcrumb-4 title="Login" subtitle="Login" :center="true" />
-      <!-- breadcrumb end -->
-
-      <!-- login area start -->
-      <login-area/>
-      <!-- login area end -->
+    <login-area/>
   </div>
 </template>
 

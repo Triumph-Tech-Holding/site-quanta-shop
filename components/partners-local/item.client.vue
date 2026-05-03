@@ -13,12 +13,14 @@
         <img
           :src="item.Imagem"
           alt="product-img"
+          loading="lazy"
         />
       </nuxt-link>
       <img
         v-else
         :src="item.Imagem"
         alt="product-img"
+        loading="lazy"
       />
 
       <div class="qs-cashback-badge qs-card-badge">
