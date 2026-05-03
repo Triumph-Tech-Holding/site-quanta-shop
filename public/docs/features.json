@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-02T22:00:00.000Z",
+  "generatedAt": "2026-05-03T00:00:00.000Z",
   "version": "1.3.0",
   "mvps": [
     {
@@ -43,7 +43,7 @@
     { "id": "F-201", "mvp": "mvp2", "audience": "all", "title": "Home V1 com hero premium", "status": "done", "progress": 100, "stories": ["US-201"], "description": "Hero com Swiper, floating cards, brand strip. Seções: ofertas, online, locais, blog, CEO, footer-CTA." },
     { "id": "F-202", "mvp": "mvp2", "audience": "all", "title": "Páginas de público (Para Você / Empresa / Agente / Quanta Amizade)", "status": "done", "progress": 100, "stories": ["US-203", "US-204"], "description": "Hero fullscreen com foto real, badge, stats. Padrão QsHero reutilizável. Layout layout-home." },
     { "id": "F-203", "mvp": "mvp2", "audience": "all", "title": "Blog premium (Apple-style)", "status": "done", "progress": 100, "stories": ["US-202"], "description": "Listagem com hero card, grid 3-col, newsletter dark. Detalhe com tipografia generosa, sidebar de relacionados. CRUD admin com upload de imagem (base64). Arquitetura híbrida dev/prod com import.meta.dev." },
-    { "id": "F-204", "mvp": "mvp2", "audience": "admin", "title": "Painel admin redesenhado", "status": "in_progress", "progress": 60, "stories": ["US-205"], "description": "Header limpo, KPIs no topo, tabelas leves, filter chips, badges semânticas. Documentação técnica integrada (/admin/docs). Pendente: unificar telas legadas (relatórios, lançamentos)." },
+    { "id": "F-204", "mvp": "mvp2", "audience": "admin", "title": "Painel admin redesenhado", "status": "done", "progress": 100, "stories": ["US-205"], "description": "Header limpo (.qs-page-header), KPIs com QsKpiCard, tabelas em .qs-card-section com --qs-shadow-sm, QsFilterChip em todas as telas, skeleton loaders, badges semânticas. LGPD completo: Login e Nome mascarados na tela de Faturas, botão Revelar exclusivo Master, banner de auditoria. Telas: lancamentos, relatorio-cashback, relatorio-de-anunciantes, relatorio-de-faturas." },
     { "id": "F-205", "mvp": "mvp2", "audience": "admin", "title": "Sistema de design tokens", "status": "done", "progress": 100, "stories": [], "description": "quanta-premium.scss com tokens --qs-* + aliases semânticos (--qs-teal, --qs-ink, --qs-gray-*). Helpers .qs-page, .qs-card-section, .qs-btn-*. Componentes QsKpiCard, QsProgressBar, QsFilterChip extraídos. DESIGN_SYSTEM.md formalizado." },
     { "id": "F-206", "mvp": "mvp2", "audience": "admin", "title": "Painel de Progresso (Q Cuida-style)", "status": "done", "progress": 100, "stories": ["US-206"], "description": "Lista de tarefas com checkmarks coloridos. Barra de progresso linear no topo. Filtros: Todas / Concluídas / Ativas / Rascunhos." },
     { "id": "F-207", "mvp": "mvp2", "audience": "admin", "title": "Painel de Features e MVP", "status": "done", "progress": 100, "stories": ["US-207"], "description": "Visualização de features por MVP, progresso por fase em tempo real, drill-down em estórias de usuário. Refatorado para usar QsKpiCard / QsProgressBar / QsFilterChip." },

@@ -6,43 +6,52 @@
         <h1>Relatório de Cashback</h1>
         <p>Cashbacks concedidos pela plataforma por período</p>
       </div>
-      <div class="qs-header-actions qs-filter-inline">
-        <div class="qs-filter-field">
-          <label class="qs-filter-label">De</label>
-          <input v-model="filtro.dataInicial" type="date" class="qs-input-sm" />
-        </div>
-        <div class="qs-filter-field">
-          <label class="qs-filter-label">Até</label>
-          <input v-model="filtro.dataFinal" type="date" class="qs-input-sm" />
-        </div>
+      <div class="qs-header-actions no-print">
+        <button class="qs-btn-outline qs-btn-sm" :disabled="itens.length === 0" @click="gerarPdf">⬇ PDF</button>
         <button class="qs-btn-primary qs-btn-sm" :disabled="loading" @click="carregar">
           <span v-if="loading" class="qs-spinner-sm" />
           Atualizar
         </button>
-        <button class="qs-btn-outline qs-btn-sm" :disabled="itens.length === 0" @click="gerarPdf">
-          ⬇ PDF
-        </button>
       </div>
     </div>
 
-    <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
+    <div class="qs-filter-bar no-print">
+      <span class="qs-filter-bar-label">Período:</span>
+      <QsFilterChip
+        v-for="preset in periodoPresets"
+        :key="preset.id"
+        :label="preset.label"
+        :active="periodoAtivo === preset.id"
+        @click="aplicarPreset(preset)"
+      />
+      <div class="qs-filter-date-range">
+        <label class="qs-filter-label">De</label>
+        <input v-model="filtro.dataInicial" type="date" class="qs-input-sm" @change="periodoAtivo = 'custom'" />
+        <label class="qs-filter-label">Até</label>
+        <input v-model="filtro.dataFinal" type="date" class="qs-input-sm" @change="periodoAtivo = 'custom'" />
+      </div>
+    </div>
 
-    <template v-else>
-      <div class="qs-grid qs-grid-3 qs-kpi-row">
-        <div class="qs-kpi-card">
-          <div class="qs-kpi-label">Total Concedido</div>
-          <div class="qs-kpi-value">{{ formatCurrency(totais.totalConcedido) }}</div>
-        </div>
-        <div class="qs-kpi-card">
-          <div class="qs-kpi-label">Lançamentos</div>
-          <div class="qs-kpi-value">{{ totais.totalLancamentos }}</div>
-        </div>
-        <div class="qs-kpi-card">
-          <div class="qs-kpi-label">Períodos</div>
-          <div class="qs-kpi-value">{{ itens.length }}</div>
+    <div class="qs-kpi-strip">
+      <QsKpiCard label="Total Concedido" :value="totais.totalConcedido" format="currency" dotColor="#2F7785" />
+      <QsKpiCard label="Total de Lançamentos" :value="totais.totalLancamentos" format="number" />
+      <QsKpiCard label="Períodos" :value="itens.length" format="number" />
+    </div>
+
+    <template v-if="loading">
+      <div class="qs-card-section">
+        <div class="qs-skeleton-table">
+          <div v-for="n in 5" :key="n" class="qs-skeleton-row">
+            <div class="qs-skeleton qs-sk-wide" />
+            <div class="qs-skeleton qs-sk-md" />
+            <div class="qs-skeleton qs-sk-md" />
+            <div class="qs-skeleton qs-sk-sm" />
+          </div>
         </div>
       </div>
+    </template>
 
+    <template v-else>
       <div class="qs-card-section">
         <div v-if="itens.length === 0" class="qs-empty-state">
           <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--qs-gray-300)" stroke-width="1.5"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
@@ -97,18 +106,39 @@
 import { useAgenciaStore } from '~/pinia/useAgenciaStore';
 import { useApi } from '~/composables/useApi';
 definePageMeta({ layout: 'agencia-painel', middleware: ['agencia-auth', 'agencia-admin'] });
+
 const agenciaStore = useAgenciaStore();
 const api = useApi();
 const loading = ref(false);
 const erro = ref('');
 const itens = ref<any[]>([]);
+const periodoAtivo = ref('3m');
+
 const hoje = new Date();
-const primeiroDiaMes = new Date(hoje.getFullYear(), hoje.getMonth() - 2, 1).toISOString().split('T')[0];
-const filtro = reactive({ dataInicial: primeiroDiaMes, dataFinal: hoje.toISOString().split('T')[0] });
+const filtro = reactive({
+  dataInicial: new Date(hoje.getFullYear(), hoje.getMonth() - 2, 1).toISOString().split('T')[0],
+  dataFinal: hoje.toISOString().split('T')[0],
+});
+
+const periodoPresets = [
+  { id: 'mes', label: 'Mês atual', mesesAtras: 0 },
+  { id: '3m', label: '3 meses', mesesAtras: 2 },
+  { id: '6m', label: '6 meses', mesesAtras: 5 },
+  { id: '12m', label: '12 meses', mesesAtras: 11 },
+];
+
+function aplicarPreset(preset: typeof periodoPresets[0]) {
+  periodoAtivo.value = preset.id;
+  filtro.dataInicial = new Date(hoje.getFullYear(), hoje.getMonth() - preset.mesesAtras, 1).toISOString().split('T')[0];
+  filtro.dataFinal = hoje.toISOString().split('T')[0];
+  carregar();
+}
+
 const totais = computed(() => ({
   totalConcedido: itens.value.reduce((s, p) => s + p.Lancamentos.reduce((ss: number, l: any) => ss + (l.Valor || 0), 0), 0),
   totalLancamentos: itens.value.reduce((s, p) => s + p.Lancamentos.length, 0),
 }));
+
 function authHeader() { return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } }; }
 function formatCurrency(v: number) { return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v || 0); }
 function formatMes(dateStr: string) {
@@ -125,6 +155,7 @@ function badgeStatus(status: string) {
   return 'qs-badge-neutral';
 }
 function gerarPdf() { window.print(); }
+
 async function carregar() {
   loading.value = true; erro.value = '';
   try {
@@ -141,19 +172,25 @@ onMounted(() => { agenciaStore.loadFromStorage(); carregar(); });
 </script>
 
 <style scoped>
-.qs-filter-inline { display: flex; align-items: flex-end; gap: 10px; flex-wrap: wrap; }
-.qs-filter-field { display: flex; flex-direction: column; gap: 4px; }
+.qs-kpi-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px; }
+@media (max-width: 640px) { .qs-kpi-strip { grid-template-columns: 1fr; } }
+
+.qs-filter-bar { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+.qs-filter-bar-label { font-size: 12px; font-weight: 600; color: var(--qs-gray-500); text-transform: uppercase; letter-spacing: 0.05em; margin-right: 4px; }
+.qs-filter-date-range { display: flex; align-items: center; gap: 6px; margin-left: 8px; }
 .qs-filter-label { font-size: 11px; font-weight: 600; color: var(--qs-gray-500); text-transform: uppercase; letter-spacing: 0.04em; }
-.qs-input-sm { padding: 7px 10px; border: 1px solid var(--qs-gray-200); border-radius: var(--qs-radius-md); font-size: 13px; outline: none; }
+.qs-input-sm { padding: 6px 10px; border: 1px solid var(--qs-gray-200); border-radius: var(--qs-radius-md); font-size: 13px; outline: none; }
 .qs-input-sm:focus { border-color: var(--qs-teal); }
 .qs-btn-sm { padding: 7px 14px; font-size: 13px; }
-.qs-kpi-row { margin-bottom: 24px; }
-.qs-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-.qs-kpi-card { background: #fff; border: 1px solid var(--qs-gray-100); border-radius: var(--qs-radius-lg); padding: 20px 24px; box-shadow: var(--qs-shadow-sm); }
-.qs-kpi-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--qs-gray-500); margin-bottom: 8px; }
-.qs-kpi-value { font-size: 24px; font-weight: 700; color: var(--qs-ink); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+
+.qs-skeleton-table { display: flex; flex-direction: column; gap: 12px; padding: 8px 0; }
+.qs-skeleton-row { display: flex; gap: 16px; align-items: center; }
+.qs-sk-wide { flex: 2; height: 18px; border-radius: 6px; }
+.qs-sk-md { flex: 1.5; height: 18px; border-radius: 6px; }
+.qs-sk-sm { flex: 1; height: 18px; border-radius: 6px; }
+
 .qs-periodo-block { margin-bottom: 28px; }
-.qs-periodo-title { font-size: 14px; font-weight: 700; color: var(--qs-teal-dark); margin-bottom: 10px; }
+.qs-periodo-title { font-size: 14px; font-weight: 700; color: var(--qs-teal-dark); margin-bottom: 10px; text-transform: capitalize; }
 .qs-text-right { text-align: right; }
 .qs-fw-bold { font-weight: 700; }
 .qs-num-teal { color: var(--qs-teal-dark); font-variant-numeric: tabular-nums; }
@@ -161,5 +198,4 @@ onMounted(() => { agenciaStore.loadFromStorage(); carregar(); });
 .qs-spinner-sm { display: inline-block; width: 13px; height: 13px; border: 2px solid rgba(255,255,255,.4); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; vertical-align: middle; margin-right: 5px; }
 .qs-alert-danger { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; border-radius: var(--qs-radius-md); padding: 12px 16px; font-size: 14px; margin-top: 16px; }
 @keyframes spin { to { transform: rotate(360deg); } }
-@media (max-width: 640px) { .qs-grid-3 { grid-template-columns: 1fr; } }
 </style>

@@ -24,7 +24,7 @@ A entrega é dividida em **4 fases progressivas**, cada uma desbloqueando uma ca
 | Fase | Foco | Status | % Concluído |
 |------|------|--------|-------------|
 | **MVP 1 — Fundação** | Cashback básico, autenticação, catálogo público | 🟢 Em produção | 100% |
-| **MVP 2 — Premium UI** | Redesign completo, experiência minimalista, blog | 🟡 Em andamento | 92% |
+| **MVP 2 — Premium UI** | Redesign completo, experiência minimalista, blog | ✅ Concluído | 100% |
 | **MVP 3 — Rede e Compensação** | Plano de carreira, Quanta Amizade, residual binário | 🔵 Planejado | 30% |
 | **MVP 4 — Inteligência** | Recomendações com IA, BI para lojista, app mobile | ⚪ Backlog | 0% |
 
@@ -71,7 +71,7 @@ Cada feature tem `id`, `audience`, `mvp`, `status` e `tasks` relacionadas. A fon
 
 ---
 
-### MVP 2 — Premium UI (em andamento)
+### MVP 2 — Premium UI ✅ (concluído — Mai 2026)
 
 #### F-201 · Home V1 com hero premium
 **Público:** Todos · **Status:** ✅ Done
@@ -93,11 +93,13 @@ Cada feature tem `id`, `audience`, `mvp`, `status` e `tasks` relacionadas. A fon
 - Arquitetura híbrida dev/prod com `import.meta.dev`
 
 #### F-204 · Painel admin redesenhado
-**Público:** Admin · **Status:** 🟡 In Progress
-- Header limpo, KPIs no topo
-- Tabelas leves, filter chips, badges semânticas
-- Documentação técnica integrada (`/admin/docs`)
-- **Pendente:** unificar telas legadas (relatórios, lançamentos)
+**Público:** Admin · **Status:** ✅ Done
+- Cabeçalhos padronizados com `.qs-page-header` e eyebrow contextual
+- KPIs com componente `QsKpiCard` (currency/number/percent) em strip de 3–4 colunas
+- Tabelas envolvidas em `.qs-card-section` com `--qs-shadow-sm` e skeleton loaders
+- `QsFilterChip` para todos os filtros de categoria, tipo e período
+- **LGPD completo** na tela de Faturas: Login (email) e Nome mascarados por padrão; botão "Revelar" exclusivo para perfil Master; banner de auditoria diferenciado
+- Telas entregues: `lancamentos`, `relatorio-cashback`, `relatorio-de-anunciantes`, `relatorio-de-faturas`
 
 #### F-205 · Sistema de design tokens
 **Público:** Interno · **Status:** ✅ Done
