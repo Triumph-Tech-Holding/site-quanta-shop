@@ -193,7 +193,7 @@ export const DEFAULT_CONFIG: HomeConfig = {
     label: 'SEMPRE CONECTADO',
     title: 'Quanta em Tempo Real: Blog e Redes Sociais',
     subtitle: 'Fique por dentro das últimas novidades, promoções e conteúdos exclusivos.',
-    posts: DEFAULT_BLOG_POSTS,
+    posts: [],
   },
   ceo: {
     ativo: true,
@@ -239,7 +239,7 @@ export function useHomeConfig() {
         blog: {
           ...DEFAULT_CONFIG.blog,
           ...cms.blog,
-          posts: cms.blog?.posts?.length ? cms.blog.posts : DEFAULT_BLOG_POSTS,
+          posts: cms.blog?.posts ?? [],
         },
       };
     }

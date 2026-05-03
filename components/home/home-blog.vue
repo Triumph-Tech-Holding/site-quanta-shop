@@ -96,7 +96,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { useHomeConfig } from '@/composables/useHomeConfig';
+import { useHomeConfig, DEFAULT_BLOG_POSTS } from '@/composables/useHomeConfig';
 
 const { config, loadConfig } = useHomeConfig();
 
@@ -208,15 +208,43 @@ onMounted(async () => {
       readTime: 0,
       img: p.img,
     }));
+    try {
+      const data = await $fetch<MockData>('/data/mock-data.json');
+      socialFeed.value = data.social ?? [];
+    } catch {}
     return;
   }
 
   try {
     const data = await $fetch<MockData>('/data/mock-data.json');
-    blogPosts.value = (data.blog ?? []).slice(0, 2);
+    const mockBlog = (data.blog ?? []);
+    if (mockBlog.length > 0) {
+      blogPosts.value = mockBlog;
+    } else {
+      blogPosts.value = DEFAULT_BLOG_POSTS.map(p => ({
+        id: p.id,
+        slug: p.slug,
+        title: p.title,
+        excerpt: p.excerpt,
+        tag: 'Blog',
+        date: p.date,
+        readTime: 0,
+        img: p.img,
+      }));
+    }
     socialFeed.value = data.social ?? [];
   } catch {
-    console.warn('[Blog] Failed to load mock-data.json');
+    console.warn('[Blog] Failed to load mock-data.json, using DEFAULT_BLOG_POSTS');
+    blogPosts.value = DEFAULT_BLOG_POSTS.map(p => ({
+      id: p.id,
+      slug: p.slug,
+      title: p.title,
+      excerpt: p.excerpt,
+      tag: 'Blog',
+      date: p.date,
+      readTime: 0,
+      img: p.img,
+    }));
   }
 });
 </script>
