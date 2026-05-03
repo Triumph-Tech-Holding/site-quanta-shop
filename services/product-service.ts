@@ -5,11 +5,11 @@ export const getProduct = async (id: string) => {
         if (id) params.append('id', id);
 
         const response = await get(`/v2/awin-feed/get-product/?${params.toString()}`);
-       
+
         return response.data;
     } catch (error) {
-        console.error('Erro ao obter produto:', error)
-        throw error
+        console.warn('[product-service] getProduct indisponível, consumidor deve usar fallback');
+        throw error;
     }
 }
 
@@ -25,11 +25,11 @@ export const getProducts = async (quantity = 12, page = 1, minPrice: number | nu
         if (category) params.append('category', category.toString());
 
         const response = await get(`/v2/awin-feed/get-products/?${params.toString()}`);
-       
+
         return response.data;
     } catch (error) {
-        console.error('Erro ao obter produtos:', error)
-        throw error
+        console.warn('[product-service] getProducts indisponível, consumidor deve usar fallback');
+        throw error;
     }
 }
 
@@ -48,7 +48,7 @@ export const getSearchedProducts = async (quantity = 12, page = 1, minPrice: num
 
         return response.data;
     } catch (error) {
-        console.error('Erro ao obter produtos:', error)
-        throw error
+        console.warn('[product-service] getSearchedProducts indisponível, consumidor deve usar fallback');
+        throw error;
     }
 }

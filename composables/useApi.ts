@@ -48,7 +48,13 @@ function getApiClient(): AxiosInstance {
             console.error('[API] Acesso negado:', error.config?.url);
             router.push('/acesso-negado');
           } else if (status !== undefined && status >= 500) {
-            console.error('[API] Erro interno do servidor:', status, error.config?.url);
+            const url = error.config?.url || '';
+            const isAwinFeed = url.includes('/awin-feed/');
+            if (isAwinFeed) {
+              console.warn('[API] Upstream indisponível (usando fallback):', status, url);
+            } else {
+              console.error('[API] Erro interno do servidor:', status, url);
+            }
           }
         }
 
