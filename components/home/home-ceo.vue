@@ -85,20 +85,20 @@
             </div>
           </div>
           <div v-if="currentStep === 0" class="qs-form-group">
-            <input v-model="userResponses.name" type="text" placeholder="Qual é seu nome?" class="qs-input" @keyup.enter="nextStep" />
+            <input v-model="userResponses.name" type="text" placeholder="Qual é seu nome?" class="qs-input" :disabled="isTyping" @keyup.enter="nextStep" />
           </div>
           <div v-else-if="currentStep === 1" class="qs-form-group">
             <label v-for="opt in ['Quero cashback', 'Quero credenciar minha loja', 'Quero ser agente']" :key="opt" class="qs-radio-label">
-              <input type="radio" v-model="userResponses.interest" :value="opt" />
+              <input type="radio" v-model="userResponses.interest" :value="opt" :disabled="isTyping" />
               {{ opt }}
             </label>
           </div>
           <div v-else-if="currentStep === 2" class="qs-form-group">
-            <input v-model="userResponses.email" type="email" placeholder="Seu e-mail" class="qs-input" @keyup.enter="submitChat" />
+            <input v-model="userResponses.email" type="email" placeholder="Seu e-mail" class="qs-input" :disabled="isTyping" @keyup.enter="submitChat" />
           </div>
           <div class="qs-modal-footer">
-            <button @click="nextStep" v-if="currentStep < 2" class="qs-btn-primary">Próximo</button>
-            <button @click="submitChat" v-else class="qs-btn-primary">Enviar</button>
+            <button @click="nextStep" v-if="currentStep < 2" class="qs-btn-primary" :disabled="isTyping">Próximo</button>
+            <button @click="submitChat" v-else class="qs-btn-primary" :disabled="isTyping">Enviar</button>
           </div>
         </div>
       </div>
@@ -151,6 +151,7 @@ async function pushBotMessageWithTyping(text: string, delay = 900) {
 }
 
 async function nextStep() {
+  if (isTyping.value) return;
   if (currentStep.value === 0 && !userResponses.value.name) return;
   if (currentStep.value === 1 && !userResponses.value.interest) return;
 
@@ -166,6 +167,7 @@ async function nextStep() {
 }
 
 async function submitChat() {
+  if (isTyping.value) return;
   if (!userResponses.value.email) return;
   chatMessages.value.push({ type: 'user', text: userResponses.value.email });
   await pushBotMessageWithTyping('Obrigado! Em breve entraremos em contato.');
