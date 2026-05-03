@@ -1,15 +1,8 @@
 <template>
   <div class="qs-page">
-    <div class="qs-page-header">
-      <div class="qs-header-text">
-        <div class="qs-eyebrow">Admin · Comunicação</div>
-        <h1>Comunicados</h1>
-        <p>Gerenciar comunicados aos usuários</p>
-      </div>
-      <div class="qs-header-actions">
-        <button class="qs-btn-primary" @click="abrirNovo">+ Novo Comunicado</button>
-      </div>
-    </div>
+    <QsPageHeader eyebrow="Admin · Comunicação" title="Comunicados" description="Gerenciar comunicados aos usuários">
+      <button class="qs-btn-primary" @click="abrirNovo">+ Novo Comunicado</button>
+    </QsPageHeader>
 
     <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
 

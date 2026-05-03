@@ -3,13 +3,7 @@
     <div class="general-content">
       <div class="page-content qs-page">
 
-        <div class="qs-page-header">
-          <div>
-            <div class="qs-eyebrow">Rede</div>
-            <h1>Meus Diretos</h1>
-            <p>Pessoas que você indicou diretamente para a Quanta Shop.</p>
-          </div>
-        </div>
+        <QsPageHeader eyebrow="Rede" title="Meus Diretos" description="Pessoas que você indicou diretamente para a Quanta Shop." />
 
         <!-- Link -->
         <div class="qs-card-section dir-link-card">

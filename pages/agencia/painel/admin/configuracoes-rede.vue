@@ -1,20 +1,13 @@
 <template>
   <div class="qs-page qs-net">
-    <div class="qs-page-header">
-      <div class="qs-header-text">
-        <div class="qs-eyebrow">Configurações · Rede &amp; Compensação</div>
-        <h1>Configurações de Rede</h1>
-        <p>Gerencie percentuais de bônus por nível, ative ou desative camadas de ganho e ajuste o valor do Quanta Point.</p>
-      </div>
-      <div class="qs-header-actions">
-        <span v-if="lastSaved" class="qs-meta">Salvo em {{ formatDate(lastSaved) }}</span>
-        <button class="qs-btn-outline" @click="loadAll" :disabled="loading">Recarregar</button>
-        <button class="qs-btn-primary" @click="saveAll" :disabled="saving || !dirty">
-          <span v-if="saving">Salvando…</span>
-          <span v-else>Salvar alterações</span>
-        </button>
-      </div>
-    </div>
+    <QsPageHeader eyebrow="Configurações · Rede &amp; Compensação" title="Configurações de Rede" description="Gerencie percentuais de bônus por nível, ative ou desative camadas de ganho e ajuste o valor do Quanta Point.">
+      <span v-if="lastSaved" class="qs-meta">Salvo em {{ formatDate(lastSaved) }}</span>
+      <button class="qs-btn-outline" @click="loadAll" :disabled="loading">Recarregar</button>
+      <button class="qs-btn-primary" @click="saveAll" :disabled="saving || !dirty">
+        <span v-if="saving">Salvando…</span>
+        <span v-else>Salvar alterações</span>
+      </button>
+    </QsPageHeader>
 
     <div v-if="loading" class="qs-loading"><div class="qs-spinner"/></div>
 

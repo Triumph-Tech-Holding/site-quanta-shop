@@ -3,17 +3,12 @@
     <div class="general-content">
       <div class="page-content qs-page">
 
-        <div class="qs-page-header">
-          <div>
-            <div class="qs-eyebrow">Atendimento</div>
-            <h1>Nova Solicitação</h1>
-            <p>Descreva o problema ou dúvida e entraremos em contato.</p>
-          </div>
+        <QsPageHeader eyebrow="Atendimento" title="Nova Solicitação" description="Descreva o problema ou dúvida e entraremos em contato.">
           <NuxtLink to="/agencia/painel/suporte" class="ss-back-link">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
             Voltar ao suporte
           </NuxtLink>
-        </div>
+        </QsPageHeader>
 
         <div class="qs-card-section ss-card">
           <form @submit.prevent="enviar" class="ss-form">

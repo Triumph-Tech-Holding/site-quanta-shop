@@ -6,11 +6,11 @@
       <p class="text-muted text-center mb-4" style="font-size:.875rem">
         Cadastre-se como parceiro Quanta Shop e comece a ganhar cashback nas suas vendas.
       </p>
-      <div class="text-center">
-        <NuxtLink to="/mais-vendas" class="btn btn-ag-primary w-100 mb-2">
+      <div class="mv-actions">
+        <NuxtLink to="/mais-vendas" class="qs-btn-primary mv-btn">
           Quero ser parceiro →
         </NuxtLink>
-        <NuxtLink to="/agencia" class="btn btn-ag-outline w-100">Já tenho conta — Entrar</NuxtLink>
+        <NuxtLink to="/agencia" class="qs-btn-outline mv-btn">Já tenho conta — Entrar</NuxtLink>
       </div>
     </div>
   </div>

@@ -1,23 +1,17 @@
 <template>
   <div class="qs-page qs-lab">
 
-    <div class="qs-page-header">
-      <div class="qs-header-text">
-        <div class="qs-eyebrow">
-          <span class="qs-lab-tag">LAB</span>
-          Cockpit Técnico Interno · Quanta Tech
-        </div>
-        <h1>LAB — Engenharia &amp; Governança</h1>
-        <p>Painel técnico interno com tudo sobre engenharia, documentação e progresso do app. <b>Visível somente para devs e equipe</b> — não aparece para o usuário final.</p>
-      </div>
-      <div class="qs-header-actions">
-        <span class="qs-meta">v1.3.0 · Mai 2026</span>
-        <button class="qs-btn-outline" @click="reload" :disabled="loading">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
-          Recarregar
-        </button>
-      </div>
-    </div>
+    <QsPageHeader title="LAB — Engenharia &amp; Governança" description="Painel técnico interno com tudo sobre engenharia, documentação e progresso do app. Visível somente para devs e equipe — não aparece para o usuário final.">
+      <template #eyebrow>
+        <span class="qs-lab-tag">LAB</span>
+        Cockpit Técnico Interno · Quanta Tech
+      </template>
+      <span class="qs-meta">v1.3.0 · Mai 2026</span>
+      <button class="qs-btn-outline" @click="reload" :disabled="loading">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        Recarregar
+      </button>
+    </QsPageHeader>
 
     <div v-if="loading" class="qs-loading"><div class="qs-spinner"></div></div>
 
@@ -199,11 +193,6 @@ onMounted(reload)
 </script>
 
 <style scoped>
-.qs-header-text h1 { font-size: 1.6rem; font-weight: 700; color: var(--qs-ink); margin: .25rem 0 .4rem; }
-.qs-header-text p  { font-size: .9rem; color: var(--qs-gray-400); margin: 0; max-width: 720px; }
-.qs-header-text p b { color: var(--qs-teal); }
-.qs-header-actions { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
-
 .qs-eyebrow { display: flex; align-items: center; gap: .5rem; }
 .qs-lab-tag {
   background: var(--qs-teal); color: #fff;

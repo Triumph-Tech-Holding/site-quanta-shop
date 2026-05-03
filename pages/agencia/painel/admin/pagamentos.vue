@@ -1,12 +1,6 @@
 <template>
   <div class="qs-page">
-    <div class="qs-page-header">
-      <div class="qs-header-text">
-        <div class="qs-eyebrow">Admin · Financeiro</div>
-        <h1>Pagamentos</h1>
-        <p>Pagamentos e transações da plataforma</p>
-      </div>
-    </div>
+    <QsPageHeader eyebrow="Admin · Financeiro" title="Pagamentos" description="Pagamentos e transações da plataforma" />
 
     <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
 

@@ -3,13 +3,7 @@
     <div class="general-content">
       <div class="page-content qs-page">
 
-        <div class="qs-page-header">
-          <div>
-            <div class="qs-eyebrow">CCR</div>
-            <h1>Inserir Cupom Fiscal</h1>
-            <p>Registre sua nota fiscal para ganhar cashback.</p>
-          </div>
-        </div>
+        <QsPageHeader eyebrow="CCR" title="Inserir Cupom Fiscal" description="Registre sua nota fiscal para ganhar cashback." />
 
         <div class="qs-card-section ic-card">
           <div class="ic-icon-wrap">

@@ -1,12 +1,6 @@
 <template>
   <div class="qs-page">
-    <div class="qs-page-header">
-      <div class="qs-header-text">
-        <div class="qs-eyebrow">Admin · Transações</div>
-        <h1>Compras</h1>
-        <p>Histórico de compras da plataforma</p>
-      </div>
-    </div>
+    <QsPageHeader eyebrow="Admin · Transações" title="Compras" description="Histórico de compras da plataforma" />
 
     <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
 

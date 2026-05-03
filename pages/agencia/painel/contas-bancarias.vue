@@ -3,18 +3,13 @@
     <div class="general-content">
       <div class="page-content qs-page">
 
-        <div class="qs-page-header">
-          <div>
-            <div class="qs-eyebrow">Financeiro</div>
-            <h1>Contas Bancárias</h1>
-            <p>Gerencie suas contas cadastradas para realizar saques.</p>
-          </div>
+        <QsPageHeader eyebrow="Financeiro" title="Contas Bancárias" description="Gerencie suas contas cadastradas para realizar saques.">
           <button class="qs-btn-primary cb-btn-add" @click="showForm = !showForm">
             <svg v-if="!showForm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
             <svg v-else xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
             {{ showForm ? 'Cancelar' : 'Adicionar conta' }}
           </button>
-        </div>
+        </QsPageHeader>
 
         <!-- Form -->
         <div v-if="showForm" class="qs-card-section cb-form-card">

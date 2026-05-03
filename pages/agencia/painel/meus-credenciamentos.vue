@@ -3,13 +3,7 @@
     <div class="general-content">
       <div class="page-content qs-page">
 
-        <div class="qs-page-header">
-          <div>
-            <div class="qs-eyebrow">Rede</div>
-            <h1>Meus Credenciamentos</h1>
-            <p>Acompanhe os estabelecimentos que você indicou para a rede.</p>
-          </div>
-        </div>
+        <QsPageHeader eyebrow="Rede" title="Meus Credenciamentos" description="Acompanhe os estabelecimentos que você indicou para a rede." />
 
         <!-- Link de indicação -->
         <div class="qs-card-section cred-link-card">

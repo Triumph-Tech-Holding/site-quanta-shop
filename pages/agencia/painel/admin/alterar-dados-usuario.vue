@@ -1,12 +1,6 @@
 <template>
   <div class="qs-page">
-    <div class="qs-page-header">
-      <div class="qs-header-text">
-        <div class="qs-eyebrow">Admin · Usuários</div>
-        <h1>Alterar Dados de Usuário</h1>
-        <p>Editar informações de usuários da plataforma</p>
-      </div>
-    </div>
+    <QsPageHeader eyebrow="Admin · Usuários" title="Alterar Dados de Usuário" description="Editar informações de usuários da plataforma" />
 
     <div class="qs-card-section qs-search-card">
       <div class="qs-search-row">

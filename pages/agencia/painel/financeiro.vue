@@ -3,13 +3,7 @@
     <div class="general-content">
       <div class="page-content qs-page">
 
-        <div class="qs-page-header">
-          <div>
-            <div class="qs-eyebrow">CCR</div>
-            <h1>Conta de Consumo Remunerada</h1>
-            <p>Acompanhe seu extrato, solicite saques e veja o histórico de movimentações.</p>
-          </div>
-        </div>
+        <QsPageHeader eyebrow="CCR" title="Conta de Consumo Remunerada" description="Acompanhe seu extrato, solicite saques e veja o histórico de movimentações." />
 
         <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
 

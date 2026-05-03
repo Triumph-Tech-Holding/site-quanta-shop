@@ -1,29 +1,21 @@
 <template>
   <div class="docs-viewer">
 
-    <!-- Page Header -->
-    <div class="qs-page-header">
-      <div class="qs-header-text">
-        <div class="qs-eyebrow">LAB · Arquitetura</div>
-        <h1>Documentação Técnica</h1>
-        <p>Consulte arquitetura, padrões e decisões do projeto Quanta Shop.</p>
-      </div>
-      <div class="qs-header-actions">
-        <span class="docs-env-pill" :class="isDev ? 'docs-env-pill--dev' : 'docs-env-pill--prod'">
-          <span class="docs-env-dot"></span>
-          {{ isDev ? 'Dev (Replit)' : 'Produção' }}
-        </span>
-        <button
-          class="qs-btn-outline"
-          :disabled="!activeDoc || gerandoPdf"
-          @click="gerarPdf(activeDoc)"
-        >
-          <span v-if="gerandoPdf" class="qs-spinner-sm"></span>
-          <svg v-else width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          {{ gerandoPdf ? 'Gerando...' : 'Baixar PDF' }}
-        </button>
-      </div>
-    </div>
+    <QsPageHeader eyebrow="LAB · Arquitetura" title="Documentação Técnica" description="Consulte arquitetura, padrões e decisões do projeto Quanta Shop.">
+      <span class="docs-env-pill" :class="isDev ? 'docs-env-pill--dev' : 'docs-env-pill--prod'">
+        <span class="docs-env-dot"></span>
+        {{ isDev ? 'Dev (Replit)' : 'Produção' }}
+      </span>
+      <button
+        class="qs-btn-outline"
+        :disabled="!activeDoc || gerandoPdf"
+        @click="gerarPdf(activeDoc)"
+      >
+        <span v-if="gerandoPdf" class="qs-spinner-sm"></span>
+        <svg v-else width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        {{ gerandoPdf ? 'Gerando...' : 'Baixar PDF' }}
+      </button>
+    </QsPageHeader>
 
     <!-- 2-column layout -->
     <div class="docs-layout">

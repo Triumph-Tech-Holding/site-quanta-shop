@@ -3,13 +3,7 @@
     <div class="general-content">
       <div class="page-content qs-page">
 
-        <div class="qs-page-header">
-          <div>
-            <div class="qs-eyebrow">Carreira</div>
-            <h1>Graduações</h1>
-            <p>Seu progresso e conquistas na plataforma Quanta Shop.</p>
-          </div>
-        </div>
+        <QsPageHeader eyebrow="Carreira" title="Graduações" description="Seu progresso e conquistas na plataforma Quanta Shop." />
 
         <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
 

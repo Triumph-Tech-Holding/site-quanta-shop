@@ -1,22 +1,15 @@
 <template>
   <div class="qs-page no-print">
-    <div class="qs-page-header">
-      <div class="qs-header-text">
-        <div class="qs-eyebrow">Admin · Relatórios</div>
-        <h1>Relatório de Faturas</h1>
-        <p>Faturas de cashback dos credenciados</p>
+    <QsPageHeader eyebrow="Admin · Relatórios" title="Relatório de Faturas" description="Faturas de cashback dos credenciados">
+      <div class="qs-period-switch no-print">
+        <QsFilterChip :active="filtroStatus === null" @click="filtroStatus = null">Todos</QsFilterChip>
+        <QsFilterChip :active="filtroStatus === 2" @click="filtroStatus = 2">Pago</QsFilterChip>
+        <QsFilterChip :active="filtroStatus === 1" @click="filtroStatus = 1">Pendente</QsFilterChip>
+        <QsFilterChip :active="filtroStatus === 3" @click="filtroStatus = 3">Cancelado</QsFilterChip>
       </div>
-      <div class="qs-header-actions no-print">
-        <div class="qs-period-switch">
-          <QsFilterChip :active="filtroStatus === null" @click="filtroStatus = null">Todos</QsFilterChip>
-          <QsFilterChip :active="filtroStatus === 2" @click="filtroStatus = 2">Pago</QsFilterChip>
-          <QsFilterChip :active="filtroStatus === 1" @click="filtroStatus = 1">Pendente</QsFilterChip>
-          <QsFilterChip :active="filtroStatus === 3" @click="filtroStatus = 3">Cancelado</QsFilterChip>
-        </div>
-        <button class="qs-btn-outline" :disabled="itens.length === 0" @click="gerarPdf">⬇ PDF</button>
-        <button class="qs-btn-primary" :disabled="loading" @click="carregar">Atualizar</button>
-      </div>
-    </div>
+      <button class="qs-btn-outline no-print" :disabled="itens.length === 0" @click="gerarPdf">⬇ PDF</button>
+      <button class="qs-btn-primary no-print" :disabled="loading" @click="carregar">Atualizar</button>
+    </QsPageHeader>
 
     <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
 

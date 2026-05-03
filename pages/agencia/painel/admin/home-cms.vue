@@ -1,19 +1,14 @@
 <template>
   <div class="hcms">
-    <div class="qs-page-header">
-      <div class="qs-header-text">
-        <div class="qs-eyebrow">Admin · CMS</div>
-        <h1>CMS — Home Page</h1>
-        <p>Edite os textos e links exibidos na página inicial. As alterações ficam visíveis imediatamente após salvar.</p>
-      </div>
-      <div class="qs-header-actions" v-if="form">
+    <QsPageHeader eyebrow="Admin · CMS" title="CMS — Home Page" description="Edite os textos e links exibidos na página inicial. As alterações ficam visíveis imediatamente após salvar.">
+      <template v-if="form">
         <button class="qs-btn-outline" @click="reset" :disabled="saving">Descartar</button>
         <button class="qs-btn-primary" :disabled="saving" @click="save">
           <span v-if="saving" class="hcms__spinner-sm" />
           {{ saving ? 'Salvando...' : 'Salvar Alterações' }}
         </button>
-      </div>
-    </div>
+      </template>
+    </QsPageHeader>
 
     <div v-if="loadError" class="qs-alert-danger" style="margin-bottom:16px">
       Erro ao carregar configuração. Verifique se o arquivo <code>home-config.json</code> existe.

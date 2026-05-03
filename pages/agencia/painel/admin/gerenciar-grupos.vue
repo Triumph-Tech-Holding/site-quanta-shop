@@ -1,15 +1,8 @@
 <template>
   <div class="qs-page">
-    <div class="qs-page-header">
-      <div class="qs-header-text">
-        <div class="qs-eyebrow">Admin · Permissões</div>
-        <h1>Gerenciar Grupos</h1>
-        <p>Grupos de usuários e permissões</p>
-      </div>
-      <div class="qs-header-actions">
-        <button class="qs-btn-primary" @click="abrirNovo">+ Novo Grupo</button>
-      </div>
-    </div>
+    <QsPageHeader eyebrow="Admin · Permissões" title="Gerenciar Grupos" description="Grupos de usuários e permissões">
+      <button class="qs-btn-primary" @click="abrirNovo">+ Novo Grupo</button>
+    </QsPageHeader>
 
     <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
 

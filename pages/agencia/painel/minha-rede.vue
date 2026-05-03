@@ -3,13 +3,7 @@
     <div class="general-content">
       <div class="page-content qs-page">
 
-        <div class="qs-page-header">
-          <div>
-            <div class="qs-eyebrow">Rede</div>
-            <h1>Minha Rede</h1>
-            <p>Visualize e acompanhe os membros da sua rede de indicados.</p>
-          </div>
-        </div>
+        <QsPageHeader eyebrow="Rede" title="Minha Rede" description="Visualize e acompanhe os membros da sua rede de indicados." />
 
         <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
 

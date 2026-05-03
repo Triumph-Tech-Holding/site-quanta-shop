@@ -1,23 +1,46 @@
 # Quanta Shop Web
 
-## 🎨 Padronização qs-* Completa — Fases 5-8 ✅ (Mai 2026)
+## 🎨 Padronização QsPageHeader — Roadmap 8 Fases (Mai 2026)
 
-### Resumo
-Eliminação de **todas** as classes Bootstrap legadas (`spinner-border`, `alert alert-*`) de páginas e components. 17 páginas legadas deletadas. Sidebars de filtro simplificados para rotear apenas para `/shop` e `/shop-full-width`.
+### Resumo desta sessão
+Aplicação de `QsPageHeader` em **todas** as páginas restantes do roadmap (Fases 3–6). Migração das páginas de marketing agência do padrão `agencia-login-page` + inline styles para `qs-*`. Zero headers inline em produção.
 
-### Fases concluídas
+### Fases concluídas (roadmap QsPageHeader)
 | Fase | Escopo | Status |
 |---|---|---|
 | Fase 1 — LAB | 6 páginas | ✅ |
 | Fase 2 — Admin operacional | 10 páginas | ✅ |
-| Fase 3 — Admin gestão | 16 páginas | ✅ (zero mudanças) |
-| Fase 4 — Painel empreendedor | 26 páginas | ✅ (zero mudanças) |
-| Fase 5 — Auth/onboarding | ~12 arquivos | ✅ |
-| Fase 6 — Marketing agência | ~8 páginas | ✅ |
-| Fase 7 — Páginas públicas | ~15 páginas | ✅ (zero mudanças) |
-| Fase 8 — Limpeza | 17 páginas deletadas | ✅ |
+| Fase 3 — Admin gestão | 16 páginas + `alterar-dados-usuario` | ✅ |
+| Fase 4 — Painel empreendedor | 26 páginas + `busca-inteligente` | ✅ |
+| Fase 5 — Auth/onboarding | split-screen próprio — sem QsPageHeader | ✅ (intacto) |
+| Fase 6 — Marketing agência | faq, como-funciona, quem-somos, privacidade, lojas-fisicas, mais-vendas, parceiro-direto | ✅ |
+| Fase 7 — Páginas públicas `tp-*` | refatoração maior — sessão dedicada | ⏳ PENDING |
+| Fase 8 — Limpeza | nenhum arquivo legado encontrado | ✅ (nada a fazer) |
 
-### Páginas deletadas (Fase 8)
+### Métricas finais
+| Métrica | Valor |
+|---|---|
+| Páginas com `QsPageHeader` | **98** |
+| Headers inline `class="qs-page-header"` restantes | **0** |
+| Classes antigas em Fase 6 (agencia-login-page, btn-ag-*) | **0** nas páginas refatoradas |
+
+### Páginas de marketing agência refatoradas (Fase 6)
+`agencia/faq.vue`, `agencia/como-funciona.vue`, `agencia/quem-somos.vue`, `agencia/privacidade.vue`, `agencia/lojas-fisicas.vue` — de `agencia-login-page` + inline styles para `qs-page` + `QsPageHeader` + `qs-card-section` + classes scoped `qs-*`.
+
+### Relatórios admin atualizados (Fase 3 complemento)
+`relatorio-cashback.vue`, `relatorio-de-anunciantes.vue`, `relatorio-de-faturas.vue` — ações com `no-print` preservado dentro do slot `QsPageHeader`.
+
+### Próximos passos (Fase 7)
+Páginas públicas `pages/*.vue` usam classes `tp-*` (tema original Bootstrap-based). Refatoração para `qs-*` requer sessão dedicada: `shop.vue`, `cart.vue`, `checkout.vue`, `wishlist.vue`, `search.vue`, `404.vue`, `about.vue`, `product-details/[id].vue`, etc.
+
+---
+
+## 🎨 Padronização qs-* Completa — Fases 5-8 ✅ (Mai 2026 — sessão anterior)
+
+### Resumo
+Eliminação de **todas** as classes Bootstrap legadas (`spinner-border`, `alert alert-*`) de páginas e components. 17 páginas legadas deletadas. Sidebars de filtro simplificados para rotear apenas para `/shop` e `/shop-full-width`.
+
+### Páginas deletadas (sessão anterior — Fase 8)
 `home-2/3/4/v2.vue`, `shop-1600/list/no-sidebar/right-sidebar/load-more/filter-dropdown/filter-offcanvas.vue`, `product-details-countdown/gallery/list/slider/swatches/video.vue`
 
 ### Sidebars simplificados

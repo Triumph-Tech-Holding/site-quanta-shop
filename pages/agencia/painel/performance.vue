@@ -3,13 +3,7 @@
     <div class="general-content">
       <div class="page-content qs-page">
 
-        <div class="qs-page-header">
-          <div>
-            <div class="qs-eyebrow">Rede</div>
-            <h1>Performance da Equipe</h1>
-            <p>Visualize o consumo e desempenho dos membros da sua rede.</p>
-          </div>
-        </div>
+        <QsPageHeader eyebrow="Rede" title="Performance da Equipe" description="Visualize o consumo e desempenho dos membros da sua rede." />
 
         <!-- Filter bar -->
         <div class="qs-filter-bar">

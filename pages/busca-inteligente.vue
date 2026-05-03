@@ -2,13 +2,7 @@
   <div class="qs-page qs-search">
     <div class="container">
       <!-- Header -->
-      <div class="qs-page-header">
-        <div class="qs-header-text">
-          <div class="qs-eyebrow">Busca Inteligente · Cashback &amp; Proximidade</div>
-          <h1>Encontre o melhor cashback perto de você</h1>
-          <p>Filtre produtos e lojistas por percentual de cashback, distância da sua localização e categoria.</p>
-        </div>
-      </div>
+      <QsPageHeader eyebrow="Busca Inteligente · Cashback &amp; Proximidade" title="Encontre o melhor cashback perto de você" description="Filtre produtos e lojistas por percentual de cashback, distância da sua localização e categoria." />
 
       <!-- Search bar -->
       <div class="qs-card-section qs-search-card">

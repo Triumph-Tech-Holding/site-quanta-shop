@@ -1,12 +1,6 @@
 <template>
   <div class="qs-page">
-    <div class="qs-page-header">
-      <div class="qs-header-text">
-        <div class="qs-eyebrow">Admin · Segurança</div>
-        <h1>Acessos</h1>
-        <p>Registro de acessos à plataforma</p>
-      </div>
-    </div>
+    <QsPageHeader eyebrow="Admin · Segurança" title="Acessos" description="Registro de acessos à plataforma" />
 
     <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
 

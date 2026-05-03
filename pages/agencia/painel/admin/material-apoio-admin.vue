@@ -1,15 +1,8 @@
 <template>
   <div class="qs-page">
-    <div class="qs-page-header">
-      <div class="qs-header-text">
-        <div class="qs-eyebrow">Admin · Conteúdo</div>
-        <h1>Material de Apoio</h1>
-        <p>Gerenciar materiais de apoio para parceiros</p>
-      </div>
-      <div class="qs-header-actions">
-        <button class="qs-btn-primary" @click="abrirNovo">+ Novo Material</button>
-      </div>
-    </div>
+    <QsPageHeader eyebrow="Admin · Conteúdo" title="Material de Apoio" description="Gerenciar materiais de apoio para parceiros">
+      <button class="qs-btn-primary" @click="abrirNovo">+ Novo Material</button>
+    </QsPageHeader>
 
     <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
 

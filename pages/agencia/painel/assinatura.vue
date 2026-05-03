@@ -3,13 +3,7 @@
     <div class="general-content">
       <div class="page-content qs-page">
 
-        <div class="qs-page-header">
-          <div>
-            <div class="qs-eyebrow">Plus</div>
-            <h1>Assinatura Mensal</h1>
-            <p>Assine e receba cashback em dobro em toda a sua rede.</p>
-          </div>
-        </div>
+        <QsPageHeader eyebrow="Plus" title="Assinatura Mensal" description="Assine e receba cashback em dobro em toda a sua rede." />
 
         <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
 

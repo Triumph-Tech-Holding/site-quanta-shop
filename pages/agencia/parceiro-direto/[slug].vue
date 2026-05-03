@@ -6,22 +6,25 @@
       <template v-else-if="parceiro">
         <h3 class="text-center mt-3 mb-1" style="color:#2f7785">{{ parceiro.username || parceiro.nome }}</h3>
         <p class="text-center text-muted mb-4">te convida para a Quanta Shop</p>
-        <div class="ag-card mb-4 text-center">
+        <div class="qs-card-section pd-invite-card text-center">
           <p class="mb-2">Com o Quanta Shop você ganha cashback em cada compra nas lojas credenciadas.</p>
-          <p class="mb-0 text-muted" style="font-size:.85rem">Cadastre-se gratuitamente e comece a economizar!</p>
+          <p class="mb-0" style="font-size:.85rem; color: var(--qs-gray-500);">Cadastre-se gratuitamente e comece a economizar!</p>
         </div>
-        <NuxtLink :to="`/agencia/cadastro?indicador=${route.params.slug}`" class="btn-login d-block text-center text-decoration-none">Cadastrar com indicação de {{ parceiro.username || parceiro.nome }}</NuxtLink>
+        <NuxtLink :to="`/agencia/cadastro?indicador=${route.params.slug}`" class="qs-btn-primary pd-btn-main">
+          Cadastrar com indicação de {{ parceiro.username || parceiro.nome }}
+        </NuxtLink>
         <div class="text-center mt-3">
-          <NuxtLink to="/agencia/login" style="font-size:.85rem; color:#6c757d">Já tenho conta → Entrar</NuxtLink>
+          <NuxtLink to="/agencia/login" class="pd-link-login">Já tenho conta → Entrar</NuxtLink>
         </div>
       </template>
       <div v-else class="text-center mt-4">
-        <p class="text-muted">Parceiro não encontrado.</p>
-        <NuxtLink to="/agencia/cadastro" class="btn btn-ag-primary">Cadastrar mesmo assim</NuxtLink>
+        <p style="color: var(--qs-gray-500);">Parceiro não encontrado.</p>
+        <NuxtLink to="/agencia/cadastro" class="qs-btn-primary">Cadastrar mesmo assim</NuxtLink>
       </div>
     </div>
   </div>
 </template>
+
 <script setup lang="ts">
 import { extractApiErrorMessage } from '~/types/agencia';
 definePageMeta({ layout: 'agencia-login' });
@@ -39,3 +42,10 @@ onMounted(async () => {
   } finally { loading.value = false; }
 });
 </script>
+
+<style scoped>
+.pd-invite-card { margin-bottom: 1.25rem; }
+.pd-btn-main { display: block; width: 100%; text-align: center; margin-bottom: .75rem; }
+.pd-link-login { font-size: .85rem; color: var(--qs-gray-400); text-decoration: none; }
+.pd-link-login:hover { color: var(--qs-teal); }
+</style>

@@ -3,17 +3,12 @@
     <div class="general-content">
       <div class="page-content qs-page">
 
-        <div class="qs-page-header">
-          <div>
-            <div class="qs-eyebrow">Cashback</div>
-            <h1>Meus Cupons Cashback</h1>
-            <p>Cupons de cashback gerados por você.</p>
-          </div>
+        <QsPageHeader eyebrow="Cashback" title="Meus Cupons Cashback" description="Cupons de cashback gerados por você.">
           <NuxtLink to="/agencia/painel/gerar-cupons" class="qs-btn-primary mc-btn-gerar">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
             Gerar Cupom
           </NuxtLink>
-        </div>
+        </QsPageHeader>
 
         <div class="qs-card-section mc-card">
           <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>

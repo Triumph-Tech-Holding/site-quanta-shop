@@ -1,15 +1,8 @@
 <template>
   <div class="qs-page">
-    <div class="qs-page-header">
-      <div class="qs-header-text">
-        <div class="qs-eyebrow">Admin · Configurações</div>
-        <h1>Ecossistemas</h1>
-        <p>Gerenciar ecossistemas de parceiros</p>
-      </div>
-      <div class="qs-header-actions">
-        <button class="qs-btn-primary" @click="abrirNovo">+ Novo Ecossistema</button>
-      </div>
-    </div>
+    <QsPageHeader eyebrow="Admin · Configurações" title="Ecossistemas" description="Gerenciar ecossistemas de parceiros">
+      <button class="qs-btn-primary" @click="abrirNovo">+ Novo Ecossistema</button>
+    </QsPageHeader>
 
     <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
 

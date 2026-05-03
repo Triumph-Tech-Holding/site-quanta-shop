@@ -3,13 +3,7 @@
     <div class="general-content">
       <div class="page-content qs-page">
 
-        <div class="qs-page-header">
-          <div>
-            <div class="qs-eyebrow">Comerciante</div>
-            <h1>Painel Comerciante</h1>
-            <p>Gerencie seu estabelecimento credenciado e acompanhe as vendas.</p>
-          </div>
-        </div>
+        <QsPageHeader eyebrow="Comerciante" title="Painel Comerciante" description="Gerencie seu estabelecimento credenciado e acompanhe as vendas." />
 
         <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
 

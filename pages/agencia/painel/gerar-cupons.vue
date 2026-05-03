@@ -3,13 +3,7 @@
     <div class="general-content">
       <div class="page-content qs-page">
 
-        <div class="qs-page-header">
-          <div>
-            <div class="qs-eyebrow">Cashback</div>
-            <h1>Gerar Cupom Cashback</h1>
-            <p>Crie um cupom de cashback vinculado à sua compra.</p>
-          </div>
-        </div>
+        <QsPageHeader eyebrow="Cashback" title="Gerar Cupom Cashback" description="Crie um cupom de cashback vinculado à sua compra." />
 
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;align-items:start;" class="gc-layout">
 

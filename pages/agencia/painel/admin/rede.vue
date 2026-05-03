@@ -1,12 +1,6 @@
 <template>
   <div class="qs-page">
-    <div class="qs-page-header">
-      <div class="qs-header-text">
-        <div class="qs-eyebrow">Admin · MLM</div>
-        <h1>Rede</h1>
-        <p>Estrutura de rede e indicações</p>
-      </div>
-    </div>
+    <QsPageHeader eyebrow="Admin · MLM" title="Rede" description="Estrutura de rede e indicações" />
 
     <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
 

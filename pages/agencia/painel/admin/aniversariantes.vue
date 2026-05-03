@@ -1,17 +1,10 @@
 <template>
   <div class="qs-page">
-    <div class="qs-page-header">
-      <div class="qs-header-text">
-        <div class="qs-eyebrow">Admin · Usuários</div>
-        <h1>Aniversariantes</h1>
-        <p>Usuários aniversariantes do período</p>
-      </div>
-      <div class="qs-header-actions">
-        <select v-model="filtroMes" class="qs-select" @change="carregarDados">
-          <option v-for="(m, i) in meses" :key="i" :value="i + 1">{{ m }}</option>
-        </select>
-      </div>
-    </div>
+    <QsPageHeader eyebrow="Admin · Usuários" title="Aniversariantes" description="Usuários aniversariantes do período">
+      <select v-model="filtroMes" class="qs-select" @change="carregarDados">
+        <option v-for="(m, i) in meses" :key="i" :value="i + 1">{{ m }}</option>
+      </select>
+    </QsPageHeader>
 
     <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
 

@@ -1,27 +1,15 @@
 <template>
   <div class="qs-page qs-flow">
 
-    <div class="qs-page-header">
-      <div class="qs-header-text">
-        <div class="qs-eyebrow">Admin · Gestão Técnica</div>
-        <h1>Flow Standard — Checklist Técnico</h1>
-        <p>Protocolo de excelência para desenvolvimento, qualidade e manutenção da plataforma.</p>
+    <QsPageHeader eyebrow="Admin · Gestão Técnica" title="Flow Standard — Checklist Técnico" description="Protocolo de excelência para desenvolvimento, qualidade e manutenção da plataforma.">
+      <div class="qs-period-switch">
+        <QsFilterChip v-for="s in sections" :key="s.key" :active="activeSection === s.key" @click="activeSection = s.key">{{ s.label }}</QsFilterChip>
       </div>
-      <div class="qs-header-actions">
-        <div class="qs-period-switch">
-          <QsFilterChip
-            v-for="s in sections"
-            :key="s.key"
-            :active="activeSection === s.key"
-            @click="activeSection = s.key"
-          >{{ s.label }}</QsFilterChip>
-        </div>
-        <button class="qs-btn-outline" @click="reload" :disabled="loading">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
-          Recarregar
-        </button>
-      </div>
-    </div>
+      <button class="qs-btn-outline" @click="reload" :disabled="loading">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        Recarregar
+      </button>
+    </QsPageHeader>
 
     <div v-if="loading" class="qs-loading"><div class="qs-spinner"></div></div>
 
@@ -500,11 +488,7 @@ const filteredFeatures = computed(() => {
 </script>
 
 <style scoped>
-/* ── Layout helpers ─────────────────────────────────── */
-.qs-header-text h1 { font-size: 1.6rem; font-weight: 700; color: var(--qs-ink); margin: .25rem 0 .4rem; }
-.qs-header-text p  { font-size: .9rem; color: var(--qs-gray-400); margin: 0; }
-.qs-header-actions { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
-.qs-period-switch  { display: flex; gap: .4rem; flex-wrap: wrap; }
+.qs-period-switch { display: flex; gap: .4rem; flex-wrap: wrap; }
 
 /* ── Section head ───────────────────────────────────── */
 .qs-section-head { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1.25rem; }

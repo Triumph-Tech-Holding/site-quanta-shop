@@ -3,13 +3,7 @@
     <div class="general-content">
       <div class="page-content qs-page">
 
-        <div class="qs-page-header">
-          <div>
-            <div class="qs-eyebrow">Benefícios</div>
-            <h1>Cupons de Desconto</h1>
-            <p>Seus cupons disponíveis para usar nas compras.</p>
-          </div>
-        </div>
+        <QsPageHeader eyebrow="Benefícios" title="Cupons de Desconto" description="Seus cupons disponíveis para usar nas compras." />
 
         <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
 

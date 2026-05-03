@@ -3,13 +3,7 @@
     <div class="general-content">
       <div class="page-content qs-page">
 
-        <div class="qs-page-header">
-          <div>
-            <div class="qs-eyebrow">Plus</div>
-            <h1>Planos disponíveis</h1>
-            <p>Escolha o plano ideal e desbloqueie vantagens exclusivas na Quanta Shop.</p>
-          </div>
-        </div>
+        <QsPageHeader eyebrow="Plus" title="Planos disponíveis" description="Escolha o plano ideal e desbloqueie vantagens exclusivas na Quanta Shop." />
 
         <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
 

@@ -1,25 +1,23 @@
 <template>
-  <div class="agencia-login-page" style="align-items:flex-start; padding:2rem 1rem; background:#ecf2f7; min-height:100vh">
-    <div class="login-box" style="max-width:720px; margin:2rem auto">
-      <img src="/agencia/imgs/quanta-shop.png" alt="Quanta Shop" class="logo-login" />
-      <h2 class="mt-4 mb-3" style="color:#2f7785">Perguntas Frequentes</h2>
-      <div v-for="(item, i) in faqs" :key="i" class="mb-3">
-        <button class="btn w-100 text-start d-flex justify-content-between align-items-center"
-          style="background:#fff; border:1px solid #dee2e6; border-radius:8px; padding:.9rem 1.2rem; font-weight:600; color:#2f7785"
-          @click="toggle(i)">
+  <div class="qs-page">
+    <QsPageHeader eyebrow="Ajuda" title="Perguntas Frequentes" description="Tire todas as suas dúvidas sobre a plataforma Quanta Shop." />
+
+    <div class="qs-card-section ag-faq-card">
+      <div v-for="(item, i) in faqs" :key="i" class="ag-faq-item">
+        <button class="ag-faq-trigger" @click="toggle(i)">
           <span>{{ item.pergunta }}</span>
           <svg :style="{ transform: open[i] ? 'rotate(180deg)' : 'none', transition:'transform .2s' }" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20"><path d="M7 10l5 5 5-5z"/></svg>
         </button>
-        <div v-show="open[i]" class="ag-card mt-1" style="border-radius:0 0 8px 8px; border-top:none; font-size:.9rem; color:#495057">
-          {{ item.resposta }}
-        </div>
+        <div v-show="open[i]" class="ag-faq-body">{{ item.resposta }}</div>
       </div>
-      <div class="text-center mt-4">
-        <NuxtLink to="/agencia" class="btn btn-ag-primary">Acessar plataforma</NuxtLink>
-      </div>
+    </div>
+
+    <div class="ag-faq-cta">
+      <NuxtLink to="/agencia" class="qs-btn-primary">Acessar plataforma</NuxtLink>
     </div>
   </div>
 </template>
+
 <script setup lang="ts">
 definePageMeta({ layout: 'agencia' });
 const open = ref<Record<number, boolean>>({});
@@ -35,3 +33,17 @@ const faqs = [
   { pergunta: 'Há um aplicativo mobile?', resposta: 'Sim! A Quanta Shop possui aplicativo para Android e iOS disponível nas respectivas lojas de aplicativos.' },
 ];
 </script>
+
+<style scoped>
+.ag-faq-card { padding: 0; overflow: hidden; }
+.ag-faq-item { border-bottom: 1px solid var(--qs-border); }
+.ag-faq-item:last-child { border-bottom: none; }
+.ag-faq-trigger {
+  width: 100%; display: flex; justify-content: space-between; align-items: center;
+  gap: 1rem; padding: 1.1rem 1.5rem; background: none; border: none; cursor: pointer;
+  font-weight: 600; font-size: .95rem; color: var(--qs-text); text-align: left;
+}
+.ag-faq-trigger:hover { background: var(--qs-bg); }
+.ag-faq-body { padding: .75rem 1.5rem 1.25rem; font-size: .9rem; color: var(--qs-gray-500); line-height: 1.6; }
+.ag-faq-cta { display: flex; justify-content: center; padding-top: .5rem; }
+</style>

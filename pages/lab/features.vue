@@ -1,21 +1,12 @@
 <template>
   <div class="qs-page qs-features">
-    <div class="qs-page-header">
-      <div class="qs-header-text">
-        <div class="qs-eyebrow">Escritório Virtual · Produto</div>
-        <h1>Features &amp; MVP</h1>
-        <p>Acompanhe o roadmap da plataforma em tempo real, organizado por fase de entrega e público.</p>
-      </div>
-      <div class="qs-header-actions">
-        <span v-if="generatedAt" class="qs-meta">
-          Atualizado em {{ formatDate(generatedAt) }}
-        </span>
-        <button class="qs-btn-outline" @click="reload" :disabled="loading">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
-          Recarregar
-        </button>
-      </div>
-    </div>
+    <QsPageHeader eyebrow="Escritório Virtual · Produto" title="Features &amp; MVP" description="Acompanhe o roadmap da plataforma em tempo real, organizado por fase de entrega e público.">
+      <span v-if="generatedAt" class="qs-meta">Atualizado em {{ formatDate(generatedAt) }}</span>
+      <button class="qs-btn-outline" @click="reload" :disabled="loading">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 6.35A7.958 7.958 0 0 0 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0 1 12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+        Recarregar
+      </button>
+    </QsPageHeader>
 
     <div v-if="loading" class="qs-loading"><div class="qs-spinner"></div></div>
 
@@ -326,9 +317,6 @@ function formatDate(iso: string): string {
 
 <style scoped>
 .qs-features { /* tokens herdados de quanta-premium.scss */ }
-.qs-header-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-.qs-header-text { max-width: 720px; }
-.qs-page-header h1 { margin: 4px 0 8px; }
 
 .qs-filter-bar {
   display: flex;

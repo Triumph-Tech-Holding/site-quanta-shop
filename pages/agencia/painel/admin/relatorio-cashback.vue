@@ -1,24 +1,12 @@
 <template>
   <div class="qs-page no-print">
-    <div class="qs-page-header">
-      <div class="qs-header-text">
-        <div class="qs-eyebrow">Admin · Relatórios</div>
-        <h1>Relatório de Cashback</h1>
-        <p>Cashbacks concedidos pela plataforma por período</p>
+    <QsPageHeader eyebrow="Admin · Relatórios" title="Relatório de Cashback" description="Cashbacks concedidos pela plataforma por período">
+      <div class="qs-period-switch no-print">
+        <QsFilterChip v-for="preset in periodoPresets" :key="preset.id" :active="periodoAtivo === preset.id" @click="aplicarPreset(preset)">{{ preset.label }}</QsFilterChip>
       </div>
-      <div class="qs-header-actions no-print">
-        <div class="qs-period-switch">
-          <QsFilterChip
-            v-for="preset in periodoPresets"
-            :key="preset.id"
-            :active="periodoAtivo === preset.id"
-            @click="aplicarPreset(preset)"
-          >{{ preset.label }}</QsFilterChip>
-        </div>
-        <button class="qs-btn-outline" :disabled="itens.length === 0" @click="gerarPdf">⬇ PDF</button>
-        <button class="qs-btn-primary" :disabled="loading" @click="carregar">Atualizar</button>
-      </div>
-    </div>
+      <button class="qs-btn-outline no-print" :disabled="itens.length === 0" @click="gerarPdf">⬇ PDF</button>
+      <button class="qs-btn-primary no-print" :disabled="loading" @click="carregar">Atualizar</button>
+    </QsPageHeader>
 
     <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
 

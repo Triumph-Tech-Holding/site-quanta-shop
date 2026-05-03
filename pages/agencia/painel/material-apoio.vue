@@ -3,13 +3,7 @@
     <div class="general-content">
       <div class="page-content qs-page">
 
-        <div class="qs-page-header">
-          <div>
-            <div class="qs-eyebrow">Conteúdo</div>
-            <h1>Material de Apoio</h1>
-            <p>Acesse e baixe nossos materiais de apoio para sua equipe.</p>
-          </div>
-        </div>
+        <QsPageHeader eyebrow="Conteúdo" title="Material de Apoio" description="Acesse e baixe nossos materiais de apoio para sua equipe." />
 
         <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
 

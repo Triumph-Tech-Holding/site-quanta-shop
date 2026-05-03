@@ -1,23 +1,11 @@
 <template>
   <div class="qs-page qs-bi">
-    <div class="qs-page-header">
-      <div class="qs-header-text">
-        <div class="qs-eyebrow">Business Intelligence · Financeiro</div>
-        <h1>BI Financeiro</h1>
-        <p>Faturamento consolidado, métricas de inadimplência e cashback reservado em tempo real.</p>
+    <QsPageHeader eyebrow="Business Intelligence · Financeiro" title="BI Financeiro" description="Faturamento consolidado, métricas de inadimplência e cashback reservado em tempo real.">
+      <div class="qs-period-switch">
+        <QsFilterChip v-for="p in periods" :key="p.key" :active="period === p.key" @click="period = p.key">{{ p.label }}</QsFilterChip>
       </div>
-      <div class="qs-header-actions">
-        <div class="qs-period-switch">
-          <QsFilterChip
-            v-for="p in periods"
-            :key="p.key"
-            :active="period === p.key"
-            @click="period = p.key"
-          >{{ p.label }}</QsFilterChip>
-        </div>
-        <button class="qs-btn-outline" @click="loadData" :disabled="loading">Recarregar</button>
-      </div>
-    </div>
+      <button class="qs-btn-outline" @click="loadData" :disabled="loading">Recarregar</button>
+    </QsPageHeader>
 
     <div v-if="loading" class="qs-loading"><div class="qs-spinner"/></div>
 
@@ -264,9 +252,6 @@ function formatBRL(v: number): string {
 
 <style scoped>
 .qs-bi { padding-bottom: 64px; }
-.qs-header-actions { display: flex; align-items: center; gap: 12px; flex-shrink: 0; flex-wrap: wrap; }
-.qs-header-text { max-width: 720px; }
-.qs-page-header h1 { margin: 4px 0 8px; }
 .qs-period-switch { display: flex; gap: 6px; }
 
 .qs-bi-grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }

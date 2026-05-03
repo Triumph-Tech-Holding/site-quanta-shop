@@ -1,19 +1,12 @@
 <template>
   <div class="qs-page">
-    <div class="qs-page-header">
-      <div class="qs-header-text">
-        <div class="qs-eyebrow">Admin · Usuários</div>
-        <h1>Usuários</h1>
-        <p>Gerenciar usuários da plataforma</p>
+    <QsPageHeader eyebrow="Admin · Usuários" title="Usuários" description="Gerenciar usuários da plataforma">
+      <div class="qs-search-field">
+        <svg class="qs-search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input v-model="busca" type="text" class="qs-search-input" placeholder="Nome, e-mail ou login..." @keyup.enter="buscarUsuarios" />
       </div>
-      <div class="qs-header-actions">
-        <div class="qs-search-field">
-          <svg class="qs-search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input v-model="busca" type="text" class="qs-search-input" placeholder="Nome, e-mail ou login..." @keyup.enter="buscarUsuarios" />
-        </div>
-        <button class="qs-btn-primary" @click="buscarUsuarios" :disabled="loading">Buscar</button>
-      </div>
-    </div>
+      <button class="qs-btn-primary" @click="buscarUsuarios" :disabled="loading">Buscar</button>
+    </QsPageHeader>
 
     <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
 

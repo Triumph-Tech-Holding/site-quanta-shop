@@ -3,13 +3,7 @@
     <div class="general-content">
       <div class="page-content qs-page">
 
-        <div class="qs-page-header">
-          <div>
-            <div class="qs-eyebrow">Conta</div>
-            <h1>Meus Dados</h1>
-            <p>Atualize suas informações pessoais, endereço, senha e foto de perfil.</p>
-          </div>
-        </div>
+        <QsPageHeader eyebrow="Conta" title="Meus Dados" description="Atualize suas informações pessoais, endereço, senha e foto de perfil." />
 
         <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
 

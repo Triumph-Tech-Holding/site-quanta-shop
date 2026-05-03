@@ -1,20 +1,13 @@
 <template>
   <div class="qs-page">
-    <div class="qs-page-header">
-      <div class="qs-header-text">
-        <div class="qs-eyebrow">Admin · Atendimento</div>
-        <h1>Suporte</h1>
-        <p>Chamados de suporte dos usuários</p>
-      </div>
-      <div class="qs-header-actions">
-        <select v-model="filtroStatus" class="qs-select-inline" @change="carregarDados">
-          <option value="">Todos os status</option>
-          <option value="Aberto">Aberto</option>
-          <option value="Em Atendimento">Em Atendimento</option>
-          <option value="Fechado">Fechado</option>
-        </select>
-      </div>
-    </div>
+    <QsPageHeader eyebrow="Admin · Atendimento" title="Suporte" description="Chamados de suporte dos usuários">
+      <select v-model="filtroStatus" class="qs-select-inline" @change="carregarDados">
+        <option value="">Todos os status</option>
+        <option value="Aberto">Aberto</option>
+        <option value="Em Atendimento">Em Atendimento</option>
+        <option value="Fechado">Fechado</option>
+      </select>
+    </QsPageHeader>
 
     <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
 

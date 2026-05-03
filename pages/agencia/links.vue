@@ -4,17 +4,12 @@
       <div class="page-content qs-page">
 
         <!-- Page Header -->
-        <div class="qs-page-header">
-          <div>
-            <div class="qs-eyebrow">Indicação Rastreável</div>
-            <h1>{{ cms.titulo }}</h1>
-            <p>{{ cms.subtitulo }}</p>
-          </div>
+        <QsPageHeader eyebrow="Indicação Rastreável" :title="cms.titulo" :description="cms.subtitulo">
           <NuxtLink to="/agencia/painel/dashboard-rede-adf" class="qs-btn-secondary lk-header-btn">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
             Ver Dashboard ADF
           </NuxtLink>
-        </div>
+        </QsPageHeader>
 
         <!-- Paywall: usuários sem HAF veem apenas o upsell -->
         <template v-if="!hasHaf">

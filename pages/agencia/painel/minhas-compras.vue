@@ -3,13 +3,7 @@
     <div class="general-content">
       <div class="page-content qs-page">
 
-        <div class="qs-page-header">
-          <div>
-            <div class="qs-eyebrow">CCR</div>
-            <h1>Minhas Compras</h1>
-            <p>Histórico de compras e distribuição de cashback registrados no seu perfil.</p>
-          </div>
-        </div>
+        <QsPageHeader eyebrow="CCR" title="Minhas Compras" description="Histórico de compras e distribuição de cashback registrados no seu perfil." />
 
         <!-- Filter bar -->
         <div class="qs-filter-bar">

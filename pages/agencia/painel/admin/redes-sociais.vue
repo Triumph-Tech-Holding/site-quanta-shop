@@ -1,15 +1,8 @@
 <template>
   <div class="qs-page">
-    <div class="qs-page-header">
-      <div class="qs-header-text">
-        <div class="qs-eyebrow">Admin · Conteúdo</div>
-        <h1>Redes Sociais</h1>
-        <p>Posts do Instagram, YouTube, TikTok e outras plataformas exibidos no site</p>
-      </div>
-      <div class="qs-header-actions">
-        <button class="qs-btn-primary" @click="abrirNovo">+ Novo Post</button>
-      </div>
-    </div>
+    <QsPageHeader eyebrow="Admin · Conteúdo" title="Redes Sociais" description="Posts do Instagram, YouTube, TikTok e outras plataformas exibidos no site">
+      <button class="qs-btn-primary" @click="abrirNovo">+ Novo Post</button>
+    </QsPageHeader>
 
     <div v-if="usandoLocal" class="qs-info-banner">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>

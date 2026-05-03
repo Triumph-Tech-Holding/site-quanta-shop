@@ -1,12 +1,6 @@
 <template>
   <div class="qs-page">
-    <div class="qs-page-header">
-      <div class="qs-header-text">
-        <div class="qs-eyebrow">Admin · Planos</div>
-        <h1>Assinaturas</h1>
-        <p>Assinaturas ativas na plataforma</p>
-      </div>
-    </div>
+    <QsPageHeader eyebrow="Admin · Planos" title="Assinaturas" description="Assinaturas ativas na plataforma" />
 
     <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
 

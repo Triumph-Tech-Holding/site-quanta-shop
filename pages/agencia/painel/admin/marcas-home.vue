@@ -1,15 +1,8 @@
 <template>
   <div class="qs-page">
-    <div class="qs-page-header">
-      <div class="qs-header-text">
-        <div class="qs-eyebrow">Admin · CMS</div>
-        <h1>Marcas da Home</h1>
-        <p>Gerencie os logos exibidos no carrossel da página inicial</p>
-      </div>
-      <div class="qs-header-actions">
-        <button class="qs-btn-primary" @click="abrirNovo">+ Adicionar Marca</button>
-      </div>
-    </div>
+    <QsPageHeader eyebrow="Admin · CMS" title="Marcas da Home" description="Gerencie os logos exibidos no carrossel da página inicial">
+      <button class="qs-btn-primary" @click="abrirNovo">+ Adicionar Marca</button>
+    </QsPageHeader>
 
     <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
 

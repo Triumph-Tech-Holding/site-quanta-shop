@@ -1,35 +1,46 @@
 <template>
-  <div class="agencia-login-page" style="align-items:flex-start; padding:2rem 1rem; background:#ecf2f7; min-height:100vh">
-    <div class="login-box" style="max-width:720px; margin:2rem auto">
-      <img src="/agencia/imgs/quanta-shop.png" alt="Quanta Shop" class="logo-login" />
-      <h2 class="mt-4 mb-3" style="color:#2f7785">Lojas Físicas</h2>
-      <div class="ag-card mb-3">
-        <form @submit.prevent="buscar" class="row g-2 align-items-end">
-          <div class="col-12 col-md-5 ag-form-group mb-0"><label>Cidade</label><input v-model="filtro.cidade" type="text" class="form-control" placeholder="Ex: São Paulo" /></div>
-          <div class="col-12 col-md-4 ag-form-group mb-0"><label>Estado</label><select v-model="filtro.estado" class="form-select"><option value="">Todos</option><option v-for="e in estados" :key="e" :value="e">{{ e }}</option></select></div>
-          <div class="col-12 col-md-3"><button type="submit" class="btn btn-ag-primary w-100">Buscar</button></div>
-        </form>
-      </div>
-      <div v-if="loading" class="ag-loading"><div class="qs-spinner" style="margin:0 auto" /></div>
-      <template v-else>
-        <div v-if="lojas.length === 0" class="ag-empty-state"><h5>Nenhuma loja encontrada</h5></div>
-        <div class="row g-3" v-else>
-          <div class="col-12 col-md-6" v-for="(loja, i) in lojas" :key="i">
-            <div class="ag-card h-100">
-              <div class="fw-bold mb-1" style="color:#2f7785">{{ loja.nomeFantasia || loja.nome }}</div>
-              <div class="text-muted mb-1" style="font-size:.85rem">{{ loja.endereco }}</div>
-              <div class="text-muted" style="font-size:.85rem">{{ loja.cidade }} / {{ loja.estado }}</div>
-              <div class="mt-2"><span class="badge bg-ag-secondary" style="background:#98c73a; color:#fff; padding:.3rem .8rem; border-radius:20px; font-size:.8rem">Até {{ loja.cashback }}% de cashback</span></div>
-            </div>
+  <div class="qs-page">
+    <QsPageHeader eyebrow="Rede" title="Lojas Físicas" description="Encontre estabelecimentos credenciados Quanta Shop perto de você." />
+
+    <div class="qs-card-section lf-filter-card">
+      <form @submit.prevent="buscar" class="lf-filter-row">
+        <div class="lf-field">
+          <label class="qs-label">Cidade</label>
+          <input v-model="filtro.cidade" type="text" class="qs-input" placeholder="Ex: São Paulo" />
+        </div>
+        <div class="lf-field">
+          <label class="qs-label">Estado</label>
+          <select v-model="filtro.estado" class="qs-input">
+            <option value="">Todos</option>
+            <option v-for="e in estados" :key="e" :value="e">{{ e }}</option>
+          </select>
+        </div>
+        <button type="submit" class="qs-btn-primary lf-btn">Buscar</button>
+      </form>
+    </div>
+
+    <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
+
+    <template v-else>
+      <QsEmptyState v-if="lojas.length === 0" icon="search" title="Nenhuma loja encontrada" description="Tente buscar por outra cidade ou estado." />
+      <div v-else class="lf-grid">
+        <div v-for="(loja, i) in lojas" :key="i" class="qs-card-section lf-card">
+          <div class="lf-card-name">{{ loja.nomeFantasia || loja.nome }}</div>
+          <div class="lf-card-addr">{{ loja.endereco }}</div>
+          <div class="lf-card-city">{{ loja.cidade }} / {{ loja.estado }}</div>
+          <div class="lf-card-badge">
+            <span class="qs-badge qs-badge-lime">Até {{ loja.cashback }}% de cashback</span>
           </div>
         </div>
-      </template>
-      <div class="text-center mt-4">
-        <NuxtLink to="/agencia" class="btn btn-ag-outline">← Voltar</NuxtLink>
       </div>
+    </template>
+
+    <div class="lf-back">
+      <NuxtLink to="/agencia" class="qs-btn-outline">← Voltar</NuxtLink>
     </div>
   </div>
 </template>
+
 <script setup lang="ts">
 import { extractApiErrorMessage } from '~/types/agencia';
 definePageMeta({ layout: 'agencia' });
@@ -51,3 +62,16 @@ async function buscar() {
 }
 onMounted(() => buscar());
 </script>
+
+<style scoped>
+.lf-filter-card { padding: 1.25rem 1.5rem; }
+.lf-filter-row { display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap; }
+.lf-field { flex: 1; min-width: 160px; }
+.lf-btn { flex-shrink: 0; align-self: flex-end; }
+.lf-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+.lf-card { display: flex; flex-direction: column; gap: .25rem; }
+.lf-card-name { font-weight: 600; color: var(--qs-text); font-size: .95rem; }
+.lf-card-addr, .lf-card-city { font-size: .825rem; color: var(--qs-gray-500); }
+.lf-card-badge { margin-top: .5rem; }
+.lf-back { display: flex; justify-content: center; padding-top: .5rem; }
+</style>

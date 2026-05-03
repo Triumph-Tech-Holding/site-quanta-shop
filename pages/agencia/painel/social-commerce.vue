@@ -3,14 +3,7 @@
     <div class="general-content">
       <div class="page-content qs-page">
 
-        <!-- Page Header — textos 100% do CMS -->
-        <div class="qs-page-header">
-          <div>
-            <div class="qs-eyebrow">Social Commerce</div>
-            <h1>{{ cms.titulo }}</h1>
-            <p>{{ cms.subtitulo }}</p>
-          </div>
-        </div>
+        <QsPageHeader eyebrow="Social Commerce" :title="cms.titulo" :description="cms.subtitulo" />
 
         <!-- Paywall: usuários sem HAF veem apenas o upsell -->
         <template v-if="!hasHaf">

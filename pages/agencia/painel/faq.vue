@@ -3,13 +3,7 @@
     <div class="general-content">
       <div class="page-content qs-page">
 
-        <div class="qs-page-header">
-          <div>
-            <div class="qs-eyebrow">Ajuda</div>
-            <h1>Perguntas Frequentes</h1>
-            <p>Ficou com dúvida? Vamos responder todas.</p>
-          </div>
-        </div>
+        <QsPageHeader eyebrow="Ajuda" title="Perguntas Frequentes" description="Ficou com dúvida? Vamos responder todas." />
 
         <div class="qs-card-section faq-search-card">
           <div class="faq-search-wrap">

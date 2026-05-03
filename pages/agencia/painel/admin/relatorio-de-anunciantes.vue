@@ -1,25 +1,18 @@
 <template>
   <div class="qs-page no-print">
-    <div class="qs-page-header">
-      <div class="qs-header-text">
-        <div class="qs-eyebrow">Admin · Relatórios</div>
-        <h1>Relatório de Anunciantes</h1>
-        <p>Parceiros de cashback ativos na plataforma</p>
+    <QsPageHeader eyebrow="Admin · Relatórios" title="Relatório de Anunciantes" description="Parceiros de cashback ativos na plataforma">
+      <div class="qs-period-switch no-print">
+        <QsFilterChip :active="filtroStatus === ''" @click="filtroStatus = ''">Todos</QsFilterChip>
+        <QsFilterChip :active="filtroStatus === '1'" @click="filtroStatus = '1'">Ativo</QsFilterChip>
+        <QsFilterChip :active="filtroStatus === '2'" @click="filtroStatus = '2'">Inativo</QsFilterChip>
       </div>
-      <div class="qs-header-actions no-print">
-        <div class="qs-period-switch">
-          <QsFilterChip :active="filtroStatus === ''" @click="filtroStatus = ''">Todos</QsFilterChip>
-          <QsFilterChip :active="filtroStatus === '1'" @click="filtroStatus = '1'">Ativo</QsFilterChip>
-          <QsFilterChip :active="filtroStatus === '2'" @click="filtroStatus = '2'">Inativo</QsFilterChip>
-        </div>
-        <div class="search-field">
-          <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-          <input v-model="filtro.nome" type="text" class="search-input" placeholder="Buscar por nome..." @keydown.enter="carregar" />
-        </div>
-        <button class="qs-btn-outline" :disabled="itens.length === 0" @click="gerarPdf">⬇ PDF</button>
-        <button class="qs-btn-primary" :disabled="loading" @click="carregar">Atualizar</button>
+      <div class="search-field no-print">
+        <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input v-model="filtro.nome" type="text" class="search-input" placeholder="Buscar por nome..." @keydown.enter="carregar" />
       </div>
-    </div>
+      <button class="qs-btn-outline no-print" :disabled="itens.length === 0" @click="gerarPdf">⬇ PDF</button>
+      <button class="qs-btn-primary no-print" :disabled="loading" @click="carregar">Atualizar</button>
+    </QsPageHeader>
 
     <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
 

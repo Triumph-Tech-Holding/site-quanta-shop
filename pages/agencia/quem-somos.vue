@@ -1,26 +1,37 @@
 <template>
-  <div class="agencia-login-page" style="align-items:flex-start; padding: 2rem 1rem; background:#ecf2f7; min-height:100vh">
-    <div class="login-box" style="max-width:680px; margin:2rem auto">
-      <img src="/agencia/imgs/quanta-shop.png" alt="Quanta Shop" class="logo-login" />
-      <h2 class="mt-4 mb-3" style="color:#2f7785">Quem Somos</h2>
+  <div class="qs-page">
+    <QsPageHeader eyebrow="Institucional" title="Quem Somos" description="Conheça a Quanta Shop e nossa missão de democratizar o cashback no Brasil." />
+
+    <div class="qs-card-section qs-body-card">
       <p>A <strong>Quanta Shop</strong> é uma plataforma inovadora de cashback que conecta lojistas e consumidores, recompensando cada compra realizada na nossa rede credenciada.</p>
       <p>Nossa missão é democratizar o acesso ao cashback, permitindo que qualquer estabelecimento possa oferecer recompensas reais para seus clientes, fidelizando-os e aumentando as vendas.</p>
-      <h5 class="mt-4" style="color:#2f7785">Nossa Visão</h5>
+
+      <h3 class="qs-section-title" style="margin-top:1.5rem;">Nossa Visão</h3>
       <p>Ser a maior plataforma de cashback do Brasil, promovendo um ecossistema financeiro justo e vantajoso para lojistas, consumidores e empreendedores parceiros.</p>
-      <h5 class="mt-4" style="color:#2f7785">Nossos Valores</h5>
-      <ul>
+
+      <h3 class="qs-section-title" style="margin-top:1.5rem;">Nossos Valores</h3>
+      <ul class="qs-values-list">
         <li>Transparência em cada transação</li>
         <li>Comprometimento com o sucesso dos parceiros</li>
         <li>Inovação constante</li>
         <li>Respeito ao consumidor</li>
       </ul>
-      <div class="text-center mt-4">
-        <NuxtLink to="/agencia" class="btn btn-ag-primary">Acessar plataforma</NuxtLink>
-        <NuxtLink to="/agencia/como-funciona" class="btn btn-ag-outline ms-2">Como funciona</NuxtLink>
-      </div>
+    </div>
+
+    <div class="qs-body-cta">
+      <NuxtLink to="/agencia" class="qs-btn-primary">Acessar plataforma</NuxtLink>
+      <NuxtLink to="/agencia/como-funciona" class="qs-btn-outline">Como funciona</NuxtLink>
     </div>
   </div>
 </template>
+
 <script setup lang="ts">
 definePageMeta({ layout: 'agencia' });
 </script>
+
+<style scoped>
+.qs-body-card p { color: var(--qs-gray-600); line-height: 1.7; margin-bottom: 1rem; }
+.qs-body-card p:last-child { margin-bottom: 0; }
+.qs-values-list { color: var(--qs-gray-600); line-height: 2; padding-left: 1.25rem; }
+.qs-body-cta { display: flex; gap: .75rem; justify-content: center; flex-wrap: wrap; padding-top: .5rem; }
+</style>

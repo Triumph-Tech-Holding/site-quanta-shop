@@ -1,15 +1,8 @@
 <template>
   <div class="qs-page">
-    <div class="qs-page-header">
-      <div class="qs-header-text">
-        <div class="qs-eyebrow">Admin · CMS</div>
-        <h1>Carrosseis</h1>
-        <p>Banners do hero da home — arraste as setas para reordenar</p>
-      </div>
-      <div class="qs-header-actions">
-        <button class="qs-btn-primary" @click="abrirNovo">+ Novo Banner</button>
-      </div>
-    </div>
+    <QsPageHeader eyebrow="Admin · CMS" title="Carrosseis" description="Banners do hero da home — arraste as setas para reordenar">
+      <button class="qs-btn-primary" @click="abrirNovo">+ Novo Banner</button>
+    </QsPageHeader>
 
     <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
     <div v-else class="qs-card-section">

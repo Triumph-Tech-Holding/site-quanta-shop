@@ -3,13 +3,7 @@
     <div class="general-content">
       <div class="page-content qs-page">
 
-        <div class="qs-page-header">
-          <div>
-            <div class="qs-eyebrow">Dashboard</div>
-            <h1>Painel Geral</h1>
-            <p>Acompanhe seus indicadores, metas e novidades da Quanta Shop.</p>
-          </div>
-        </div>
+        <QsPageHeader eyebrow="Dashboard" title="Painel Geral" description="Acompanhe seus indicadores, metas e novidades da Quanta Shop." />
 
         <template>
           <div class="idx-layout">

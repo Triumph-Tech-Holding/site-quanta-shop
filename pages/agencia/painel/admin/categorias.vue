@@ -1,15 +1,8 @@
 <template>
   <div class="qs-page">
-    <div class="qs-page-header">
-      <div class="qs-header-text">
-        <div class="qs-eyebrow">Admin · Configurações</div>
-        <h1>Categorias</h1>
-        <p>Gerenciar categorias de lojas</p>
-      </div>
-      <div class="qs-header-actions">
-        <button class="qs-btn-primary" @click="abrirNovo">+ Nova Categoria</button>
-      </div>
-    </div>
+    <QsPageHeader eyebrow="Admin · Configurações" title="Categorias" description="Gerenciar categorias de lojas">
+      <button class="qs-btn-primary" @click="abrirNovo">+ Nova Categoria</button>
+    </QsPageHeader>
 
     <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
 

@@ -1,20 +1,13 @@
 <template>
   <div class="qs-page">
-    <div class="qs-page-header">
-      <div class="qs-header-text">
-        <div class="qs-eyebrow">Admin · Financeiro</div>
-        <h1>Lançamentos</h1>
-        <p>Lançamentos financeiros manuais da plataforma</p>
+    <QsPageHeader eyebrow="Admin · Financeiro" title="Lançamentos" description="Lançamentos financeiros manuais da plataforma">
+      <div class="qs-period-switch">
+        <QsFilterChip :active="filtroTipo === ''" @click="filtroTipo = ''">Todos</QsFilterChip>
+        <QsFilterChip :active="filtroTipo === 'Crédito'" @click="filtroTipo = 'Crédito'">Crédito</QsFilterChip>
+        <QsFilterChip :active="filtroTipo === 'Débito'" @click="filtroTipo = 'Débito'">Débito</QsFilterChip>
       </div>
-      <div class="qs-header-actions">
-        <div class="qs-period-switch">
-          <QsFilterChip :active="filtroTipo === ''" @click="filtroTipo = ''">Todos</QsFilterChip>
-          <QsFilterChip :active="filtroTipo === 'Crédito'" @click="filtroTipo = 'Crédito'">Crédito</QsFilterChip>
-          <QsFilterChip :active="filtroTipo === 'Débito'" @click="filtroTipo = 'Débito'">Débito</QsFilterChip>
-        </div>
-        <button class="qs-btn-primary" @click="abrirNovo">+ Novo Lançamento</button>
-      </div>
-    </div>
+      <button class="qs-btn-primary" @click="abrirNovo">+ Novo Lançamento</button>
+    </QsPageHeader>
 
     <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
 

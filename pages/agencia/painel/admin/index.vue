@@ -1,12 +1,6 @@
 <template>
   <div class="qs-page">
-    <div class="qs-page-header">
-      <div class="qs-header-text">
-        <div class="qs-eyebrow">Admin</div>
-        <h1>Painel Administrativo</h1>
-        <p>Gerencie a plataforma Quanta Shop</p>
-      </div>
-    </div>
+    <QsPageHeader eyebrow="Admin" title="Painel Administrativo" description="Gerencie a plataforma Quanta Shop" />
 
     <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
 

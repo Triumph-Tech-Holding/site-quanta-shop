@@ -200,6 +200,15 @@
 .qs-alert-success { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; border-radius: var(--qs-radius-md, 8px); padding: 10px 14px; font-size: 14px; }
 .qs-alert-warn    { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; border-radius: var(--qs-radius-md, 8px); padding: 10px 14px; font-size: 14px; }
 
+/* ─── BADGE PILLS ─────────────────────────────────────────── */
+.qs-badge { font-size: .72rem; font-weight: 600; padding: .22rem .65rem; border-radius: 999px; white-space: nowrap; display: inline-flex; align-items: center; }
+.qs-badge-success { background: #d1fae5; color: #065f46; }
+.qs-badge-warn    { background: #fef3c7; color: #92400e; }
+.qs-badge-danger  { background: #fee2e2; color: #991b1b; }
+.qs-badge-neutral { background: var(--qs-gray-100, #f3f4f6); color: var(--qs-gray-500, #6b7280); }
+.qs-badge-teal    { background: rgba(47,119,133,.12); color: var(--qs-teal-dark, #225F6B); border: 1px solid rgba(47,119,133,.2); }
+.qs-badge-lime    { background: rgba(152,199,58,.12); color: #3d6606; border: 1px solid rgba(152,199,58,.3); }
+
 /* ─── 3. GLOBAL BODY & FONT ───────────────────────────────── */
 body {
   font-family: var(--qs-font) !important;
