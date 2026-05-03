@@ -47,7 +47,7 @@
           <div class="qs-social-thumbs">
             <a
               v-for="item in socialThumbs"
-              :key="`${item.id}-${item.rede}`"
+              :key="item._key"
               :href="item.url || (item.rede?.toLowerCase() === 'youtube' ? 'https://youtube.com/@quantashop' : 'https://instagram.com/quantashop')"
               target="_blank"
               rel="noopener"
@@ -113,11 +113,18 @@ const fallbackSocial: SocialItem[] = [
   { id: 4, rede: 'YouTube', legenda: 'Dicas e truques', thumb: 'https://images.unsplash.com/photo-1516738901601-6d0ee099431b?w=300&q=80&auto=format&fit=crop', url: 'https://youtube.com/@quantashop' },
 ];
 
-const socialThumbs = computed<SocialItem[]>(() => {
-  const real = socialFeed.value.slice(0, 4);
+const socialThumbs = computed<Array<SocialItem & { _key: string }>>(() => {
+  const real = socialFeed.value.slice(0, 4).map((item, i) => ({
+    ...item,
+    _key: `real-${item.id ?? i}-${item.rede ?? ''}`,
+  }));
   if (real.length >= 4) return real;
   const need = 4 - real.length;
-  return [...real, ...fallbackSocial.slice(0, need)];
+  const filler = fallbackSocial.slice(0, need).map((item, i) => ({
+    ...item,
+    _key: `fallback-${item.id}-${i}`,
+  }));
+  return [...real, ...filler];
 });
 
 function lsArtigosBlog(): BlogPost[] {
