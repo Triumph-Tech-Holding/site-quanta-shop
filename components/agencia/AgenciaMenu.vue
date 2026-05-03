@@ -71,6 +71,9 @@
         <NuxtLink to="/agencia/painel/admin" class="listMenu listMenu--admin">
           Painel Admin
         </NuxtLink>
+        <NuxtLink to="/agencia/painel/admin/home-cms" class="listMenu listMenu--admin">
+          🏠 Conteúdo da Home
+        </NuxtLink>
         <NuxtLink to="/lab/progresso" class="listMenu listMenu--admin">
           🚀 Progresso
         </NuxtLink>

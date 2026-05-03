@@ -147,7 +147,7 @@ export function useHomeConfig() {
     if (_loaded) return;
     if (_fetchPromise) return _fetchPromise;
 
-    _fetchPromise = $fetch<HomeConfig>('/data/home-config.json')
+    _fetchPromise = $fetch<HomeConfig>('/home-cms')
       .then((data) => {
         _config.value = { ...DEFAULT_CONFIG, ...data };
         _loaded = true;

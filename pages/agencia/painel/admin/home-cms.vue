@@ -425,7 +425,7 @@ const previewHeroTitle = computed(() => {
 async function load() {
   loadError.value = false;
   try {
-    const data = await $fetch<HomeConfig>('/api/admin/home-config', { ...authHeader() });
+    const data = await $fetch<HomeConfig>('/home-cms');
     const parsed: HomeConfig = JSON.parse(JSON.stringify(data));
     if (!parsed.heroCards || parsed.heroCards.length === 0) {
       parsed.heroCards = JSON.parse(JSON.stringify(DEFAULT_HERO_CARDS));
@@ -443,10 +443,9 @@ async function save() {
   saveSuccess.value = false;
   saveError.value = false;
   try {
-    await $fetch('/api/admin/home-config', {
-      method: 'POST',
+    await $fetch('/home-cms', {
+      method: 'PUT',
       body: form.value,
-      ...authHeader(),
     });
     originalJson.value = JSON.stringify(form.value);
     saveSuccess.value = true;
