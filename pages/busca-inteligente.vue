@@ -131,12 +131,29 @@
             </div>
           </div>
 
-          <div v-if="loading" class="qs-loading"><div class="qs-spinner"/></div>
+          <!-- Skeleton loaders (proibido spinner) -->
+          <div v-if="loading" :class="['qs-results-list', `view-${viewMode}`]">
+            <div v-for="n in 6" :key="n" class="qs-result-card qs-skeleton-card">
+              <div class="qs-skeleton qs-sk-img" />
+              <div class="qs-result-body" style="gap:10px">
+                <div class="qs-skeleton qs-sk-line" style="width:40%;height:10px" />
+                <div class="qs-skeleton qs-sk-line" style="width:75%;height:16px" />
+                <div class="qs-skeleton qs-sk-line" style="width:90%;height:11px" />
+                <div class="qs-skeleton qs-sk-line" style="width:60%;height:11px" />
+              </div>
+              <div class="qs-result-actions">
+                <div class="qs-skeleton qs-sk-line" style="width:60px;height:22px" />
+                <div class="qs-skeleton qs-sk-btn" />
+              </div>
+            </div>
+          </div>
 
-          <div v-else-if="filteredResults.length === 0" class="qs-empty-state">
+          <!-- Empty state canônico -->
+          <div v-else-if="filteredResults.length === 0" class="ag-empty-state">
             <svg width="48" height="48" viewBox="0 0 24 24" fill="var(--qs-gray-300)"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
             <h3>Nenhum resultado encontrado</h3>
             <p>Tente ajustar seus filtros ou ampliar o raio de busca.</p>
+            <button class="qs-btn-outline" @click="clearFilters">Limpar filtros</button>
           </div>
 
           <div v-else :class="['qs-results-list', `view-${viewMode}`]">
@@ -312,27 +329,25 @@ function clearFilters() {
   runSearch();
 }
 
-const filteredResults = computed(() => {
-  let list = [...allResults.value];
-  if (query.value) {
-    const q = query.value.toLowerCase();
-    list = list.filter(r => r.nome.toLowerCase().includes(q) || r.descricao.toLowerCase().includes(q));
-  }
-  if (activeCategoria.value) list = list.filter(r => r.categoria === activeCategoria.value);
-  list = list.filter(r => r.cashback >= minCashback.value && r.distancia <= maxDistance.value);
-  switch (sortBy.value) {
-    case 'cashback': list.sort((a, b) => b.cashback - a.cashback); break;
-    case 'distance': list.sort((a, b) => a.distancia - b.distancia); break;
-    case 'popular': list.sort((a, b) => b.transacoes - a.transacoes); break;
-    case 'price-asc': list.sort((a, b) => (a.preco || 0) - (b.preco || 0)); break;
-    case 'price-desc': list.sort((a, b) => (b.preco || 0) - (a.preco || 0)); break;
-  }
-  return list;
-});
+// A API já filtra/ordena server-side — apenas expõe o resultado
+const filteredResults = computed(() => allResults.value);
 
 function catName(id: string): string {
   return categorias.find(c => c.id === id)?.nome ?? id;
 }
+
+// Debounce helper
+let _debounceTimer: ReturnType<typeof setTimeout> | null = null;
+function debounceSearch() {
+  if (_debounceTimer) clearTimeout(_debounceTimer);
+  _debounceTimer = setTimeout(() => runSearch(), 400);
+}
+
+// Watchers para re-buscar ao mudar qualquer filtro
+watch(minCashback, debounceSearch);
+watch(maxDistance, debounceSearch);
+watch(activeCategoria, () => runSearch());
+watch(sortBy, () => runSearch());
 
 onMounted(runSearch);
 </script>
@@ -650,15 +665,21 @@ onMounted(runSearch);
 }
 .qs-result-cta { padding: 8px 14px; font-size: 13px; }
 
-.qs-empty-state {
-  background: #fff;
-  border-radius: var(--qs-radius-lg);
-  padding: 60px 20px;
-  text-align: center;
-  color: var(--qs-gray-500);
+/* Skeleton card */
+.qs-skeleton-card { pointer-events: none; }
+.qs-sk-img {
+  aspect-ratio: 16 / 10;
+  width: 100%;
+  border-radius: 0;
 }
-.qs-empty-state h3 { color: var(--qs-ink); margin: 16px 0 4px; font-size: 18px; }
-.qs-empty-state p { margin: 0; font-size: 14px; }
+.view-list .qs-sk-img { aspect-ratio: 1; width: 140px; flex-shrink: 0; border-radius: 0; }
+.qs-sk-line { border-radius: var(--qs-radius-sm); }
+.qs-sk-btn {
+  width: 90px;
+  height: 34px;
+  border-radius: var(--qs-radius-md);
+}
+.qs-result-body { display: flex; flex-direction: column; padding: 16px; flex: 1; }
 
 @media (max-width: 768px) {
   .qs-search-grid { grid-template-columns: 1fr; }
