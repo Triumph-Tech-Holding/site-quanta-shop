@@ -268,7 +268,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Gold variant button */
-.qs-btn-gold {
+.qs-btn-gold,
+.tp-btn-gold {
   display: inline-block;
   background: linear-gradient(135deg, #e8950a 0%, #FFB342 100%);
   border-radius: var(--qs-radius-sm);
@@ -286,6 +287,28 @@ h1, h2, h3, h4, h5, h6 {
     background: linear-gradient(135deg, #c97e00 0%, #e8950a 100%);
     color: #fff;
     transform: translateY(-1px);
+  }
+}
+
+/* Base .tp-btn — premium teal style for bare tp-btn usages */
+.tp-btn:not(.tp-btn-2):not(.tp-btn-border):not(.tp-btn-green):not(.tp-btn-gold):not(.tp-btn-offcanvas) {
+  background: var(--qs-gradient-btn) !important;
+  border: none !important;
+  border-radius: var(--qs-radius-sm) !important;
+  font-family: var(--qs-font) !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  color: #fff !important;
+  padding: 10px 24px !important;
+  box-shadow: var(--qs-shadow-green) !important;
+  transition: var(--qs-transition) !important;
+  cursor: pointer;
+
+  &:hover {
+    background: linear-gradient(135deg, #1a4a54 0%, #225F6B 100%) !important;
+    box-shadow: 0 6px 24px rgba(47, 119, 133, 0.40) !important;
+    transform: translateY(-1px);
+    color: #fff !important;
   }
 }
 
@@ -578,11 +601,16 @@ section.tp-feature-area {
   font-size: 15px !important;
 }
 
-/* Login form inputs */
+/* Login form inputs — targets both old .tp-login-area and new split-screen .qs-auth-form-panel */
 .tp-login-input,
 .tp-login-area input[type="text"],
 .tp-login-area input[type="email"],
-.tp-login-area input[type="password"] {
+.tp-login-area input[type="password"],
+.qs-auth-form-panel input[type="text"],
+.qs-auth-form-panel input[type="email"],
+.qs-auth-form-panel input[type="password"],
+.qs-auth-form-panel input[type="tel"],
+.qs-auth-form-panel select {
   font-family: var(--qs-font) !important;
   border-radius: var(--qs-radius-sm) !important;
   border: 1.5px solid #d1d9e0 !important;
@@ -597,9 +625,11 @@ section.tp-feature-area {
   }
 }
 
-/* Login submit button */
+/* Login submit button — targets both old .tp-login-area and new split-screen */
 .tp-login-area button[type="submit"],
-.tp-login-area .tp-login-btn {
+.tp-login-area .tp-login-btn,
+.qs-auth-form-panel button[type="submit"],
+.qs-auth-form-panel .tp-login-btn {
   background: var(--qs-gradient-btn) !important;
   border-radius: var(--qs-radius-sm) !important;
   font-family: var(--qs-font) !important;

@@ -97,7 +97,8 @@ onMounted(() => {});
 .qs-card-badge {
   position: absolute;
   top: 10px;
-  left: 10px;
+  right: 10px;
+  left: auto;
   font-size: 10px !important;
   padding: 3px 8px !important;
   z-index: 2;
