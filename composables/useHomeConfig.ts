@@ -1,4 +1,5 @@
-import { ref } from 'vue';
+import { computed } from 'vue';
+import { useHomeCmsStore } from '@/pinia/useHomeCmsStore';
 
 export interface HeroCard {
   ativo: boolean;
@@ -71,7 +72,7 @@ export interface HomeConfig {
   footerCta: FooterCtaSection;
 }
 
-const DEFAULT_CONFIG: HomeConfig = {
+export const DEFAULT_CONFIG: HomeConfig = {
   hero: {
     badge: '+12.000 usuários economizando',
     title: 'Seu dinheiro <highlight>volta</highlight> a cada compra',
@@ -136,27 +137,18 @@ const DEFAULT_CONFIG: HomeConfig = {
   },
 };
 
-const _config = ref<HomeConfig>({ ...DEFAULT_CONFIG });
-let _loaded = false;
-let _fetchPromise: Promise<void> | null = null;
-
 export function useHomeConfig() {
-  const config = _config;
+  const homeCmsStore = useHomeCmsStore();
+
+  const config = computed<HomeConfig>(() => {
+    if (homeCmsStore.config) {
+      return { ...DEFAULT_CONFIG, ...homeCmsStore.config };
+    }
+    return DEFAULT_CONFIG;
+  });
 
   async function loadConfig(): Promise<void> {
-    if (_loaded) return;
-    if (_fetchPromise) return _fetchPromise;
-
-    _fetchPromise = $fetch<HomeConfig>('/home-cms')
-      .then((data) => {
-        _config.value = { ...DEFAULT_CONFIG, ...data };
-        _loaded = true;
-      })
-      .catch(() => {
-        _loaded = true;
-      });
-
-    return _fetchPromise;
+    await homeCmsStore.fetchConfig();
   }
 
   return { config, loadConfig };

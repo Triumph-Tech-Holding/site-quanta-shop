@@ -29,17 +29,20 @@ import { useCategoryStore } from "@/pinia/useCategoryStore";
 import { useCarouselStore } from "@/pinia/useCarouselStore";
 import { usePartnerStore } from "@/pinia/usePartnerStore";
 import { useLoadingStore } from "@/pinia/useLoadingStore";
+import { useHomeCmsStore } from "@/pinia/useHomeCmsStore";
 
 const categoryStore = useCategoryStore();
 const carouselStore = useCarouselStore();
 const partnerStore = usePartnerStore();
 const loadingStore = useLoadingStore();
+const homeCmsStore = useHomeCmsStore();
 
 onMounted(async () => {
   loadingStore.setLoading(true);
 
   const tasks = [];
 
+  if (!homeCmsStore.loaded) tasks.push(homeCmsStore.fetchConfig());
   if (!carouselStore.carousels.length) tasks.push(carouselStore.fetchCarousels());
   if (!partnerStore.newPartners.length) tasks.push(partnerStore.fetchNewPartners());
   if (!partnerStore.featuredPartners.length) tasks.push(partnerStore.fetchFeaturedPartners());

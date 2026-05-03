@@ -2,6 +2,7 @@
   <div class="hcms">
     <QsPageHeader eyebrow="Admin · CMS" title="CMS — Home Page" description="Edite os textos e links exibidos na página inicial. As alterações ficam visíveis imediatamente após salvar.">
       <template v-if="form">
+        <nuxt-link to="/" target="_blank" class="qs-btn-outline">Ver Home ↗</nuxt-link>
         <button class="qs-btn-outline" @click="reset" :disabled="saving">Descartar</button>
         <button class="qs-btn-primary" :disabled="saving" @click="save">
           <span v-if="saving" class="hcms__spinner-sm" />
@@ -443,9 +444,11 @@ async function save() {
   saveSuccess.value = false;
   saveError.value = false;
   try {
+    const token = agenciaStore.getToken();
     await $fetch('/home-cms', {
       method: 'PUT',
       body: form.value,
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
     });
     originalJson.value = JSON.stringify(form.value);
     saveSuccess.value = true;
