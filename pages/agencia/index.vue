@@ -22,13 +22,13 @@
           </div>
           <div class="ag-hero__stats">
             <div class="ag-stat">
-              <span class="ag-stat__val">+12 mil</span>
-              <span class="ag-stat__lbl">usuários ativos</span>
+              <span class="ag-stat__val">Gratuito</span>
+              <span class="ag-stat__lbl">cadastro sem custo</span>
             </div>
             <div class="ag-stat__div"></div>
             <div class="ag-stat">
-              <span class="ag-stat__val">+500</span>
-              <span class="ag-stat__lbl">lojas parceiras</span>
+              <span class="ag-stat__val">Instantâneo</span>
+              <span class="ag-stat__lbl">saque sem burocracia</span>
             </div>
             <div class="ag-stat__div"></div>
             <div class="ag-stat">
@@ -40,9 +40,9 @@
 
         <div class="ag-hero__visual">
           <div class="ag-cashback-card">
-            <div class="ag-cashback-card__label">Cashback recebido</div>
-            <div class="ag-cashback-card__amount">R$ 127,50</div>
-            <div class="ag-cashback-card__sub">neste mês</div>
+            <div class="ag-cashback-card__label">Seu cashback acumulado</div>
+            <div class="ag-cashback-card__amount">💰 Cashback</div>
+            <div class="ag-cashback-card__sub">direto na sua conta</div>
             <div class="ag-cashback-card__badge">
               <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#fff" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
               Cashback Garantido
@@ -50,7 +50,7 @@
           </div>
           <div class="ag-float-pill ag-float-pill--top">
             <span class="ag-float-pill__dot"></span>
-            +234 compras hoje
+            Compras em tempo real
           </div>
           <div class="ag-float-pill ag-float-pill--bot">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="#98c73a"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
