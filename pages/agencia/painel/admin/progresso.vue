@@ -1,6 +1,5 @@
 <script setup lang="ts">
 definePageMeta({ layout: false })
-if (process.client) navigateTo('/lab/progresso', { replace: true })
-else throw createError({ statusCode: 301, statusMessage: 'Movido para /lab/progresso' })
+await navigateTo('/lab/progresso', { replace: true, redirectCode: 301 })
 </script>
 <template><div /></template>
