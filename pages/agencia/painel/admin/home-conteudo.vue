@@ -14,6 +14,12 @@
     <div v-if="loadError" class="qs-alert-danger" style="margin-bottom:16px">
       Erro ao carregar configuração. Tente recarregar a página.
     </div>
+    <div v-if="validationErrors.length" class="qs-alert-danger" style="margin-bottom:16px">
+      <strong>Corrija os campos antes de salvar:</strong>
+      <ul style="margin:.375rem 0 0 1rem; padding:0">
+        <li v-for="(err, i) in validationErrors" :key="i">{{ err }}</li>
+      </ul>
+    </div>
     <div v-if="saveSuccess" class="qs-alert-success" style="margin-bottom:16px">
       Configuração salva com sucesso!
     </div>
@@ -282,6 +288,7 @@ const saving = ref(false);
 const saveSuccess = ref(false);
 const saveError = ref(false);
 const loadError = ref(false);
+const validationErrors = ref<string[]>([]);
 
 const previewHeroTitle = computed(() => {
   if (!form.value) return '';
@@ -309,8 +316,33 @@ async function load() {
   }
 }
 
+function isValidLink(v: string) {
+  return !v || v.startsWith('/') || v.startsWith('http://') || v.startsWith('https://');
+}
+
+function validate(): string[] {
+  if (!form.value) return [];
+  const errs: string[] = [];
+  const f = form.value;
+
+  if (!f.hero.title?.trim()) errs.push('Hero: o título é obrigatório.');
+  if (!isValidLink(f.hero.ctaPrimaryLink)) errs.push('Hero: o link do botão principal deve começar com "/" ou "http".');
+
+  if (!isValidLink(f.footerCta.primaryLink)) errs.push('Footer CTA: o link do botão principal deve começar com "/" ou "http".');
+  if (!isValidLink(f.footerCta.outlineLink)) errs.push('Footer CTA: o link do botão outline deve começar com "/" ou "http".');
+
+  f.blog.posts.forEach((post, i) => {
+    if (post.img && !isValidLink(post.img)) errs.push(`Blog — Post ${i + 1}: URL da imagem inválida (use "/" ou "https://").`);
+  });
+
+  return errs;
+}
+
 async function save() {
   if (!form.value) return;
+  validationErrors.value = validate();
+  if (validationErrors.value.length) return;
+
   saving.value = true;
   saveSuccess.value = false;
   saveError.value = false;

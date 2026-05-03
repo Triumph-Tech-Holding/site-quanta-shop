@@ -2,7 +2,7 @@
   <div>
     <!-- ── HERO ─────────────────────────────────────────────── -->
     <section class="ag-hero">
-      <div class="ag-hero__inner container">
+      <div class="ag-hero__inner">
         <div class="ag-hero__text">
           <div class="qs-eyebrow ag-eyebrow">Plataforma de Cashback #1 do Brasil</div>
           <h1 class="ag-hero__h1">
@@ -62,7 +62,7 @@
 
     <!-- ── POR QUE ESCOLHER ─────────────────────────────────── -->
     <section class="qs-section">
-      <div class="container">
+      <div class="ag-wrap">
         <div class="qs-section-header">
           <div class="qs-label qs-label--lime">Vantagens</div>
           <h2>Por que escolher a Quanta Shop?</h2>
@@ -80,7 +80,7 @@
 
     <!-- ── COMO FUNCIONA ────────────────────────────────────── -->
     <section class="qs-section qs-section--gray">
-      <div class="container">
+      <div class="ag-wrap">
         <div class="qs-section-header">
           <div class="qs-label qs-label--lime">Passo a passo</div>
           <h2>Como funciona</h2>
@@ -105,7 +105,7 @@
 
     <!-- ── CASHBACK EXEMPLOS ────────────────────────────────── -->
     <section class="qs-section qs-section--teal">
-      <div class="container">
+      <div class="ag-wrap">
         <div class="qs-section-header qs-section-header--white">
           <div class="qs-label qs-label--lime">Ganhos reais</div>
           <h2>Quanto você pode ganhar?</h2>
@@ -126,7 +126,7 @@
 
     <!-- ── CTA FINAL ─────────────────────────────────────────── -->
     <section class="qs-section">
-      <div class="container">
+      <div class="ag-wrap">
         <div class="ag-cta-final">
           <div class="qs-label qs-label--lime" style="margin-bottom:12px">Comece agora</div>
           <h2 class="ag-cta-final__h2">Pronto para começar a ganhar?</h2>
@@ -195,10 +195,19 @@ const cashbackExamples = [
   grid-template-columns: 1fr 360px;
   gap: 60px;
   align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.ag-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
 }
 @media (max-width: 900px) {
   .ag-hero__inner { grid-template-columns: 1fr; gap: 40px; }
   .ag-hero { padding: 56px 0 48px; }
+  .ag-wrap { padding: 0 16px; }
 }
 .ag-eyebrow {
   color: #98c73a !important;

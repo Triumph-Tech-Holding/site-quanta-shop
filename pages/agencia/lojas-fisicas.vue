@@ -5,11 +5,11 @@
     <div class="qs-card-section lf-filter-card">
       <form @submit.prevent="buscar" class="lf-filter-row">
         <div class="lf-field">
-          <label class="qs-label">Cidade</label>
+          <label class="lf-label">Cidade</label>
           <input v-model="filtro.cidade" type="text" class="qs-input" placeholder="Ex: São Paulo" />
         </div>
         <div class="lf-field">
-          <label class="qs-label">Estado</label>
+          <label class="lf-label">Estado</label>
           <select v-model="filtro.estado" class="qs-input">
             <option value="">Todos</option>
             <option v-for="e in estados" :key="e" :value="e">{{ e }}</option>
@@ -64,6 +64,7 @@ onMounted(() => buscar());
 </script>
 
 <style scoped>
+.lf-label { font-size: .75rem; font-weight: 600; color: var(--qs-gray-700, #374151); margin-bottom: .35rem; display: block; }
 .lf-filter-card { padding: 1.25rem 1.5rem; }
 .lf-filter-row { display: flex; gap: 1rem; align-items: flex-end; flex-wrap: wrap; }
 .lf-field { flex: 1; min-width: 160px; }

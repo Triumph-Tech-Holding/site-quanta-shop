@@ -1,7 +1,5 @@
 <template>
-  <div class="p-0">
-    <div class="general-content">
-      <div class="page-content qs-page">
+  <div class="qs-page">
 
         <!-- Page Header -->
         <QsPageHeader eyebrow="Indicação Rastreável" :title="cms.titulo" :description="cms.subtitulo">
@@ -218,8 +216,6 @@
 
         </template>
 
-      </div>
-    </div>
   </div>
 </template>
 

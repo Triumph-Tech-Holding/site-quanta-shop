@@ -67,6 +67,29 @@ Remoção de Bootstrap residual em **8 páginas** de auth/onboarding da agência
 
 ---
 
+## 🎨 Fase 6 — Bootstrap Removal Marketing/Institucional Agência ✅ (Mai 2026)
+
+### Resumo
+Remoção de Bootstrap residual em **9 páginas** de marketing/institucional da agência. Zero `container`, `text-center`, `mb-*`, `text-muted` nos templates. Validação Home CMS com validação de campos obrigatórios e URLs.
+
+### Páginas corrigidas (Fase 6)
+| Página | Alteração principal |
+|---|---|
+| `agencia/index.vue` | `class="container"` → `ag-wrap` scoped (max-width 1200px) em 4 seções + `ag-hero__inner` com próprio max-width |
+| `agencia/links.vue` | Wrappers legados `p-0 > general-content > page-content` → `qs-page` direto |
+| `agencia/lojas-fisicas.vue` | `qs-label` (eyebrow pill) → `lf-label` scoped nos form labels |
+| `agencia/mais-vendas/[[login]].vue` | `text-center mb-4 text-muted` → `mv-title`/`mv-sub` scoped |
+| `agencia/parceiro-direto/[slug].vue` | `text-center mt-3 mb-1 text-muted mb-4 mb-2 mb-0 mt-4` → `pd-*` scoped |
+| `agencia/como-funciona.vue` | Já limpo — verificado ✅ |
+| `agencia/quem-somos.vue` | Já limpo — verificado ✅ |
+| `agencia/faq.vue` | Já limpo — verificado ✅ |
+| `agencia/privacidade.vue` | Já limpo — verificado ✅ |
+
+### Home CMS — validação adicionada (code review request)
+`pages/agencia/painel/admin/home-conteudo.vue` — adicionadas funções `isValidLink()` e `validate()` que bloqueiam o `save()` se: hero.title vazio, links de CTA não iniciarem com `/` ou `http`, URLs de imagens dos posts do blog forem inválidas. Erros exibidos via lista `qs-alert-danger`.
+
+---
+
 ## 🎨 Padronização qs-* Completa — Fases 5-8 ✅ (Mai 2026 — sessão anterior)
 
 ### Resumo
