@@ -6,6 +6,14 @@ Todas as mudanças relevantes da plataforma. Formato baseado em [Keep a Changelo
 
 ## [1.3.0] — Mai 2026
 
+### 📋 Flow Standard — Checklist Técnico Admin
+
+#### Adicionado — Frontend (Nuxt)
+- **`pages/agencia/painel/admin/flow-standard.vue`** — Painel admin que implementa o protocolo FLOW DEVELOPMENT SYSTEMS com 5 seções: §1 Introdução, §2 Camada de Contexto e Memória (CLAUDE.md, CHANGELOG.md, features.json, FEATURES.md com links diretos), §3 Gestão e Progresso (matriz de status com todas as features reais do projeto — filtrável por status e fase/MVP), §4 Setup Técnico Replit (configurações, secrets, deploy), §5 Qualidade e Código Limpo (tratamento de erros e DoD). KPIs de progresso no topo com QsKpiCard por fase. Segue padrão canônico bi-financeiro.vue.
+- **`components/agencia/AgenciaMenu.vue`** — item "✅ Flow Standard" adicionado ao bloco Admin do menu lateral.
+
+---
+
 ### 🔒 Hardening de Segurança & Estabilidade (Tasks #30 e #116)
 
 #### Adicionado / Corrigido — Frontend (Nuxt)

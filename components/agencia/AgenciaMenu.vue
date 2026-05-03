@@ -86,6 +86,9 @@
         <NuxtLink to="/agencia/painel/admin/docs" class="listMenu listMenu--admin">
           📋 Documentação
         </NuxtLink>
+        <NuxtLink to="/agencia/painel/admin/flow-standard" class="listMenu listMenu--admin">
+          ✅ Flow Standard
+        </NuxtLink>
       </template>
 
       <NuxtLink to="/agencia/logout" class="listMenu logout-item">

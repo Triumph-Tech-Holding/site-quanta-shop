@@ -361,6 +361,22 @@ A Quanta Shop opera como Plataforma de Consumo Inteligente e Marketing de Fideli
 
 ---
 
+## Painel Flow Standard
+
+Tela admin em `/agencia/painel/admin/flow-standard` que implementa o protocolo **FLOW DEVELOPMENT SYSTEMS** (29/04/2026). Cinco seções navegáveis por chips:
+
+| § | Seção | Conteúdo |
+|---|-------|----------|
+| 1 | Introdução | Missão do protocolo, responsável, data |
+| 2 | Contexto e Memória | Links vivos para CLAUDE.md, CHANGELOG.md, features.json, FEATURES.md |
+| 3 | Gestão e Progresso | Matriz de status real (features.json) filtrável por status e MVP |
+| 4 | Setup Técnico Replit | .replit, secrets, deploy, proxy Nitro |
+| 5 | Qualidade / DoD | Tratamento de erros e Definition of Done |
+
+Feature registrada como **F-214** (mvp2, admin, status: done).
+
+---
+
 ## Tasks do Projeto (Histórico)
 
 - **#1–#24**: Configuração inicial, migração Vue2→Nuxt3, deploy, autenticação
