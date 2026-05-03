@@ -272,6 +272,18 @@ const sliderData = computed<HeroBannerSlide[]>(() => {
   overflow: hidden;
 }
 
+@media (max-height: 800px) {
+  .qs-hero__slide {
+    min-height: 60vh !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .qs-hero {
+    max-height: none;
+  }
+}
+
 .qs-hero__loading {
   display: flex;
   align-items: center;
