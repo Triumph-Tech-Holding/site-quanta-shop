@@ -363,7 +363,7 @@ A Quanta Shop opera como Plataforma de Consumo Inteligente e Marketing de Fideli
 
 ## Painel Flow Standard
 
-Tela admin em `/agencia/painel/admin/flow-standard` que implementa o protocolo **FLOW DEVELOPMENT SYSTEMS** (29/04/2026). Cinco seções navegáveis por chips:
+Tela do LAB em `/lab/flow-standard` que implementa o protocolo **FLOW DEVELOPMENT SYSTEMS** (29/04/2026). Cinco seções navegáveis por chips:
 
 | § | Seção | Conteúdo |
 |---|-------|----------|

@@ -86,8 +86,9 @@
         <NuxtLink to="/agencia/painel/admin/docs" class="listMenu listMenu--admin">
           📋 Documentação
         </NuxtLink>
-        <NuxtLink to="/agencia/painel/admin/flow-standard" class="listMenu listMenu--admin">
-          ✅ Flow Standard
+        <div class="menu-admin-divider">LAB</div>
+        <NuxtLink to="/lab" class="listMenu listMenu--admin">
+          🧪 LAB · Cockpit Técnico
         </NuxtLink>
       </template>
 

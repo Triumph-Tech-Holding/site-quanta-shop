@@ -9,8 +9,10 @@ Todas as mudanças relevantes da plataforma. Formato baseado em [Keep a Changelo
 ### 📋 Flow Standard — Checklist Técnico Admin
 
 #### Adicionado — Frontend (Nuxt)
-- **`pages/agencia/painel/admin/flow-standard.vue`** — Painel admin que implementa o protocolo FLOW DEVELOPMENT SYSTEMS com 5 seções: §1 Introdução, §2 Camada de Contexto e Memória (CLAUDE.md, CHANGELOG.md, features.json, FEATURES.md com links diretos), §3 Gestão e Progresso (matriz de status com todas as features reais do projeto — filtrável por status e fase/MVP), §4 Setup Técnico Replit (configurações, secrets, deploy), §5 Qualidade e Código Limpo (tratamento de erros e DoD). KPIs de progresso no topo com QsKpiCard por fase. Segue padrão canônico bi-financeiro.vue.
-- **`components/agencia/AgenciaMenu.vue`** — item "✅ Flow Standard" adicionado ao bloco Admin do menu lateral.
+- **`pages/lab/index.vue`** — **LAB · Cockpit Técnico Interno** (rota `/lab`, middleware `agencia-admin`): área interna de engenharia e governança visível somente a devs/gestores. Hub com 5 categorias (Engenharia, Produto, Arquitetura, Qualidade & Governança, Versionamento) totalizando 20 atalhos para Backlog, Sprints, Kanban, Commits, Stories, Progresso, Features, Fluxograma, CLAUDE.md, Documentação, Configurações de Rede, Flow Standard, Matriz E2E, Relatórios, BI Financeiro, CHANGELOG, FEATURES.md, features.json e DATA_DICTIONARY. KPIs no topo (progresso global, em curso, backlog, versão) carregados de features.json. Itens "em breve" sinalizados.
+- **`pages/lab/flow-standard.vue`** — Sub-página do LAB que implementa o protocolo FLOW DEVELOPMENT SYSTEMS com 5 seções: §1 Introdução, §2 Camada de Contexto e Memória (CLAUDE.md, CHANGELOG.md, features.json, FEATURES.md com links diretos), §3 Gestão e Progresso (matriz de status com todas as features reais do projeto — filtrável por status e fase/MVP), §4 Setup Técnico Replit (configurações, secrets, deploy), §5 Qualidade e Código Limpo (tratamento de erros e DoD). KPIs de progresso no topo com QsKpiCard por fase. Segue padrão canônico bi-financeiro.vue.
+- **`components/agencia/AgenciaMenu.vue`** — Adicionado divisor "LAB" e link "🧪 LAB · Cockpit Técnico" → `/lab` (apenas para admin).
+- **`pages/agencia/painel/admin/index.vue`** — Atalho discreto para `/lab` no topo (pill "LAB"). Painel admin permanece operacional, sem misturar com o cockpit técnico.
 
 ---
 
