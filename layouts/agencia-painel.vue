@@ -75,7 +75,7 @@
           <AgenciaMenu />
         </div>
         <div class="box-conteudo conteudo-logado">
-          <div style="padding:0 1rem;">
+          <div v-if="!isLabRoute" style="padding:0 1rem;">
             <div class="referral-link" style="padding:10px 0;">
               <div class="global-box" style="background:#fff;border-radius:8px;padding:.6rem 1rem;box-shadow:0 1px 4px rgba(0,0,0,.08);">
                 <small>Link de indicação da rede</small>
@@ -108,6 +108,8 @@ useHead({
 
 const agenciaStore = useAgenciaStore();
 const api = useApi();
+const route = useRoute();
+const isLabRoute = computed(() => route.path.startsWith('/lab'));
 
 const user = computed(() => agenciaStore.dadosUser);
 const isAcessoRemoto = computed(() => agenciaStore.isAcessoRemoto);
