@@ -44,7 +44,7 @@
           <input
             v-model="searchQuery"
             type="text"
-            placeholder="Buscar marcas, produtos, cashback..."
+            placeholder="Busque produtos, grandes marcas ou lojas por CEP..."
             @keyup.enter="handleSearch"
           />
           <button v-if="searchQuery" @click="searchQuery = ''" class="qs-search-clear">✕</button>

@@ -156,8 +156,8 @@ export const DEFAULT_BLOG_POSTS: BlogPostCms[] = [
 export const DEFAULT_CONFIG: HomeConfig = {
   hero: {
     badge: '+12.000 usuários economizando',
-    title: 'Seu dinheiro <highlight>volta</highlight> a cada compra',
-    subtitle: 'Compre nas suas lojas favoritas e receba cashback de verdade. Simples, transparente e instantâneo.',
+    title: 'Sua Receita por Minuto <highlight>Começa Aqui</highlight>',
+    subtitle: 'Ative o cashback com 1 clique e veja seu saldo crescer automaticamente em centenas de lojas.',
     ctaPrimaryText: 'Criar Conta Grátis',
     ctaPrimaryLink: '/register',
   },

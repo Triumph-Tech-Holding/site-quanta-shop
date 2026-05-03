@@ -268,6 +268,8 @@ const sliderData = computed<HeroBannerSlide[]>(() => {
 .qs-hero {
   position: relative;
   width: 100%;
+  max-height: 60vh;
+  overflow: hidden;
 }
 
 .qs-hero__loading {

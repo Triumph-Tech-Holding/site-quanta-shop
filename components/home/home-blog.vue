@@ -7,58 +7,101 @@
         <p class="qs-social__sub">{{ config.blog.subtitle }}</p>
       </div>
 
-      <div class="qs-social__grid">
-        <component
-          v-for="(item, i) in feedItems"
-          :key="i"
-          :is="item.type === 'blog' ? NuxtLinkComponent : 'a'"
-          :to="item.type === 'blog' ? item.url : undefined"
-          :href="item.type !== 'blog' ? item.url : undefined"
-          :target="item.type !== 'blog' ? '_blank' : undefined"
-          :rel="item.type !== 'blog' ? 'noopener' : undefined"
-          class="qs-feed-card"
-        >
-          <div class="qs-feed-card__img-wrap">
-            <img :src="item.img" :alt="item.title" loading="lazy" />
-            <span class="qs-feed-card__badge" :class="`qs-feed-card__badge--${item.type}`">
-              <!-- Instagram -->
-              <svg v-if="item.type === 'instagram'" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-              <!-- YouTube -->
-              <svg v-else-if="item.type === 'youtube'" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-              <!-- Blog -->
-              <svg v-else width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
-              {{ item.badgeLabel }}
-            </span>
+      <div class="qs-livefeed">
+        <!-- Coluna principal: artigos de blog -->
+        <div class="qs-livefeed__main">
+          <NuxtLink
+            v-for="post in blogPosts.slice(0, 2)"
+            :key="post.id"
+            :to="`/blog/${post.slug || post.id}`"
+            class="qs-blog-card"
+          >
+            <div class="qs-blog-card__img-wrap">
+              <img :src="post.img" :alt="post.title" loading="lazy" />
+              <span class="qs-feed-badge qs-feed-badge--blog">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                Blog
+              </span>
+            </div>
+            <div class="qs-blog-card__body">
+              <span v-if="post.tag" class="qs-blog-card__tag">{{ post.tag }}</span>
+              <h3 class="qs-blog-card__title">{{ post.title }}</h3>
+              <p v-if="post.excerpt" class="qs-blog-card__excerpt">{{ post.excerpt }}</p>
+              <div class="qs-blog-card__foot">
+                <span v-if="post.date" class="qs-blog-card__date">{{ post.date }}</span>
+                <span class="qs-blog-card__read">
+                  Ler artigo
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                </span>
+              </div>
+            </div>
+          </NuxtLink>
+
+          <div v-if="blogPosts.length === 0" class="qs-livefeed__empty">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2z"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/></svg>
+            <p>Nenhum artigo publicado ainda.</p>
           </div>
-          <div class="qs-feed-card__body">
-            <h3 class="qs-feed-card__title">{{ item.title }}</h3>
-            <p v-if="item.date" class="qs-feed-card__date">{{ item.date }}</p>
-            <span class="qs-feed-card__link">Ler mais →</span>
+        </div>
+
+        <!-- Coluna lateral: redes sociais -->
+        <div class="qs-livefeed__sidebar">
+          <p class="qs-livefeed__sidebar-title">Redes Sociais</p>
+          <div class="qs-social-thumbs">
+            <a
+              v-for="item in socialFeed.slice(0, 4)"
+              :key="item.id"
+              :href="item.url || (item.rede?.toLowerCase() === 'youtube' ? 'https://youtube.com/@quantashop' : 'https://instagram.com/quantashop')"
+              target="_blank"
+              rel="noopener"
+              class="qs-social-thumb"
+            >
+              <div class="qs-social-thumb__img-wrap">
+                <img :src="item.thumb" :alt="item.legenda" loading="lazy" />
+                <span
+                  class="qs-feed-badge"
+                  :class="item.rede?.toLowerCase() === 'youtube' ? 'qs-feed-badge--youtube' : 'qs-feed-badge--instagram'"
+                >
+                  <svg v-if="item.rede?.toLowerCase() === 'instagram'" width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                  <svg v-else width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                  {{ item.rede }}
+                </span>
+              </div>
+              <p class="qs-social-thumb__caption">{{ item.legenda }}</p>
+            </a>
+
+            <!-- Fallback se não houver posts sociais -->
+            <template v-if="socialFeed.length === 0">
+              <a
+                v-for="fallback in fallbackSocial"
+                :key="fallback.id"
+                :href="fallback.url"
+                target="_blank"
+                rel="noopener"
+                class="qs-social-thumb"
+              >
+                <div class="qs-social-thumb__img-wrap">
+                  <img :src="fallback.thumb" :alt="fallback.legenda" loading="lazy" />
+                  <span class="qs-feed-badge" :class="`qs-feed-badge--${fallback.rede.toLowerCase()}`">
+                    <svg v-if="fallback.rede === 'Instagram'" width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    <svg v-else width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                    {{ fallback.rede }}
+                  </span>
+                </div>
+                <p class="qs-social-thumb__caption">{{ fallback.legenda }}</p>
+              </a>
+            </template>
           </div>
-        </component>
+        </div>
       </div>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, resolveComponent } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useHomeConfig } from '@/composables/useHomeConfig';
 
-const NuxtLinkComponent = resolveComponent('NuxtLink');
-
 const { config, loadConfig } = useHomeConfig();
-
-type FeedType = 'blog' | 'instagram' | 'youtube';
-
-interface FeedItem {
-  type: FeedType;
-  badgeLabel: string;
-  title: string;
-  img: string;
-  date: string;
-  url: string;
-}
 
 interface BlogPost {
   id: number;
@@ -87,34 +130,12 @@ interface MockData {
 const blogPosts = ref<BlogPost[]>([]);
 const socialFeed = ref<SocialItem[]>([]);
 
-const feedItems = computed<FeedItem[]>(() => {
-  const items: FeedItem[] = [];
-
-  for (const post of blogPosts.value) {
-    items.push({
-      type: 'blog',
-      badgeLabel: 'Blog',
-      title: post.title,
-      img: post.img,
-      date: post.date,
-      url: post.id ? `/blog/${post.id}` : '/blog',
-    });
-  }
-
-  for (const social of socialFeed.value) {
-    const rede = (social.rede ?? '').toLowerCase();
-    items.push({
-      type: rede === 'youtube' ? 'youtube' : 'instagram',
-      badgeLabel: social.rede,
-      title: social.legenda,
-      img: social.thumb,
-      date: '',
-      url: social.url || (rede === 'youtube' ? 'https://youtube.com/@quantashop' : 'https://instagram.com/quantashop'),
-    });
-  }
-
-  return items.slice(0, 4);
-});
+const fallbackSocial: SocialItem[] = [
+  { id: 1, rede: 'Instagram', legenda: 'Cashback em tempo real ✨', thumb: 'https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=300&q=80&auto=format&fit=crop', url: 'https://instagram.com/quantashop' },
+  { id: 2, rede: 'YouTube', legenda: 'Como começar agora', thumb: 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=300&q=80&auto=format&fit=crop', url: 'https://youtube.com/@quantashop' },
+  { id: 3, rede: 'Instagram', legenda: 'Histórias de sucesso', thumb: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=300&q=80&auto=format&fit=crop', url: 'https://instagram.com/quantashop' },
+  { id: 4, rede: 'YouTube', legenda: 'Dicas e truques', thumb: 'https://images.unsplash.com/photo-1516738901601-6d0ee099431b?w=300&q=80&auto=format&fit=crop', url: 'https://youtube.com/@quantashop' },
+];
 
 function lsArtigosBlog(): BlogPost[] {
   try {
@@ -132,7 +153,7 @@ function lsArtigosBlog(): BlogPost[] {
         const db = b.dataPublicacao ? new Date(b.dataPublicacao).getTime() : 0;
         return db - da;
       })
-      .slice(0, 3)
+      .slice(0, 2)
       .map(a => ({
         id: a.id,
         slug: a.slug || String(a.id),
@@ -155,12 +176,12 @@ function lsPostsSocial(): SocialItem[] {
     }>;
     return posts
       .filter(p => p.ativo)
-      .slice(0, 2)
+      .slice(0, 4)
       .map(p => ({
         id: p.id,
         rede: p.plataforma,
         legenda: p.titulo,
-        thumb: p.thumbnailUrl || 'https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=600&q=80&auto=format&fit=crop',
+        thumb: p.thumbnailUrl || 'https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?w=300&q=80&auto=format&fit=crop',
         url: p.url,
       }));
   } catch { return []; }
@@ -195,7 +216,7 @@ onMounted(async () => {
 
   try {
     const data = await $fetch<MockData>('/data/mock-data.json');
-    blogPosts.value = data.blog ?? [];
+    blogPosts.value = (data.blog ?? []).slice(0, 2);
     socialFeed.value = data.social ?? [];
   } catch {
     console.warn('[Blog] Failed to load mock-data.json');
@@ -205,7 +226,7 @@ onMounted(async () => {
 
 <style scoped>
 .qs-social {
-  padding: 48px 0;
+  padding: 64px 0;
   background: #f9fafb;
 }
 
@@ -242,119 +263,251 @@ onMounted(async () => {
   margin: 0 auto;
 }
 
-.qs-social__grid {
+/* ── LiveFeed 2-col layout ─────────────────────────────── */
+.qs-livefeed {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: 1fr 280px;
   gap: 24px;
+  align-items: start;
 }
 
-@media (max-width: 991px) {
-  .qs-social__grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 575px) {
-  .qs-social__grid {
+@media (max-width: 900px) {
+  .qs-livefeed {
     grid-template-columns: 1fr;
   }
 }
 
-.qs-feed-card {
+/* ── Main: blog cards ──────────────────────────────────── */
+.qs-livefeed__main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.qs-livefeed__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 60px 0;
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+.qs-blog-card {
+  display: grid;
+  grid-template-columns: 260px 1fr;
   background: #fff;
   border-radius: 16px;
   overflow: hidden;
   text-decoration: none;
   color: inherit;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.qs-feed-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 32px rgba(47, 119, 133, 0.14);
+.qs-blog-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 36px rgba(47, 119, 133, 0.14);
 }
 
-.qs-feed-card__img-wrap {
+@media (max-width: 620px) {
+  .qs-blog-card {
+    grid-template-columns: 1fr;
+  }
+}
+
+.qs-blog-card__img-wrap {
   position: relative;
   overflow: hidden;
-  aspect-ratio: 4 / 3;
 }
 
-.qs-feed-card__img-wrap img {
+.qs-blog-card__img-wrap img {
   width: 100%;
   height: 100%;
+  min-height: 180px;
   object-fit: cover;
   transition: transform 0.4s ease;
+  display: block;
 }
 
-.qs-feed-card:hover .qs-feed-card__img-wrap img {
-  transform: scale(1.04);
+.qs-blog-card:hover .qs-blog-card__img-wrap img {
+  transform: scale(1.05);
 }
 
-.qs-feed-card__badge {
-  position: absolute;
-  top: 12px;
-  left: 12px;
+.qs-blog-card__body {
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.qs-blog-card__tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #2F7785;
+  background: rgba(47,119,133,0.08);
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+
+.qs-blog-card__title {
+  font-family: 'Jost', 'Inter', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: #225F6B;
+  line-height: 1.35;
+  margin: 0;
+}
+
+.qs-blog-card__excerpt {
+  font-size: 13px;
+  color: #6b7280;
+  line-height: 1.65;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin: 0;
+}
+
+.qs-blog-card__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.qs-blog-card__date {
+  font-size: 11px;
+  color: #aeaeb2;
+}
+
+.qs-blog-card__read {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 5px 10px;
-  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #2F7785;
+  transition: gap 0.2s;
+}
+
+.qs-blog-card:hover .qs-blog-card__read {
+  gap: 8px;
+}
+
+/* ── Sidebar: social thumbnails ────────────────────────── */
+.qs-livefeed__sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.qs-livefeed__sidebar-title {
+  font-family: 'Jost', 'Inter', sans-serif;
   font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #9ca3af;
+  margin: 0 0 4px;
+}
+
+.qs-social-thumbs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+@media (max-width: 900px) {
+  .qs-social-thumbs {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .qs-social-thumbs {
+    grid-template-columns: 1fr;
+  }
+}
+
+.qs-social-thumb {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.qs-social-thumb:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(47, 119, 133, 0.12);
+}
+
+.qs-social-thumb__img-wrap {
+  position: relative;
+  width: 70px;
+  height: 70px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.qs-social-thumb__img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+  display: block;
+}
+
+.qs-social-thumb:hover .qs-social-thumb__img-wrap img {
+  transform: scale(1.08);
+}
+
+.qs-social-thumb__caption {
+  font-family: 'Inter', 'Jost', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #374151;
+  line-height: 1.4;
+  padding-right: 12px;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ── Badges ─────────────────────────────────────────────── */
+.qs-feed-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 10px;
   font-weight: 700;
   color: #fff;
   letter-spacing: 0.02em;
 }
 
-.qs-feed-card__badge--instagram {
-  background: #E1306C;
-}
-
-.qs-feed-card__badge--youtube {
-  background: #FF0000;
-}
-
-.qs-feed-card__badge--blog {
-  background: #2F7785;
-}
-
-.qs-feed-card__body {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  flex: 1;
-}
-
-.qs-feed-card__title {
-  font-family: 'Jost', 'Inter', sans-serif;
-  font-size: 15px;
-  font-weight: 700;
-  color: #225F6B;
-  line-height: 1.45;
-  margin: 0;
-}
-
-.qs-feed-card__date {
-  font-size: 12px;
-  color: #9CA3AF;
-  margin: 0;
-}
-
-.qs-feed-card__link {
-  display: inline-block;
-  margin-top: auto;
-  padding-top: 10px;
-  font-size: 13px;
-  font-weight: 700;
-  color: #2F7785;
-  transition: letter-spacing 0.2s;
-}
-
-.qs-feed-card:hover .qs-feed-card__link {
-  letter-spacing: 0.03em;
-}
+.qs-feed-badge--blog { background: #2F7785; }
+.qs-feed-badge--instagram { background: #E1306C; }
+.qs-feed-badge--youtube { background: #FF0000; }
 </style>
