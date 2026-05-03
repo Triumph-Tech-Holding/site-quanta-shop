@@ -46,8 +46,8 @@
           <p class="qs-livefeed__sidebar-title">Redes Sociais</p>
           <div class="qs-social-thumbs">
             <a
-              v-for="item in socialFeed.slice(0, 4)"
-              :key="item.id"
+              v-for="item in socialThumbs"
+              :key="`${item.id}-${item.rede}`"
               :href="item.url || (item.rede?.toLowerCase() === 'youtube' ? 'https://youtube.com/@quantashop' : 'https://instagram.com/quantashop')"
               target="_blank"
               rel="noopener"
@@ -67,7 +67,7 @@
               <p class="qs-social-thumb__caption">{{ item.legenda }}</p>
             </a>
 
-            <template v-if="socialFeed.length === 0">
+            <template v-if="false">
               <a
                 v-for="fallback in fallbackSocial"
                 :key="fallback.id"
@@ -95,7 +95,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useHomeConfig, DEFAULT_BLOG_POSTS, type BlogPostCms } from '@/composables/useHomeConfig';
 
 const { config, loadConfig } = useHomeConfig();
@@ -133,6 +133,13 @@ const fallbackSocial: SocialItem[] = [
   { id: 3, rede: 'Instagram', legenda: 'Histórias de sucesso', thumb: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=300&q=80&auto=format&fit=crop', url: 'https://instagram.com/quantashop' },
   { id: 4, rede: 'YouTube', legenda: 'Dicas e truques', thumb: 'https://images.unsplash.com/photo-1516738901601-6d0ee099431b?w=300&q=80&auto=format&fit=crop', url: 'https://youtube.com/@quantashop' },
 ];
+
+const socialThumbs = computed<SocialItem[]>(() => {
+  const real = socialFeed.value.slice(0, 4);
+  if (real.length >= 4) return real;
+  const need = 4 - real.length;
+  return [...real, ...fallbackSocial.slice(0, need)];
+});
 
 function lsArtigosBlog(): BlogPost[] {
   try {
