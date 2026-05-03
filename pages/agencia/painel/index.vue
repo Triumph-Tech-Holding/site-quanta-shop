@@ -11,9 +11,7 @@
           </div>
         </div>
 
-        <div v-if="loading" class="qs-loading"><div class="qs-spinner" /></div>
-
-        <template v-else>
+        <template>
           <div class="idx-layout">
 
             <!-- ── COLUNA ESQUERDA ──────────────────────────────── -->
@@ -84,10 +82,21 @@
             <!-- ── COLUNA DIREITA ───────────────────────────────── -->
             <div class="idx-col-side">
 
-              <!-- Indicadores -->
+              <!-- Indicadores (skeleton → dados reais) -->
               <div class="qs-card-section idx-card idx-card--no-gap">
                 <div class="idx-section-label">Indicadores</div>
-                <div class="idx-indicadores">
+
+                <!-- Skeleton loading -->
+                <div v-if="loading" class="idx-indicadores">
+                  <div v-for="n in 4" :key="n" class="idx-indicador idx-indicador--skeleton">
+                    <div class="idx-sk idx-sk--icon"></div>
+                    <div class="idx-sk idx-sk--val"></div>
+                    <div class="idx-sk idx-sk--lbl"></div>
+                  </div>
+                </div>
+
+                <!-- Dados reais -->
+                <div v-else class="idx-indicadores">
                   <div class="idx-indicador">
                     <div class="idx-indicador__icon idx-indicador__icon--teal">
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
@@ -470,6 +479,22 @@ onUnmounted(() => {
   color: var(--qs-teal-dark, #225F6B);
   margin-bottom: .875rem;
 }
+
+/* Skeleton */
+.idx-sk {
+  border-radius: 6px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #f8f8f8 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: idx-shimmer 1.4s infinite;
+}
+@keyframes idx-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.idx-sk--icon { width: 36px; height: 36px; border-radius: 9px; margin-bottom: .2rem; }
+.idx-sk--val { width: 48px; height: 14px; margin-bottom: .3rem; }
+.idx-sk--lbl { width: 36px; height: 9px; }
+.idx-indicador--skeleton { pointer-events: none; }
 
 /* Indicadores */
 .idx-indicadores {
