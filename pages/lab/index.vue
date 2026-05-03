@@ -122,9 +122,9 @@ const categories: LabCategory[] = [
     id: 'engenharia', title: 'Engenharia', icon: '⚙️', color: '#2F7785',
     desc: 'Backlog, sprints, kanban e registro de commits.',
     items: [
-      { label: 'Backlog',   desc: 'Histórico priorizado de features e melhorias do produto.', icon: '📚', to: '/agencia/painel/admin/features', badge: 'features.json' },
+      { label: 'Backlog',   desc: 'Histórico priorizado de features e melhorias do produto.', icon: '📚', to: '/lab/features', badge: 'features.json' },
       { label: 'Sprints',   desc: 'Planejamento e entrega por iteração. Em construção.', icon: '🏃', disabled: true },
-      { label: 'Kanban',    desc: 'Quadro Todo / Em curso / Concluído derivado das tasks.', icon: '🗂️', to: '/agencia/painel/admin/progresso' },
+      { label: 'Kanban',    desc: 'Quadro Todo / Em curso / Concluído derivado das tasks.', icon: '🗂️', to: '/lab/progresso' },
       { label: 'Commits',   desc: 'CHANGELOG semântico — todas as versões e hotfixes.', icon: '📝', href: '/docs/CHANGELOG.md', external: true },
     ],
   },
@@ -133,8 +133,8 @@ const categories: LabCategory[] = [
     desc: 'User stories, progresso por módulo e roadmap por fase.',
     items: [
       { label: 'Histórias',    desc: 'User stories detalhadas com critérios de aceitação.', icon: '📖', href: '/docs/FEATURES.md', external: true },
-      { label: 'Progresso',    desc: 'Andamento real das tarefas de desenvolvimento.', icon: '🚀', to: '/agencia/painel/admin/progresso' },
-      { label: 'Features & MVP', desc: 'Roadmap por fase, status, público e drill-down.', icon: '🎯', to: '/agencia/painel/admin/features' },
+      { label: 'Progresso',    desc: 'Andamento real das tarefas de desenvolvimento.', icon: '🚀', to: '/lab/progresso' },
+      { label: 'Features & MVP', desc: 'Roadmap por fase, status, público e drill-down.', icon: '🎯', to: '/lab/features' },
       { label: 'Fluxograma do app', desc: 'Diagrama de fluxos principais. Em construção.', icon: '🗺️', disabled: true },
     ],
   },
@@ -155,7 +155,7 @@ const categories: LabCategory[] = [
       { label: 'Flow Standard',      desc: 'Checklist técnico FLOW DEVELOPMENT SYSTEMS — 5 seções.', icon: '✅', to: '/lab/flow-standard' },
       { label: 'Matriz de Testes E2E', desc: 'Cenários críticos: auth, cashback, saque, LGPD, LAB.', icon: '🧪', to: '/lab/docs' },
       { label: 'Relatórios admin',   desc: 'Lançamentos, Cashback, Anunciantes e Faturas (LGPD).', icon: '📊', to: '/agencia/painel/admin/relatorio-de-faturas' },
-      { label: 'BI Financeiro',      desc: 'Dashboard analítico de faturamento, aging e cashback.', icon: '📈', to: '/agencia/painel/admin/bi-financeiro' },
+      { label: 'BI Financeiro',      desc: 'Dashboard analítico de faturamento, aging e cashback.', icon: '📈', to: '/lab/bi-financeiro' },
     ],
   },
   {

@@ -71,16 +71,16 @@
         <NuxtLink to="/agencia/painel/admin" class="listMenu listMenu--admin">
           Painel Admin
         </NuxtLink>
-        <NuxtLink to="/agencia/painel/admin/progresso" class="listMenu listMenu--admin">
+        <NuxtLink to="/lab/progresso" class="listMenu listMenu--admin">
           🚀 Progresso
         </NuxtLink>
-        <NuxtLink to="/agencia/painel/admin/features" class="listMenu listMenu--admin">
+        <NuxtLink to="/lab/features" class="listMenu listMenu--admin">
           🎯 Features &amp; MVP
         </NuxtLink>
         <NuxtLink to="/agencia/painel/admin/configuracoes-rede" class="listMenu listMenu--admin">
           ⚙️ Configurações de Rede
         </NuxtLink>
-        <NuxtLink to="/agencia/painel/admin/bi-financeiro" class="listMenu listMenu--admin">
+        <NuxtLink to="/lab/bi-financeiro" class="listMenu listMenu--admin">
           📈 BI Financeiro
         </NuxtLink>
         <NuxtLink to="/lab/docs" class="listMenu listMenu--admin">

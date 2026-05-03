@@ -82,10 +82,10 @@ const adminLinks = [
   { to: '/agencia/painel/admin/blog', label: 'Blog', desc: 'Criar e gerenciar artigos do blog', icon: '📝' },
   { to: '/agencia/painel/admin/redes-sociais', label: 'Redes Sociais', desc: 'Posts do Instagram, YouTube, TikTok e mais', icon: '📱' },
   { to: '/lab/docs', label: 'Documentação Técnica', desc: 'Arquitetura, padrões, decisões e histórico do projeto (LAB)', icon: '📋' },
-  { to: '/agencia/painel/admin/progresso', label: 'Progresso do Produto', desc: 'Acompanhe o andamento das tarefas de desenvolvimento', icon: '🚀' },
-  { to: '/agencia/painel/admin/features', label: 'Features & MVP', desc: 'Roadmap por fase, status e público', icon: '🎯' },
+  { to: '/lab/progresso', label: 'Progresso do Produto', desc: 'Acompanhe o andamento das tarefas (LAB)', icon: '🚀' },
+  { to: '/lab/features', label: 'Features & MVP', desc: 'Roadmap por fase, status e público (LAB)', icon: '🎯' },
   { to: '/agencia/painel/admin/configuracoes-rede', label: 'Configurações de Rede', desc: 'Percentuais por nível, Quanta Points, quarentena', icon: '⚙️' },
-  { to: '/agencia/painel/admin/bi-financeiro', label: 'BI Financeiro', desc: 'Faturamento por categoria, inadimplência, cashback reservado', icon: '📈' },
+  { to: '/lab/bi-financeiro', label: 'BI Financeiro', desc: 'Faturamento por categoria, inadimplência, cashback reservado (LAB)', icon: '📈' },
 ];
 
 function authHeader() { return { headers: { Authorization: `Bearer ${agenciaStore.getToken()}` } }; }

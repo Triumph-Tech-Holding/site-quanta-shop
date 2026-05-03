@@ -218,7 +218,7 @@
 
         <div class="qs-table-footer">
           <span class="qs-meta">{{ filteredFeatures.length }} de {{ totalCount }} features exibidas</span>
-          <NuxtLink to="/agencia/painel/admin/features" class="qs-btn-sm-outline">Ver painel completo</NuxtLink>
+          <NuxtLink to="/lab/features" class="qs-btn-sm-outline">Ver painel completo</NuxtLink>
           <NuxtLink to="/lab" class="qs-btn-sm-outline" style="margin-left:.5rem">← Voltar ao LAB</NuxtLink>
         </div>
       </section>
