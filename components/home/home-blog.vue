@@ -263,7 +263,6 @@ onMounted(async () => {
   margin: 0 auto;
 }
 
-/* ── LiveFeed 2-col layout ─────────────────────────────── */
 .qs-livefeed {
   display: grid;
   grid-template-columns: 1fr 280px;
@@ -277,7 +276,6 @@ onMounted(async () => {
   }
 }
 
-/* ── Main: blog cards ──────────────────────────────────── */
 .qs-livefeed__main {
   display: flex;
   flex-direction: column;
@@ -402,7 +400,6 @@ onMounted(async () => {
   gap: 8px;
 }
 
-/* ── Sidebar: social thumbnails ────────────────────────── */
 .qs-livefeed__sidebar {
   display: flex;
   flex-direction: column;
@@ -491,7 +488,6 @@ onMounted(async () => {
   overflow: hidden;
 }
 
-/* ── Badges ─────────────────────────────────────────────── */
 .qs-feed-badge {
   position: absolute;
   top: 8px;

@@ -219,6 +219,7 @@
   ],
   "blog": [
     {
+      "id": 1,
       "slug": "como-maximizar-cashback",
       "title": "Como maximizar seu cashback em compras online",
       "excerpt": "Estratégias simples para multiplicar o dinheiro que volta para o seu bolso a cada compra.",
@@ -228,6 +229,7 @@
       "img": "https://images.unsplash.com/photo-1556740049-0cfed4f6a45d?w=600&q=80&auto=format&fit=crop"
     },
     {
+      "id": 2,
       "slug": "parceiros-locais-quanta",
       "title": "Parceiros locais: cashback na sua cidade",
       "excerpt": "Descubra como ganhar cashback em estabelecimentos perto de você com o programa Quanta.",
@@ -237,6 +239,7 @@
       "img": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&q=80&auto=format&fit=crop"
     },
     {
+      "id": 3,
       "slug": "guia-completo-indicacoes",
       "title": "Guia completo: como ganhar com indicações",
       "excerpt": "Aprenda a construir sua rede de afiliados e multiplique seus ganhos mensais.",
@@ -246,6 +249,7 @@
       "img": "https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&q=80&auto=format&fit=crop"
     },
     {
+      "id": 4,
       "slug": "consumo-inteligente-2026",
       "title": "Consumo inteligente em 2026: dicas práticas",
       "excerpt": "Tendências de consumo responsável e como o cashback pode ajudar sua economia.",
