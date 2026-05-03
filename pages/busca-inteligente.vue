@@ -275,6 +275,29 @@ const api = useApi();
 
 async function runSearch() {
   loading.value = true;
+
+  // Aplicar filtros nos mocks imediatamente (sem espera de rede)
+  const applyMockFilters = () => {
+    let list = [...MOCK_RESULTS];
+    if (query.value) {
+      const q = query.value.toLowerCase();
+      list = list.filter(r => r.nome.toLowerCase().includes(q) || r.descricao.toLowerCase().includes(q));
+    }
+    if (activeCategoria.value) list = list.filter(r => r.categoria === activeCategoria.value);
+    list = list.filter(r => r.cashback >= minCashback.value && r.distancia <= maxDistance.value);
+    switch (sortBy.value) {
+      case 'cashback': list.sort((a, b) => b.cashback - a.cashback); break;
+      case 'distance': list.sort((a, b) => a.distancia - b.distancia); break;
+      case 'popular': list.sort((a, b) => b.transacoes - a.transacoes); break;
+    }
+    return list;
+  };
+
+  // Mostrar mocks filtrados imediatamente — sem spinner prolongado
+  allResults.value = applyMockFilters();
+  loading.value = false;
+
+  // Tentar API real em background (substitui se vier dados)
   try {
     const params = new URLSearchParams({
       q: query.value || '',
@@ -289,15 +312,15 @@ async function runSearch() {
     }
     const token = agenciaStore.getToken?.();
     const headers = token ? { Authorization: `Bearer ${token}` } : undefined;
-    const { data } = await api.get(`/busca-inteligente?${params.toString()}`, { headers });
-    // backend retorna { items, total, page, pageSize }
-    allResults.value = data?.items && Array.isArray(data.items)
+    const { data } = await api.get(`/busca-inteligente?${params.toString()}`, { headers, timeout: 5000 });
+    const apiItems = data?.items && Array.isArray(data.items)
       ? data.items
-      : (Array.isArray(data) ? data : MOCK_RESULTS);
+      : (Array.isArray(data) ? data : null);
+    if (apiItems && apiItems.length > 0) {
+      allResults.value = apiItems;
+    }
   } catch {
-    allResults.value = MOCK_RESULTS;
-  } finally {
-    loading.value = false;
+    // Mocks já estão visíveis — sem ação necessária
   }
 }
 
