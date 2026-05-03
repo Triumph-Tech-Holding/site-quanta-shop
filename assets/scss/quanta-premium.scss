@@ -1242,7 +1242,44 @@ a:focus-visible {
   color: #fff !important;
 }
 
-/* ─── 23. FOOTER COLUMN ALIGNMENT ─────────────────────────── */
+/* ─── 23. FOOTER SOCIAL LIST + SECURITY SEALS ─────────────── */
+.qs-footer-social-list {
+  li a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    i {
+      width: 18px;
+      text-align: center;
+      color: var(--qs-lime);
+      font-size: 15px;
+    }
+  }
+}
+
+.qs-footer-seal {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.qs-footer-seal__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-family: var(--qs-font);
+  color: rgba(255, 255, 255, 0.55);
+  font-weight: 500;
+
+  i {
+    color: var(--qs-lime);
+    font-size: 13px;
+  }
+}
+
+/* ─── FOOTER COLUMN ALIGNMENT ─────────────────────────────── */
 /* Ensure 4-column layout balances properly */
 .tp-footer-top .row .col-xl-3 {
   flex: 0 0 auto;
