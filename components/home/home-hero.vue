@@ -280,7 +280,7 @@ const sliderData = computed<HeroBannerSlide[]>(() => {
 
 @media (max-width: 768px) {
   .qs-hero {
-    max-height: none;
+    max-height: 80vh;
   }
 }
 
