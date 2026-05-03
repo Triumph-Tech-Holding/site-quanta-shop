@@ -1,9 +1,9 @@
 # DATA_DICTIONARY.md — Quanta Shop
 
-> Dicionário de dados da API .NET 8 + banco PostgreSQL/Azure SQL.
+> Dicionário de dados da API .NET 8 + banco SQL Server Azure.
 > Engenharia reversa das entidades em `api/MMN.Dominio/Model/`.
 > **Conformidade LGPD** — campos sensíveis explicitamente marcados.
-> Versão 1.0 — Mai 2026
+> Versão 1.1 — Mai 2026
 
 ---
 
@@ -321,6 +321,22 @@ Sistema de cupons fiscais (NF-e) para cashback presencial.
 ---
 
 ## 7. Auditoria e Conformidade
+
+### `AuditoriaLgpd` — Reveal de dados sensíveis por usuário Master
+**Tabela:** `AuditoriaLgpd` · **PK:** `IdAuditoriaLgpd`
+
+| Coluna | Tipo | Descrição |
+|--------|------|-----------|
+| 🔑 `IdAuditoriaLgpd` | long | — |
+| 🔗 `IdUsuarioMaster` | Guid | Quem revelou |
+| 🔗 `IdUsuarioAlvo` | Guid | De quem o dado foi revelado |
+| `Campo` | string | Nome do campo revelado (`Documento`, `Conta`, `Email`, etc.) |
+| `Motivo` | string | Justificativa informada pelo Master |
+| 🔒 `EnderecoIP` | string | IP do solicitante |
+| `AgenteUsuario` | string | User-agent do navegador |
+| 🕒 `DataAcesso` | DateTime | Timestamp da revelação |
+
+> Toda revelação via `POST /admin/revelar-dado-sensivel` grava obrigatoriamente nesta tabela antes de retornar o dado real.
 
 ### Tabelas de Log Obrigatórias
 - `Acesso` — IP, user-agent, timestamp.

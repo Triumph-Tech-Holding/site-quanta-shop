@@ -304,22 +304,34 @@ Em todas as outras páginas, use Bootstrap 5 + classes do design system Quanta (
 
 | Rota | Descrição |
 |------|-----------|
-| `/agencia/painel/admin` | Dashboard admin |
-| `/agencia/painel/admin/usuarios` | Gestão de usuários |
+| `/agencia/painel/admin` | Dashboard operacional (KPIs + nav + atalho LAB) |
+| `/agencia/painel/admin/usuarios` | Gestão de usuários (LGPD mascarado) |
 | `/agencia/painel/admin/pagamentos` | Aprovação de pagamentos |
 | `/agencia/painel/admin/compras` | Gestão de compras |
-| `/agencia/painel/admin/credenciamento` | Credenciamento de parceiros |
+| `/agencia/painel/admin/credenciamento` | Credenciamento de parceiros ZEE |
+| `/agencia/painel/admin/lancamentos` | Lançamentos financeiros |
+| `/agencia/painel/admin/relatorio-cashback` | Relatório de cashback |
+| `/agencia/painel/admin/relatorio-de-anunciantes` | Relatório de anunciantes |
+| `/agencia/painel/admin/relatorio-de-faturas` | Faturas com reveal LGPD |
+| `/agencia/painel/admin/configuracoes-rede` | Percentuais MLM, quarentena, Plus |
+| `/agencia/painel/admin/bi-financeiro` | BI analítico (mês/trimestre/ano) |
+| `/agencia/painel/admin/features` | Features & MVP roadmap |
+| `/agencia/painel/admin/progresso` | Kanban de progresso |
 | `/agencia/painel/admin/categorias` | Categorias de lojas |
-| `/agencia/painel/admin/ecossistemas` | Ecossistemas |
 | `/agencia/painel/admin/carrosseis` | Banners e carrosséis |
 | `/agencia/painel/admin/home-cms` | CMS da home |
-| `/agencia/painel/admin/marcas-home` | Logos do carrossel |
 | `/agencia/painel/admin/blog` | CRUD do blog |
-| `/agencia/painel/admin/redes-sociais` | Posts das redes sociais |
 | `/agencia/painel/admin/suporte` | Tickets de suporte |
-| `/agencia/painel/admin/rede` | Visualização da rede MLM |
-| `/agencia/painel/admin/comunicados` | Comunicados |
-| `/agencia/painel/admin/docs` | **Esta documentação** |
+| `/agencia/painel/admin/docs` | Visualizador de documentação técnica (PDF download) |
+
+## LAB — Cockpit Técnico Interno
+
+| Rota | Descrição |
+|------|-----------|
+| `/lab` | Hub do LAB (5 categorias, ~20 atalhos, KPIs em tempo real) |
+| `/lab/flow-standard` | Checklist FLOW DEVELOPMENT SYSTEMS (5 seções) |
+
+> ⚠️ **DIRETRIZ MÁXIMA:** ZERO alterações no backend (.NET/api/). O backend é read-only para o agente Replit. Toda evolução é feita exclusivamente no frontend Nuxt 3.
 
 ---
 
@@ -361,9 +373,21 @@ A Quanta Shop opera como Plataforma de Consumo Inteligente e Marketing de Fideli
 
 ---
 
-## Painel Flow Standard
+## LAB — Cockpit Técnico (v1.3.0)
 
-Tela do LAB em `/lab/flow-standard` que implementa o protocolo **FLOW DEVELOPMENT SYSTEMS** (29/04/2026). Cinco seções navegáveis por chips:
+Área interna de engenharia e governança em `/lab` (middleware: `agencia-auth + agencia-admin`). Visível **somente para devs/gestores** — não aparece para o usuário final.
+
+| Categoria | Conteúdo |
+|-----------|---------|
+| Engenharia | Backlog (features.json), Kanban (progresso), Commits (CHANGELOG) |
+| Produto | Histórias (historia.md), Progresso, Features & MVP |
+| Arquitetura | CLAUDE.md, Documentação Técnica (viewer PDF), ARCHITECTURE.md |
+| Qualidade | Flow Standard, Matriz E2E (TESTING.md), Relatórios, BI |
+| Versionamento | CHANGELOG.md, FEATURES.md, features.json, DATA_DICTIONARY.md |
+
+### Flow Standard (sub-página `/lab/flow-standard`)
+
+Implementa o protocolo **FLOW DEVELOPMENT SYSTEMS** (29/04/2026). Cinco seções navegáveis por chips:
 
 | § | Seção | Conteúdo |
 |---|-------|----------|
