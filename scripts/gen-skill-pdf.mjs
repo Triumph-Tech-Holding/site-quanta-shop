@@ -138,7 +138,7 @@ doc.fillColor('#fff').font('Helvetica').fontSize(13).text(
   M, 290, { width: CW - 60, lineGap: 3 });
 doc.moveTo(M, 700).lineTo(M + CW, 700).lineWidth(1).strokeColor('#7fb6c0').stroke();
 doc.fillColor('#cfe6ea').font('Helvetica').fontSize(11).text(
-  'Versão: v1.3.0   ·   Data: ' + TODAY + '   ·   Stack: Nuxt 3 + .NET 8 + SQL Server Azure', M, 716);
+  'Versão: v1.3.0   ·   Data: ' + TODAY + '   ·   Stack: Nuxt 3 + C# (.NET 8) + SQL Server Azure', M, 716);
 doc.text('Produção: quantashop.com.br   ·   API: api.quantashop.com.br', M, 734);
 doc.addPage();
 y = M;
@@ -184,7 +184,7 @@ table(['Categoria', 'Tecnologia', 'Versão'],
     ['Datas/Máscaras/Toasts', 'dayjs / vue-the-mask / vue3-toastify', '—'],
     ['Fontes', 'Inter / Jost (Google Fonts)', '—'],
   ], [26, 52, 22]);
-H3('Backend — api/ (.NET 8 / ASP.NET Core, solução Bigcash.sln)');
+H3('Backend — api/ (C# · .NET 8 / ASP.NET Core, solução Bigcash.sln)');
 bullets([
   'MMN.Api — controllers REST (/Controllers/v1/), Program/Startup, SignalR (Hubs), Swagger, HealthChecks',
   'MMN.Dominio — entidades (Model/), enums, exceções, ViewModels, WebHooks',
@@ -317,8 +317,56 @@ bullets([
   'Tratar Quanta Shop como self-contained. Integração futura entre apps da holding precisaria ser especificada — não existe hoje.',
 ]);
 
-/* ---------------- 10 ÍNDICE DE ROTAS ---------------- */
-H2('10', 'Índice completo de rotas e endpoints');
+/* ---------------- 10 MÓDULO FINANCEIRO ---------------- */
+H2('10', 'Módulo financeiro — componentes existentes no sistema');
+para('O módulo financeiro está implementado no backend (C#) e consumido pelo frontend via proxy Nitro. A lógica de distribuição é encapsulada em um Domain Service puro, sem dependência direta do banco, facilitando testes unitários. As regras de compensação (splits, níveis, compressão) estão documentadas em skill dedicada.');
+H3('Services e Controllers implementados');
+table(['Componente', 'Caminho', 'Função'],
+  [
+    ['CashbackDistribuicaoService', 'MMN.Negocio/Services/', 'Motor de cálculo de cashback — Domain Service puro, sem DB'],
+    ['QuantaPointsController', 'MMN.Api/Controllers/v1/', 'GET saldo, POST resgatar (transação SERIALIZABLE)'],
+    ['CupomController', 'MMN.Api/Controllers/v1/', 'POST /cupom/validar — tipos percent / fixed'],
+    ['SearchController', 'MMN.Api/Controllers/v1/', 'GET /busca-inteligente (Haversine + filtros + sort)'],
+    ['AdminController.Config', 'MMN.Api/Controllers/v1/', 'GET/POST /admin/configuracoes-rede (parâmetros da rede)'],
+    ['AdminController.Financeiro', 'MMN.Api/Controllers/v1/', 'GET /admin/bi-financeiro (KPIs, aging, safras, top parceiros)'],
+    ['AdminController.Usuarios', 'MMN.Api/Controllers/v1/', 'POST /admin/revelar-dado-sensivel (gated por Master, loga AuditoriaLgpd)'],
+    ['LgpdMask (C#)', 'MMN.Util/Util/', 'MaskCpfCnpj / MaskEmail / MaskTelefone / MaskConta / MaskAgencia'],
+    ['lgpd-mask.ts', 'utils/', 'Espelho client-side dos helpers de mask (TypeScript)'],
+  ], [34, 34, 32]);
+H3('Entidades financeiras (tabelas no banco)');
+table(['Entidade', 'Campos-chave'],
+  [
+    ['Cupom', 'IdCupom, Codigo, Tipo (percent|fixed), Valor, Ativo, DataExpiracao'],
+    ['CupomUso', 'IdCupomUso, IdCupom, IdUsuario, DataUso'],
+    ['QuantaPontoLancamento', 'IdLancamento, IdUsuario, Pontos, Tipo (credito|debito), DataLancamento'],
+    ['AuditoriaLgpd', 'IdAuditoria, IdUsuarioAdmin, IdUsuarioAlvo, CampoRevelado, DataHora'],
+  ], [30, 70]);
+callout('Configurações financeiras ficam na tabela Configuracao com chaves Rede.* (ex. Rede.SustentabilidadePercent, Rede.MultiplicadorPlus). Nunca hardcodar percentuais no código.', '#2F7785', '#edf6f9');
+
+/* ---------------- 11 HABILITAÇÕES ---------------- */
+H2('11', 'Habilitações (tipos de licença/perfil de usuário)');
+para('O campo "habilitacao" é retornado no JWT de login com o valor de produtoAtivo.Produto.Nome. Cada usuário tem exatamente um produto ativo (UsuarioProduto) que determina seus privilégios no sistema.');
+table(['Tipo / Habilitação', 'Campo / Flag no banco', 'Acesso liberado'],
+  [
+    ['Consumidor (padrão)', 'Cadastro básico sem flags especiais', 'Compras, cashback, carrinho, checkout, blog, perfil'],
+    ['Empreendedor', 'Usuario.Empreendedor = true', 'Painel da agência (MLM): rede, indicações, financeiro, graduações, cupons'],
+    ['Comerciante / Credenciado', 'Grupo.Descricao = "Comerciante" + credenciamento aprovado', 'Emite cupons de venda via Scan Go; aparece na busca de lojas parceiras'],
+    ['Vision Plus', 'AssinaturaHabilitada = true; IsPlus = true (cashback)', 'Multiplicador de cashback (configurável, padrão 2×); assinatura mensal via Pagar.me (~R$99/mês)'],
+    ['Admin', 'IdGrupo == 1 E Perfil != "P"', 'Painel admin completo: usuários, credenciamentos, financeiro, CMS, BI'],
+    ['Master', 'Usuario.Master = true', 'Pode revelar dados LGPD sensíveis (CPF, e-mail, conta bancária) via endpoint auditado'],
+  ], [22, 34, 44]);
+H3('Flags no modelo Usuario (C#)');
+bullets([
+  'IdGrupo — FK para Grupo (Grupo.Descricao: "Comerciante" | "Parceiro" | "Empreendedor" | etc.)',
+  'Perfil — char: "P" = parceiro simples; outros valores habilitam Admin',
+  'Empreendedor — bool: libera painel da agência (MLM)',
+  'Master — bool: libera revelação de dados LGPD (único nível com esse acesso)',
+  'AssinaturaHabilitada — bool via UsuarioProduto: ativo se tem produto Plus vigente',
+  'PreCadastro — bool: usuário criado por indicação, ainda não completou cadastro',
+]);
+
+/* ---------------- 12 ÍNDICE DE ROTAS ---------------- */
+H2('12', 'Índice completo de rotas e endpoints');
 H3('Site — páginas públicas (usuário final)');
 para('index (home), para-voce, para-sua-empresa, seja-um-agente, quanta-amizade, shop, shop-categories, shop-full-width, cart, checkout, wishlist, compare, coupons, order, profile, search, busca-inteligente, about, contato, contact, login, forgot, blog/index, blog/[slug], 404.');
 H3('LAB (governança técnica) — /lab/*');
