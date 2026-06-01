@@ -293,3 +293,9 @@ id = "YLPGetrOGbaaweEnp4H4g"
 uri = "file://public/lovable-architecture.pdf"
 type = "pdf"
 title = "Quanta Shop — Design Brief para o Lovable (completo)"
+
+[[outputs]]
+id = "OWcZHBzWJcNjuFyNFEt08"
+uri = "file://docs/QUANTA_SHOP_SNAPSHOT.pdf"
+type = "pdf"
+title = "Quanta Shop — Snapshot Técnico Completo (v1.3.0)"
