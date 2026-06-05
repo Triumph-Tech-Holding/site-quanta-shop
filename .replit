@@ -52,12 +52,12 @@ args = "bash /home/runner/workspace/api/start-api.sh"
 name = "Auto Push"
 author = "agent"
 
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "AUTO_PUSH_INTERVAL=30 bash scripts/auto-push.sh"
-
 [workflows.workflow.metadata]
 outputType = "console"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "bash scripts/auto-push.sh"
 
 [[ports]]
 localPort = 3000
