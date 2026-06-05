@@ -21,6 +21,10 @@ args = "Start application"
 task = "workflow.run"
 args = "Start API"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Auto Push"
+
 [[workflows.workflow]]
 name = "Start application"
 author = "agent"
@@ -43,6 +47,17 @@ outputType = "console"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "bash /home/runner/workspace/api/start-api.sh"
+
+[[workflows.workflow]]
+name = "Auto Push"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "AUTO_PUSH_INTERVAL=30 bash scripts/auto-push.sh"
+
+[workflows.workflow.metadata]
+outputType = "console"
 
 [[ports]]
 localPort = 3000
