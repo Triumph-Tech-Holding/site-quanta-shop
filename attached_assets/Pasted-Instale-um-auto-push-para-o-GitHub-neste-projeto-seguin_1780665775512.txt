@@ -1,0 +1,57 @@
+Instale um "auto-push" para o GitHub neste projeto, seguindo exatamente estas regras: ele deve apenas fazer git push (NUNCA deploy), só commitar/empurrar quando houver mudança real, rodar uma única instância em segundo plano junto com o app, e NUNCA usar --force.
+
+PASSO 1 — Crie o arquivo scripts/auto-push.sh com EXATAMENTE este conteúdo:
+
+#!/usr/bin/env bash
+# Auto-push — mantém o GitHub sempre em dia, de graça.
+# • Só faz commit/push QUANDO há mudança real (parado = custo zero).
+# • NUNCA faz deploy. NUNCA usa --force.
+# • Integra o remoto com segurança antes de enviar.
+# • Roda uma única instância, em segundo plano junto com o app.
+set -uo pipefail
+
+INTERVAL="${AUTO_PUSH_INTERVAL:-600}"   # segundos entre verificações (padrão: 10 min)
+BRANCH="$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo main)"
+LOCK="/tmp/auto-push.lock"
+
+if [ -e "$LOCK" ] && kill -0 "$(cat "$LOCK" 2>/dev/null)" 2>/dev/null; then
+  echo "[auto-push] já está rodando. Saindo."
+  exit 0
+fi
+echo $$ > "$LOCK"
+trap 'rm -f "$LOCK"' EXIT
+
+git config user.name  >/dev/null 2>&1 || git config user.name  "Auto-Push Bot"
+git config user.email >/dev/null 2>&1 || git config user.email "bot@triumphtech.local"
+
+echo "[auto-push] vigiando a cada ${INTERVAL}s na branch ${BRANCH}."
+
+while true; do
+  if [ -n "$(git status --porcelain 2>/dev/null)" ]; then
+    git add -A
+    git commit -m "auto: snapshot $(date '+%Y-%m-%d %H:%M:%S')" >/dev/null 2>&1
+    if ! git pull --rebase --autostash origin "$BRANCH" >/dev/null 2>&1; then
+      git rebase --abort >/dev/null 2>&1 || true
+      echo "[auto-push] conflito ao integrar o remoto — push adiado. Resolver manualmente."
+      sleep "$INTERVAL"; continue
+    fi
+    if git push origin "$BRANCH" >/dev/null 2>&1; then
+      echo "[auto-push] enviado para ${BRANCH} em $(date '+%H:%M:%S')."
+    else
+      echo "[auto-push] falha no push — verifique a conexão do Replit com o GitHub."
+    fi
+  fi
+  sleep "$INTERVAL"
+done
+
+PASSO 2 — Torne o script executável: chmod +x scripts/auto-push.sh
+
+PASSO 3 — Faça o script iniciar em segundo plano JUNTO com o app, sem bloquear o app.
+Adapte à estrutura deste projeto: se houver workflows no .replit, adicione uma tarefa paralela que rode "bash scripts/auto-push.sh"; se o app inicia por um comando único (run), prefixe o início com "bash scripts/auto-push.sh &" para rodar em segundo plano. O importante: o auto-push roda em paralelo ao app e NÃO interfere nele.
+
+PASSO 4 — Garanta que o git deste Repl está conectado ao GitHub com permissão de push (credencial do Replit). Em seguida, faça UM teste real: crie um arquivo qualquer, espere alguns segundos e confirme que apareceu um commit "auto: snapshot ..." na branch main do GitHub. Me mostre o resultado do teste.
+
+REGRAS QUE NÃO PODE QUEBRAR:
+- Não rode deploy em nenhum momento.
+- Não use git push --force.
+- Não commite segredos (.env, chaves). Respeite o .gitignore existente; se não houver, crie um com .env e node_modules.
