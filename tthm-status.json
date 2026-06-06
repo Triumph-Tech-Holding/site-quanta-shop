@@ -1,0 +1,74 @@
+{
+  "schemaVersion": "2.0",
+  "project": {
+    "id": "quanta_shop",
+    "name": "Quanta Shop",
+    "destaque": "carro-chefe",
+    "multistack": true,
+    "repos": [
+      { "repo": "Triumph-Tech-Holding/site-quanta-shop", "papel": "site (Nuxt 3)", "stack": "nuxt" },
+      { "repo": "Triumph-Tech-Holding/api-quanta-shop", "papel": "API", "stack": "dotnet" },
+      { "repo": "Triumph-Tech-Holding/primeira-compra-quanta-shop", "papel": "onboarding", "stack": "nuxt" },
+      { "repo": "Triumph-Tech-Holding/agencia-quanta-shop", "papel": "painel agencia", "stack": "vue2" }
+    ],
+    "url": "https://quantashop.com.br",
+    "faseAtual": "manutencao",
+    "responsavel": "Mauro",
+    "atualizadoEm": "2026-06-06T12:00:00Z",
+    "notificacoes": {
+      "canal": "quanta_flow",
+      "fallback": "email",
+      "vigiarUptime": true,
+      "intervaloMin": 2,
+      "alertarRegressaoAuditoria": true,
+      "prioridade": "alta"
+    }
+  },
+  "_nota": "Carro-chefe da holding, em Fase 3 (melhorias e modernizacao). Monitoramento reforçado: ping a cada 2 min e alerta a cada regressao de auditoria, via Quanta Flow. Modulos JS (@tthm/seo) servem o site/agencia; a API .NET segue o PADRAO de forma nativa.",
+  "fases": {
+    "inicio": {
+      "titulo": "Inicio — Kickoff Premium",
+      "statusFase": "concluido",
+      "progresso": 100,
+      "descricao": "Produto ja no ar (e-commerce com base de usuarios).",
+      "checklist": [
+        { "id": "auth",  "label": "Autenticacao (JWT legado .NET)", "status": "done", "executor": "humano", "nota": "Legado funcional." },
+        { "id": "admin", "label": "Painel admin / agencia",          "status": "done", "executor": "humano", "nota": "agencia-quanta-shop." }
+      ]
+    },
+    "desenvolvimento": {
+      "titulo": "Desenvolvimento — Prontidao Premium (relancamento)",
+      "statusFase": "em_andamento",
+      "progresso": 0,
+      "descricao": "Tirar o site do nivel amador: SEO/GEO, conteudo, LGPD e tracking. Puxado do milestone MVP do site-quanta-shop.",
+      "fonte": "github-milestone:MVP",
+      "checklist": [
+        { "id": "seo-base",  "label": "SEO base (title, meta, OG, Twitter)",          "status": "doing","executor": "agente", "nota": "PR #27 cobriu parte." },
+        { "id": "schema",    "label": "Dados estruturados Schema.org (Org + Product)", "status": "doing","executor": "agente", "nota": "" },
+        { "id": "sitemap",   "label": "sitemap.xml + robots.txt reais",               "status": "todo", "executor": "agente", "nota": "Usar @tthm/seo." },
+        { "id": "ssr",       "label": "Renderizacao no servidor (SSR)",               "status": "todo", "executor": "humano", "nota": "Causa raiz; decisao arquitetural." },
+        { "id": "conteudo",  "label": "Atualizar conteudo defasado",                  "status": "todo", "executor": "humano", "nota": "" },
+        { "id": "analytics", "label": "GA4 + Meta Pixel + Consent Mode",              "status": "todo", "executor": "humano", "nota": "" },
+        { "id": "lgpd",      "label": "Privacidade + Termos + banner de cookies",     "status": "todo", "executor": "humano", "nota": "" }
+      ]
+    },
+    "manutencao": {
+      "titulo": "Manutencao — Monitoramento e Modernizacao",
+      "statusFase": "em_andamento",
+      "progresso": 0,
+      "descricao": "Carro-chefe: vigiado de perto pra nunca ficar inadequado. Alertas via Quanta Flow.",
+      "checklist": [
+        { "id": "uptime",      "label": "Vigia de uptime (2 min) + alerta Quanta Flow",        "status": "todo", "executor": "agendado", "nota": "Prioridade alta." },
+        { "id": "reauditoria", "label": "Re-auditoria premium semanal + alerta de regressao",  "status": "todo", "executor": "agendado", "nota": "Avisa se cair de nivel." },
+        { "id": "erros",       "label": "Rastreador de erros (Sentry) no site e na API",        "status": "todo", "executor": "humano",   "nota": "" },
+        { "id": "seo-geo",     "label": "SEO/GEO continuo (acompanhar mudancas)",               "status": "todo", "executor": "agendado", "nota": "Radar de Inteligencia." },
+        { "id": "roadmap",     "label": "Roadmap de modernizacao e novas features",             "status": "todo", "executor": "humano",   "nota": "Premiumizacao continua." },
+        { "id": "backups",     "label": "Backups testados (SQL Server legado)",                 "status": "todo", "executor": "humano",   "nota": "" }
+      ]
+    }
+  },
+  "resumo": {
+    "faseAtual": "manutencao",
+    "progressoPorFase": { "inicio": 100, "desenvolvimento": 0, "manutencao": 0 }
+  }
+}
