@@ -81,8 +81,8 @@ export default defineNuxtConfig({
     workbox: {
       globDirectory: ".nuxt/dev-sw-dist",
       globPatterns: [
-        "**/*.js",   // Incluir arquivos .js
-        "**/*.map"   // Incluir arquivos .map
+        "**/*.js",
+        "**/*.map"
       ],
       globIgnores: [
         "**/node_modules/**/*",
@@ -101,11 +101,21 @@ export default defineNuxtConfig({
       charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no',
       meta: [
-        { name: 'description', content: 'Lojistas, aumentem suas vendas com o programa de cashback da Quanta Shop. Ofereça mais valor aos seus clientes e receba cashback real em centenas de lojas parceiras.' },
-        { name: 'format-detection', content: 'telephone=no' }
+        { name: 'description', content: 'Ganhe dinheiro de volta em suas compras nas maiores lojas do Brasil. O Quanta Shop é a plataforma de cashback real que te ajuda a economizar de verdade.' },
+        { name: 'format-detection', content: 'telephone=no' },
+        { property: 'og:title', content: 'Quanta Shop — Cashback Real em Centenas de Lojas' },
+        { property: 'og:description', content: 'Ganhe dinheiro de volta em suas compras nas maiores lojas do Brasil. O Quanta Shop é a plataforma de cashback real que te ajuda a economizar de verdade.' },
+        { property: 'og:type', content: 'website' },
+        { property: 'og:url', content: 'https://quantashop.com.br' },
+        { property: 'og:image', content: 'https://res.cloudinary.com/dryd9bfjj/image/upload/v1716503306/Quanta%20Shop/ectutuigpjez4ufngegb.png' },
+        { name: 'twitter:card', content: 'summary_large_image' },
+        { name: 'twitter:title', content: 'Quanta Shop — Cashback Real em Centenas de Lojas' },
+        { name: 'twitter:description', content: 'Ganhe dinheiro de volta em suas compras nas maiores lojas do Brasil. O Quanta Shop é a plataforma de cashback real que te ajuda a economizar de verdade.' },
+        { name: 'subject', content: 'Política de Privacidade: https://quantashop.com.br/agencia/privacidade' },
       ],
       link: [
         { rel: 'canonical', href: 'https://quantashop.com.br' },
+        { rel: 'privacy-policy', href: 'https://quantashop.com.br/agencia/privacidade' },
         {
           rel: 'preconnect',
           href: 'https://fonts.googleapis.com',
@@ -118,6 +128,47 @@ export default defineNuxtConfig({
         {
           rel: 'stylesheet',
           href: 'https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap',
+        },
+      ],
+      script: [
+        {
+          type: 'application/ld+json',
+          innerHTML: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Organization',
+            'name': 'Quanta Shop',
+            'url': 'https://quantashop.com.br',
+            'logo': 'https://quantashop.com.br/img/logo/logo-white.png',
+            'description': 'Plataforma de cashback real que conecta consumidores a centenas de lojas parceiras no Brasil.',
+            'sameAs': [
+              'https://www.instagram.com/quantashop.oficial',
+              'https://www.facebook.com/quantashop',
+            ],
+            'contactPoint': {
+              '@type': 'ContactPoint',
+              'contactType': 'Customer Support',
+              'telephone': '+55-21-4040-4866',
+              'url': 'https://quantashop.com.br/contato'
+            }
+          }),
+        },
+        {
+          type: 'application/ld+json',
+          innerHTML: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'WebSite',
+            'url': 'https://quantashop.com.br',
+            'name': 'Quanta Shop',
+            'description': 'Plataforma de cashback real que conecta consumidores a centenas de lojas parceiras no Brasil.',
+            'potentialAction': {
+              '@type': 'SearchAction',
+              'target': {
+                '@type': 'EntryPoint',
+                'urlTemplate': 'https://quantashop.com.br/shop?q={search_term_string}'
+              },
+              'query-input': 'required name=search_term_string'
+            }
+          }),
         },
       ],
     }
@@ -145,44 +196,6 @@ export default defineNuxtConfig({
   ssr: false,
   hooks: {
     'pages:extend'(pages) {
-      // add a route
-      // const newRoutes = [
-      //   {
-      //     name: 'contact',
-      //     path: '/contato',
-      //     file: '~/Pages/contact.vue'
-      //   },
-      //   {
-      //     name: 'about',
-      //     path: '/quem-somos',
-      //     file: '~/Pages/about.vue'
-      //   },
-      //   {
-      //     name: 'search',
-      //     path: '/busca',
-      //     file: '~/Pages/search.vue'
-      //   }
-      // ];
-
-      // newRoutes.forEach(route => {
-      //   pages.push(route);
-      // });
-
-      // remove routes
-      // function removePagesMatching(pattern: RegExp, pages: NuxtPage[] = []) {
-      //   const pagesToRemove = []
-      //   for (const page of pages) {
-      //     if (pattern.test(page.file as string)) {
-      //       pagesToRemove.push(page)
-      //     } else {
-      //       removePagesMatching(pattern, page.children)
-      //     }
-      //   }
-      //   for (const page of pagesToRemove) {
-      //     pages.splice(pages.indexOf(page), 1)
-      //   }
-      // }
-      // removePagesMatching(/\.ts$/, pages)
     }
   }
 })
