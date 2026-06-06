@@ -49,6 +49,7 @@
             <h4 class="qs-footer__heading">Suporte</h4>
             <ul class="qs-footer__links">
               <li><a href="https://bigcash.blob.core.windows.net/documentos/QB%20-%20TERMOS%20DE%20USO%20E%20BONIFICA%C3%87%C3%83O%20ESPEC%C3%8DFICA%20v102023.pdf" target="_blank">Termos e condições</a></li>
+              <li><nuxt-link to="/agencia/privacidade">Política de Privacidade</nuxt-link></li>
               <li><a href="/blog">Blog</a></li>
               <li><a href="https://api.whatsapp.com/send/?phone=552140404866" target="_blank">WhatsApp</a></li>
               <li><nuxt-link to="/agencia/painel/assinatura">Quanta Plus</nuxt-link></li>
@@ -183,3 +184,4 @@
   opacity: 0.6;
 }
 </style>
+
