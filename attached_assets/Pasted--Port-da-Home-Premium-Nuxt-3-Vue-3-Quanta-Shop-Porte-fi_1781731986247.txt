@@ -1,0 +1,119 @@
+# Port da Home Premium → Nuxt 3 / Vue 3 (Quanta Shop)
+
+Porte fiel do protótipo aprovado `quanta-home-premium.html` para componentes de produção,
+no design system `qs-*`. Nuxt 3 SPA (`ssr:false`), Vue 3 `<script setup lang="ts">`, CSS puro
+`scoped` por componente. Sem Bootstrap, sem Tailwind, sem base64.
+
+---
+
+## 1. Arquivos criados / alterados (onde colar no projeto Replit)
+
+Cole cada arquivo no caminho equivalente dentro do projeto Nuxt (raiz do app Nuxt no Replit).
+
+### Componentes de seção — `components/home/`
+| Arquivo | Prefixo CSS | Observação |
+|---|---|---|
+| `home-hero.vue` | `qs-hero__` | **ALTERADO** — já existia. Adicionados: botão "Converse você mesmo" (chatCta), pausa do autoplay por `prefers-reduced-motion` / hover / focus / offscreen (IntersectionObserver), chat estático em reduced-motion, refs e `onBeforeUnmount` limpando timers + observer. |
+| `home-como-funciona.vue` | `qs-hiw__` | 3 passos (01 Ative → 02 Compre → 03 PIX) + linha conectora teal→lime + CTA. |
+| `home-capabilities.vue` | `qs-cap__` | "Uma conversa resolve" — 3 cards. |
+| `home-brand-logos.vue` | `qs-bw__` | Grade de marcas (Clearbit, grayscale→cor no hover, `@error` esconde quebradas). |
+| `home-ofertas-dia.vue` | `qs-ofd__` | 4 cards de produto (badge cashback, preço, botão). |
+| `home-parceiros-online.vue` | `qs-pon__` | Grade de logos com "Até X% de cashback". |
+| `home-parceiros-locais.vue` | `qs-plo__` | Cards de loja local com WhatsApp. |
+| `home-lojistas.vue` | `qs-biz__` | Editorial assimétrica (imagem + benefícios + CTA). |
+| `home-testimonials.vue` | `qs-tst__` | 3 depoimentos. |
+| `home-blog.vue` | `qs-blg__` | 4 posts com badge Instagram/YouTube/Blog. |
+| `home-faq.vue` | `qs-faq__` | Acordeão acessível `<details>/<summary>` (5 perguntas). |
+| `home-ceo.vue` | `qs-ceo__` | Foto recortada do Mauro sob película em degradê, nome com gradiente, 2 cartões de vidro; mobile empilha. |
+| `home-footer-cta.vue` | `qs-fcta__` | "Pronto para começar a economizar?". |
+
+### Header / Footer
+| Arquivo | Prefixo | Observação |
+|---|---|---|
+| `components/header/header-home.vue` | `qs-hdr__` | Logo colorida, nav (1º item "Como funciona"), Login/Cadastro, hambúrguer mobile funcional. |
+| `components/footer/footer-home.vue` | `qs-ft__` | Logo branca+verde, newsletter, selos PIX/LGPD/SSL, nav, redes sociais. |
+
+### Páginas / Layout / Composable
+| Arquivo | Observação |
+|---|---|
+| `pages/index.vue` | **ALTERADO** — monta todas as seções na ordem do protótipo; SEO mantido + FAQPage ampliada p/ 5 perguntas + **JSON-LD `ItemList`** das ofertas adicionado. |
+| `pages/como-funciona.vue` | **NOVO** — página dedicada (fluxo ative→compre→PIX) com SEO próprio (title/description/canonical) + JSON-LD HowTo; layout `layout-home`. |
+| `layouts/layout-home.vue` | **NOVO** — wrapper que injeta `header-home` + `footer-home` + skip-link. Ambas as páginas usam `definePageMeta({ layout: 'layout-home' })`. |
+| `composables/useHomeConfig.ts` | **NOVO** — composable CMS-ready (hoje retorna defaults vazios; o hero já o consome). Quando houver `/api/home-config`, basta preencher `loadConfig`. |
+
+> Se o projeto Replit já possuir um `layout-home.vue`, um header ou um footer próprios,
+> reaproveite os existentes e descarte os equivalentes deste port (mantendo as seções
+> `components/home/*`). Garanta apenas que o header tenha "Como funciona" como 1º item e que
+> o footer use a logo branca+verde.
+
+---
+
+## 2. Assets a copiar
+
+Já presentes em `nuxt/public/img/logo/` e `nuxt/public/img/team/`. Garanta que existam no Replit:
+
+```
+public/
+├─ favicon.png                       (de home-assets/favicon.png)
+├─ og-cover.jpg                      (de home-assets/og-cover.jpg)  ← usado no useSeoMeta
+└─ img/
+   ├─ logo/
+   │  ├─ quanta-logo.png             (header — logo colorida)
+   │  ├─ quanta-logo-whitegreen.png  (footer — branca+verde)
+   │  ├─ quanta-icon.png             (qs-logo tone="color")
+   │  └─ quanta-icon-white.png       (qs-logo tone="white" — hero/footer-cta)
+   └─ team/
+      └─ mauro-cutout.png            (seção CEO)
+```
+
+Todas as `<img>` usam `width` + `height` + `loading="lazy"` + `decoding="async"`.
+Imagens de produtos/marcas continuam em URLs externas (Unsplash/Clearbit) com `<!-- TODO: hospedar localmente / partnerStore -->`.
+
+---
+
+## 3. Hospedar as fontes comerciais (Bruum FY / Kiye Sans)
+
+Hoje os componentes declaram as famílias com fallback:
+- Display (títulos): `'Bruum FY','Jost','Inter',sans-serif`
+- Corpo: `'Kiye Sans','Inter','Jost',sans-serif`
+
+Enquanto as comerciais não estão hospedadas, Jost/Inter assumem (carregue Jost+Inter no
+`nuxt.config` ou via `<link>` do Google Fonts, como no protótipo).
+
+Para ativar as fontes oficiais (sem mudar nenhum componente):
+1. Coloque os `.woff2` em `public/fonts/` (ex.: `BruumFY-Bold.woff2`, `KiyeSans-Regular.woff2`, etc.).
+2. Adicione um CSS global (`assets/css/fonts.css` registrado em `nuxt.config` → `css: [...]`):
+   ```css
+   @font-face { font-family: 'Bruum FY'; src: url('/fonts/BruumFY-Bold.woff2') format('woff2'); font-weight: 700 800; font-display: swap; }
+   @font-face { font-family: 'Kiye Sans'; src: url('/fonts/KiyeSans-Regular.woff2') format('woff2'); font-weight: 400 600; font-display: swap; }
+   ```
+3. Assim que carregadas, as famílias já referenciadas nos componentes passam a usá-las automaticamente.
+
+---
+
+## 4. Notas de qualidade
+
+- **Mobile-first / zero overflow horizontal** em 360/390/414px: grids colapsam, ofertas viram
+  1 coluna, CEO empilha (foto em cima, película vertical, stats em linha), header vira hambúrguer.
+  Alvos de toque ≥44px; tipografia fluida com `clamp()`.
+- **`prefers-reduced-motion`**: hero para o autoplay e mostra o chat estático; cards sem
+  transições de hover; sem animações de reveal.
+- **Timers/observers** limpos em `onBeforeUnmount` no hero.
+- **Tokens**: cores/raios/sombras seguem os tokens oficiais (hardcodados em hex por componente,
+  como o `home-hero.vue` original já fazia, por o port ser auto-contido).
+- **SEO**: `index.vue` mantém Organization + WebSite (SearchAction) + FAQPage (5) e ganhou ItemList.
+  `como-funciona.vue` tem canonical próprio + HowTo.
+
+---
+
+## 5. Checklist pós-colagem no Replit
+
+```bash
+npm run build:nuxt   # 0 erros
+# Validar mobile 360–414px sem overflow horizontal
+# Conferir que /img/logo/* e /img/team/mauro-cutout.png + /og-cover.jpg respondem 200
+```
+
+> Pitfall conhecido: não usar `localhost` hardcoded; preview do Replit é iframe proxiado
+> (`allowedHosts: true`). Nenhum componente deste port usa `localhost` — links internos são
+> relativos (`nuxt-link`).
