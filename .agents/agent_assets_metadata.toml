@@ -299,3 +299,9 @@ id = "OWcZHBzWJcNjuFyNFEt08"
 uri = "file://docs/QUANTA_SHOP_SNAPSHOT.pdf"
 type = "pdf"
 title = "Quanta Shop — Snapshot Técnico v1.3.0 (atualizado)"
+
+[[outputs]]
+id = "kbO7x7QGuPzqBGNFDzlsf"
+uri = "file://public/docs/home-claude-guide.md"
+type = "text"
+title = "home-claude-guide.md — Guia completo da Home para Claude"
