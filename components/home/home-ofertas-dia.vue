@@ -2,6 +2,10 @@
   <section class="qs-ofertas">
     <div class="container">
       <div class="qs-section-header">
+        <span class="qs-ofertas__eyebrow">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          {{ config.ofertas.label || 'TEMPO LIMITADO' }}
+        </span>
         <h2 class="qs-section-title">{{ config.ofertas.title }}</h2>
         <p class="qs-section-sub">{{ config.ofertas.subtitle }}</p>
       </div>
@@ -188,6 +192,19 @@ function formatPrice(price: unknown): string {
 .qs-section-header {
   text-align: center;
   margin-bottom: 40px;
+}
+
+.qs-ofertas__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'Inter', 'Jost', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #98C73A;
+  margin-bottom: 10px;
 }
 
 .qs-section-title {

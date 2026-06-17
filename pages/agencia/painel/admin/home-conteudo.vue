@@ -66,6 +66,37 @@
         </div>
       </div>
 
+      <!-- ─── Marcas ────────────────────────────────────────────── -->
+      <div v-show="activeTab === 'marcas'" class="hcon__section">
+        <h2 class="hcon__section-title">Seção Marcas Parceiras</h2>
+        <div class="hcon__field">
+          <label class="hcon__label">Rótulo da seção</label>
+          <input v-model="form.brands.label" class="hcon__input" placeholder="AS MAIORES MARCAS CONFIAM NA QUANTA" />
+          <span class="hcon__hint">Texto exibido acima da grade de logos. Em MAIÚSCULAS por convenção.</span>
+        </div>
+        <div class="hcon__hint" style="padding:10px 14px;background:#f0f9ff;border-radius:8px;border:1px solid #bae6fd;margin-top:8px;color:#0369a1;">
+          <strong>Logos das marcas:</strong> Exibidos automaticamente a partir dos parceiros cadastrados na API. Quando a API não retorna dados, são exibidos logos padrão (Nike, Renner, Puma, Casas Bahia…). Para customizar os logos de fallback, edite <code>composables/useHomeConfig.ts</code>.
+        </div>
+      </div>
+
+      <!-- ─── Ofertas ────────────────────────────────────────────── -->
+      <div v-show="activeTab === 'ofertas'" class="hcon__section">
+        <h2 class="hcon__section-title">Seção Ofertas do Dia</h2>
+        <div class="hcon__field">
+          <label class="hcon__label">Eyebrow (texto acima do título)</label>
+          <input v-model="form.ofertas.label" class="hcon__input" placeholder="TEMPO LIMITADO" />
+          <span class="hcon__hint">Exibido em maiúsculas com ícone de relógio. Ex: TEMPO LIMITADO</span>
+        </div>
+        <div class="hcon__field">
+          <label class="hcon__label">Título da Seção</label>
+          <input v-model="form.ofertas.title" class="hcon__input" />
+        </div>
+        <div class="hcon__field">
+          <label class="hcon__label">Subtítulo da Seção</label>
+          <input v-model="form.ofertas.subtitle" class="hcon__input" />
+        </div>
+      </div>
+
       <!-- ─── Testemunhos ───────────────────────────────────────── -->
       <div v-show="activeTab === 'testimonials'" class="hcon__section">
         <h2 class="hcon__section-title">Seção Depoimentos</h2>
@@ -149,6 +180,15 @@
                 <label class="hcon__label">Slug (URL)</label>
                 <input v-model="post.slug" class="hcon__input" placeholder="ex: titulo-do-post" />
               </div>
+            </div>
+            <div class="hcon__field">
+              <label class="hcon__label">Tipo de Conteúdo</label>
+              <select v-model="post.type" class="hcon__input">
+                <option value="blog">Blog</option>
+                <option value="instagram">Instagram</option>
+                <option value="youtube">YouTube</option>
+              </select>
+              <span class="hcon__hint">Define a cor do badge no card: teal (Blog), rosa (Instagram), vermelho (YouTube).</span>
             </div>
             <div class="hcon__field">
               <label class="hcon__label">URL da Imagem</label>
@@ -275,6 +315,8 @@ const agenciaStore = useAgenciaStore();
 
 const tabs = [
   { key: 'hero', label: 'Hero' },
+  { key: 'marcas', label: 'Marcas' },
+  { key: 'ofertas', label: 'Ofertas' },
   { key: 'testimonials', label: 'Depoimentos' },
   { key: 'blog', label: 'Blog' },
   { key: 'ceo', label: 'CEO' },
