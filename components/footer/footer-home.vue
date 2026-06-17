@@ -1,5 +1,32 @@
 <template>
   <footer class="qs-footer">
+
+    <!-- Newsletter + Selos -->
+    <div class="qs-footer__upper">
+      <div class="container">
+        <div class="qs-footer__upper-row">
+          <div class="qs-footer__brand-col">
+            <nuxt-link class="qs-footer__brand" href="/" aria-label="Quanta Shop">
+              <img class="qs-footer__logo-top" src="/img/logo/logo-white.png" width="128" height="42" alt="Quanta Shop" decoding="async" />
+            </nuxt-link>
+            <div class="qs-footer__seals">
+              <span class="qs-footer__seal"><b>PIX</b> saque instantâneo</span>
+              <span class="qs-footer__seal"><b>LGPD</b> dados protegidos</span>
+              <span class="qs-footer__seal"><b>SSL</b> site seguro</span>
+            </div>
+          </div>
+          <div class="qs-footer__news-col">
+            <p class="qs-footer__news-title">Receba ofertas e cashback turbinado</p>
+            <p class="qs-footer__news-sub">Novidades e promoções no seu e-mail. Sem spam.</p>
+            <form class="qs-footer__news-form" @submit.prevent="subscribe">
+              <input v-model="newsletterEmail" type="email" aria-label="Seu e-mail" placeholder="seu@email.com" />
+              <button type="submit">Assinar</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="qs-footer__top">
       <div class="container">
         <div class="qs-footer__grid">
@@ -72,7 +99,37 @@
   </footer>
 </template>
 
+<script setup lang="ts">
+import { ref } from 'vue';
+const newsletterEmail = ref('');
+function subscribe() {
+  newsletterEmail.value = '';
+}
+</script>
+
 <style scoped>
+/* ── Newsletter + Selos ── */
+.qs-footer__upper { background: #0d1520; border-bottom: 1px solid rgba(255,255,255,.07); padding: 44px 0; }
+.qs-footer__upper-row { display: grid; grid-template-columns: 1.25fr 1fr; gap: 40px; align-items: start; }
+@media (max-width: 720px) { .qs-footer__upper-row { grid-template-columns: 1fr; gap: 24px; } }
+
+.qs-footer__brand { display: inline-flex; text-decoration: none; }
+.qs-footer__logo-top { height: 40px; width: auto; display: block; }
+
+.qs-footer__seals { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+.qs-footer__seal { display: flex; align-items: center; gap: 6px; font-family: 'Inter','Jost',sans-serif; font-size: 12px; color: #9ca3af; border: 1px solid rgba(255,255,255,.1); border-radius: 999px; padding: 6px 12px; }
+.qs-footer__seal b { color: #cbd5e1; font-weight: 700; }
+
+.qs-footer__news-title { color: #fff; font-family: 'Jost','Inter',sans-serif; font-weight: 700; font-size: 17px; margin: 0 0 4px; }
+.qs-footer__news-sub { font-family: 'Inter','Jost',sans-serif; font-size: 13px; color: #9ca3af; margin: 0 0 14px; }
+.qs-footer__news-form { display: flex; gap: 10px; max-width: 420px; }
+.qs-footer__news-form input { flex: 1; min-width: 0; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.16); border-radius: 999px; padding: 10px 16px; color: #fff; font-family: 'Inter','Jost',sans-serif; font-size: 14px; outline: none; }
+.qs-footer__news-form input::placeholder { color: #8b95a5; }
+.qs-footer__news-form button { flex-shrink: 0; background: #98C73A; color: #173a0a; border: 0; border-radius: 999px; padding: 0 20px; min-height: 42px; font-family: 'Inter','Jost',sans-serif; font-weight: 700; font-size: 13px; cursor: pointer; transition: background .2s; }
+.qs-footer__news-form button:hover { background: #7aad1f; }
+@media (prefers-reduced-motion: reduce) { .qs-footer__news-form button { transition: none; } }
+
+/* ── Base ── */
 .qs-footer {
   background: #111827;
   color: #d1d5db;

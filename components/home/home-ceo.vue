@@ -1,658 +1,112 @@
 <template>
-  <section v-if="config.ceo.ativo !== false" class="qs-ceo">
+  <section class="qs-ceo-sec" aria-labelledby="qs-ceo-title">
     <div class="container">
-      <div class="qs-ceo__card" :style="config.ceo.imagemFundo ? { backgroundImage: `url(${config.ceo.imagemFundo})`, backgroundSize: 'cover', backgroundPosition: config.ceo.posicaoFundo ?? 'center' } : {}">
-        <div v-if="config.ceo.imagemFundo" class="qs-ceo__overlay" :style="{ background: `rgba(34,95,107,${config.ceo.overlayOpacity ?? 0.72})` }"></div>
-        <div class="qs-ceo__content">
-          <span class="qs-ceo__tag">{{ config.ceo.tag }}</span>
-          <p class="qs-ceo__pre">{{ config.ceo.pre }}</p>
-          <h2 class="qs-ceo__name">{{ config.ceo.name }}</h2>
-          <p class="qs-ceo__desc">{{ config.ceo.desc }}</p>
-          <div style="display: flex; gap: 14px; flex-wrap: wrap; align-items: center;">
-            <button @click="openModal" class="qs-ceo__btn" style="background: #98C73A; color: #225F6B; border: 0;">
-              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/></svg>
-              Iniciar Conversa com IA
-            </button>
-            <a
-              :href="config.ceo.whatsappLink || 'https://wa.me/5511999999999'"
-              target="_blank"
-              rel="noopener"
-              class="qs-ceo__btn-secondary"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-              {{ config.ceo.whatsappText || 'Falar no WhatsApp' }}
-            </a>
+      <div class="qs-ceo">
+        <div class="qs-ceo__film" aria-hidden="true"></div>
+
+        <div class="qs-ceo__in">
+          <span class="qs-ceo__tag"><span class="qs-ceo__d" aria-hidden="true"></span> CEO &amp; Founder</span>
+          <p class="qs-ceo__pre">FALE COM O CEO</p>
+          <h2 id="qs-ceo-title" class="qs-ceo__h2">Mauro Triumph</h2>
+          <p class="qs-ceo__text">Clareza estratégica sem rodeios, sem burocracia, sem perda de tempo. Converse com a IA do CEO e leve sua parceria adiante.</p>
+          <div class="qs-ceo__cta-row">
+            <button class="qs-ceo__btn qs-ceo__btn--primary" @click="openModal">Iniciar Conversa com IA</button>
+            <a class="qs-ceo__btn qs-ceo__btn--ghost" href="https://api.whatsapp.com/send/?phone=552140404866" target="_blank" rel="noopener">Falar no WhatsApp</a>
           </div>
-        </div>
-        <div v-if="config.ceo.imagemFundo" class="qs-ceo__mobile-row">
-          <div class="qs-ceo__mobile-badges">
-            <div class="qs-ceo__mbadge">
-              <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="rgba(255,255,255,0.75)" stroke-width="2"><path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
-              <div>
-                <div class="qs-ceo__mbadge-label">{{ config.ceo.badge1Label || 'Respostas' }}</div>
-                <div class="qs-ceo__mbadge-value">{{ config.ceo.badge1Value || 'Em até 24h' }}</div>
-              </div>
-            </div>
-            <div class="qs-ceo__mbadge">
-              <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="rgba(255,255,255,0.75)" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-              <div>
-                <div class="qs-ceo__mbadge-label">{{ config.ceo.badge2Label || 'Parcerias' }}</div>
-                <div class="qs-ceo__mbadge-value">{{ config.ceo.badge2Value || '+200 fechadas' }}</div>
-              </div>
-            </div>
-          </div>
-          <div class="qs-ceo__mobile-photo">
-            <img src="/img/ceo-mobile.png" alt="Mauro Triumph" class="qs-ceo__mobile-photo-img" />
-            <div class="qs-ceo__mobile-photo-fade"></div>
+          <div class="qs-ceo__stats qs-ceo__stats--inline">
+            <div><b>Em até 24h</b><span>RESPOSTAS</span></div>
+            <div><b>+200</b><span>PARCERIAS FECHADAS</span></div>
           </div>
         </div>
 
-        <div class="qs-ceo__badges">
-          <div class="qs-ceo__badge">
-            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#2F7785" stroke-width="2"><path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
-            <div>
-              <div class="qs-ceo__badge-label">{{ config.ceo.badge1Label || 'Respostas' }}</div>
-              <div class="qs-ceo__badge-value">{{ config.ceo.badge1Value || 'Em até 24h' }}</div>
-            </div>
+        <div class="qs-ceo__photo">
+          <img
+            v-if="photoExists"
+            src="/img/team/mauro-cutout.png"
+            alt="Mauro Triumph, CEO e fundador da Quanta Shop"
+            width="700" height="665" loading="lazy" decoding="async"
+            @error="photoExists = false"
+          />
+          <div v-else class="qs-ceo__photo-placeholder" aria-hidden="true">
+            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.3)" stroke-width="1"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
           </div>
-          <div class="qs-ceo__badge">
-            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#2F7785" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-            <div>
-              <div class="qs-ceo__badge-label">{{ config.ceo.badge2Label || 'Parcerias' }}</div>
-              <div class="qs-ceo__badge-value">{{ config.ceo.badge2Value || '+200 fechadas' }}</div>
-            </div>
+          <div class="qs-ceo__card qs-ceo__card--1">
+            <span class="qs-ceo__card-ic">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 4V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z" /></svg>
+            </span>
+            <div><span class="qs-ceo__card-lbl">RESPOSTAS</span><b>Em até 24h</b></div>
           </div>
-        </div>
-
-      </div>
-    </div>
-
-    <div v-if="showModal" class="qs-modal-overlay" @click="closeModal">
-      <div class="qs-modal" @click.stop>
-        <div class="qs-modal-header">
-          <h3>Conversa com IA</h3>
-          <button @click="closeModal" class="qs-modal-close">×</button>
-        </div>
-        <div class="qs-modal-body">
-          <div class="qs-chat">
-            <div v-for="(msg, i) in chatMessages" :key="i" :class="['qs-chat-msg', msg.type]">
-              {{ msg.text }}
-            </div>
-            <div v-if="isTyping" class="qs-chat-msg bot qs-chat-typing">
-              <span class="qs-chat-typing-dot"></span>
-              <span class="qs-chat-typing-dot"></span>
-              <span class="qs-chat-typing-dot"></span>
-            </div>
-          </div>
-          <div v-if="currentStep === 0" class="qs-form-group">
-            <input v-model="userResponses.name" type="text" placeholder="Qual é seu nome?" class="qs-input" :disabled="isTyping" @keyup.enter="nextStep" />
-          </div>
-          <div v-else-if="currentStep === 1" class="qs-form-group">
-            <label v-for="opt in ['Quero cashback', 'Quero credenciar minha loja', 'Quero ser agente']" :key="opt" class="qs-radio-label">
-              <input type="radio" v-model="userResponses.interest" :value="opt" :disabled="isTyping" />
-              {{ opt }}
-            </label>
-          </div>
-          <div v-else-if="currentStep === 2" class="qs-form-group">
-            <input v-model="userResponses.email" type="email" placeholder="Seu e-mail" class="qs-input" :disabled="isTyping" @keyup.enter="submitChat" />
-          </div>
-          <div class="qs-modal-footer">
-            <button @click="nextStep" v-if="currentStep < 2" class="qs-btn-primary" :disabled="isTyping">Próximo</button>
-            <button @click="submitChat" v-else class="qs-btn-primary" :disabled="isTyping">Enviar</button>
+          <div class="qs-ceo__card qs-ceo__card--2">
+            <span class="qs-ceo__card-ic">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 17l6-6 4 4 7-7" /><path d="M17 8h4v4" /></svg>
+            </span>
+            <div><span class="qs-ceo__card-lbl">PARCERIAS</span><b>+200 fechadas</b></div>
           </div>
         </div>
       </div>
     </div>
+
+    <HomeCeoAiChatModal v-if="modalOpen" @close="modalOpen = false" />
   </section>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { useHomeConfig } from '@/composables/useHomeConfig';
+import { ref } from 'vue';
 
-const { config, loadConfig } = useHomeConfig();
-
-onMounted(() => loadConfig());
-
-const showModal = ref(false);
-const currentStep = ref(0);
-const isTyping = ref(false);
-const chatMessages = ref<Array<{ type: 'bot' | 'user'; text: string }>>([
-  { type: 'bot', text: 'Olá! Qual é seu nome?' }
-]);
-const userResponses = ref({
-  name: '',
-  interest: '',
-  email: ''
-});
-
-const questions = [
-  'Qual é seu interesse?',
-  'Qual é seu e-mail?'
-];
+const modalOpen = ref(false);
+const photoExists = ref(true);
 
 function openModal() {
-  showModal.value = true;
-  currentStep.value = 0;
-  isTyping.value = false;
-  userResponses.value = { name: '', interest: '', email: '' };
-  chatMessages.value = [{ type: 'bot', text: 'Olá! Qual é seu nome?' }];
-}
-
-function closeModal() {
-  showModal.value = false;
-}
-
-async function pushBotMessageWithTyping(text: string, delay = 900) {
-  isTyping.value = true;
-  await new Promise(resolve => setTimeout(resolve, delay));
-  isTyping.value = false;
-  chatMessages.value.push({ type: 'bot', text });
-}
-
-async function nextStep() {
-  if (isTyping.value) return;
-  if (currentStep.value === 0 && !userResponses.value.name) return;
-  if (currentStep.value === 1 && !userResponses.value.interest) return;
-
-  if (currentStep.value === 0) {
-    chatMessages.value.push({ type: 'user', text: userResponses.value.name });
-    currentStep.value++;
-    await pushBotMessageWithTyping(questions[0]);
-  } else if (currentStep.value === 1) {
-    chatMessages.value.push({ type: 'user', text: userResponses.value.interest });
-    currentStep.value++;
-    await pushBotMessageWithTyping(questions[1]);
-  }
-}
-
-async function submitChat() {
-  if (isTyping.value) return;
-  if (!userResponses.value.email) return;
-  chatMessages.value.push({ type: 'user', text: userResponses.value.email });
-  await pushBotMessageWithTyping('Obrigado! Em breve entraremos em contato.');
-  setTimeout(() => closeModal(), 2000);
+  modalOpen.value = true;
 }
 </script>
 
 <style scoped>
-.qs-ceo {
-  padding: 48px 0;
-  background: #fff;
+.qs-ceo-sec { padding: 84px 0; background: #f7f8fa; }
+.container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+.qs-ceo { position: relative; display: grid; grid-template-columns: 1.05fr .95fr; align-items: end; border-radius: 20px; overflow: hidden; color: #fff; min-height: 470px; background: linear-gradient(135deg, #225F6B, #163038); }
+.qs-ceo__film { position: absolute; inset: 0; z-index: 2; pointer-events: none; background: linear-gradient(115deg, rgba(20,48,56,.92) 0%, rgba(26,74,84,.66) 42%, rgba(47,119,133,.48) 66%, rgba(152,199,58,.28) 100%); }
+
+.qs-ceo__in { position: relative; z-index: 3; padding: 56px; align-self: center; }
+.qs-ceo__tag { display: inline-flex; align-items: center; gap: 7px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.22); border-radius: 999px; padding: 6px 13px; font-family: 'Inter','Jost',sans-serif; font-size: 12px; font-weight: 700; letter-spacing: .06em; color: #fff; }
+.qs-ceo__d { width: 7px; height: 7px; border-radius: 50%; background: #98C73A; }
+.qs-ceo__pre { font-family: 'Inter','Jost',sans-serif; font-size: 14px; letter-spacing: .22em; margin-top: 18px; color: #cfe6ea; }
+.qs-ceo__h2 { font-family: 'Jost','Inter',sans-serif; font-size: clamp(34px, 4.6vw, 54px); font-weight: 800; text-transform: uppercase; letter-spacing: -.01em; margin: 4px 0 14px; background: linear-gradient(92deg, #ffffff 0%, #e6fff0 36%, #98C73A 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+.qs-ceo__text { font-family: 'Inter','Jost',sans-serif; font-size: 17px; color: #e8f3f4; max-width: 430px; text-shadow: 0 1px 12px rgba(0,0,0,.3); }
+.qs-ceo__cta-row { display: flex; gap: 12px; margin-top: 26px; flex-wrap: wrap; }
+.qs-ceo__btn { display: inline-flex; align-items: center; gap: 8px; font-family: 'Inter','Jost',sans-serif; font-weight: 700; font-size: 15px; border-radius: 999px; padding: 14px 26px; min-height: 44px; text-decoration: none; border: 1.5px solid transparent; cursor: pointer; transition: transform .2s ease, box-shadow .2s ease, background .2s ease; }
+.qs-ceo__btn--primary { background: linear-gradient(180deg, #98C73A, #7aad1f); color: #173a0a; box-shadow: 0 10px 28px rgba(152,199,58,.35); }
+.qs-ceo__btn--primary:hover { transform: translateY(-2px); box-shadow: 0 16px 36px rgba(152,199,58,.45); }
+.qs-ceo__btn--ghost { background: rgba(255,255,255,.08); color: #fff; border-color: rgba(255,255,255,.35); }
+.qs-ceo__btn--ghost:hover { background: rgba(255,255,255,.16); }
+
+.qs-ceo__stats { display: flex; gap: 30px; margin-top: 28px; }
+.qs-ceo__stats b { display: block; font-family: 'Jost','Inter',sans-serif; font-size: 20px; color: #98C73A; }
+.qs-ceo__stats span { font-size: 12px; color: #bcd6da; letter-spacing: .08em; }
+.qs-ceo__stats--inline { display: none; }
+
+.qs-ceo__photo { position: relative; z-index: 1; align-self: end; justify-self: center; display: flex; align-items: flex-end; height: 100%; min-height: 320px; }
+.qs-ceo__photo img { max-height: 480px; width: auto; display: block; }
+.qs-ceo__photo-placeholder { width: 200px; height: 300px; display: flex; align-items: center; justify-content: center; opacity: .4; }
+
+.qs-ceo__card { position: absolute; z-index: 4; display: flex; align-items: center; gap: 11px; background: rgba(12,26,33,.5); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,.16); border-radius: 16px; padding: 12px 16px; box-shadow: 0 4px 20px rgba(1,15,28,.12); }
+.qs-ceo__card--1 { top: 8%; right: 0; }
+.qs-ceo__card--2 { bottom: 18%; left: -14%; }
+.qs-ceo__card-ic { width: 38px; height: 38px; border-radius: 11px; display: grid; place-items: center; background: linear-gradient(135deg, #7aad1f, #98C73A); color: #0c1a21; flex-shrink: 0; }
+.qs-ceo__card--2 .qs-ceo__card-ic { background: linear-gradient(135deg, #2F7785, #3A9AAD); color: #fff; }
+.qs-ceo__card-ic svg { width: 19px; height: 19px; }
+.qs-ceo__card-lbl { display: block; font-size: 11px; letter-spacing: .07em; color: #bcd6da; text-transform: uppercase; }
+.qs-ceo__card b { font-family: 'Jost','Inter',sans-serif; font-size: 17px; color: #fff; }
+
+@media (max-width: 880px) {
+  .qs-ceo { grid-template-columns: 1fr; text-align: center; min-height: 0; }
+  .qs-ceo__in { padding: 40px 24px 0; }
+  .qs-ceo__photo { justify-self: center; }
+  .qs-ceo__photo img { max-height: 340px; }
+  .qs-ceo__film { background: linear-gradient(0deg, rgba(20,48,56,.93) 35%, rgba(26,74,84,.55) 70%, rgba(152,199,58,.18) 100%); }
+  .qs-ceo__card { display: none; }
+  .qs-ceo__stats--inline { display: flex; justify-content: center; }
 }
-
-.qs-ceo__card {
-  background: linear-gradient(135deg, #1a4a54 0%, #225F6B 50%, #2F7785 100%);
-  border-radius: 20px;
-  padding: 52px 56px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 40px;
-  position: relative;
-  overflow: hidden;
-}
-
-.qs-ceo__overlay {
-  position: absolute;
-  inset: 0;
-  border-radius: 20px;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.qs-ceo__card::before {
-  content: '';
-  position: absolute;
-  right: -60px;
-  top: -60px;
-  width: 280px;
-  height: 280px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.04);
-}
-
-.qs-ceo__mobile-row {
-  display: none;
-}
-
-@media (max-width: 767px) {
-  .qs-ceo__card {
-    flex-direction: column;
-    padding: 28px 24px 0;
-    text-align: center;
-    background: linear-gradient(160deg, #1a4a54 0%, #225F6B 55%, #2a7078 100%) !important;
-    overflow: hidden;
-  }
-
-  .qs-ceo__overlay {
-    display: none !important;
-  }
-
-  .qs-ceo__badges {
-    display: none !important;
-  }
-
-  .qs-ceo__mobile-row {
-    display: flex;
-    flex-direction: row;
-    width: calc(100% + 48px);
-    margin-left: -24px;
-    height: 175px;
-    margin-top: 18px;
-    flex-shrink: 0;
-    overflow: hidden;
-  }
-
-  .qs-ceo__mobile-badges {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 8px;
-    padding: 0 8px 0 16px;
-    flex-shrink: 0;
-    width: 155px;
-    z-index: 2;
-  }
-
-  .qs-ceo__mbadge {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(255, 255, 255, 0.13);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.20);
-    border-radius: 10px;
-    padding: 6px 10px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.22);
-  }
-
-  .qs-ceo__mbadge-label {
-    color: rgba(255, 255, 255, 0.60);
-    font-size: 7px;
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    margin-bottom: 1px;
-    white-space: nowrap;
-    font-family: 'Inter', 'Jost', sans-serif;
-  }
-
-  .qs-ceo__mbadge-value {
-    color: #fff;
-    font-size: 11px;
-    font-weight: 700;
-    white-space: nowrap;
-    font-family: 'Inter', 'Jost', sans-serif;
-  }
-
-  .qs-ceo__mobile-photo {
-    flex: 1;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .qs-ceo__mobile-photo-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center center;
-    display: block;
-    filter: brightness(0.70) saturate(0.85);
-  }
-
-  .qs-ceo__mobile-photo-fade {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      to right,
-      #225F6B 0%,
-      rgba(34, 95, 107, 0.30) 30%,
-      rgba(34, 95, 107, 0.00) 60%
-    );
-  }
-}
-
-.qs-ceo__content {
-  position: relative;
-  z-index: 2;
-}
-
-.qs-ceo__tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(255,255,255,0.12);
-  border: 1px solid rgba(255,255,255,0.20);
-  border-radius: 999px;
-  color: rgba(255,255,255,0.80);
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 11px;
-  font-weight: 600;
-  padding: 4px 14px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  margin-bottom: 12px;
-}
-
-.qs-ceo__pre {
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 14px;
-  font-weight: 500;
-  color: rgba(255,255,255,0.70);
-  margin-bottom: 4px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.qs-ceo__name {
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: clamp(28px, 4vw, 40px);
-  font-weight: 800;
-  color: #98C73A;
-  letter-spacing: -0.02em;
-  margin-bottom: 12px;
-}
-
-.qs-ceo__desc {
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 15px;
-  color: rgba(255,255,255,0.75);
-  line-height: 1.5;
-  max-width: 360px;
-  margin-bottom: 28px;
-}
-
-.qs-ceo__btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: #98C73A;
-  color: #fff;
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  padding: 13px 24px;
-  border-radius: 8px;
-  text-decoration: none;
-  transition: all 0.2s ease;
-}
-
-.qs-ceo__btn:hover {
-  background: #7aad1f;
-  color: #fff;
-  transform: translateY(-2px);
-}
-
-.qs-ceo__badges {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  flex-shrink: 0;
-  position: relative;
-  z-index: 2;
-}
-
-.qs-ceo__badge {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: rgba(255,255,255,0.95);
-  backdrop-filter: blur(8px);
-  border-radius: 12px;
-  padding: 14px 20px;
-  min-width: 180px;
-}
-
-.qs-ceo__badge-label {
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 11px;
-  color: #6b7280;
-  margin-bottom: 2px;
-}
-
-.qs-ceo__badge-value {
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 15px;
-  font-weight: 700;
-  color: #111827;
-}
-
-.qs-ceo__btn-secondary {
-  padding: 10px 24px;
-  border: 1px solid rgba(255,255,255,0.30);
-  border-radius: 8px;
-  background: transparent;
-  color: #fff;
-  font-weight: 600;
-  font-size: 13px;
-  font-family: 'Inter', 'Jost', sans-serif;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: all 0.3s ease;
-}
-
-.qs-ceo__btn-secondary:hover {
-  background: rgba(255,255,255,0.1);
-  border-color: rgba(255,255,255,0.50);
-}
-
-/* Modal */
-.qs-modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-}
-
-.qs-modal {
-  background: #1f2937;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 420px;
-  max-height: 600px;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-  animation: slideUp 0.3s ease;
-}
-
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.qs-modal-header {
-  padding: 20px;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.qs-modal-header h3 {
-  color: #fff;
-  font-size: 18px;
-  font-weight: 700;
-  margin: 0;
-}
-
-.qs-modal-close {
-  background: transparent;
-  border: 0;
-  color: rgba(255,255,255,0.5);
-  font-size: 28px;
-  cursor: pointer;
-  padding: 0;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.qs-modal-close:hover {
-  color: #fff;
-}
-
-.qs-modal-body {
-  padding: 20px;
-  overflow-y: auto;
-  flex: 1;
-}
-
-.qs-chat {
-  margin-bottom: 20px;
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-.qs-chat-msg {
-  margin-bottom: 10px;
-  padding: 10px 12px;
-  border-radius: 8px;
-  font-size: 13px;
-  line-height: 1.4;
-}
-
-.qs-chat-msg.bot {
-  background: rgba(152,199,58,0.15);
-  color: #a8d84e;
-  border-left: 3px solid #98C73A;
-}
-
-.qs-chat-msg.user {
-  background: rgba(47,119,133,0.15);
-  color: #a8d7e8;
-  border-left: 3px solid #2F7785;
-  margin-left: auto;
-  max-width: 80%;
-}
-
-.qs-chat-typing {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 12px 14px;
-}
-
-.qs-chat-typing-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #98C73A;
-  display: inline-block;
-  animation: qs-typing-bounce 1.2s infinite ease-in-out;
-}
-
-.qs-chat-typing-dot:nth-child(2) {
-  animation-delay: 0.15s;
-}
-
-.qs-chat-typing-dot:nth-child(3) {
-  animation-delay: 0.3s;
-}
-
-@keyframes qs-typing-bounce {
-  0%, 60%, 100% {
-    transform: translateY(0);
-    opacity: 0.4;
-  }
-  30% {
-    transform: translateY(-5px);
-    opacity: 1;
-  }
-}
-
-.qs-form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 15px;
-}
-
-.qs-input {
-  padding: 10px 12px;
-  border: 1px solid rgba(255,255,255,0.2);
-  border-radius: 6px;
-  background: rgba(255,255,255,0.05);
-  color: #fff;
-  font-size: 13px;
-  font-family: 'Inter', 'Jost', sans-serif;
-}
-
-.qs-input::placeholder {
-  color: rgba(255,255,255,0.4);
-}
-
-.qs-input:focus {
-  outline: none;
-  background: rgba(255,255,255,0.08);
-  border-color: #98C73A;
-}
-
-.qs-radio-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px;
-  border-radius: 6px;
-  border: 1px solid rgba(255,255,255,0.1);
-  cursor: pointer;
-  color: rgba(255,255,255,0.8);
-  font-size: 13px;
-  transition: all 0.2s ease;
-}
-
-.qs-radio-label:hover {
-  background: rgba(255,255,255,0.05);
-  border-color: #98C73A;
-}
-
-.qs-radio-label input {
-  cursor: pointer;
-}
-
-.qs-modal-footer {
-  padding: 15px 20px;
-  border-top: 1px solid rgba(255,255,255,0.1);
-  display: flex;
-  gap: 10px;
-}
-
-.qs-btn-primary {
-  flex: 1;
-  padding: 10px 16px;
-  background: #98C73A;
-  color: #225F6B;
-  border: 0;
-  border-radius: 6px;
-  font-weight: 700;
-  font-size: 13px;
-  font-family: 'Inter', 'Jost', sans-serif;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.qs-btn-primary:hover {
-  background: #a8d84e;
-  transform: translateY(-2px);
-}
-
-.qs-btn-primary:active {
-  transform: translateY(0);
-}
+@media (prefers-reduced-motion: reduce) { .qs-ceo__btn { transition: none; } }
 </style>

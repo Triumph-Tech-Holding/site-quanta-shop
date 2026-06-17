@@ -10,6 +10,7 @@
           </div>
 
           <nav class="qs-home-header__nav d-none d-xl-flex">
+            <nuxt-link href="/como-funciona">Como funciona</nuxt-link>
             <nuxt-link href="/para-voce">Para Você</nuxt-link>
             <nuxt-link href="/para-sua-empresa">Para sua Empresa</nuxt-link>
             <nuxt-link href="/seja-um-agente">Seja um Agente</nuxt-link>
