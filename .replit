@@ -29,13 +29,13 @@ args = "Auto Push"
 name = "Start application"
 author = "agent"
 
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "npm run dev"
-waitForPort = 5000
-
 [workflows.workflow.metadata]
 outputType = "webview"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "NUXT_TELEMETRY_DISABLED=1 npm run dev"
+waitForPort = 5000
 
 [[workflows.workflow]]
 name = "Start API"
