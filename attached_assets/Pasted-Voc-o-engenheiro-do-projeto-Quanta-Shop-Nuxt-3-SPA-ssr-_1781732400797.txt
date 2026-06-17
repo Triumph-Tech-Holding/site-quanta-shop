@@ -1,0 +1,79 @@
+Você é o engenheiro do projeto Quanta Shop (Nuxt 3 SPA, ssr: false, Vue 3 <script setup lang="ts">, CSS puro scoped, design system qs-*, SEM Bootstrap/Tailwind). Vou integrar uma nova home premium já desenvolvida (hero com a "Quanta IA", 6 banners rotativos, seção "Como funciona", FAQ, seção lojistas, CEO, etc.). Sua tarefa é integrar os arquivos abaixo sem quebrar o que já existe e deixar tudo buildando.
+
+1. Arquivos a integrar (na ordem de dependência)
+
+Coloque cada um no caminho indicado. Faça nesta ordem e só rode o build no fim.
+
+a) Assets → public/
+
+
+public/img/logo/quanta-logo.png (logo colorida — header)
+public/img/logo/quanta-logo-whitegreen.png (logo branca+verde — footer)
+public/img/logo/quanta-icon.png e quanta-icon-white.png (ícone bq)
+public/img/team/mauro-cutout.png (foto recortada do CEO)
+public/og-cover.jpg e public/favicon.png
+
+
+b) Base/dependências
+
+
+composables/useHomeConfig.ts  → MESCLAR (ver regra 2)
+components/qs-logo.vue         → novo (ou mesclar se existir)
+layouts/layout-home.vue        → MESCLAR se já existir
+components/header/header-home.vue → MESCLAR se já existir
+components/footer/footer-home.vue → MESCLAR se já existir
+
+
+c) Seções da home (novas — pode colar direto) em components/home/:
+home-hero.vue, home-como-funciona.vue, home-capabilities.vue, home-brand-logos.vue, home-ofertas-dia.vue, home-parceiros-online.vue, home-parceiros-locais.vue, home-lojistas.vue, home-testimonials.vue, home-blog.vue, home-faq.vue, home-ceo.vue, home-footer-cta.vue.
+
+d) Páginas (por último)
+
+
+pages/index.vue         → MESCLAR (ver regra 2)
+pages/como-funciona.vue → nova
+
+
+2. Regra de MESCLAGEM (não sobrescrever cego)
+
+Para os arquivos que já existem no projeto, NÃO substitua por inteiro. Compare e integre:
+
+
+composables/useHomeConfig.ts: MANTENHA a versão atual do projeto (ela é a oficial e mais completa). NÃO troque pelo stub. Apenas garanta que a interface HomeConfig aceite, opcionalmente, um array heroBanners (badge, title com <highlight>, sub, cta, href). Se não houver banners no CMS, o home-hero.vue já cai num default interno (6 banners) — então pode deixar sem heroBanners que funciona.
+pages/index.vue: mantenha o que já existe e garanta que (1) a ordem de seções seja a do novo arquivo, (2) o useSeoMeta e o JSON-LD incluam Organization + WebSite (SearchAction) + FAQPage (5 perguntas) + ItemList das ofertas. Não duplique blocos de SEO.
+header-home.vue: garanta que "Como funciona" seja o 1º item do menu e que exista o menu hambúrguer mobile funcional.
+footer-home.vue: garanta a logo branca+verde (/img/logo/quanta-logo-whitegreen.png), a newsletter e os selos (PIX/LGPD/SSL).
+layout-home.vue: deve injetar header + conteúdo + footer. Se o projeto já tem layout, só confirme que header/footer são os corretos.
+
+
+Se algum componente novo colidir com nome existente, prefira o novo, mas preserve qualquer integração real (chamadas de API, stores) que o antigo tivesse.
+
+3. Restrições da plataforma (NÃO violar)
+
+
+ssr: false (SPA). Porta dev 5000. allowedHosts: true (preview é iframe proxiado).
+Nunca usar localhost hardcoded; use nuxt-link/URLs relativas e process.env/$REPLIT_DEV_DOMAIN quando preciso.
+Não introduzir Bootstrap nem Tailwind. CSS puro scoped, tokens qs-*.
+Não usar base64 em imagens — apenas arquivos em /img/....
+Toda <img> deve ter width, height, loading="lazy", decoding="async".
+Não alterar backend, autenticação ou lógica de negócio. É só a camada de apresentação da home.
+Imagens de produtos/marcas estão em URLs externas (Unsplash/Clearbit) marcadas com <!-- TODO: hospedar / partnerStore -->. Pode deixar por enquanto.
+
+
+4. Fontes
+
+Os componentes declaram 'Bruum FY' (display) e 'Kiye Sans' (corpo) com fallback Jost/Inter.
+Garanta que Jost + Inter estejam carregados (Google Fonts no nuxt.config ou <link>).
+Se houver .woff2 de Bruum FY/Kiye Sans em public/fonts/, registre um @font-face (font-display: swap) num CSS global; senão, deixe o fallback.
+
+5. Validação (faça e me reporte)
+
+
+npm run build:nuxt → 0 erros (warnings ok). Corrija erros de import/SFC se houver.
+Rodar o app e abrir a home: hero com 6 banners girando + chat "Quanta IA"; seções na ordem; /como-funciona acessível; nav com "Como funciona" 1º; footer com logo branca+verde.
+Mobile 360–414px: sem overflow horizontal; hambúrguer funciona; CEO empilha; ofertas em 1 coluna.
+Conferir que /img/logo/*, /img/team/mauro-cutout.png, /og-cover.jpg retornam 200.
+Sem console.error no browser.
+
+
+Ao terminar, liste: arquivos criados, arquivos mesclados (e o que foi preservado), e qualquer ajuste que você precisou fazer.
