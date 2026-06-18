@@ -10,7 +10,6 @@
     <home-lojistas />
     <home-testimonials />
     <home-blog />
-    <home-faq />
     <home-ceo />
     <home-footer-cta />
   </div>
@@ -78,37 +77,6 @@ useHead({
               },
               'query-input': 'required name=search_term_string',
             },
-          },
-          {
-            '@type': 'FAQPage',
-            '@id': SITE + '/#faq',
-            mainEntity: [
-              {
-                '@type': 'Question',
-                name: 'O que é a Quanta Shop?',
-                acceptedAnswer: { '@type': 'Answer', text: 'É uma plataforma de cashback em rede: você compra nas suas lojas favoritas e recebe dinheiro de volta, podendo ainda ganhar com a sua rede de consumo.' },
-              },
-              {
-                '@type': 'Question',
-                name: 'Como funciona a Quanta IA?',
-                acceptedAnswer: { '@type': 'Answer', text: 'Pelo chat você busca e cota produtos e lojas, consulta seu saldo de cashback e tira qualquer dúvida — a mesma praticidade de uma conversa no WhatsApp.' },
-              },
-              {
-                '@type': 'Question',
-                name: 'O cashback é dinheiro de verdade?',
-                acceptedAnswer: { '@type': 'Answer', text: 'Sim. O valor acumulado pode ser sacado via PIX, de forma transparente e instantânea.' },
-              },
-              {
-                '@type': 'Question',
-                name: 'Quanto custa para usar?',
-                acceptedAnswer: { '@type': 'Answer', text: 'Criar conta e receber cashback é grátis. Há um plano opcional (Quanta Plus) com cashback turbinado e benefícios exclusivos.' },
-              },
-              {
-                '@type': 'Question',
-                name: 'Como recebo e saco meu cashback?',
-                acceptedAnswer: { '@type': 'Answer', text: 'O cashback cai automaticamente na sua carteira Quanta após a compra confirmada. O saque é via PIX, direto pela plataforma.' },
-              },
-            ],
           },
           {
             '@type': 'ItemList',

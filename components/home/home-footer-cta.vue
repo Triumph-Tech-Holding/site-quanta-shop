@@ -1,6 +1,5 @@
 <template>
   <section class="qs-fcta" aria-labelledby="qs-fcta-title">
-    <QsLogo tone="white" :size="62" class="qs-fcta__ic" aria-hidden="true" />
     <h2 id="qs-fcta-title" class="qs-fcta__h2">Pronto para começar a economizar?</h2>
     <p class="qs-fcta__lead">Cadastre-se gratuitamente e aproveite cashback em milhares de lojas.</p>
     <div class="qs-fcta__row">
@@ -14,7 +13,6 @@
 
 <style scoped>
 .qs-fcta { background: radial-gradient(900px 500px at 50% -20%, rgba(58,154,173,.5), transparent 60%), linear-gradient(160deg, #225F6B, #143038); color: #fff; text-align: center; padding: 88px 24px; }
-.qs-fcta__ic { margin: 0 auto 20px; display: block; }
 .qs-fcta__h2 { font-family: 'Bruum FY','Jost','Inter',sans-serif; color: #fff; font-size: clamp(32px, 4vw, 48px); font-weight: 800; line-height: 1.08; letter-spacing: -.02em; }
 .qs-fcta__lead { font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 18px; color: #cfe6ea; margin: 14px 0 30px; }
 .qs-fcta__row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
