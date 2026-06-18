@@ -278,7 +278,7 @@ onBeforeUnmount(() => {
 @keyframes qsBlink { 0%,60%,100% { opacity: .3; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-3px); } }
 
 @media (max-width: 980px) {
-  .qs-hero__grid { display: flex; flex-direction: column; gap: 20px; padding: 22px 0 40px; min-height: auto; }
+  .qs-hero__grid { display: flex; flex-direction: column; gap: 20px; padding: 44px 0 60px; min-height: auto; }
   .qs-hero__copy { display: contents; }
   .qs-hero__rotate { order: 1; }
   .qs-hero__chat { order: 2; margin: 0 auto; max-width: 460px; width: 100%; }
