@@ -4,7 +4,7 @@
     <h2 id="qs-fcta-title" class="qs-fcta__h2">Pronto para começar a economizar?</h2>
     <p class="qs-fcta__lead">Cadastre-se gratuitamente e aproveite cashback em milhares de lojas.</p>
     <div class="qs-fcta__row">
-      <nuxt-link class="qs-fcta__btn qs-fcta__btn--primary" href="/register">Cadastrar Agora →</nuxt-link>
+      <nuxt-link class="qs-fcta__btn qs-fcta__btn--primary" href="/agencia/cadastro">Cadastrar Agora →</nuxt-link>
       <nuxt-link class="qs-fcta__btn qs-fcta__btn--ghost" href="/login">Já tenho conta</nuxt-link>
     </div>
   </section>

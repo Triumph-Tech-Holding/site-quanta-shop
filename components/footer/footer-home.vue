@@ -4,7 +4,7 @@
       <div class="qs-ft__top">
         <div class="qs-ft__brand-col">
           <nuxt-link class="qs-ft__brand" href="/" aria-label="Quanta Shop">
-            <img class="qs-ft__logo" src="/img/logo/quanta-logo-whitegreen.png" width="128" height="42" alt="Quanta Shop" decoding="async" />
+            <img class="qs-ft__logo" src="/img/logo/logo-white.png" width="128" height="42" alt="Quanta Shop" decoding="async" />
           </nuxt-link>
           <div class="qs-ft__seals">
             <span class="qs-ft__seal"><b>PIX</b> saque instantâneo</span>
@@ -50,12 +50,12 @@ function subscribe() {
 
 const links = [
   { label: 'Como funciona', href: '/como-funciona' },
-  { label: 'Quem somos', href: '/quem-somos' },
-  { label: 'Credenciamento', href: '/credenciar' },
-  { label: 'Suporte', href: '/suporte' },
-  { label: 'Dúvidas', href: '/faq' },
-  { label: 'Termos e condições', href: '/termos' },
-  { label: 'LGPD', href: '/privacidade' },
+  { label: 'Quem somos', href: '/agencia/quem-somos' },
+  { label: 'Credenciamento', href: '/agencia/credenciar' },
+  { label: 'Suporte', href: '/contato' },
+  { label: 'Dúvidas', href: '/agencia/faq' },
+  { label: 'Termos e condições', href: '/agencia/privacidade' },
+  { label: 'LGPD', href: '/agencia/privacidade' },
 ];
 </script>
 

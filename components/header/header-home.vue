@@ -2,7 +2,7 @@
   <header class="qs-hdr">
     <div class="container qs-hdr__row">
       <nuxt-link class="qs-hdr__brand" href="/" aria-label="Quanta Shop">
-        <img class="qs-hdr__logo" src="/img/logo/quanta-logo.png" width="122" height="40" alt="Quanta Shop" decoding="async" />
+        <img class="qs-hdr__logo" src="/img/logo/logo-trimmed.png" width="122" height="40" alt="Quanta Shop" decoding="async" />
       </nuxt-link>
 
       <nav class="qs-hdr__nav" aria-label="Principal">
@@ -11,7 +11,7 @@
 
       <div class="qs-hdr__actions">
         <nuxt-link class="qs-hdr__login" href="/login">Login</nuxt-link>
-        <nuxt-link class="qs-hdr__cad" href="/register">Cadastro</nuxt-link>
+        <nuxt-link class="qs-hdr__cad" href="/agencia/cadastro">Cadastro</nuxt-link>
         <button
           class="qs-hdr__burger" :class="{ 'is-open': open }"
           type="button" :aria-label="open ? 'Fechar menu' : 'Abrir menu'"
@@ -27,7 +27,7 @@
       <nuxt-link v-for="(l, i) in links" :key="i" :href="l.href" @click="open = false">{{ l.label }}</nuxt-link>
       <div class="qs-hdr__mobile-actions">
         <nuxt-link class="qs-hdr__login" href="/login" @click="open = false">Login</nuxt-link>
-        <nuxt-link class="qs-hdr__cad" href="/register" @click="open = false">Cadastro</nuxt-link>
+        <nuxt-link class="qs-hdr__cad" href="/agencia/cadastro" @click="open = false">Cadastro</nuxt-link>
       </div>
     </div>
   </header>

@@ -19,7 +19,7 @@
       </ol>
 
       <div class="qs-hiw__cta">
-        <nuxt-link class="qs-hiw__btn" href="/register">Criar conta grátis →</nuxt-link>
+        <nuxt-link class="qs-hiw__btn" href="/agencia/cadastro">Criar conta grátis →</nuxt-link>
       </div>
     </div>
   </section>

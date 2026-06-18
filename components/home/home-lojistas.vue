@@ -20,7 +20,7 @@
             {{ b }}
           </li>
         </ul>
-        <nuxt-link class="qs-biz__btn" href="/credenciar">Credenciar minha loja →</nuxt-link>
+        <nuxt-link class="qs-biz__btn" href="/agencia/credenciar">Credenciar minha loja →</nuxt-link>
       </div>
     </div>
   </section>

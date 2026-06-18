@@ -16,8 +16,8 @@ const props = withDefaults(defineProps<{
 
 const alt = 'Quanta Shop';
 const src = computed(() => {
-  if (props.variant === 'full') return '/img/logo/quanta-logo.png';
-  return props.tone === 'white' ? '/img/logo/quanta-icon-white.png' : '/img/logo/quanta-icon.png';
+  if (props.variant === 'full') return '/img/logo/logo-trimmed.png';
+  return props.tone === 'white' ? '/img/logo/logo-symbol-white.png' : '/img/logo/logo-symbol.png';
 });
 </script>
 

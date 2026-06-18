@@ -85,12 +85,12 @@ let offscreen = false;
 
 interface Banner { badge: string; title: string; sub: string; cta: string; href: string }
 const DEFAULT_BANNERS: Banner[] = [
-  { badge: '+12.000 usuários economizando', title: 'Seu dinheiro <highlight>volta</highlight> a cada compra', sub: 'Compre nas suas lojas favoritas e receba cashback de verdade. Simples, transparente e instantâneo.', cta: 'Criar Conta Grátis', href: '/register' },
-  { badge: 'Simples e rápido', title: 'Transforme cada compra em <highlight>dinheiro de volta</highlight>', sub: 'Ative o cashback com um clique, compre normalmente e veja o saldo crescer automaticamente.', cta: 'Começar Agora', href: '/register' },
-  { badge: 'Rede exclusiva', title: 'As melhores marcas em <highlight>um só lugar</highlight>', sub: 'Nike, Renner, Puma, Casas Bahia e centenas de outras marcas com cashback garantido.', cta: 'Ver Marcas Parceiras', href: '/partners' },
+  { badge: '+12.000 usuários economizando', title: 'Seu dinheiro <highlight>volta</highlight> a cada compra', sub: 'Compre nas suas lojas favoritas e receba cashback de verdade. Simples, transparente e instantâneo.', cta: 'Criar Conta Grátis', href: '/agencia/cadastro' },
+  { badge: 'Simples e rápido', title: 'Transforme cada compra em <highlight>dinheiro de volta</highlight>', sub: 'Ative o cashback com um clique, compre normalmente e veja o saldo crescer automaticamente.', cta: 'Começar Agora', href: '/agencia/cadastro' },
+  { badge: 'Rede exclusiva', title: 'As melhores marcas em <highlight>um só lugar</highlight>', sub: 'Nike, Renner, Puma, Casas Bahia e centenas de outras marcas com cashback garantido.', cta: 'Ver Marcas Parceiras', href: '/busca-inteligente' },
   { badge: 'Programa de pontos', title: 'Ganhe pontos, <highlight>resgate benefícios</highlight>', sub: 'Cada compra acumula pontos que viram cashback extra, descontos e experiências exclusivas.', cta: 'Conhecer Benefícios', href: '/quanta-amizade' },
-  { badge: 'Quanta Plus ✦', title: 'Ative sua experiência <highlight>Premium</highlight>', sub: 'Cashback turbinado, ofertas antecipadas e benefícios exclusivos para assinantes Quanta Plus.', cta: 'Assinar Quanta Plus', href: '/planos' },
-  { badge: 'Para lojistas', title: 'Aumente vendas com <highlight>tecnologia Quanta</highlight>', sub: 'Fidelize clientes, aumente o ticket médio e ganhe visibilidade na maior rede de cashback do Brasil.', cta: 'Credenciar Minha Loja', href: '/credenciar' },
+  { badge: 'Quanta Plus ✦', title: 'Ative sua experiência <highlight>Premium</highlight>', sub: 'Cashback turbinado, ofertas antecipadas e benefícios exclusivos para assinantes Quanta Plus.', cta: 'Assinar Quanta Plus', href: '/agencia/painel/planos' },
+  { badge: 'Para lojistas', title: 'Aumente vendas com <highlight>tecnologia Quanta</highlight>', sub: 'Fidelize clientes, aumente o ticket médio e ganhe visibilidade na maior rede de cashback do Brasil.', cta: 'Credenciar Minha Loja', href: '/agencia/credenciar' },
 ];
 const banners = computed<Banner[]>(() => {
   const cms = (config.value as any)?.heroBanners;
