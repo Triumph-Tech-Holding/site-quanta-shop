@@ -1,0 +1,996 @@
+{
+ "brands": [
+  {
+   "name": "Eurorelogios",
+   "slug": "eurorelogios",
+   "site": "https://www.eurorelogios.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/28167.png"
+  },
+  {
+   "name": "Café L'or",
+   "slug": "cafe-l-or",
+   "site": "https://www.cafelor.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/19672.png"
+  },
+  {
+   "name": "Drogaria Venancio",
+   "slug": "drogaria-venancio",
+   "site": "https://www.drogariavenancio.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/47165.png"
+  },
+  {
+   "name": "Carrefour",
+   "slug": "carrefour",
+   "site": "https://www.carrefour.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17665.png"
+  },
+  {
+   "name": "Casas Bahia",
+   "slug": "casas-bahia",
+   "site": "https://www.casasbahia.com.br",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17629.png"
+  },
+  {
+   "name": "Quero Passagem",
+   "slug": "quero-passagem",
+   "site": "http://queropassagem.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17817.png"
+  },
+  {
+   "name": "Panasonic",
+   "slug": "panasonic",
+   "site": "https://loja.panasonic.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/78382.png"
+  },
+  {
+   "name": "Electrolux",
+   "slug": "electrolux",
+   "site": "https://loja.electrolux.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17858.png"
+  },
+  {
+   "name": "LG",
+   "slug": "lg",
+   "site": "https://www.lg.com/br",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/33061.png"
+  },
+  {
+   "name": "Diesel",
+   "slug": "diesel",
+   "site": "https://br.diesel.com/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17846.png"
+  },
+  {
+   "name": "Zé Delivery",
+   "slug": "ze-delivery",
+   "site": "https://www.ze.delivery/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/112634.png"
+  },
+  {
+   "name": "Lacoste",
+   "slug": "lacoste",
+   "site": "https://www.lacoste.com/br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/112756.png"
+  },
+  {
+   "name": "Eudora",
+   "slug": "eudora",
+   "site": "https://www.eudora.com.br",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17837.png"
+  },
+  {
+   "name": "Reserva",
+   "slug": "reserva",
+   "site": "https://www.usereserva.com/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/61287.png"
+  },
+  {
+   "name": "Mizuno",
+   "slug": "mizuno",
+   "site": "https://www.mizuno.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/51271.png"
+  },
+  {
+   "name": "Lojas Renner",
+   "slug": "lojas-renner",
+   "site": "https://www.lojasrenner.com.br",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17801.png"
+  },
+  {
+   "name": "Adidas",
+   "slug": "adidas",
+   "site": "https://www.adidas.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/79926.png"
+  },
+  {
+   "name": "Madeira Madeira",
+   "slug": "madeira-madeira",
+   "site": "https://www.madeiramadeira.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17762.png"
+  },
+  {
+   "name": "Consul",
+   "slug": "consul",
+   "site": "https://www.consul.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17639.png"
+  },
+  {
+   "name": "Camicado",
+   "slug": "camicado",
+   "site": "https://www.camicado.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17790.png"
+  },
+  {
+   "name": "Fossil",
+   "slug": "fossil",
+   "site": "https://www.fossil.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/28169.png"
+  },
+  {
+   "name": "Pague Menos",
+   "slug": "pague-menos",
+   "site": "https://www.paguemenos.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/64086.png"
+  },
+  {
+   "name": "Nike",
+   "slug": "nike",
+   "site": "https://www.nike.com.br",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17652.png"
+  },
+  {
+   "name": "Adcos",
+   "slug": "adcos",
+   "site": "https://www.lojaadcos.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/85419.png"
+  },
+  {
+   "name": "Cobasi",
+   "slug": "cobasi",
+   "site": "https://www.cobasi.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17870.png"
+  },
+  {
+   "name": "Pontofrio",
+   "slug": "pontofrio",
+   "site": "https://www.pontofrio.com.br",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17621.png"
+  },
+  {
+   "name": "SorteOnline",
+   "slug": "sorteonline",
+   "site": "https://www.sorteonline.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/24164.png"
+  },
+  {
+   "name": "Hope Resort",
+   "slug": "hope-resort",
+   "site": "https://www.hoperesort.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/107041.png"
+  },
+  {
+   "name": "ASICS",
+   "slug": "asics",
+   "site": "https://www.asics.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/23659.png"
+  },
+  {
+   "name": "Olympikus",
+   "slug": "olympikus",
+   "site": "https://www.olympikus.com.br",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17698.png"
+  },
+  {
+   "name": "Under Armour",
+   "slug": "under-armour",
+   "site": "https://www.underarmour.com.br",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/18864.png"
+  },
+  {
+   "name": "JBL",
+   "slug": "jbl",
+   "site": "https://www.jbl.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/118761.png"
+  },
+  {
+   "name": "Pilao",
+   "slug": "pilao",
+   "site": "https://www.pilao.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/19673.png"
+  },
+  {
+   "name": "Central Ar",
+   "slug": "central-ar",
+   "site": "https://www.centralar.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17608.png"
+  },
+  {
+   "name": "Centauro",
+   "slug": "centauro",
+   "site": "https://www.centauro.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17806.png"
+  },
+  {
+   "name": "BELEZA NA WEB",
+   "slug": "beleza-na-web",
+   "site": "https://www.belezanaweb.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/29407.png"
+  },
+  {
+   "name": "Brastemp",
+   "slug": "brastemp",
+   "site": "https://www.brastemp.com.br",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17772.png"
+  },
+  {
+   "name": "Riachuelo",
+   "slug": "riachuelo",
+   "site": "https://www.riachuelo.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/86587.png"
+  },
+  {
+   "name": "Technos",
+   "slug": "technos",
+   "site": "https://www.technos.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/28161.png"
+  },
+  {
+   "name": "Vivara",
+   "slug": "vivara",
+   "site": "https://www.vivara.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17662.png"
+  },
+  {
+   "name": "GOL Linhas Aereas",
+   "slug": "gol-linhas-aereas",
+   "site": "https://www.voegol.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/32843.png"
+  },
+  {
+   "name": "Calvin Klein",
+   "slug": "calvin-klein",
+   "site": "https://www.calvinklein.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/100553.png"
+  }
+ ],
+ "online": [
+  {
+   "name": "Fotoregistro",
+   "slug": "fotoregistro",
+   "site": "https://www.fotoregistro.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17835.png"
+  },
+  {
+   "name": "Dentro da Historia",
+   "slug": "dentro-da-historia",
+   "site": "https://www.dentrodahistoria.com.br",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17912.png"
+  },
+  {
+   "name": "Grupo A",
+   "slug": "grupo-a",
+   "site": "https://loja.grupoa.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17884.png"
+  },
+  {
+   "name": "Eurorelogios",
+   "slug": "eurorelogios",
+   "site": "https://www.eurorelogios.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/28167.png"
+  },
+  {
+   "name": "Café L'or",
+   "slug": "cafe-l-or",
+   "site": "https://www.cafelor.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/19672.png"
+  },
+  {
+   "name": "Too Faced",
+   "slug": "too-faced",
+   "site": "https://www.toofaced.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/26875.png"
+  },
+  {
+   "name": "Drogaria Venancio",
+   "slug": "drogaria-venancio",
+   "site": "https://www.drogariavenancio.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/47165.png"
+  },
+  {
+   "name": "Dutra Maquinas",
+   "slug": "dutra-maquinas",
+   "site": "https://www.dutramaquinas.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/44939.png"
+  },
+  {
+   "name": "Trocafy",
+   "slug": "trocafy",
+   "site": "https://www.trocafy.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/51277.png"
+  },
+  {
+   "name": "Intimissimi",
+   "slug": "intimissimi",
+   "site": "https://www.intimissimi.com.br/mulher",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/70965.png"
+  },
+  {
+   "name": "Carrefour",
+   "slug": "carrefour",
+   "site": "https://www.carrefour.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17665.png"
+  },
+  {
+   "name": "Stanley",
+   "slug": "stanley",
+   "site": "https://www.stanley1913.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/30599.png"
+  },
+  {
+   "name": "Jo Malone",
+   "slug": "jo-malone",
+   "site": "https://www.jomalone.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/22390.png"
+  },
+  {
+   "name": "Quero Passagem",
+   "slug": "quero-passagem",
+   "site": "http://queropassagem.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17817.png"
+  },
+  {
+   "name": "Panasonic",
+   "slug": "panasonic",
+   "site": "https://loja.panasonic.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/78382.png"
+  },
+  {
+   "name": "FlixBus",
+   "slug": "flixbus",
+   "site": "https://www.flixbus.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/30765.png"
+  },
+  {
+   "name": "LG",
+   "slug": "lg",
+   "site": "https://www.lg.com/br",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/33061.png"
+  },
+  {
+   "name": "Diesel",
+   "slug": "diesel",
+   "site": "https://br.diesel.com/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17846.png"
+  },
+  {
+   "name": "Emma",
+   "slug": "emma",
+   "site": "https://www.colchoesemma.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/23385.png"
+  },
+  {
+   "name": "Zé Delivery",
+   "slug": "ze-delivery",
+   "site": "https://www.ze.delivery/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/112634.png"
+  },
+  {
+   "name": "Kipling",
+   "slug": "kipling",
+   "site": "https://www.kipling.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17740.png"
+  },
+  {
+   "name": "Electrolux",
+   "slug": "electrolux",
+   "site": "https://loja.electrolux.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17858.png"
+  },
+  {
+   "name": "Casas Bahia",
+   "slug": "casas-bahia",
+   "site": "https://www.casasbahia.com.br",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17629.png"
+  },
+  {
+   "name": "Vult",
+   "slug": "vult",
+   "site": "https://www.vult.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/21055.png"
+  },
+  {
+   "name": "Eotica",
+   "slug": "eotica",
+   "site": "https://www.eotica.com.br",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17854.png"
+  },
+  {
+   "name": "Eudora",
+   "slug": "eudora",
+   "site": "https://www.eudora.com.br",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17837.png"
+  },
+  {
+   "name": "Samsung",
+   "slug": "samsung",
+   "site": "https://shop.samsung.com/br/desconto-samsung",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/25539.png"
+  },
+  {
+   "name": "Reserva",
+   "slug": "reserva",
+   "site": "https://www.usereserva.com/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/61287.png"
+  },
+  {
+   "name": "Lacoste",
+   "slug": "lacoste",
+   "site": "https://www.lacoste.com/br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/112756.png"
+  },
+  {
+   "name": "Loccitane en Provence",
+   "slug": "loccitane-en-provence",
+   "site": "https://br.loccitane.com/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17891.png"
+  },
+  {
+   "name": "Madeira Madeira",
+   "slug": "madeira-madeira",
+   "site": "https://www.madeiramadeira.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17762.png"
+  },
+  {
+   "name": "Consul",
+   "slug": "consul",
+   "site": "https://www.consul.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17639.png"
+  },
+  {
+   "name": "Aramis",
+   "slug": "aramis",
+   "site": "https://www.aramis.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/121392.png"
+  },
+  {
+   "name": "Kabum",
+   "slug": "kabum",
+   "site": "https://www.kabum.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17729.png"
+  },
+  {
+   "name": "Drogaria Araujo",
+   "slug": "drogaria-araujo",
+   "site": "https://www.araujo.com.br",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17919.png"
+  },
+  {
+   "name": "Continental",
+   "slug": "continental",
+   "site": "https://www.continentalbrasil.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/19675.png"
+  },
+  {
+   "name": "Adidas",
+   "slug": "adidas",
+   "site": "https://www.adidas.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/79926.png"
+  },
+  {
+   "name": "Mizuno",
+   "slug": "mizuno",
+   "site": "https://www.mizuno.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/51271.png"
+  },
+  {
+   "name": "Dafiti",
+   "slug": "dafiti",
+   "site": "https://www.dafiti.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17697.png"
+  },
+  {
+   "name": "Lojas Renner",
+   "slug": "lojas-renner",
+   "site": "https://www.lojasrenner.com.br",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17801.png"
+  },
+  {
+   "name": "Camicado",
+   "slug": "camicado",
+   "site": "https://www.camicado.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17790.png"
+  },
+  {
+   "name": "MAC Cosmeticos",
+   "slug": "mac-cosmeticos",
+   "site": "https://www.maccosmetics.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17780.png"
+  },
+  {
+   "name": "Fut Fanatics",
+   "slug": "fut-fanatics",
+   "site": "https://www.futfanatics.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17893.png"
+  },
+  {
+   "name": "Polishop",
+   "slug": "polishop",
+   "site": "https://www.polishop.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/26113.png"
+  },
+  {
+   "name": "iPlace",
+   "slug": "iplace",
+   "site": "https://www.iplace.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/31355.png"
+  },
+  {
+   "name": "Spicy",
+   "slug": "spicy",
+   "site": "https://www.spicy.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/30615.png"
+  },
+  {
+   "name": "Wine",
+   "slug": "wine",
+   "site": "https://www.wine.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17770.png"
+  },
+  {
+   "name": "Calzedonia",
+   "slug": "calzedonia",
+   "site": "https://www.calzedonia.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/70963.png"
+  },
+  {
+   "name": "Posthaus",
+   "slug": "posthaus",
+   "site": "https://www.posthaus.com.br",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17634.png"
+  },
+  {
+   "name": "Lego",
+   "slug": "lego",
+   "site": "https://www.lego.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/30511.png"
+  },
+  {
+   "name": "Forever Liss",
+   "slug": "forever-liss",
+   "site": "https://www.foreverliss.com.br",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17619.png"
+  },
+  {
+   "name": "Mobly",
+   "slug": "mobly",
+   "site": "https://www.mobly.com.br",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17777.png"
+  },
+  {
+   "name": "Fossil",
+   "slug": "fossil",
+   "site": "https://www.fossil.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/28169.png"
+  },
+  {
+   "name": "Soldiers Nutrition",
+   "slug": "soldiers-nutrition",
+   "site": "https://www.soldiersnutrition.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/65354.png"
+  },
+  {
+   "name": "Ferramentas Kennedy",
+   "slug": "ferramentas-kennedy",
+   "site": "https://www.ferramentaskennedy.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/64654.png"
+  },
+  {
+   "name": "Avon",
+   "slug": "avon",
+   "site": "https://www.avon.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/23993.png"
+  },
+  {
+   "name": "Phooto",
+   "slug": "phooto",
+   "site": "https://www.phooto.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17727.png"
+  },
+  {
+   "name": "Zarpo Viagens",
+   "slug": "zarpo-viagens",
+   "site": "https://www.zarpo.com.br/hotel/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/32789.png"
+  },
+  {
+   "name": "eclock",
+   "slug": "eclock",
+   "site": "https://www.eclock.com.br",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17748.png"
+  },
+  {
+   "name": "Clube Giro",
+   "slug": "clube-giro",
+   "site": "https://www.clubegiro.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/97543.png"
+  },
+  {
+   "name": "Cama In Box",
+   "slug": "cama-in-box",
+   "site": "https://www.camainbox.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/38988.png"
+  },
+  {
+   "name": "DeÔnibus",
+   "slug": "deonibus",
+   "site": "https://deonibus.com/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/65292.png"
+  },
+  {
+   "name": "StudioZ",
+   "slug": "studioz",
+   "site": "https://www.stz.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/20946.png"
+  },
+  {
+   "name": "Decanter Vinhos",
+   "slug": "decanter-vinhos",
+   "site": "https://www.decanter.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/50557.png"
+  },
+  {
+   "name": "Nike",
+   "slug": "nike",
+   "site": "https://www.nike.com.br",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17652.png"
+  },
+  {
+   "name": "Compra Certa",
+   "slug": "compra-certa",
+   "site": "https://www.compracerta.com.br",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17824.png"
+  },
+  {
+   "name": "Clinique",
+   "slug": "clinique",
+   "site": "https://www.clinique.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17752.png"
+  },
+  {
+   "name": "Pague Menos",
+   "slug": "pague-menos",
+   "site": "https://www.paguemenos.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/64086.png"
+  },
+  {
+   "name": "Adcos",
+   "slug": "adcos",
+   "site": "https://www.lojaadcos.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/85419.png"
+  },
+  {
+   "name": "Outlet de Passagens",
+   "slug": "outlet-de-passagens",
+   "site": "https://www.outletdepassagens.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/71273.png"
+  },
+  {
+   "name": "Booking.com",
+   "slug": "booking-com",
+   "site": "https://www.booking.com/index.html",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/18120.png"
+  },
+  {
+   "name": "Shopclub",
+   "slug": "shopclub",
+   "site": "https://www.shopclub.com.br",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17668.png"
+  },
+  {
+   "name": "Brinox Shop",
+   "slug": "brinox-shop",
+   "site": "https://www.brinox.com.br",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/25279.png"
+  },
+  {
+   "name": "Efacil",
+   "slug": "efacil",
+   "site": "https://www.efacil.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/47533.png"
+  },
+  {
+   "name": "Acer",
+   "slug": "acer",
+   "site": "https://br-store.acer.com",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/18878.png"
+  },
+  {
+   "name": "Biscoitê",
+   "slug": "biscoite",
+   "site": "https://www.biscoite.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/106047.png"
+  },
+  {
+   "name": "Amend",
+   "slug": "amend",
+   "site": "https://www.amend.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/24288.png"
+  },
+  {
+   "name": "Cobasi",
+   "slug": "cobasi",
+   "site": "https://www.cobasi.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17870.png"
+  },
+  {
+   "name": "Karsten",
+   "slug": "karsten",
+   "site": "https://www.karsten.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/116157.png"
+  },
+  {
+   "name": "Pontofrio",
+   "slug": "pontofrio",
+   "site": "https://www.pontofrio.com.br",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17621.png"
+  },
+  {
+   "name": "SorteOnline",
+   "slug": "sorteonline",
+   "site": "https://www.sorteonline.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/24164.png"
+  },
+  {
+   "name": "Hope Resort",
+   "slug": "hope-resort",
+   "site": "https://www.hoperesort.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/107041.png"
+  },
+  {
+   "name": "ASICS",
+   "slug": "asics",
+   "site": "https://www.asics.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/23659.png"
+  },
+  {
+   "name": "Under Armour",
+   "slug": "under-armour",
+   "site": "https://www.underarmour.com.br",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/18864.png"
+  },
+  {
+   "name": "JBL",
+   "slug": "jbl",
+   "site": "https://www.jbl.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/118761.png"
+  },
+  {
+   "name": "Pilao",
+   "slug": "pilao",
+   "site": "https://www.pilao.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/19673.png"
+  },
+  {
+   "name": "Central Ar",
+   "slug": "central-ar",
+   "site": "https://www.centralar.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17608.png"
+  },
+  {
+   "name": "Centauro",
+   "slug": "centauro",
+   "site": "https://www.centauro.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17806.png"
+  },
+  {
+   "name": "BELEZA NA WEB",
+   "slug": "beleza-na-web",
+   "site": "https://www.belezanaweb.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/29407.png"
+  },
+  {
+   "name": "Brastemp",
+   "slug": "brastemp",
+   "site": "https://www.brastemp.com.br",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17772.png"
+  },
+  {
+   "name": "Riachuelo",
+   "slug": "riachuelo",
+   "site": "https://www.riachuelo.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/86587.png"
+  },
+  {
+   "name": "Olympikus",
+   "slug": "olympikus",
+   "site": "https://www.olympikus.com.br",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17698.png"
+  },
+  {
+   "name": "Technos",
+   "slug": "technos",
+   "site": "https://www.technos.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/28161.png"
+  },
+  {
+   "name": "Vou Levar",
+   "slug": "vou-levar",
+   "site": "https://www.voulevar.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/35161.png"
+  },
+  {
+   "name": "eLens",
+   "slug": "elens",
+   "site": "https://www.elens.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17612.png"
+  },
+  {
+   "name": "Truss",
+   "slug": "truss",
+   "site": "https://www.trussprofessional.com.br",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/118923.png"
+  },
+  {
+   "name": "Elements",
+   "slug": "elements",
+   "site": "https://www.elements.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/48557.png"
+  },
+  {
+   "name": "Loccitane Au Bresil",
+   "slug": "loccitane-au-bresil",
+   "site": "https://br.loccitaneaubresil.com/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17631.png"
+  },
+  {
+   "name": "Allianz Travel",
+   "slug": "allianz-travel",
+   "site": "https://www.allianztravel.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/24143.png"
+  },
+  {
+   "name": "Kitchenaid",
+   "slug": "kitchenaid",
+   "site": "https://www.kitchenaid.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17809.png"
+  },
+  {
+   "name": "Extrafarma",
+   "slug": "extrafarma",
+   "site": "https://www.extrafarma.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/64084.png"
+  },
+  {
+   "name": "Tjama",
+   "slug": "tjama",
+   "site": "https://www.tjama.com/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/26353.png"
+  },
+  {
+   "name": "Authentic Feet",
+   "slug": "authentic-feet",
+   "site": "https://www.authenticfeet.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/28775.png"
+  },
+  {
+   "name": "Decathlon",
+   "slug": "decathlon",
+   "site": "https://www.decathlon.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/19296.png"
+  },
+  {
+   "name": "Lojas taQi",
+   "slug": "lojas-taqi",
+   "site": "https://www.taqi.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/32787.png"
+  },
+  {
+   "name": "Unidas",
+   "slug": "unidas",
+   "site": "https://www.unidas.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/70066.png"
+  },
+  {
+   "name": "Drogal",
+   "slug": "drogal",
+   "site": "https://www.drogal.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/68224.png"
+  },
+  {
+   "name": "Fastshop",
+   "slug": "fastshop",
+   "site": "https://site.fastshop.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17590.png"
+  },
+  {
+   "name": "Vivara",
+   "slug": "vivara",
+   "site": "https://www.vivara.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17662.png"
+  },
+  {
+   "name": "Magic Feet",
+   "slug": "magic-feet",
+   "site": "https://www.magicfeet.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/28777.png"
+  },
+  {
+   "name": "Tok & Stok",
+   "slug": "tok-stok",
+   "site": "https://www.tokstok.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/36382.png"
+  },
+  {
+   "name": "Aliexpress",
+   "slug": "aliexpress",
+   "site": "https://www.aliexpress.com/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/18879.png"
+  },
+  {
+   "name": "Motorola",
+   "slug": "motorola",
+   "site": "https://www.motorola.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/24534.png"
+  },
+  {
+   "name": "PUMA",
+   "slug": "puma",
+   "site": "https://br.puma.com/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/32675.png"
+  },
+  {
+   "name": "GOL Linhas Aereas",
+   "slug": "gol-linhas-aereas",
+   "site": "https://www.voegol.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/32843.png"
+  },
+  {
+   "name": "Calvin Klein",
+   "slug": "calvin-klein",
+   "site": "https://www.calvinklein.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/100553.png"
+  },
+  {
+   "name": "Sestini",
+   "slug": "sestini",
+   "site": "https://www.sestini.com.br",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17910.png"
+  },
+  {
+   "name": "Maria Filó",
+   "slug": "maria-filo",
+   "site": "https://www.mariafilo.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/116455.png"
+  },
+  {
+   "name": "Natura",
+   "slug": "natura",
+   "site": "https://www.natura.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17658.png"
+  },
+  {
+   "name": "C&A",
+   "slug": "c-a",
+   "site": "https://www.cea.com.br",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17648.png"
+  },
+  {
+   "name": "Shop2gether",
+   "slug": "shop2gether",
+   "site": "https://www.shop2gether.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/117987.png"
+  },
+  {
+   "name": "Webcontinental",
+   "slug": "webcontinental",
+   "site": "https://www.webcontinental.com.br",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/17743.png"
+  },
+  {
+   "name": "Dufrio",
+   "slug": "dufrio",
+   "site": "https://www.dufrio.com.br/",
+   "logo": "https://ui.awin.com/images/upload/merchant/profile/23524.png"
+  }
+ ]
+}
