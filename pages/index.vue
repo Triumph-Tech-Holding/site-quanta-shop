@@ -10,6 +10,7 @@
     <home-lojistas />
     <home-testimonials />
     <home-blog />
+    <home-faq />
     <home-ceo />
     <home-footer-cta />
   </div>
@@ -77,6 +78,27 @@ useHead({
               },
               'query-input': 'required name=search_term_string',
             },
+          },
+          {
+            '@type': 'FAQPage',
+            '@id': SITE + '/#faq',
+            mainEntity: [
+              {
+                '@type': 'Question',
+                name: 'O que é a Quanta Shop?',
+                acceptedAnswer: { '@type': 'Answer', text: 'É uma plataforma de cashback em rede: você compra nas suas lojas favoritas e recebe dinheiro de volta, podendo ainda ganhar com a sua rede de consumo.' },
+              },
+              {
+                '@type': 'Question',
+                name: 'O cashback é dinheiro de verdade?',
+                acceptedAnswer: { '@type': 'Answer', text: 'Sim. O valor acumulado pode ser sacado via PIX, de forma transparente e instantânea.' },
+              },
+              {
+                '@type': 'Question',
+                name: 'Como recebo e saco meu cashback?',
+                acceptedAnswer: { '@type': 'Answer', text: 'O cashback cai automaticamente na sua carteira Quanta após a compra confirmada. O saque é via PIX, direto pela plataforma.' },
+              },
+            ],
           },
           {
             '@type': 'ItemList',
