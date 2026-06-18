@@ -208,7 +208,7 @@ onBeforeUnmount(() => {
 .qs-hero__wm { position: absolute; right: -130px; top: 50%; transform: translateY(-50%); opacity: .06; z-index: 1; pointer-events: none; }
 @keyframes qsFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-26px); } }
 
-.qs-hero__grid { position: relative; z-index: 2; display: grid; grid-template-columns: 1.05fr .95fr; gap: 44px; align-items: center; padding: 28px 0 32px; min-height: calc(100svh - 72px); }
+.qs-hero__grid { position: relative; z-index: 2; display: grid; grid-template-columns: 1.05fr .95fr; gap: 44px; align-items: center; padding: 92px 0 80px; min-height: calc(100svh - 72px); }
 .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
 
 .qs-hero__rotate { transition: opacity .45s ease; }
