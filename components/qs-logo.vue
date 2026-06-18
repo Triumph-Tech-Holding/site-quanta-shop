@@ -9,15 +9,19 @@ import { computed } from 'vue';
 
 const props = withDefaults(defineProps<{
   variant?: 'icon' | 'full';
-  tone?: 'color' | 'white';
+  tone?: 'color' | 'white' | 'whitegreen';
   size?: number;
   to?: string;
 }>(), { variant: 'icon', tone: 'color', size: 40 });
 
 const alt = 'Quanta Shop';
 const src = computed(() => {
-  if (props.variant === 'full') return '/img/logo/logo-trimmed.png';
-  return props.tone === 'white' ? '/img/logo/logo-symbol-white.png' : '/img/logo/logo-symbol.png';
+  if (props.variant === 'full') {
+    if (props.tone === 'white') return '/img/logo/quanta-logo-white.png';
+    if (props.tone === 'whitegreen') return '/img/logo/quanta-logo-whitegreen.png';
+    return '/img/logo/quanta-logo.png';
+  }
+  return props.tone === 'white' ? '/img/logo/quanta-icon-white.png' : '/img/logo/quanta-icon.png';
 });
 </script>
 

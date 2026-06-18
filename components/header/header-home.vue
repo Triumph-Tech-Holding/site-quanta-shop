@@ -2,7 +2,7 @@
   <header class="qs-hdr">
     <div class="container qs-hdr__row">
       <nuxt-link class="qs-hdr__brand" href="/" aria-label="Quanta Shop">
-        <img class="qs-hdr__logo" src="/img/logo/logo-trimmed.png" width="122" height="40" alt="Quanta Shop" decoding="async" />
+        <img class="qs-hdr__logo" src="/img/logo/quanta-logo.png" width="122" height="40" alt="Quanta Shop" decoding="async" />
       </nuxt-link>
 
       <nav class="qs-hdr__nav" aria-label="Principal">
