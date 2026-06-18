@@ -216,9 +216,9 @@ onBeforeUnmount(() => {
 .qs-hero__badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 7px 14px; font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 13px; font-weight: 600; color: #dff3e0; }
 .qs-hero__dot { width: 8px; height: 8px; border-radius: 50%; background: #98C73A; animation: qsPulse 2s infinite; }
 @keyframes qsPulse { 0% { box-shadow: 0 0 0 0 rgba(152,199,58,.6); } 70% { box-shadow: 0 0 0 10px rgba(152,199,58,0); } 100% { box-shadow: 0 0 0 0 rgba(152,199,58,0); } }
-.qs-hero__title { font-family: 'Bruum FY','Jost','Inter',sans-serif; color: #fff; font-size: clamp(38px, 5vw, 62px); font-weight: 800; line-height: 1.07; letter-spacing: -.02em; margin: 20px 0 16px; min-height: 2.1em; }
+.qs-hero__title { font-family: 'Jost','Inter',sans-serif; color: #fff; font-size: clamp(38px, 5vw, 62px); font-weight: 800; line-height: 1.07; letter-spacing: -.025em; margin: 20px 0 16px; min-height: 2.1em; }
 .qs-hero__title :deep(.qs-hero__hl) { color: #98C73A; position: relative; white-space: nowrap; display: inline; }
-.qs-hero__title :deep(.qs-hero__hl)::after { content: ""; position: absolute; left: -6px; right: -6px; top: 12%; bottom: -4px; background: rgba(152,199,58,.22); border-radius: 8px; z-index: -1; }
+.qs-hero__title :deep(.qs-hero__hl)::after { content: ""; position: absolute; left: 2px; right: 2px; bottom: 4px; height: 5px; background: rgba(152,199,58,.55); border-radius: 3px; z-index: -1; }
 .qs-hero__sub { font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 18px; line-height: 1.6; color: #c8dde0; max-width: 520px; }
 .qs-hero__cta { display: inline-flex; align-items: center; gap: 8px; margin-top: 22px; font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-weight: 700; font-size: 15px; color: #173a0a; background: linear-gradient(180deg,#98C73A,#7aad1f); border-radius: 999px; padding: 13px 24px; text-decoration: none; box-shadow: 0 10px 28px rgba(152,199,58,.35); transition: transform .2s ease, box-shadow .2s ease; }
 .qs-hero__cta:hover { transform: translateY(-2px); box-shadow: 0 16px 36px rgba(152,199,58,.45); }
