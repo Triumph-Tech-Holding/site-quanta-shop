@@ -62,7 +62,7 @@ const testimonials: Testimonial[] = [
 }
 .qs-tst__h2 {
   font-family: 'Jost','Inter',sans-serif;
-  font-size: clamp(30px, 3.6vw, 44px);
+  font-size: clamp(26px, 3.8vw, 44px);
   font-weight: 700;
   color: #225F6B;
   line-height: 1.08;
@@ -159,5 +159,9 @@ const testimonials: Testimonial[] = [
 
 @media (max-width: 880px) {
   .qs-tst__grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 760px) {
+  .qs-tst { padding: 48px 0; }
+  .qs-tst__head { margin-bottom: 30px; }
 }
 </style>

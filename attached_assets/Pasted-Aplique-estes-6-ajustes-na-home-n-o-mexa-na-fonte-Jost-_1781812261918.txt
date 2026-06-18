@@ -1,0 +1,14 @@
+Aplique estes 6 ajustes na home (não mexa na fonte Jost nem no realce verde, que já estão ok):
+1) HERO na primeira dobra (desktop): no .qs-hero__grid use padding: 28px 0 32px, gap: 44px, align-items: center e min-height: calc(100svh - 72px) (72px = altura do header; ajuste se for diferente). Compacte margens internas: título margin: 12px 0 12px; .qs-hero__cta margin-top 16px; dots margin-top 16px; o label "ou pergunte à Quanta IA" margin-top 18px; chips margin-top 12px. No .qs-hero__chat-body: min-height: 296px; max-height: 360px; overflow:hidden. Objetivo: num notebook, o texto + barra de busca + chat animado aparecem juntos, sem rolar.
+2) TÍTULOS responsivos + espaçamento mobile:
+
+Título do hero: font-size: clamp(32px, 5.4vw, 62px) (grande no desktop, encolhe no mobile).
+Títulos de seção (h2): clamp(26px, 3.8vw, 44px). Título CEO: clamp(28px, 4.6vw, 54px). Título CTA final: clamp(28px, 4vw, 48px).
+@media (max-width: 980px): no .qs-hero__grid use grid-template-columns: 1fr; gap: 32px; padding: 32px 0 48px; min-height: auto (empilha, sem forçar a dobra no celular).
+@media (max-width: 760px): reduza o padding vertical das seções para ~48px, o CTA final para ~56px, e a margem inferior do cabeçalho de seção para ~30px.
+
+3) LOGO/ÍCONE transparente de alta qualidade: rode find . -iname "quanta-*". Se achar quanta-logo.png, quanta-logo-whitegreen.png, quanta-icon.png, quanta-icon-white.png, mova-os para public/img/logo/ e aponte o qs-logo.vue para eles (PNG transparentes). Se não existirem, mantenha os logo-* atuais.
+4) CTA "Pronto para começar a economizar": remova o ícone quebrado do topo dessa seção — ela deve ficar limpa, sem logo.
+5) TESTEMUNHOS — fundo branco: remova o retângulo teal escuro atrás do texto. Cada card: fundo #fff, borda 1px #e5e7eb, raio 20px, sombra suave, padding ~28px; texto do depoimento #374151 (sem bloco colorido atrás); trecho em destaque só com cor teal #225F6B em negrito; estrelas #FFB342; nome #1d1d1f; "Usuária há X meses" #9ca3af. Seção sobre fundo claro #f7f8fa.
+6) FAQ enxuta (3 perguntas): garanta a seção home-faq com apenas 3 perguntas (fechadas): "O que é a Quanta Shop?", "O cashback é dinheiro de verdade?", "Como recebo e saco meu cashback?" — entre <home-blog /> e <home-ceo />, com o JSON-LD FAQPage contendo exatamente essas 3.
+Ao terminar, rode npm run build:nuxt e confirme cada item; teste no desktop (chat na dobra) e no mobile 375px (títulos menores, seções compactas, sem overflow horizontal).

@@ -62,7 +62,7 @@ const faqs = [
 }
 .qs-faq__h2 {
   font-family: 'Jost','Inter',sans-serif;
-  font-size: clamp(28px, 3.2vw, 40px);
+  font-size: clamp(26px, 3.8vw, 44px);
   font-weight: 700;
   color: #225F6B;
   line-height: 1.1;
@@ -139,6 +139,10 @@ const faqs = [
   background: none;
 }
 
+@media (max-width: 760px) {
+  .qs-faq { padding: 48px 0; }
+  .qs-faq__head { margin-bottom: 30px; }
+}
 @media (prefers-reduced-motion: reduce) {
   .qs-faq__icon { transition: none; }
   .qs-faq__item { transition: none; }
