@@ -1,280 +1,59 @@
 <template>
-  <section class="qs-locais">
+  <section class="qs-plo" aria-labelledby="qs-plo-title">
     <div class="container">
-      <div class="qs-section-header">
-        <span class="qs-section-label">{{ config.parceirosLocais.label }}</span>
-        <h2 class="qs-section-title">{{ config.parceirosLocais.title }}</h2>
-        <p class="qs-section-sub">{{ config.parceirosLocais.subtitle }}</p>
+      <div class="qs-plo__head">
+        <span class="qs-plo__eyebrow">Parceiros Locais</span>
+        <h2 id="qs-plo-title" class="qs-plo__h2">Cashback perto de você</h2>
+        <p class="qs-plo__lead">Lojas, restaurantes e serviços no seu bairro com cashback automático.</p>
       </div>
 
-      <div v-if="!partnerStore.isLocalPartnersLoaded" class="qs-locais__grid">
-        <div v-for="n in 6" :key="n" class="qs-local-card qs-local-card--skeleton">
-          <div class="qs-skeleton" style="height:14px;width:40%;border-radius:4px;margin-bottom:8px;"></div>
-          <div class="qs-skeleton" style="height:18px;width:70%;border-radius:4px;margin-bottom:6px;"></div>
-          <div class="qs-skeleton" style="height:13px;width:50%;border-radius:4px;margin-bottom:16px;"></div>
-          <div class="qs-skeleton" style="height:13px;width:60%;border-radius:4px;margin-bottom:16px;"></div>
-          <div class="qs-skeleton" style="height:36px;width:100%;border-radius:8px;"></div>
-        </div>
-      </div>
-
-      <div v-else-if="displayedLocais.length > 0" class="qs-locais__grid">
-        <div
-          v-for="item in displayedLocais"
-          :key="item.id"
-          class="qs-local-card"
-        >
-          <a v-if="item.whatsapp" :href="getWhatsAppLink(item.whatsapp)" target="_blank" rel="noopener" class="qs-local-card__whatsapp">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            WhatsApp
-          </a>
-          <div class="qs-local-card__logo" v-if="item.imagemPequena || item.imagem">
-            <img :src="item.imagemPequena || item.imagem" :alt="item.nome" />
+      <div class="qs-plo__grid">
+        <article v-for="(l, i) in locals" :key="i" class="qs-plo__card">
+          <img class="qs-plo__th" :src="l.img" :alt="l.name" width="64" height="64" loading="lazy" decoding="async" />
+          <div>
+            <h3 class="qs-plo__nm">{{ l.name }}</h3>
+            <p class="qs-plo__cb">Até {{ l.cb }} de cashback</p>
+            <p class="qs-plo__loc">{{ l.loc }}</p>
+            <a class="qs-plo__wa" :href="l.wa" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.06 24l1.69-6.16a11.87 11.87 0 01-1.6-5.95C.16 5.32 5.5 0 12.06 0a11.8 11.8 0 018.4 3.49 11.76 11.76 0 013.48 8.39c0 6.55-5.34 11.88-11.9 11.88a11.9 11.9 0 01-5.7-1.45L.06 24zm6.6-3.8c1.68.99 3.28 1.59 5.4 1.59 5.45 0 9.9-4.43 9.9-9.88a9.8 9.8 0 00-2.9-7 9.78 9.78 0 00-7-2.9c-5.46 0-9.9 4.43-9.9 9.88 0 2.23.65 3.9 1.74 5.65l-1 3.66 3.76-1zm11.4-5.66c-.07-.12-.27-.2-.57-.35-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51l-.57-.01c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.49 0 1.47 1.07 2.89 1.22 3.09.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.62.71.23 1.36.2 1.87.12.57-.08 1.76-.72 2-1.41.25-.7.25-1.29.18-1.42z"/></svg>
+              WhatsApp
+            </a>
           </div>
-          <div class="qs-local-card__logo qs-local-card__logo--placeholder" v-else>
-            <svg width="28" height="28" fill="none" viewBox="0 0 24 24" stroke="#9ca3af" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
-          </div>
-          <p class="qs-local-card__cashback">Até {{ item.percentualCashback || '?' }}% de cashback</p>
-          <h3 class="qs-local-card__name">{{ item.nome }}</h3>
-          <p class="qs-local-card__location" v-if="item.bairro || item.cidade">
-            <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="#6b7280" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            {{ item.bairro ? item.bairro + ' — ' : '' }}{{ item.cidade }}<span v-if="item.estado">, {{ item.estado }}</span>
-          </p>
-          <a :href="item.link || '#'" target="_blank" rel="noopener" class="qs-local-card__btn">
-            Ver empresa
-          </a>
-        </div>
-      </div>
-
-      <div v-else-if="partnerStore.isLocalPartnersLoaded && displayedLocais.length === 0" class="qs-locais__empty">
-        <p>Nenhum parceiro local disponível no momento.</p>
-      </div>
-
-      <div v-if="partnerStore.isLocalPartnersLoaded && displayedLocais.length > 0" class="qs-locais__more">
-        <nuxt-link href="/partners?tipo=LOCAL" class="qs-btn-outline-primary">
-          Ver parceiros locais
-          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </nuxt-link>
+        </article>
       </div>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue';
-import { usePartnerStore } from "@/pinia/usePartnerStore";
-import { useHomeConfig } from '@/composables/useHomeConfig';
+interface Local { name: string; cb: string; loc: string; img: string; wa: string }
 
-const { config, loadConfig } = useHomeConfig();
-const partnerStore = usePartnerStore();
-const displayedLocais = computed(() => (partnerStore.localPartners || []).slice(0, 6));
-
-function getWhatsAppLink(phone: string | undefined): string {
-  if (!phone) return '#';
-  const cleaned = String(phone).replace(/\D/g, '');
-  const withCountry = cleaned.startsWith('55') ? cleaned : `55${cleaned}`;
-  return `https://wa.me/${withCountry}`;
-}
-
-onMounted(() => {
-  loadConfig();
-  partnerStore.fetchLocalPartners();
-});
+const locals: Local[] = [
+  { name: 'Padaria Real', cb: '5%', loc: 'Vila Mariana — São Paulo, SP', img: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=200&q=80&auto=format&fit=crop', wa: 'https://api.whatsapp.com/send/?phone=5511999999999' },
+  { name: 'Restaurante Sabor & Arte', cb: '8%', loc: 'Botafogo — Rio de Janeiro, RJ', img: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=200&q=80&auto=format&fit=crop', wa: 'https://api.whatsapp.com/send/?phone=5521999999999' },
+  { name: 'Studio Bem Estar', cb: '6%', loc: 'Savassi — Belo Horizonte, MG', img: 'https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=200&q=80&auto=format&fit=crop', wa: 'https://api.whatsapp.com/send/?phone=5531999999999' },
+];
 </script>
 
 <style scoped>
-.qs-locais {
-  padding: 48px 0;
-  background: #fff;
-}
+.qs-plo { padding: 84px 0; background: #fff; }
+.container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
 
-.qs-section-header {
-  text-align: center;
-  margin-bottom: 40px;
-}
+.qs-plo__head { text-align: center; max-width: 680px; margin: 0 auto 52px; }
+.qs-plo__eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: #3A9AAD; }
+.qs-plo__h2 { font-family: 'Bruum FY','Jost','Inter',sans-serif; font-size: clamp(30px, 3.6vw, 44px); font-weight: 700; color: #225F6B; line-height: 1.08; letter-spacing: -.02em; margin: 12px 0 14px; }
+.qs-plo__lead { font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 17px; color: #6b7280; }
 
-.qs-section-label {
-  display: inline-block;
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #98C73A;
-  margin-bottom: 10px;
-}
+.qs-plo__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.qs-plo__card { display: flex; gap: 14px; background: #fff; border: 1px solid #e5e7eb; border-radius: 20px; padding: 18px; align-items: center; transition: transform .25s ease, box-shadow .25s ease; }
+.qs-plo__card:hover { transform: translateY(-4px); box-shadow: 0 4px 20px rgba(1,15,28,.12); }
+.qs-plo__th { width: 64px; height: 64px; border-radius: 14px; object-fit: cover; flex-shrink: 0; }
+.qs-plo__nm { font-family: 'Bruum FY','Jost','Inter',sans-serif; font-weight: 700; color: #225F6B; font-size: 16px; }
+.qs-plo__cb { color: #7aad1f; font-weight: 600; font-size: 13px; }
+.qs-plo__loc { font-size: 12px; color: #9ca3af; margin-top: 2px; }
+.qs-plo__wa { margin-top: 8px; display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #16a34a; text-decoration: none; }
+.qs-plo__wa svg { width: 14px; height: 14px; }
 
-.qs-section-title {
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: clamp(24px, 4vw, 36px);
-  font-weight: 800;
-  color: #225F6B;
-  letter-spacing: -0.03em;
-  margin-bottom: 8px;
-}
-
-.qs-section-sub {
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 15px;
-  color: #2F7785;
-  max-width: 480px;
-  margin: 0 auto;
-}
-
-.qs-locais__grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-bottom: 36px;
-}
-
-@media (max-width: 991px) { .qs-locais__grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 575px) { .qs-locais__grid { grid-template-columns: 1fr; } }
-
-.qs-local-card {
-  position: relative;
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 20px;
-  transition: all 0.25s ease;
-}
-
-.qs-local-card:hover {
-  border-color: #2F7785;
-  box-shadow: 0 12px 32px rgba(47, 119, 133, 0.12);
-  transform: translateY(-4px);
-}
-
-.qs-local-card--skeleton {
-  pointer-events: none;
-}
-
-.qs-local-card__whatsapp {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  background: rgba(37, 211, 102, 0.08);
-  color: #1a9040;
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 11px;
-  font-weight: 600;
-  padding: 4px 10px;
-  border-radius: 999px;
-  text-decoration: none;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.qs-local-card__whatsapp:hover {
-  background: rgba(37, 211, 102, 0.16);
-  color: #0d7a3a;
-}
-
-.qs-local-card__logo {
-  width: 52px;
-  height: 52px;
-  border-radius: 10px;
-  overflow: hidden;
-  margin-bottom: 10px;
-  background: #f3f4f6;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.qs-local-card__logo img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.qs-local-card__logo--placeholder {
-  background: #f3f4f6;
-}
-
-.qs-local-card__cashback {
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 11px;
-  font-weight: 600;
-  color: #98C73A;
-  margin-bottom: 4px;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.qs-local-card__name {
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 15px;
-  font-weight: 700;
-  color: #225F6B;
-  margin-bottom: 6px;
-}
-
-.qs-local-card__location {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 12px;
-  color: #2F7785;
-  margin-bottom: 16px;
-}
-
-.qs-local-card__btn {
-  display: block;
-  text-align: center;
-  border: 1.5px solid #e5e7eb;
-  color: #374151;
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  padding: 9px;
-  border-radius: 8px;
-  text-decoration: none;
-  transition: all 0.2s;
-}
-
-.qs-local-card__btn:hover {
-  border-color: #2F7785;
-  color: #2F7785;
-  background: rgba(47, 119, 133, 0.04);
-}
-
-.qs-locais__more {
-  text-align: center;
-}
-
-.qs-btn-outline-primary {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  border: 2px solid #2F7785;
-  color: #2F7785;
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  padding: 12px 28px;
-  border-radius: 8px;
-  text-decoration: none;
-  transition: all 0.2s ease;
-}
-
-.qs-btn-outline-primary:hover {
-  background: #2F7785;
-  color: #fff;
-}
-
-.qs-skeleton {
-  background: linear-gradient(90deg, #e8edf0 25%, #f5f8fa 50%, #e8edf0 75%);
-  background-size: 200% 100%;
-  animation: qs-skeleton-wave 1.5s infinite;
-}
-
-@keyframes qs-skeleton-wave {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
+@media (max-width: 820px) { .qs-plo__grid { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .qs-plo__card { transition: none; } }
 </style>

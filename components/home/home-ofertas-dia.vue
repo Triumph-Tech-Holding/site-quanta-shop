@@ -1,447 +1,65 @@
 <template>
-  <section class="qs-ofertas">
+  <section class="qs-ofd" aria-labelledby="qs-ofd-title">
     <div class="container">
-      <div class="qs-section-header">
-        <span class="qs-ofertas__eyebrow">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          {{ config.ofertas.label || 'TEMPO LIMITADO' }}
-        </span>
-        <h2 class="qs-section-title">{{ config.ofertas.title }}</h2>
-        <p class="qs-section-sub">{{ config.ofertas.subtitle }}</p>
+      <div class="qs-ofd__head">
+        <span class="qs-ofd__eyebrow">Tempo limitado</span>
+        <h2 id="qs-ofd-title" class="qs-ofd__h2">Ofertas do Dia</h2>
+        <p class="qs-ofd__lead">Produtos selecionados com cashback turbinado. Aproveite antes que acabe.</p>
       </div>
 
-      <Swiper
-        v-if="isLoading"
-        :slidesPerView="1.2"
-        :spaceBetween="20"
-        :modules="[]"
-        :breakpoints="{
-          640: { slidesPerView: 2, spaceBetween: 20 },
-          1024: { slidesPerView: 4, spaceBetween: 20 }
-        }"
-        class="qs-ofertas__swiper"
-      >
-        <SwiperSlide v-for="n in 4" :key="n" class="qs-ofertas__slide">
-          <div class="qs-ofertas__card qs-ofertas__card--skeleton">
-            <div class="qs-ofertas__thumb qs-ofertas__thumb--skeleton">
-              <div class="qs-skeleton" style="height:120px;width:80%;border-radius:8px;"></div>
-            </div>
-            <div class="qs-ofertas__body">
-              <div class="qs-skeleton" style="height:11px;width:50%;border-radius:4px;margin-bottom:8px;"></div>
-              <div class="qs-skeleton" style="height:14px;width:90%;border-radius:4px;margin-bottom:6px;"></div>
-              <div class="qs-skeleton" style="height:14px;width:70%;border-radius:4px;margin-bottom:10px;"></div>
-              <div class="qs-skeleton" style="height:24px;width:45%;border-radius:4px;margin-bottom:14px;"></div>
-              <div class="qs-skeleton" style="height:36px;width:100%;border-radius:8px;"></div>
-            </div>
+      <div class="qs-ofd__grid">
+        <article v-for="(o, i) in offers" :key="i" class="qs-ofd__card">
+          <div class="qs-ofd__media">
+            <img :src="o.img" :alt="o.name" width="600" height="450" loading="lazy" decoding="async" />
+            <span class="qs-ofd__cb">⚡ {{ o.cb }} cashback</span>
           </div>
-        </SwiperSlide>
-      </Swiper>
-
-      <Swiper
-        v-if="offers.length > 0"
-        :slidesPerView="1.2"
-        :spaceBetween="20"
-        :navigation="{ nextEl: '.qs-ofertas-next', prevEl: '.qs-ofertas-prev' }"
-        :pagination="{ el: '.qs-ofertas-dots', clickable: true }"
-        :modules="[Navigation, Pagination, Autoplay]"
-        :autoplay="{ delay: 5000, disableOnInteraction: false }"
-        :breakpoints="{
-          640: { slidesPerView: 2, spaceBetween: 20 },
-          1024: { slidesPerView: 3.2, spaceBetween: 20 }
-        }"
-        class="qs-ofertas__swiper"
-      >
-        <SwiperSlide v-for="item in offers" :key="item.id" class="qs-ofertas__slide">
-          <div class="qs-ofertas__card">
-            <div class="qs-ofertas__badge" v-if="item.percentualCashback">
-              Até {{ item.percentualCashback }}% de Cashback
-            </div>
-            <div class="qs-ofertas__thumb">
-              <img :src="item.imagemPequena || item.imagem || '/img/placeholder.png'" :alt="item.nome" />
-            </div>
-            <div class="qs-ofertas__body">
-              <div class="qs-ofertas__brand">
-                <span>{{ item.parceiro }}</span>
-              </div>
-              <h3 class="qs-ofertas__name">{{ item.nome }}</h3>
-              <div class="qs-ofertas__price">R$ {{ formatPrice(item.preco) }}</div>
-              <div class="qs-ofertas__cashback-label">
-                <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="#2F7785" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
-                Cashback Garantido
-              </div>
-              <a :href="item.link" target="_blank" rel="noopener" class="qs-ofertas__btn">
-                Aproveitar Agora
-                <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </a>
-            </div>
+          <div class="qs-ofd__body">
+            <p class="qs-ofd__brand">{{ o.brand }}</p>
+            <h3 class="qs-ofd__name">{{ o.name }}</h3>
+            <p class="qs-ofd__price">{{ o.price }}</p>
+            <nuxt-link class="qs-ofd__go" :href="o.href">Aproveitar Agora →</nuxt-link>
           </div>
-        </SwiperSlide>
-      </Swiper>
-      
-      <div v-if="offers.length > 0" class="qs-ofertas-dots"></div>
-      <div v-if="offers.length > 0" class="qs-ofertas-arrows d-none d-lg-flex">
-        <button class="qs-ofertas-prev">
-          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
-        </button>
-        <button class="qs-ofertas-next">
-          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
-        </button>
-      </div>
-
-      <div v-if="!isLoading && offers.length > 0" class="qs-ofertas__more">
-        <nuxt-link to="/shop" class="qs-btn-outline-primary">
-          Ver Todas as Ofertas
-          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </nuxt-link>
+        </article>
       </div>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, onMounted } from 'vue';
-import { useHomeConfig } from '@/composables/useHomeConfig';
-import { getProducts } from '@/services/product-service';
-import { Swiper, SwiperSlide } from 'swiper/vue';
-import { Navigation, Pagination, Autoplay } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
+interface Offer { name: string; brand: string; price: string; cb: string; img: string; href: string }
 
-const { config, loadConfig } = useHomeConfig();
-
-const isLoading = ref(true);
-const apiProducts = ref<Array<Record<string, unknown>>>([]);
-const mockOffers = ref<Array<Record<string, unknown>>>([]);
-
-function normalizeProduct(p: Record<string, unknown>) {
-  return {
-    id: p['aw_product_id'] as string,
-    nome: p['product_name'] as string,
-    imagemPequena: (p['merchant_image_url'] || p['imagem']) as string,
-    parceiro: p['merchant_name'] as string,
-    percentualCashback: p['cashback'] as number,
-    preco: p['search_price'] as string,
-    link: p['aw_deep_link'] as string,
-  };
-}
-
-onMounted(async () => {
-  loadConfig();
-
-  try {
-    const result = await getProducts(24, 1, null, null, null, null) as { data?: { products?: unknown[] } };
-    const products = result?.data?.products;
-    if (Array.isArray(products) && products.length > 0) {
-      apiProducts.value = products.map(p => normalizeProduct(p as Record<string, unknown>));
-    }
-  } catch {
-    console.warn('[home-ofertas-dia] API de produtos indisponível, usando fallback');
-  }
-
-  if (apiProducts.value.length === 0) {
-    try {
-      const res = await fetch('/data/mock-data.json');
-      const data = await res.json();
-      mockOffers.value = (data.ofertas || []).map((p: Record<string, unknown>) =>
-        normalizeProduct({
-          ...p,
-          merchant_image_url: p['imagem'],
-          product_name: p['nome'],
-          merchant_name: p['parceiro'],
-          cashback: p['percentualCashback'],
-          search_price: p['preco'],
-          aw_deep_link: p['link'],
-          aw_product_id: p['id'],
-        })
-      );
-    } catch {
-      console.warn('[home-ofertas-dia] Fallback mock também falhou');
-    }
-  }
-
-  isLoading.value = false;
-});
-
-const offers = computed(() =>
-  apiProducts.value.length > 0 ? apiProducts.value : mockOffers.value
-);
-
-function formatPrice(price: unknown): string {
-  if (!price) return '0,00';
-  const num = typeof price === 'string' ? parseFloat(price) : Number(price);
-  if (isNaN(num)) return '0,00';
-  return num.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-}
+const offers: Offer[] = [
+  { name: 'Tênis Air Max Premium', brand: 'Nike', price: 'R$ 599,90', cb: '12%', img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80&auto=format&fit=crop', href: '/partners?nome=Tenis%20Air%20Max%20Premium' },
+  { name: 'Bolsa Couro Elegance', brand: 'Vivara', price: 'R$ 349,90', cb: '9%', img: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&q=80&auto=format&fit=crop', href: '/partners?nome=Bolsa%20Couro%20Elegance' },
+  { name: 'Smartwatch GT Series', brand: 'Motorola', price: 'R$ 899,90', cb: '10%', img: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=80&auto=format&fit=crop', href: '/partners?nome=Smartwatch%20GT%20Series' },
+  { name: 'Kit Café Gourmet', brand: 'Nescafé', price: 'R$ 89,90', cb: '8%', img: 'https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=600&q=80&auto=format&fit=crop', href: '/partners?nome=Kit%20Cafe%20Gourmet' },
+];
 </script>
 
 <style scoped>
-.qs-ofertas {
-  padding: 48px 0;
-  background: #fff;
-}
+.qs-ofd { padding: 84px 0; background: #fff; }
+.container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
 
-.qs-ofertas .container {
-  overflow: visible;
-}
+.qs-ofd__head { text-align: center; max-width: 680px; margin: 0 auto 52px; }
+.qs-ofd__eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: #3A9AAD; }
+.qs-ofd__h2 { font-family: 'Bruum FY','Jost','Inter',sans-serif; font-size: clamp(30px, 3.6vw, 44px); font-weight: 700; color: #225F6B; line-height: 1.08; letter-spacing: -.02em; margin: 12px 0 14px; }
+.qs-ofd__lead { font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 17px; color: #6b7280; }
 
-.qs-ofertas__swiper {
-  overflow: visible !important;
-}
+.qs-ofd__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+.qs-ofd__card { background: #fff; border: 1px solid #e5e7eb; border-radius: 20px; overflow: hidden; transition: transform .25s ease, box-shadow .25s ease; }
+.qs-ofd__card:hover { transform: translateY(-4px); box-shadow: 0 4px 20px rgba(1,15,28,.12); }
+.qs-ofd__media { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: #eef1f3; }
+.qs-ofd__media img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
+.qs-ofd__card:hover .qs-ofd__media img { transform: scale(1.06); }
+.qs-ofd__cb { position: absolute; top: 12px; left: 12px; background: rgba(26,35,50,.86); color: #98C73A; font-size: 12px; font-weight: 700; padding: 5px 11px; border-radius: 999px; backdrop-filter: blur(6px); }
+.qs-ofd__body { padding: 16px 18px 20px; }
+.qs-ofd__brand { font-size: 12px; color: #9ca3af; font-weight: 600; }
+.qs-ofd__name { font-family: 'Bruum FY','Jost','Inter',sans-serif; font-size: 16px; font-weight: 700; color: #1d1d1f; margin: 4px 0 8px; }
+.qs-ofd__price { font-family: 'Bruum FY','Jost','Inter',sans-serif; font-size: 22px; font-weight: 700; color: #225F6B; }
+.qs-ofd__go { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 14px; width: 100%; min-height: 44px; font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-weight: 700; font-size: 15px; color: #173a0a; background: linear-gradient(180deg, #98C73A, #7aad1f); border-radius: 999px; padding: 12px 20px; text-decoration: none; box-shadow: 0 10px 28px rgba(152,199,58,.35); transition: transform .2s ease, box-shadow .2s ease; }
+.qs-ofd__go:hover { transform: translateY(-2px); box-shadow: 0 16px 36px rgba(152,199,58,.45); }
 
-.qs-section-header {
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.qs-ofertas__eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #98C73A;
-  margin-bottom: 10px;
-}
-
-.qs-section-title {
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: clamp(24px, 4vw, 36px);
-  font-weight: 800;
-  color: #225F6B;
-  letter-spacing: -0.03em;
-  margin-bottom: 8px;
-}
-
-.qs-section-sub {
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 15px;
-  color: #2F7785;
-  max-width: 480px;
-  margin: 0 auto;
-}
-
-.qs-ofertas__swiper {
-  width: 100%;
-  margin-bottom: 24px;
-  padding-bottom: 20px;
-}
-
-.qs-ofertas__slide {
-  height: auto;
-}
-
-.qs-ofertas__card {
-  position: relative;
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  overflow: hidden;
-  transition: all 0.25s ease;
-}
-
-.qs-ofertas__card:hover {
-  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-  transform: translateY(-4px);
-  border-color: transparent;
-}
-
-.qs-ofertas__card--skeleton {
-  pointer-events: none;
-}
-
-.qs-ofertas__badge {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  background: #98C73A;
-  color: #fff;
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 3px 10px;
-  border-radius: 999px;
-  z-index: 1;
-}
-
-.qs-ofertas__thumb {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 160px;
-  background: #f9fafb;
-  padding: 16px;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.qs-ofertas__thumb--skeleton {
-  border-bottom: none;
-}
-
-.qs-ofertas__thumb img {
-  max-height: 120px;
-  max-width: 100%;
-  object-fit: contain;
-}
-
-.qs-ofertas__body {
-  padding: 16px;
-}
-
-.qs-ofertas__brand {
-  margin-bottom: 6px;
-}
-
-.qs-ofertas__brand span {
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 11px;
-  color: #6b7280;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.qs-ofertas__name {
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  color: #225F6B;
-  line-height: 1.4;
-  margin-bottom: 8px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.qs-ofertas__price {
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 20px;
-  font-weight: 800;
-  color: #225F6B;
-  margin-bottom: 6px;
-}
-
-.qs-ofertas__cashback-label {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 11px;
-  color: #2F7785;
-  font-weight: 500;
-  margin-bottom: 14px;
-}
-
-.qs-ofertas__btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  width: 100%;
-  background: #98C73A;
-  color: #fff;
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 13px;
-  font-weight: 700;
-  padding: 10px;
-  border-radius: 8px;
-  text-decoration: none;
-  transition: all 0.2s ease;
-}
-
-.qs-ofertas__btn:hover {
-  background: #7aad1f;
-  color: #fff;
-  transform: translateY(-1px);
-}
-
-.qs-ofertas__more {
-  text-align: center;
-}
-
-.qs-btn-outline-primary {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  border: 2px solid #2F7785;
-  color: #2F7785;
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  padding: 12px 28px;
-  border-radius: 8px;
-  text-decoration: none;
-  transition: all 0.2s ease;
-}
-
-.qs-btn-outline-primary:hover {
-  background: #2F7785;
-  color: #fff;
-}
-
-.qs-skeleton {
-  background: linear-gradient(90deg, #e8edf0 25%, #f5f8fa 50%, #e8edf0 75%);
-  background-size: 200% 100%;
-  animation: qs-skeleton-wave 1.5s infinite;
-}
-
-@keyframes qs-skeleton-wave {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-
-.qs-ofertas-dots {
-  position: relative;
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  margin-bottom: 24px;
-}
-
-:deep(.qs-ofertas-dots .swiper-pagination-bullet) {
-  width: 8px !important;
-  height: 8px !important;
-  background: rgba(47, 119, 133, 0.45) !important;
-  opacity: 1 !important;
-  border-radius: 50%;
-  transition: all 0.3s;
-}
-
-:deep(.qs-ofertas-dots .swiper-pagination-bullet-active) {
-  background: #2F7785 !important;
-  width: 24px !important;
-  border-radius: 999px !important;
-}
-
-.qs-ofertas-arrows {
-  position: relative;
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  margin-bottom: 24px;
-}
-
-.qs-ofertas-prev, .qs-ofertas-next {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: #f3f4f6;
-  border: 1px solid #e5e7eb;
-  color: #2F7785;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-}
-
-.qs-ofertas-prev:hover, .qs-ofertas-next:hover {
-  background: #2F7785;
-  color: #fff;
-  border-color: #2F7785;
-}
+@media (max-width: 991px) { .qs-ofd__grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px) { .qs-ofd__grid { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .qs-ofd__card, .qs-ofd__media img, .qs-ofd__go { transition: none; } }
 </style>

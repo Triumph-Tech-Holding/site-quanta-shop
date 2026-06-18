@@ -1,656 +1,290 @@
 <template>
-  <section class="qs-hero">
-    <div v-if="sliderData.length === 0" class="qs-hero__loading">
-      <img src="/img/ui/loading.gif" alt="Carregando..." width="48" />
-    </div>
+  <section ref="heroEl" class="qs-hero" aria-label="Destaque — Quanta IA" @mouseenter="pauseRotate" @mouseleave="resumeRotate" @focusin="pauseRotate" @focusout="resumeRotate">
+    <span class="qs-hero__orb qs-hero__orb--1" aria-hidden="true"></span>
+    <span class="qs-hero__orb qs-hero__orb--2" aria-hidden="true"></span>
+    <QsLogo tone="white" :size="540" class="qs-hero__wm" aria-hidden="true" />
 
-    <Swiper
-      v-if="sliderData.length > 0"
-      :slidesPerView="1"
-      :loop="true"
-      :autoplay="{ delay: 6000, disableOnInteraction: false }"
-      :navigation="{ nextEl: '.qs-hero-next', prevEl: '.qs-hero-prev' }"
-      :pagination="{ el: '.qs-hero-dots', clickable: true }"
-      :modules="[Navigation, Pagination, Autoplay]"
-      class="qs-hero__swiper"
-    >
-      <SwiperSlide v-for="(item, i) in sliderData" :key="i" class="qs-hero__slide">
-        <div
-          class="qs-hero__bg"
-          :style="item.url ? { backgroundImage: `url(${item.url})`, backgroundPosition: item.objectPosition || '50% 50%' } : undefined"
-        ></div>
-        <div
-          class="qs-hero__overlay"
-          :style="{ background: getOverlayGradient(item), opacity: item.overlayIntensidade != null ? item.overlayIntensidade / 100 : undefined }"
-        ></div>
+    <div class="container qs-hero__grid">
+      <div class="qs-hero__copy">
+        <div class="qs-hero__rotate" :class="{ 'is-fading': fading }">
+          <span class="qs-hero__badge"><span class="qs-hero__dot" aria-hidden="true"></span> {{ active.badge }}</span>
+          <h1 class="qs-hero__title" v-html="activeTitle" />
+          <p class="qs-hero__sub">{{ active.sub }}</p>
+          <nuxt-link class="qs-hero__cta" :href="active.href">{{ active.cta }} →</nuxt-link>
+        </div>
 
-        <div class="container qs-hero__content-wrap">
-          <div class="row align-items-center qs-hero__row">
-            <div class="col-xl-6 col-lg-7">
-              <div class="qs-hero__content" :class="item.textoCor === 'dark' ? 'qs-hero__content--dark' : ''">
-                <span
-                  class="qs-hero__badge"
-                  :style="item.badgeCor ? { color: item.badgeCor, borderColor: item.badgeCor + '55', background: item.badgeCor + '1A' } : {}"
-                >
-                  <span class="qs-hero__badge-dot" :style="item.badgeCor ? { background: item.badgeCor } : {}"></span>
-                  {{ item.badge || config.hero.badge }}
-                </span>
+        <div class="qs-hero__dots" role="tablist" aria-label="Trocar banner">
+          <button
+            v-for="(b, i) in banners" :key="i" type="button" role="tab"
+            class="qs-hero__dot-btn" :class="{ active: i === index }"
+            :aria-selected="i === index" :aria-label="'Banner ' + (i + 1)"
+            @click="go(i, true)"
+          />
+        </div>
 
-                <h1 class="qs-hero__title" :style="{ fontSize: getTitleFontSize(item), lineHeight: getTitleLineHeight(item), ...(item.headlineCor ? { color: item.headlineCor } : {}) }" v-html="getSlideTitle(item)"></h1>
+        <p class="qs-hero__composer-label">ou pergunte à <strong>Quanta IA</strong> — busque, cote, consulte saldo</p>
 
-                <p class="qs-hero__subtitle" :style="getSubtitleStyle(item)" v-html="getSlideSubtitle(item)"></p>
+        <form class="qs-hero__composer" role="search" @submit.prevent="submitQuery">
+          <span class="qs-hero__ai" aria-hidden="true">
+            <QsLogo tone="color" :size="20" />
+            Quanta IA
+          </span>
+          <input
+            ref="composerInput"
+            v-model="query" type="text" class="qs-hero__input"
+            aria-label="Buscar produtos, lojas ou perguntar à Quanta IA"
+            :placeholder="placeholder"
+          />
+          <button type="submit" class="qs-hero__send" aria-label="Enviar para a Quanta IA">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M22 2 11 13" /><path d="M22 2 15 22l-4-9-9-4z" />
+            </svg>
+          </button>
+        </form>
 
-                <div
-                  class="qs-hero__actions"
-                  :style="item.ctaAlinhamento === 'direita' ? { justifyContent: 'flex-end' } : item.ctaAlinhamento === 'centro' ? { justifyContent: 'center' } : {}"
-                >
-                  <nuxt-link
-                    :href="item.ctaLink || config.hero.ctaPrimaryLink"
-                    class="qs-hero__cta"
-                    :style="getCtaStyle(item)"
-                  >
-                    {{ item.ctaTexto || config.hero.ctaPrimaryText }}
-                    <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                  </nuxt-link>
-                </div>
+        <div class="qs-hero__chips" aria-label="Sugestões de busca">
+          <button v-for="(c, i) in chips" :key="i" type="button" class="qs-hero__chip" @click="useChip(c.q)">{{ c.label }}</button>
+        </div>
+      </div>
 
-                <div class="qs-hero__social-proof">
-                  <div class="qs-hero__avatars">
-                    <img src="/img/users/user-1.jpg" alt="Usuário" />
-                    <img src="/img/users/user-2.jpg" alt="Usuário" />
-                    <img src="/img/users/user-3.jpg" alt="Usuário" />
-                    <img src="/img/users/user-4.jpg" alt="Usuário" />
-                  </div>
-                  <span class="qs-hero__rating">4.9 ★ — Avaliação dos usuários</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-xl-6 col-lg-5 d-none d-lg-flex justify-content-end align-items-center">
-              <div class="qs-hero__cards">
-                <template v-for="(card, ci) in activeHeroCards" :key="ci">
-                  <div class="qs-hero__card" :class="ci === 1 ? 'qs-hero__card--offset' : ''">
-                    <div class="qs-hero__card-icon" :class="card.iconBg === 'green' ? 'qs-hero__card-icon--green' : ''" v-html="getCardIconSvg(card.icon, card.iconBg)"></div>
-                    <div>
-                      <div class="qs-hero__card-label">{{ card.label }}</div>
-                      <div
-                        class="qs-hero__card-value"
-                        :class="card.valueColor === 'green' ? 'qs-hero__card-value--green' : ''"
-                        :style="card.valueColor === 'white' ? { color: '#fff' } : {}"
-                      >{{ card.value }}</div>
-                    </div>
-                  </div>
-                </template>
-              </div>
-            </div>
+      <div class="qs-hero__chat" aria-label="Demonstração da Quanta IA">
+        <div class="qs-hero__chat-top">
+          <span class="qs-hero__chat-av" aria-hidden="true"><QsLogo tone="white" :size="26" /></span>
+          <div>
+            <p class="qs-hero__chat-nm">Quanta IA</p>
+            <p class="qs-hero__chat-st"><i aria-hidden="true"></i> online · responde na hora</p>
           </div>
         </div>
-
-        <div class="qs-hero-dots"></div>
-        <div class="qs-hero-arrows d-none d-lg-flex">
-          <button class="qs-hero-prev">
-            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
-          </button>
-          <button class="qs-hero-next">
-            <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
-          </button>
+        <div ref="chatBody" class="qs-hero__chat-body">
+          <template v-for="(m, i) in visible" :key="i">
+            <div v-if="m.typing" class="qs-hero__typing"><span /><span /><span /></div>
+            <div v-else class="qs-hero__msg" :class="'qs-hero__msg--' + m.who" v-html="m.html" />
+          </template>
         </div>
-      </SwiperSlide>
-    </Swiper>
+        <button type="button" class="qs-hero__chat-cta" @click="focusComposer">
+          Converse você mesmo com a Quanta IA
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14" /><path d="M13 6l6 6-6 6" /></svg>
+        </button>
+      </div>
+    </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
-import { useCarouselStore } from "@/pinia/useCarouselStore";
-import { Swiper, SwiperSlide } from "swiper/vue";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
+import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue';
 import { useHomeConfig } from '@/composables/useHomeConfig';
-import type { HeroCard } from '@/composables/useHomeConfig';
-import type { HeroBannerSlide } from '~/types/agencia';
 
+const router = useRouter();
 const { config, loadConfig } = useHomeConfig();
-const carouselStore = useCarouselStore();
-const heroSlides = ref<HeroBannerSlide[]>([]);
 
-const DEFAULT_HERO_CARDS: HeroCard[] = [
-  { ativo: true, label: 'PIX INSTANTÂNEO', value: 'Saque em segundos ✓', valueColor: 'green', icon: 'card', iconBg: 'teal' },
-  { ativo: true, label: 'CASHBACK RECEBIDO', value: 'R$ 50,00', valueColor: 'green', icon: 'chart', iconBg: 'green' },
-  { ativo: true, label: 'MARCAS PARCEIRAS', value: '+500 lojas', valueColor: 'teal', icon: 'bag', iconBg: 'teal' },
+const reduceMotion = ref(false);
+const heroEl = ref<HTMLElement | null>(null);
+const composerInput = ref<HTMLInputElement | null>(null);
+let visObserver: IntersectionObserver | null = null;
+let offscreen = false;
+
+interface Banner { badge: string; title: string; sub: string; cta: string; href: string }
+const DEFAULT_BANNERS: Banner[] = [
+  { badge: '+12.000 usuários economizando', title: 'Seu dinheiro <highlight>volta</highlight> a cada compra', sub: 'Compre nas suas lojas favoritas e receba cashback de verdade. Simples, transparente e instantâneo.', cta: 'Criar Conta Grátis', href: '/register' },
+  { badge: 'Simples e rápido', title: 'Transforme cada compra em <highlight>dinheiro de volta</highlight>', sub: 'Ative o cashback com um clique, compre normalmente e veja o saldo crescer automaticamente.', cta: 'Começar Agora', href: '/register' },
+  { badge: 'Rede exclusiva', title: 'As melhores marcas em <highlight>um só lugar</highlight>', sub: 'Nike, Renner, Puma, Casas Bahia e centenas de outras marcas com cashback garantido.', cta: 'Ver Marcas Parceiras', href: '/partners' },
+  { badge: 'Programa de pontos', title: 'Ganhe pontos, <highlight>resgate benefícios</highlight>', sub: 'Cada compra acumula pontos que viram cashback extra, descontos e experiências exclusivas.', cta: 'Conhecer Benefícios', href: '/quanta-amizade' },
+  { badge: 'Quanta Plus ✦', title: 'Ative sua experiência <highlight>Premium</highlight>', sub: 'Cashback turbinado, ofertas antecipadas e benefícios exclusivos para assinantes Quanta Plus.', cta: 'Assinar Quanta Plus', href: '/planos' },
+  { badge: 'Para lojistas', title: 'Aumente vendas com <highlight>tecnologia Quanta</highlight>', sub: 'Fidelize clientes, aumente o ticket médio e ganhe visibilidade na maior rede de cashback do Brasil.', cta: 'Credenciar Minha Loja', href: '/credenciar' },
 ];
-
-const activeHeroCards = computed<HeroCard[]>(() => {
-  const cards = config.value.heroCards ?? DEFAULT_HERO_CARDS;
-  return cards.filter(c => c.ativo);
+const banners = computed<Banner[]>(() => {
+  const cms = (config.value as any)?.heroBanners;
+  return Array.isArray(cms) && cms.length ? cms : DEFAULT_BANNERS;
 });
 
-const ICON_PATHS: Record<string, string> = {
-  card: '<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>',
-  chart: '<polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/>',
-  bag: '<path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>',
-  star: '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>',
-  percent: '<line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/>',
-  gift: '<polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/>',
-  users: '<path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/>',
-  zap: '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
-};
+const index = ref(0);
+const fading = ref(false);
+const active = computed(() => banners.value[index.value]);
+const activeTitle = computed(() =>
+  active.value.title.replace(/<highlight>/g, '<span class="qs-hero__hl">').replace(/<\/highlight>/g, '</span>'),
+);
+let rotTimer: ReturnType<typeof setInterval> | null = null;
+function go(i: number, user = false) {
+  fading.value = true;
+  setTimeout(() => { index.value = i; fading.value = false; }, 420);
+  if (user) restart();
+}
+function restart() {
+  if (rotTimer) clearInterval(rotTimer);
+  if (reduceMotion.value || offscreen) return;
+  rotTimer = setInterval(() => go((index.value + 1) % banners.value.length), 5600);
+}
+function pauseRotate() { if (rotTimer) { clearInterval(rotTimer); rotTimer = null; } }
+function resumeRotate() { restart(); }
 
-function getCardIconSvg(icon: string, iconBg: string): string {
-  const paths = ICON_PATHS[icon] ?? ICON_PATHS.card;
-  const stroke = iconBg === 'green' ? '#fff' : '#2F7785';
-  return `<svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="${stroke}" stroke-width="2">${paths}</svg>`;
+const placeholder = 'Ex.: tênis de corrida até R$400 com mais cashback…';
+const chips = [
+  { label: '⌚ Smartwatch com + cashback', q: 'Quero um smartwatch com o maior cashback' },
+  { label: '💰 Meu saldo', q: 'Qual é o meu saldo?' },
+  { label: '📍 Lojas no meu bairro', q: 'Tem padaria com cashback perto de mim?' },
+];
+const query = ref('');
+function submitQuery() {
+  const v = query.value.trim();
+  if (v) router.push(`/partners?nome=${encodeURIComponent(v)}`);
+}
+function useChip(q: string) { query.value = q; composerInput.value?.focus(); }
+function focusComposer() {
+  composerInput.value?.focus();
+  composerInput.value?.scrollIntoView({ behavior: reduceMotion.value ? 'auto' : 'smooth', block: 'center' });
 }
 
-function hexToRgba(hex: string, alpha: number): string {
-  const h = hex.replace('#', '');
-  const r = parseInt(h.substring(0, 2), 16);
-  const g = parseInt(h.substring(2, 4), 16);
-  const b = parseInt(h.substring(4, 6), 16);
-  return `rgba(${r},${g},${b},${alpha})`;
-}
-
-function getCtaStyle(item: HeroBannerSlide): Record<string, string> {
-  const style: Record<string, string> = {};
-  if (item.ctaCor) { style.background = item.ctaCor; style.borderColor = item.ctaCor; }
-  if (item.ctaTextoCor) style.color = item.ctaTextoCor;
-  if (item.ctaTamanho === 'pequeno') { style.padding = '10px 20px'; style.fontSize = '13px'; }
-  else if (item.ctaTamanho === 'grande') { style.padding = '18px 36px'; style.fontSize = '18px'; }
-  return style;
-}
-
-function getSlideTitle(item: HeroBannerSlide): string {
-  const raw = item.headline || config.value.hero.title;
-  return raw
-    .replace(/\n/g, '<br>')
-    .replace('<highlight>', '<span style="color:#98C73A">')
-    .replace('</highlight>', '</span>');
-}
-
-function getOverlayGradient(item: HeroBannerSlide): string {
-  const d = item.overlayDirecao || 'esquerda';
-  const cor = item.overlayCor && item.overlayCor.startsWith('#') ? item.overlayCor : null;
-  const hi = cor ? hexToRgba(cor, 0.88) : 'rgba(15,35,45,0.88)';
-  const mid = cor ? hexToRgba(cor, 0.65) : 'rgba(15,35,45,0.65)';
-  const lo = cor ? hexToRgba(cor, 0.30) : 'rgba(15,35,45,0.30)';
-  const loAlt = cor ? hexToRgba(cor, 0.20) : 'rgba(15,35,45,0.20)';
-  if (d === 'direita') return `linear-gradient(to left, ${hi} 0%, ${mid} 45%, ${lo} 100%)`;
-  if (d === 'centro') return `linear-gradient(to right, ${loAlt} 0%, ${hi} 50%, ${loAlt} 100%)`;
-  if (d === 'uniforme') return hi;
-  return `linear-gradient(to right, ${hi} 0%, ${mid} 45%, ${lo} 100%)`;
-}
-
-function getTitleFontSize(item: HeroBannerSlide): string {
-  if (item.tituloFontSize === 'pequeno') return 'clamp(22px, 3.5vw, 36px)';
-  if (item.tituloFontSize === 'grande') return 'clamp(42px, 6.5vw, 68px)';
-  return 'clamp(32px, 5vw, 54px)';
-}
-
-function getTitleLineHeight(item: HeroBannerSlide): string {
-  if (item.headlineEspacamento === 'normal') return '1.02';
-  if (item.headlineEspacamento === 'amplo') return '1.18';
-  return '0.95';
-}
-
-function getSlideSubtitle(item: HeroBannerSlide): string {
-  const raw = item.subtitulo || config.value.hero.subtitle;
-  return raw.replace(/\n/g, '<br>');
-}
-
-function getSubtitleStyle(item: HeroBannerSlide): Record<string, string> {
-  const style: Record<string, string> = {};
-  if (item.subtituloCor) style.color = item.subtituloCor;
-  if (item.subtituloFontSize === 'pequeno') style.fontSize = 'clamp(12px, 1.5vw, 14px)';
-  else if (item.subtituloFontSize === 'grande') style.fontSize = 'clamp(18px, 2.5vw, 24px)';
-  return style;
+type Step = { who?: 'user' | 'bot'; html?: string; typing?: number };
+const SCRIPT: Step[] = [
+  { who: 'user', html: 'Quero um tênis de corrida até R$400 com mais cashback 👟' },
+  { typing: 1100 },
+  { who: 'bot', html:
+      '<span class="qs-hero__lead">Achei a melhor relação cashback perto de você:</span>' +
+      '<div class="qs-hero__pcard"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=160&q=80&auto=format&fit=crop" alt="Tênis de corrida" loading="lazy" />' +
+      '<div><div class="qs-hero__pn">Nike Revolution 7</div><div class="qs-hero__pmeta">Casas Bahia · entrega 2 dias</div>' +
+      '<div class="qs-hero__price">R$ 389,90</div><span class="qs-hero__cb">12% cashback ≈ R$ 46,79 de volta</span></div></div>' },
+  { who: 'user', html: 'Qual é o meu saldo?' },
+  { typing: 900 },
+  { who: 'bot', html:
+      '<span class="qs-hero__lead">Sua carteira Quanta:</span>' +
+      '<div class="qs-hero__scard"><div class="qs-hero__srow"><span class="qs-hero__lbl">Disponível</span><span class="qs-hero__lbl">Reservado</span></div>' +
+      '<div class="qs-hero__srow"><span class="qs-hero__big">R$ 247,30</span><span class="qs-hero__ssub">R$ 88,10 a liberar</span></div>' +
+      '<div class="qs-hero__ssub" style="margin-top:8px">💸 Resgate via PIX em segundos</div></div>' },
+  { who: 'user', html: 'Tem padaria com cashback aqui no bairro?' },
+  { typing: 900 },
+  { who: 'bot', html:
+      '<span class="qs-hero__lead">Pertinho de você:</span>' +
+      '<div class="qs-hero__pcard"><img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=160&q=80&auto=format&fit=crop" alt="Padaria" loading="lazy" />' +
+      '<div><div class="qs-hero__pn">Padaria Real</div><div class="qs-hero__pmeta">Vila Mariana · 600 m</div>' +
+      '<span class="qs-hero__cb">5% cashback · ativa no WhatsApp</span></div></div>' },
+];
+const visible = ref<Step[]>([]);
+const chatBody = ref<HTMLElement | null>(null);
+let chatTimer: ReturnType<typeof setTimeout> | null = null;
+let i = 0;
+async function scrollDown() { await nextTick(); if (chatBody.value) chatBody.value.scrollTop = chatBody.value.scrollHeight; }
+function play() {
+  if (i >= SCRIPT.length) { chatTimer = setTimeout(() => { visible.value = []; i = 0; play(); }, 4200); return; }
+  const it = SCRIPT[i++];
+  if (it.typing) { visible.value.push({ typing: it.typing }); scrollDown(); chatTimer = setTimeout(() => { visible.value.pop(); play(); }, it.typing); return; }
+  visible.value.push(it); scrollDown(); chatTimer = setTimeout(play, it.who === 'user' ? 700 : 1500);
 }
 
 onMounted(async () => {
-  loadConfig();
-  try {
-    const banners = await carouselStore.fetchCarousels();
-    // Se a API retornar vazia ou falhar, heroSlides.value continuará vazio e sliderData usará fallbacks
-  } catch (err) {
-    console.warn('[home-hero] Falha ao carregar banners da API:', err);
-  }
-  
-  try {
-    const slides = await $fetch<HeroBannerSlide[]>('/data/hero-banners.json');
-    if (Array.isArray(slides)) heroSlides.value = slides;
-  } catch {
-    heroSlides.value = [];
+  reduceMotion.value = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  await loadConfig();
+
+  if (reduceMotion.value) {
+    visible.value = SCRIPT.filter((s) => !s.typing);
+  } else {
+    restart();
+    play();
+    if (heroEl.value && 'IntersectionObserver' in window) {
+      visObserver = new IntersectionObserver((es) => {
+        es.forEach((e) => { offscreen = !e.isIntersecting; offscreen ? pauseRotate() : restart(); });
+      }, { threshold: 0 });
+      visObserver.observe(heroEl.value);
+    }
   }
 });
-
-const sliderData = computed<HeroBannerSlide[]>(() => {
-  const newSlides = heroSlides.value.filter(s => s.ativo);
-  if (newSlides.length > 0) return newSlides;
-
-  const carousels = carouselStore.carousels;
-  const oldFiltered = carousels
-    .filter((c: Record<string, unknown>) => c.posicao === "1" && c.ativo === true)
-    .sort((a: Record<string, unknown>, b: Record<string, unknown>) => (a.ordemExibicao as number) - (b.ordemExibicao as number));
-
-  if (oldFiltered.length > 0) {
-    return oldFiltered.map((c: Record<string, unknown>): HeroBannerSlide => ({
-      id: (c.idCarrossel as number) || 0,
-      url: (c.imagem as string) || '',
-      urlDestino: (c.link as string) || '',
-      ativo: true,
-      headline: '',
-      subtitulo: '',
-      badge: '',
-      ctaTexto: '',
-      ctaLink: (c.link as string) || '',
-      ctaCor: '#98C73A',
-      textoCor: 'light',
-      overlayIntensidade: 70,
-    }));
-  }
-
-  return [{
-    id: 0,
-    url: '',
-    urlDestino: '/register',
-    ativo: true,
-    headline: '',
-    subtitulo: '',
-    badge: '',
-    ctaTexto: '',
-    ctaLink: '/register',
-    ctaCor: '#98C73A',
-    textoCor: 'light',
-    overlayIntensidade: 70,
-  }];
+onBeforeUnmount(() => {
+  if (rotTimer) clearInterval(rotTimer);
+  if (chatTimer) clearTimeout(chatTimer);
+  if (visObserver) visObserver.disconnect();
 });
 </script>
 
 <style scoped>
 .qs-hero {
-  position: relative;
-  width: 100%;
-  max-height: 60vh;
-  overflow: hidden;
+  position: relative; overflow: hidden; isolation: isolate; color: #eaf3f5;
+  background:
+    radial-gradient(1200px 700px at 78% -8%, rgba(58,154,173,.55), transparent 60%),
+    radial-gradient(900px 600px at 8% 110%, rgba(152,199,58,.22), transparent 55%),
+    linear-gradient(160deg, #0f2730 0%, #1a2332 48%, #0c1c24 100%);
 }
+.qs-hero__orb { position: absolute; border-radius: 50%; filter: blur(60px); z-index: 0; opacity: .5; animation: qsFloat 14s ease-in-out infinite; }
+.qs-hero__orb--1 { width: 360px; height: 360px; background: #3A9AAD; top: -80px; right: 18%; }
+.qs-hero__orb--2 { width: 280px; height: 280px; background: #98C73A; bottom: -100px; left: 6%; animation-delay: -5s; }
+.qs-hero__wm { position: absolute; right: -130px; top: 50%; transform: translateY(-50%); opacity: .06; z-index: 1; pointer-events: none; }
+@keyframes qsFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-26px); } }
 
-@media (max-height: 800px) {
-  .qs-hero__slide {
-    min-height: 60vh !important;
-  }
+.qs-hero__grid { position: relative; z-index: 2; display: grid; grid-template-columns: 1.05fr .95fr; gap: 48px; align-items: center; padding: 60px 0 80px; }
+.container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+.qs-hero__rotate { transition: opacity .45s ease; }
+.qs-hero__rotate.is-fading { opacity: 0; }
+.qs-hero__badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 7px 14px; font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 13px; font-weight: 600; color: #dff3e0; }
+.qs-hero__dot { width: 8px; height: 8px; border-radius: 50%; background: #98C73A; animation: qsPulse 2s infinite; }
+@keyframes qsPulse { 0% { box-shadow: 0 0 0 0 rgba(152,199,58,.6); } 70% { box-shadow: 0 0 0 10px rgba(152,199,58,0); } 100% { box-shadow: 0 0 0 0 rgba(152,199,58,0); } }
+.qs-hero__title { font-family: 'Bruum FY','Jost','Inter',sans-serif; color: #fff; font-size: clamp(38px, 5vw, 62px); font-weight: 800; line-height: 1.07; letter-spacing: -.02em; margin: 20px 0 16px; min-height: 2.1em; }
+.qs-hero__title :deep(.qs-hero__hl) { color: #98C73A; position: relative; white-space: nowrap; }
+.qs-hero__title :deep(.qs-hero__hl)::after { content: ""; position: absolute; left: 0; right: 0; bottom: 6px; height: 10px; background: rgba(152,199,58,.28); border-radius: 6px; z-index: -1; }
+.qs-hero__sub { font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 18px; line-height: 1.6; color: #c8dde0; max-width: 520px; }
+.qs-hero__cta { display: inline-flex; align-items: center; gap: 8px; margin-top: 22px; font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-weight: 700; font-size: 15px; color: #173a0a; background: linear-gradient(180deg,#98C73A,#7aad1f); border-radius: 999px; padding: 13px 24px; text-decoration: none; box-shadow: 0 10px 28px rgba(152,199,58,.35); transition: transform .2s ease, box-shadow .2s ease; }
+.qs-hero__cta:hover { transform: translateY(-2px); box-shadow: 0 16px 36px rgba(152,199,58,.45); }
+
+.qs-hero__dots { display: flex; gap: 8px; margin-top: 24px; }
+.qs-hero__dot-btn { width: 9px; height: 9px; border-radius: 50%; border: 0; padding: 0; cursor: pointer; background: rgba(255,255,255,.28); transition: .25s; }
+.qs-hero__dot-btn.active { background: #98C73A; width: 26px; border-radius: 5px; }
+
+.qs-hero__composer-label { margin-top: 30px; font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 13px; color: #bcd6da; }
+.qs-hero__composer-label strong { color: #fff; font-weight: 700; }
+
+.qs-hero__composer { margin-top: 12px; background: rgba(255,255,255,.97); border-radius: 20px; padding: 10px 10px 10px 18px; box-shadow: 0 24px 60px rgba(1,15,28,.28); display: flex; align-items: center; gap: 12px; }
+.qs-hero__ai { display: flex; align-items: center; gap: 8px; color: #225F6B; font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-weight: 700; font-size: 13px; white-space: nowrap; border-right: 1px solid #e5e7eb; padding-right: 12px; }
+.qs-hero__input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 16px; color: #1d1d1f; }
+.qs-hero__input::placeholder { color: #9ca3af; }
+.qs-hero__send { flex-shrink: 0; width: 46px; height: 46px; border: 0; border-radius: 14px; cursor: pointer; background: linear-gradient(180deg, #98C73A, #7aad1f); color: #173a0a; display: grid; place-items: center; transition: transform .2s ease; }
+.qs-hero__send:hover { transform: scale(1.05); }
+.qs-hero__send svg { width: 20px; height: 20px; }
+
+.qs-hero__chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.qs-hero__chip { font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 13px; font-weight: 500; color: #dff3e0; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16); border-radius: 999px; padding: 7px 13px; cursor: pointer; transition: all .2s ease; }
+.qs-hero__chip:hover { background: rgba(255,255,255,.18); color: #fff; }
+
+.qs-hero__chat { position: relative; z-index: 2; width: 100%; max-width: 420px; margin-left: auto; background: #0c1a21; border: 1px solid rgba(255,255,255,.1); border-radius: 26px; box-shadow: 0 24px 60px rgba(1,15,28,.4); padding: 16px; }
+.qs-hero__chat-top { display: flex; align-items: center; gap: 12px; padding: 6px 6px 14px; border-bottom: 1px solid rgba(255,255,255,.08); }
+.qs-hero__chat-av { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #3A9AAD, #98C73A); display: grid; place-items: center; }
+.qs-hero__chat-nm { font-family: 'Bruum FY','Jost','Inter',sans-serif; font-weight: 700; color: #fff; font-size: 15px; margin: 0; }
+.qs-hero__chat-st { font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 12px; color: #9fd3a6; margin: 0; display: flex; align-items: center; gap: 6px; }
+.qs-hero__chat-st i { width: 7px; height: 7px; border-radius: 50%; background: #98C73A; display: inline-block; }
+.qs-hero__chat-body { display: flex; flex-direction: column; gap: 10px; padding: 16px 6px 6px; min-height: 360px; max-height: 420px; overflow: hidden; }
+
+.qs-hero__msg { max-width: 86%; font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 14px; line-height: 1.45; padding: 11px 14px; border-radius: 16px; animation: qsPop .5s both; }
+@keyframes qsPop { from { opacity: 0; transform: translateY(10px) scale(.98); } to { opacity: 1; transform: none; } }
+.qs-hero__msg--user { align-self: flex-end; background: linear-gradient(180deg, #2f7785, #266472); color: #eafaff; border-bottom-right-radius: 5px; }
+.qs-hero__msg--bot { align-self: flex-start; background: #15262e; color: #d7e7ea; border: 1px solid rgba(255,255,255,.06); border-bottom-left-radius: 5px; }
+.qs-hero__msg :deep(.qs-hero__lead) { color: #9fd3a6; font-weight: 600; font-size: 12px; display: block; margin-bottom: 8px; }
+.qs-hero__msg :deep(.qs-hero__pcard) { display: flex; gap: 12px; background: #0c1a21; border: 1px solid rgba(255,255,255,.08); border-radius: 14px; padding: 10px; margin-top: 4px; }
+.qs-hero__msg :deep(.qs-hero__pcard img) { width: 62px; height: 62px; border-radius: 10px; object-fit: cover; flex-shrink: 0; }
+.qs-hero__msg :deep(.qs-hero__pn) { font-weight: 700; color: #fff; font-size: 13px; }
+.qs-hero__msg :deep(.qs-hero__pmeta) { font-size: 11px; color: #8fb3b8; margin: 2px 0 6px; }
+.qs-hero__msg :deep(.qs-hero__price) { font-family: 'Bruum FY','Jost','Inter',sans-serif; font-weight: 700; color: #fff; font-size: 15px; }
+.qs-hero__msg :deep(.qs-hero__cb) { display: inline-block; background: rgba(152,199,58,.16); color: #98C73A; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; margin-top: 4px; }
+.qs-hero__msg :deep(.qs-hero__scard) { background: #0c1a21; border: 1px solid rgba(255,255,255,.08); border-radius: 14px; padding: 12px; margin-top: 4px; }
+.qs-hero__msg :deep(.qs-hero__srow) { display: flex; justify-content: space-between; align-items: center; }
+.qs-hero__msg :deep(.qs-hero__lbl) { font-size: 11px; color: #8fb3b8; text-transform: uppercase; letter-spacing: .08em; }
+.qs-hero__msg :deep(.qs-hero__big) { font-family: 'Bruum FY','Jost','Inter',sans-serif; font-weight: 800; color: #98C73A; font-size: 24px; }
+.qs-hero__msg :deep(.qs-hero__ssub) { font-size: 12px; color: #aac4c8; margin-top: 2px; }
+
+.qs-hero__chat-cta { margin-top: 10px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; background: rgba(152,199,58,.14); color: #d4ef9f; border: 1px solid rgba(152,199,58,.3); border-radius: 14px; padding: 12px; font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-weight: 700; font-size: 14px; min-height: 44px; cursor: pointer; transition: background .2s ease; }
+.qs-hero__chat-cta:hover { background: rgba(152,199,58,.22); }
+.qs-hero__chat-cta svg { width: 16px; height: 16px; }
+
+.qs-hero__typing { align-self: flex-start; background: #15262e; border: 1px solid rgba(255,255,255,.06); border-radius: 16px; border-bottom-left-radius: 5px; padding: 14px 16px; display: flex; gap: 5px; }
+.qs-hero__typing span { width: 7px; height: 7px; border-radius: 50%; background: #6f9aa1; animation: qsBlink 1.2s infinite; }
+.qs-hero__typing span:nth-child(2) { animation-delay: .2s; }
+.qs-hero__typing span:nth-child(3) { animation-delay: .4s; }
+@keyframes qsBlink { 0%,60%,100% { opacity: .3; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-3px); } }
+
+@media (max-width: 980px) {
+  .qs-hero__grid { grid-template-columns: 1fr; gap: 36px; padding: 44px 0 60px; }
+  .qs-hero__chat { margin: 0 auto; }
+  .qs-hero__wm { right: -90px; top: 16%; transform: none; }
+  .qs-hero__wm :deep(img) { height: 320px !important; }
+  .qs-hero__title { min-height: 0; }
 }
-
-@media (max-width: 768px) {
-  .qs-hero {
-    max-height: 80vh;
-  }
-}
-
-.qs-hero__loading {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 480px;
-  background: linear-gradient(135deg, #1a4a54 0%, #225F6B 40%, #2F7785 100%);
-}
-
-.qs-hero__swiper {
-  width: 100%;
-}
-
-.qs-hero__slide {
-  position: relative;
-  overflow: hidden;
-  min-height: 480px;
-}
-
-.qs-hero__bg {
-  position: absolute;
-  inset: 0;
-  background: #225F6B;
-}
-
-.qs-hero__overlay {
-  position: absolute;
-  inset: 0;
-}
-
-.qs-hero__content-wrap {
-  position: relative;
-  z-index: 2;
-  padding-top: 60px;
-  padding-bottom: 80px;
-}
-
-.qs-hero__badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(255,255,255,0.12);
-  border: 1px solid rgba(255,255,255,0.20);
-  border-radius: 999px;
-  color: #fff;
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 12px;
-  font-weight: 500;
-  padding: 5px 14px;
-  margin-bottom: 20px;
-  backdrop-filter: blur(4px);
-}
-
-.qs-hero__title {
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: clamp(32px, 5vw, 54px);
-  font-weight: 800;
-  color: #fff;
-  line-height: 0.95;
-  letter-spacing: -0.03em;
-  margin-bottom: 10px;
-}
-
-.qs-hero__title--lime {
-  color: #98C73A;
-}
-
-.qs-hero__content--dark .qs-hero__badge {
-  color: #1a2236;
-  background: rgba(0,0,0,0.06);
-  border-color: rgba(0,0,0,0.12);
-}
-
-.qs-hero__content--dark .qs-hero__title {
-  color: #1a2236;
-}
-
-.qs-hero__content--dark .qs-hero__subtitle {
-  color: rgba(26,34,54,0.80);
-}
-
-.qs-hero__subtitle {
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 16px;
-  color: rgba(255,255,255,0.80);
-  line-height: 1.5;
-  max-width: 440px;
-  margin-bottom: 20px;
-}
-
-.qs-hero__cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: #98C73A;
-  color: #fff;
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 15px;
-  font-weight: 700;
-  padding: 14px 28px;
-  border-radius: 8px;
-  text-decoration: none;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 20px rgba(152, 199, 58, 0.40);
-  white-space: nowrap;
-}
-
-.qs-hero__cta:hover {
-  background: #7aad1f;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 28px rgba(152, 199, 58, 0.50);
-  color: #fff;
-}
-
-.qs-hero__actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.qs-hero__cta-sec {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  border: 1.5px solid rgba(255,255,255,0.55);
-  color: #fff;
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 15px;
-  font-weight: 600;
-  padding: 13px 26px;
-  border-radius: 8px;
-  text-decoration: none;
-  transition: all 0.2s ease;
-  backdrop-filter: blur(4px);
-  background: rgba(255,255,255,0.08);
-}
-
-.qs-hero__cta-sec:hover {
-  border-color: #fff;
-  background: rgba(255,255,255,0.18);
-  color: #fff;
-  transform: translateY(-2px);
-}
-
-.qs-hero__cards {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  align-items: flex-end;
-}
-
-.qs-hero__card {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: rgba(255,255,255,0.97);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,0.60);
-  padding: 12px 18px;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.20), 0 2px 8px rgba(0,0,0,0.10);
-  min-width: 190px;
-  transition: all 0.3s ease;
-  animation: heroCardIn 0.6s ease both;
-}
-
-.qs-hero__card:nth-child(1) { animation-delay: 0.1s; }
-.qs-hero__card:nth-child(2) { animation-delay: 0.25s; }
-.qs-hero__card:nth-child(3) { animation-delay: 0.4s; }
-
-@keyframes heroCardIn {
-  from { opacity: 0; transform: translateX(24px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-
-.qs-hero__card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 50px rgba(0,0,0,0.28), 0 4px 12px rgba(0,0,0,0.12);
-}
-
-.qs-hero__card-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background: rgba(47, 119, 133, 0.12);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.qs-hero__card-icon--green {
-  background: #98C73A;
-}
-
-.qs-hero__card-label {
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 10px;
-  color: #9ca3af;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  margin-bottom: 3px;
-}
-
-.qs-hero__card-value {
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  color: #111827;
-  line-height: 1.2;
-}
-
-.qs-hero__card-value--green {
-  color: #2F7785;
-  font-size: 14px;
-}
-
-.qs-hero__card--offset {
-  align-self: flex-end;
-  margin-right: -28px;
-}
-
-.qs-hero-dots {
-  position: absolute;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 3;
-  display: flex;
-  gap: 8px;
-}
-
-:deep(.qs-hero-dots .swiper-pagination-bullet) {
-  width: 8px !important;
-  height: 8px !important;
-  background: rgba(255,255,255,0.45) !important;
-  opacity: 1 !important;
-  border-radius: 50%;
-  transition: all 0.3s;
-}
-
-:deep(.qs-hero-dots .swiper-pagination-bullet-active) {
-  background: #98C73A !important;
-  width: 24px !important;
-  border-radius: 999px !important;
-}
-
-.qs-hero-arrows {
-  position: absolute;
-  bottom: 20px;
-  right: 24px;
-  z-index: 3;
-  gap: 8px;
-}
-
-.qs-hero-prev, .qs-hero-next {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.15);
-  backdrop-filter: blur(4px);
-  border: 1px solid rgba(255,255,255,0.25);
-  color: #fff;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-}
-
-.qs-hero-prev:hover, .qs-hero-next:hover {
-  background: rgba(255,255,255,0.30);
-}
-
-/* Badge dot pulsante */
-.qs-hero__badge-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #98C73A;
-  flex-shrink: 0;
-  animation: pulse-dot 2s infinite;
-}
-
-@keyframes pulse-dot {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.6; transform: scale(1.3); }
-}
-
-/* Social proof */
-.qs-hero__social-proof {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 18px;
-  background: rgba(255,255,255,0.10);
-  border: 1px solid rgba(255,255,255,0.18);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border-radius: 999px;
-  padding: 6px 14px 6px 6px;
-}
-
-.qs-hero__avatars {
-  display: flex;
-}
-
-.qs-hero__avatars img {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  border: 2px solid rgba(255,255,255,0.9);
-  object-fit: cover;
-  margin-left: -7px;
-}
-
-.qs-hero__avatars img:first-child {
-  margin-left: 0;
-}
-
-.qs-hero__rating {
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 12px;
-  color: rgba(255,255,255,0.92);
-  font-weight: 600;
-  letter-spacing: 0.01em;
-}
-
-.qs-hero__row {
-  min-height: 480px;
-}
-
-@media (max-width: 991px) {
-  .qs-hero__content-wrap {
-    padding-top: 40px;
-    padding-bottom: 60px;
-  }
-  .qs-hero__row {
-    min-height: 380px;
-  }
-}
-
-@media (max-width: 575px) {
-  .qs-hero__row {
-    min-height: 0;
-    padding-top: 20px;
-    padding-bottom: 20px;
-  }
-  .qs-hero__content-wrap {
-    padding-top: 24px;
-    padding-bottom: 40px;
-  }
-  .qs-hero__title {
-    font-size: clamp(26px, 8vw, 36px);
-  }
-  .qs-hero__subtitle {
-    font-size: 14px;
-  }
-  .qs-hero__cta {
-    font-size: 14px;
-    padding: 12px 20px;
-  }
-  .qs-hero__social-proof {
-    flex-wrap: wrap;
-    gap: 8px;
-  }
+@media (prefers-reduced-motion: reduce) {
+  .qs-hero__orb, .qs-hero__dot, .qs-hero__msg, .qs-hero__typing span { animation: none; }
 }
 </style>

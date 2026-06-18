@@ -1,24 +1,13 @@
 <template>
-  <section class="qs-brands">
+  <section class="qs-bw" aria-label="Marcas parceiras">
     <div class="container">
-      <p class="qs-brands__label">{{ config.brands.label }}</p>
-      <div class="qs-brands__grid">
-        <div
-          v-for="brand in displayBrands"
-          :key="brand.nome"
-          class="qs-brands__item"
-          :title="brand.nome"
-          role="button"
-          tabindex="0"
-          style="cursor:pointer"
-          @click="handleBrandClick(brand)"
-          @keydown.enter="handleBrandClick(brand)"
-        >
+      <p class="qs-bw__label">As maiores marcas confiam na Quanta</p>
+      <div class="qs-bw__grid">
+        <div v-for="(b, i) in brands" :key="i" class="qs-bw__cell" :title="b.name">
           <img
-            :src="brand.imagem || brand.imagemPequena || '/img/placeholder.png'"
-            :alt="brand.nome"
-            loading="lazy"
-            @error="(e) => (e.target as HTMLImageElement).style.opacity = '0'"
+            :src="logo(b.domain)" :alt="b.name"
+            width="120" height="48" loading="lazy" decoding="async"
+            @error="onImgError"
           />
         </div>
       </div>
@@ -27,132 +16,42 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue';
-import { useHomeConfig } from '@/composables/useHomeConfig';
-import { usePartnerStore } from '@/pinia/usePartnerStore';
-import { useUserStore } from '@/pinia/useUserStore';
-import { useRouter } from 'vue-router';
+interface Brand { name: string; domain: string }
 
-const { config, loadConfig } = useHomeConfig();
-const partnerStore = usePartnerStore();
-const userStore = useUserStore();
-const router = useRouter();
-
-const FALLBACK_BRANDS = [
-  { nome: 'Nike', imagem: 'https://logo.clearbit.com/nike.com', link: '' },
-  { nome: 'Renner', imagem: 'https://logo.clearbit.com/lojasrenner.com.br', link: '' },
-  { nome: 'Puma', imagem: 'https://logo.clearbit.com/puma.com', link: '' },
-  { nome: 'Casas Bahia', imagem: 'https://logo.clearbit.com/casasbahia.com.br', link: '' },
-  { nome: 'Cobasi', imagem: 'https://logo.clearbit.com/cobasi.com.br', link: '' },
-  { nome: 'MadeiraMadeira', imagem: 'https://logo.clearbit.com/madeiramadeira.com.br', link: '' },
-  { nome: 'Dafiti', imagem: 'https://logo.clearbit.com/dafiti.com.br', link: '' },
-  { nome: 'Vivara', imagem: 'https://logo.clearbit.com/vivara.com.br', link: '' },
-  { nome: 'LG', imagem: 'https://logo.clearbit.com/lg.com', link: '' },
-  { nome: 'Motorola', imagem: 'https://logo.clearbit.com/motorola.com', link: '' },
-  { nome: 'Pernambucanas', imagem: 'https://logo.clearbit.com/pernambucanas.com.br', link: '' },
-  { nome: 'Tok&Stok', imagem: 'https://logo.clearbit.com/tokstok.com.br', link: '' },
-  { nome: 'Olympikus', imagem: 'https://logo.clearbit.com/olympikus.com.br', link: '' },
-  { nome: 'Under Armour', imagem: 'https://logo.clearbit.com/underarmour.com', link: '' },
-  { nome: 'Shoptime', imagem: 'https://logo.clearbit.com/shoptime.com.br', link: '' },
-  { nome: 'Mizuno', imagem: 'https://logo.clearbit.com/mizuno.com', link: '' },
+const brands: Brand[] = [
+  { name: 'Nike', domain: 'nike.com' },
+  { name: 'Renner', domain: 'lojasrenner.com.br' },
+  { name: 'Puma', domain: 'puma.com' },
+  { name: 'Casas Bahia', domain: 'casasbahia.com.br' },
+  { name: 'Cobasi', domain: 'cobasi.com.br' },
+  { name: 'MadeiraMadeira', domain: 'madeiramadeira.com.br' },
+  { name: 'Dafiti', domain: 'dafiti.com.br' },
+  { name: 'Vivara', domain: 'vivara.com.br' },
+  { name: 'LG', domain: 'lg.com' },
+  { name: 'Motorola', domain: 'motorola.com' },
+  { name: 'Pernambucanas', domain: 'pernambucanas.com.br' },
+  { name: 'Tok&Stok', domain: 'tokstok.com.br' },
+  { name: 'Olympikus', domain: 'olympikus.com.br' },
+  { name: 'Under Armour', domain: 'underarmour.com' },
+  { name: 'Shoptime', domain: 'shoptime.com.br' },
+  { name: 'Mizuno', domain: 'mizuno.com' },
 ];
 
-const displayBrands = computed(() => {
-  const apiPartners = (partnerStore.newPartners || []).slice(0, 16);
-  if (apiPartners.length >= 8) return apiPartners;
-  const configItems = config.value.brands?.items;
-  if (configItems && configItems.length >= 4) return configItems.slice(0, 16);
-  return FALLBACK_BRANDS;
-});
-
-function handleBrandClick(brand: any) {
-  if (!userStore.isLoggedIn) {
-    router.push('/login');
-    return;
-  }
-  if (brand.link) {
-    const url = brand.link.replace('{userId}', userStore.userId || '');
-    window.open(url, '_blank', 'noopener');
-  }
-}
-
-onMounted(async () => {
-  await loadConfig();
-  try {
-    await partnerStore.fetchNewPartners();
-  } catch {
-    console.warn('[Brands] Erro ao carregar parceiros');
-  }
-});
+const logo = (domain: string) => `https://logo.clearbit.com/${domain}`;
+function onImgError(e: Event) { (e.target as HTMLImageElement).style.opacity = '0'; }
 </script>
 
 <style scoped>
-.qs-brands {
-  padding: 40px 0 36px;
-  background: #fff;
-  border-top: 1px solid #f0f0f0;
-  border-bottom: 1px solid #f0f0f0;
-}
+.qs-bw { padding: 84px 0; background: #f7f8fa; }
+.container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
 
-.qs-brands__label {
-  text-align: center;
-  font-family: 'Inter', 'Jost', sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #9ca3af;
-  margin-bottom: 28px;
-}
+.qs-bw__label { text-align: center; font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: #9ca3af; margin-bottom: 30px; }
+.qs-bw__grid { display: grid; grid-template-columns: repeat(8, 1fr); border: 1px solid #eef1f3; border-radius: 12px; overflow: hidden; background: #fff; }
+.qs-bw__cell { min-height: 88px; display: grid; place-items: center; padding: 16px; border-right: 1px solid #f0f4f6; border-bottom: 1px solid #f0f4f6; }
+.qs-bw__cell img { max-width: 96px; max-height: 38px; width: auto; height: auto; object-fit: contain; filter: grayscale(100%) opacity(.6); transition: filter .25s ease; }
+.qs-bw__cell:hover img { filter: grayscale(0) opacity(1); }
 
-.qs-brands__grid {
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  gap: 0;
-}
-
-@media (max-width: 991px) {
-  .qs-brands__grid {
-    grid-template-columns: repeat(6, 1fr);
-  }
-}
-
-@media (max-width: 767px) {
-  .qs-brands__grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-@media (max-width: 479px) {
-  .qs-brands__grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-.qs-brands__item {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px 20px;
-  border-right: 1px solid #f0f4f6;
-  border-bottom: 1px solid #f0f4f6;
-  transition: background 0.2s ease;
-  min-height: 72px;
-}
-
-.qs-brands__item:hover {
-  background: #f7fbfc;
-}
-
-.qs-brands__item img {
-  max-width: 90px;
-  max-height: 36px;
-  object-fit: contain;
-  filter: grayscale(100%) opacity(0.65);
-  transition: filter 0.25s ease;
-}
-
-.qs-brands__item:hover img {
-  filter: grayscale(0%) opacity(1);
-}
+@media (max-width: 991px) { .qs-bw__grid { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 560px) { .qs-bw__grid { grid-template-columns: repeat(3, 1fr); } }
+@media (prefers-reduced-motion: reduce) { .qs-bw__cell img { transition: none; } }
 </style>
