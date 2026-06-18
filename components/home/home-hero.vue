@@ -278,16 +278,18 @@ onBeforeUnmount(() => {
 @keyframes qsBlink { 0%,60%,100% { opacity: .3; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-3px); } }
 
 @media (max-width: 980px) {
-  .qs-hero__grid { grid-template-columns: 1fr; gap: 32px; padding: 32px 0 48px; min-height: auto; }
-  .qs-hero__chat { margin: 0 auto; }
+  .qs-hero__grid { display: flex; flex-direction: column; gap: 20px; padding: 22px 0 40px; min-height: auto; }
+  .qs-hero__copy { display: contents; }
+  .qs-hero__rotate { order: 1; }
+  .qs-hero__chat { order: 2; margin: 0 auto; max-width: 460px; width: 100%; }
+  .qs-hero__composer-label { order: 3; }
+  .qs-hero__composer { order: 4; }
+  .qs-hero__dots { order: 5; justify-content: center; }
+  .qs-hero__chips { display: none; }
+  .qs-hero__chat-body { min-height: 236px; max-height: 284px; }
   .qs-hero__wm { right: -90px; top: 16%; transform: none; }
   .qs-hero__wm :deep(img) { height: 320px !important; }
   .qs-hero__title { min-height: 0; }
-}
-@media (max-width: 760px) {
-  .qs-hero__grid { padding: 24px 0 40px; gap: 28px; }
-  .qs-hero__sub { font-size: 16px; }
-  .qs-hero__chips { gap: 6px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .qs-hero__orb, .qs-hero__dot, .qs-hero__msg, .qs-hero__typing span { animation: none; }
