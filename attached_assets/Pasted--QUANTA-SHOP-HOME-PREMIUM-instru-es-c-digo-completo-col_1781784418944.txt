@@ -1,0 +1,1635 @@
+# QUANTA SHOP — HOME PREMIUM: instruções + código completo (colar no Agent do Replit)
+
+INSTRUÇÕES PARA O AGENT (leia tudo antes de começar):
+
+Este documento contém o CÓDIGO COMPLETO de 20 arquivos da nova home premium do site Quanta Shop
+(Nuxt 3 SPA, Vue 3 <script setup lang="ts">, CSS scoped, design system qs-*, SEM Bootstrap/Tailwind).
+Crie/atualize cada arquivo no caminho EXATO indicado em cada bloco "INÍCIO ARQUIVO: <caminho>".
+O conteúdo do arquivo é tudo que está entre a linha "INÍCIO ARQUIVO" e a linha "FIM ARQUIVO".
+
+REGRAS:
+1) Crie os arquivos novos e SUBSTITUA os existentes pelos conteúdos abaixo — COM UMA EXCEÇÃO:
+   - "composables/useHomeConfig.ts": se o projeto JÁ tiver esse arquivo, MANTENHA o existente (não troque).
+     O incluído aqui é só um fallback; o hero funciona sem ele (usa 6 banners default internos).
+2) O arquivo "pages/index.vue" é o que faz a home nova aparecer — ele monta os 13 componentes home-*.
+   Substitua o index atual por este (preservando rotas/SEO que por acaso já existam e sejam necessárias).
+3) Respeite as restrições da plataforma: ssr:false, porta 5000, allowedHosts:true; NUNCA usar "localhost"
+   hardcoded; não introduzir Bootstrap/Tailwind; não usar base64 em imagens.
+4) Imagens: este documento é só TEXTO, então as imagens NÃO vêm aqui. Os componentes apontam para:
+   /img/logo/quanta-logo.png, /img/logo/quanta-logo-whitegreen.png, /img/logo/quanta-icon.png,
+   /img/logo/quanta-icon-white.png, /img/team/mauro-cutout.png, /og-cover.jpg, /favicon.png
+   O usuário vai subir esses arquivos de imagem na pasta public/ depois (arrastando). Se algum ainda não
+   existir, NÃO quebre o build — apenas deixe a referência (a imagem aparece quando for enviada).
+5) Ao terminar, rode: npm run build:nuxt  (0 erros; corrija imports se necessário).
+6) Confirme na home: hero escuro com 6 banners girando + chat "Quanta IA"; seção "Como funciona";
+   seção do CEO com a foto; rodapé com logo branca+verde; menu com "Como funciona" como 1º item;
+   e a rota /como-funciona funcionando. Teste no mobile (largura ~390px) sem rolagem horizontal.
+
+ABAIXO, O CÓDIGO DE CADA ARQUIVO:
+
+
+===== INÍCIO ARQUIVO: composables/useHomeConfig.ts =====
+import { ref } from 'vue';
+
+/**
+ * useHomeConfig — composable CMS-ready para a home.
+ *
+ * Hoje retorna um objeto vazio (cada componente da home traz seus defaults
+ * embutidos). Quando o backend expuser /api/home-config, basta preencher
+ * `loadConfig` com o fetch — os componentes já leem `config.value.<chave>`
+ * com fallback para os arrays default, então nada mais precisa mudar.
+ */
+export interface HomeConfig {
+  heroBanners?: unknown[];
+  [key: string]: unknown;
+}
+
+const config = ref<HomeConfig>({});
+let loaded = false;
+
+export function useHomeConfig() {
+  async function loadConfig(): Promise<void> {
+    if (loaded) return;
+    loaded = true;
+    // TODO: hospedar /api/home-config e popular via useApi()/$fetch.
+    // try { config.value = await $fetch('/api/home-config'); } catch { /* usa defaults */ }
+  }
+  return { config, loadConfig };
+}
+===== FIM ARQUIVO: composables/useHomeConfig.ts =====
+
+
+===== INÍCIO ARQUIVO: components/qs-logo.vue =====
+<template>
+  <component :is="to ? 'nuxt-link' : 'span'" :href="to || undefined" class="qs-logo" :aria-label="alt">
+    <img class="qs-logo__img" :src="src" :alt="alt" :style="{ height: size + 'px' }" decoding="async" />
+  </component>
+</template>
+
+<script setup lang="ts">
+import { computed } from 'vue';
+
+const props = withDefaults(defineProps<{
+  /** 'icon' = só o símbolo bq · 'full' = logo + wordmark "quanta SHOP" */
+  variant?: 'icon' | 'full';
+  /** 'color' = teal+lime · 'white' = monocromático p/ fundo escuro (só variant icon) */
+  tone?: 'color' | 'white';
+  /** altura em px */
+  size?: number;
+  /** se passado, vira <nuxt-link> */
+  to?: string;
+}>(), { variant: 'icon', tone: 'color', size: 40 });
+
+const alt = 'Quanta Shop';
+const src = computed(() => {
+  if (props.variant === 'full') return '/img/logo/quanta-logo.png';
+  return props.tone === 'white' ? '/img/logo/quanta-icon-white.png' : '/img/logo/quanta-icon.png';
+});
+</script>
+
+<style scoped>
+.qs-logo { display: inline-flex; align-items: center; text-decoration: none; }
+.qs-logo__img { width: auto; display: block; }
+</style>
+===== FIM ARQUIVO: components/qs-logo.vue =====
+
+
+===== INÍCIO ARQUIVO: layouts/layout-home.vue =====
+<template>
+  <div class="qs-layout-home">
+    <a class="qs-layout-home__skip" href="#main">Pular para o conteúdo</a>
+    <header-home />
+    <main id="main">
+      <slot />
+    </main>
+    <footer-home />
+  </div>
+</template>
+
+<script setup lang="ts"></script>
+
+<style scoped>
+.qs-layout-home { overflow-x: hidden; }
+.qs-layout-home__skip { position: absolute; left: -999px; top: 0; background: #98C73A; color: #225F6B; padding: 10px 16px; border-radius: 0 0 6px 0; z-index: 2000; font-weight: 700; font-family: 'Kiye Sans','Inter','Jost',sans-serif; }
+.qs-layout-home__skip:focus { left: 0; }
+</style>
+===== FIM ARQUIVO: layouts/layout-home.vue =====
+
+
+===== INÍCIO ARQUIVO: components/header/header-home.vue =====
+<template>
+  <header class="qs-hdr">
+    <div class="container qs-hdr__row">
+      <nuxt-link class="qs-hdr__brand" href="/" aria-label="Quanta Shop">
+        <!-- logo colorida -->
+        <img class="qs-hdr__logo" src="/img/logo/quanta-logo.png" width="122" height="40" alt="Quanta Shop" decoding="async" />
+      </nuxt-link>
+
+      <nav class="qs-hdr__nav" aria-label="Principal">
+        <nuxt-link v-for="(l, i) in links" :key="i" :href="l.href">{{ l.label }}</nuxt-link>
+      </nav>
+
+      <div class="qs-hdr__actions">
+        <nuxt-link class="qs-hdr__login" href="/login">Login</nuxt-link>
+        <nuxt-link class="qs-hdr__cad" href="/register">Cadastro</nuxt-link>
+        <button
+          class="qs-hdr__burger" :class="{ 'is-open': open }"
+          type="button" :aria-label="open ? 'Fechar menu' : 'Abrir menu'"
+          :aria-expanded="open" aria-controls="qs-hdr-mobile"
+          @click="open = !open"
+        >
+          <span /><span /><span />
+        </button>
+      </div>
+    </div>
+
+    <div id="qs-hdr-mobile" class="qs-hdr__mobile" :class="{ 'is-show': open }">
+      <nuxt-link v-for="(l, i) in links" :key="i" :href="l.href" @click="open = false">{{ l.label }}</nuxt-link>
+      <div class="qs-hdr__mobile-actions">
+        <nuxt-link class="qs-hdr__login" href="/login" @click="open = false">Login</nuxt-link>
+        <nuxt-link class="qs-hdr__cad" href="/register" @click="open = false">Cadastro</nuxt-link>
+      </div>
+    </div>
+  </header>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue';
+
+const open = ref(false);
+
+const links = [
+  { label: 'Como funciona', href: '/como-funciona' },
+  { label: 'Para Você', href: '/para-voce' },
+  { label: 'Para sua Empresa', href: '/para-sua-empresa' },
+  { label: 'Seja um Agente', href: '/seja-um-agente' },
+  { label: 'Quanta Amizade', href: '/quanta-amizade' },
+  { label: 'Blog', href: '/blog' },
+  { label: 'Fale Conosco', href: '/contato' },
+];
+</script>
+
+<style scoped>
+.qs-hdr { position: sticky; top: 0; z-index: 1000; background: rgba(255,255,255,.82); backdrop-filter: saturate(160%) blur(14px); -webkit-backdrop-filter: saturate(160%) blur(14px); border-bottom: 1px solid rgba(17,24,39,.06); }
+.container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+.qs-hdr__row { display: flex; align-items: center; gap: 20px; height: 68px; }
+.qs-hdr__brand { display: flex; align-items: center; text-decoration: none; }
+.qs-hdr__logo { height: 40px; width: auto; display: block; }
+
+.qs-hdr__nav { display: flex; gap: 4px; flex: 1; justify-content: center; }
+.qs-hdr__nav a { font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 14px; font-weight: 500; color: #374151; padding: 8px 12px; border-radius: 6px; text-decoration: none; transition: color .2s ease, background .2s ease; }
+.qs-hdr__nav a:hover { color: #2F7785; background: rgba(47,119,133,.07); }
+
+.qs-hdr__actions { display: flex; align-items: center; gap: 10px; }
+.qs-hdr__login { font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 14px; font-weight: 600; color: #2F7785; border: 1.5px solid #2F7785; border-radius: 999px; padding: 8px 18px; min-height: 40px; display: inline-flex; align-items: center; text-decoration: none; transition: background .2s ease, color .2s ease; }
+.qs-hdr__login:hover { background: #2F7785; color: #fff; }
+.qs-hdr__cad { font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 14px; font-weight: 700; color: #173a0a; background: #98C73A; border-radius: 999px; padding: 9px 20px; min-height: 40px; display: inline-flex; align-items: center; text-decoration: none; transition: background .2s ease; }
+.qs-hdr__cad:hover { background: #7aad1f; }
+
+.qs-hdr__burger { display: none; flex-direction: column; gap: 5px; background: none; border: 0; cursor: pointer; padding: 10px 8px; margin-left: 2px; min-width: 44px; min-height: 44px; align-items: center; justify-content: center; }
+.qs-hdr__burger span { display: block; width: 24px; height: 2px; background: #374151; border-radius: 2px; transition: transform .25s ease, opacity .25s ease; }
+.qs-hdr__burger.is-open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.qs-hdr__burger.is-open span:nth-child(2) { opacity: 0; }
+.qs-hdr__burger.is-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.qs-hdr__mobile { display: none; flex-direction: column; padding: 8px 24px 18px; background: #fff; border-bottom: 1px solid rgba(17,24,39,.06); }
+.qs-hdr__mobile a { font-family: 'Kiye Sans','Inter','Jost',sans-serif; padding: 13px 4px; font-size: 15px; font-weight: 500; color: #374151; border-bottom: 1px solid #f5f5f7; text-decoration: none; min-height: 44px; display: flex; align-items: center; }
+.qs-hdr__mobile a:hover { color: #2F7785; }
+.qs-hdr__mobile-actions { display: flex; gap: 12px; margin-top: 14px; }
+.qs-hdr__mobile-actions a { border-bottom: 0; justify-content: center; flex: 1; }
+
+@media (max-width: 1024px) {
+  .qs-hdr__nav { display: none; }
+  .qs-hdr__burger { display: flex; }
+  .qs-hdr__mobile.is-show { display: flex; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .qs-hdr__burger span, .qs-hdr__login, .qs-hdr__cad, .qs-hdr__nav a { transition: none; }
+}
+</style>
+===== FIM ARQUIVO: components/header/header-home.vue =====
+
+
+===== INÍCIO ARQUIVO: components/footer/footer-home.vue =====
+<template>
+  <footer class="qs-ft">
+    <div class="container">
+      <div class="qs-ft__top">
+        <div class="qs-ft__brand-col">
+          <nuxt-link class="qs-ft__brand" href="/" aria-label="Quanta Shop">
+            <!-- logo branca+verde p/ fundo escuro -->
+            <img class="qs-ft__logo" src="/img/logo/quanta-logo-whitegreen.png" width="128" height="42" alt="Quanta Shop" decoding="async" />
+          </nuxt-link>
+          <div class="qs-ft__seals">
+            <span class="qs-ft__seal"><b>PIX</b> saque instantâneo</span>
+            <span class="qs-ft__seal"><b>LGPD</b> dados protegidos</span>
+            <span class="qs-ft__seal"><b>SSL</b> site seguro</span>
+          </div>
+        </div>
+
+        <div class="qs-ft__news-col">
+          <p class="qs-ft__news-title">Receba ofertas e cashback turbinado</p>
+          <p class="qs-ft__news-sub">Novidades e promoções no seu e-mail. Sem spam.</p>
+          <form class="qs-ft__news" @submit.prevent="subscribe">
+            <input v-model="email" type="email" aria-label="Seu e-mail" placeholder="seu@email.com" />
+            <button type="submit">Assinar</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="qs-ft__row">
+        <nav class="qs-ft__nav" aria-label="Rodapé">
+          <nuxt-link v-for="(l, i) in links" :key="i" :href="l.href">{{ l.label }}</nuxt-link>
+        </nav>
+        <div class="qs-ft__soc">
+          <a href="https://www.instagram.com/quantashop" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.2c3.2 0 3.6 0 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.15 3.23-1.66 4.77-4.92 4.92-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-3.26-.15-4.77-1.7-4.92-4.92C2.16 15.58 2.15 15.2 2.15 12s.01-3.58.07-4.85C2.37 3.92 3.88 2.38 7.15 2.27 8.42 2.21 8.8 2.2 12 2.2zm0 3.64a6.16 6.16 0 100 12.32 6.16 6.16 0 000-12.32zm0 10.16a4 4 0 110-8 4 4 0 010 8zm6.4-10.4a1.44 1.44 0 100 2.88 1.44 1.44 0 000-2.88z" /></svg></a>
+          <a href="https://www.facebook.com/quantashop" target="_blank" rel="noopener" aria-label="Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.07C24 5.44 18.63.07 12 .07S0 5.44 0 12.07c0 5.99 4.39 10.95 10.13 11.85v-8.38H7.08v-3.47h3.05V9.43c0-3.01 1.79-4.67 4.53-4.67 1.31 0 2.69.24 2.69.24v2.95h-1.51c-1.49 0-1.96.93-1.96 1.87v2.25h3.33l-.53 3.47h-2.8v8.38C19.61 23.02 24 18.06 24 12.07z" /></svg></a>
+          <a href="https://www.youtube.com/@quantashop" target="_blank" rel="noopener" aria-label="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.5 6.19a3.02 3.02 0 00-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.5A3.02 3.02 0 00.5 6.19C0 8.07 0 12 0 12s0 3.93.5 5.81a3.02 3.02 0 002.12 2.14c1.88.5 9.38.5 9.38.5s7.5 0 9.38-.5a3.02 3.02 0 002.12-2.14C24 15.93 24 12 24 12s0-3.93-.5-5.81zM9.55 15.57V8.43L15.82 12l-6.27 3.57z" /></svg></a>
+        </div>
+      </div>
+
+      <p class="qs-ft__bottom">© {{ year }} Quanta Shop · Consumo inteligente e prosperidade equitativa.</p>
+    </div>
+  </footer>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue';
+
+const year = new Date().getFullYear();
+const email = ref('');
+function subscribe() {
+  // TODO: integrar com endpoint de newsletter
+  email.value = '';
+}
+
+const links = [
+  { label: 'Como funciona', href: '/como-funciona' },
+  { label: 'Quem somos', href: '/quem-somos' },
+  { label: 'Credenciamento', href: '/credenciar' },
+  { label: 'Suporte', href: '/suporte' },
+  { label: 'Dúvidas', href: '/faq' },
+  { label: 'Termos e condições', href: '/termos' },
+  { label: 'LGPD', href: '/privacidade' },
+];
+</script>
+
+<style scoped>
+.qs-ft { background: #111827; color: #9ca3af; padding: 54px 0 30px; }
+.container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+.qs-ft__top { display: grid; grid-template-columns: 1.25fr 1fr; gap: 40px; align-items: start; margin-bottom: 34px; padding-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,.08); }
+.qs-ft__brand { display: inline-flex; text-decoration: none; }
+.qs-ft__logo { height: 42px; width: auto; display: block; }
+.qs-ft__seals { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 18px; align-items: center; }
+.qs-ft__seal { display: flex; align-items: center; gap: 7px; font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 12px; color: #9ca3af; border: 1px solid rgba(255,255,255,.1); border-radius: 999px; padding: 7px 13px; }
+.qs-ft__seal b { color: #cbd5e1; font-weight: 700; }
+
+.qs-ft__news-title { color: #fff; font-family: 'Bruum FY','Jost','Inter',sans-serif; font-weight: 700; font-size: 18px; }
+.qs-ft__news-sub { font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 14px; margin-top: 4px; }
+.qs-ft__news { display: flex; gap: 10px; max-width: 420px; margin-top: 14px; }
+.qs-ft__news input { flex: 1; min-width: 0; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.16); border-radius: 999px; padding: 11px 16px; color: #fff; font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 14px; outline: none; }
+.qs-ft__news input::placeholder { color: #8b95a5; }
+.qs-ft__news button { flex-shrink: 0; background: #98C73A; color: #173a0a; border: 0; border-radius: 999px; padding: 0 20px; min-height: 44px; font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-weight: 700; cursor: pointer; transition: background .2s ease; }
+.qs-ft__news button:hover { background: #7aad1f; }
+
+.qs-ft__row { display: flex; justify-content: space-between; gap: 30px; flex-wrap: wrap; align-items: center; }
+.qs-ft__nav { display: flex; gap: 22px; flex-wrap: wrap; }
+.qs-ft__nav a { font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 14px; color: #9ca3af; text-decoration: none; transition: color .2s ease; }
+.qs-ft__nav a:hover { color: #fff; }
+.qs-ft__soc { display: flex; gap: 12px; }
+.qs-ft__soc a { width: 38px; height: 38px; border-radius: 50%; border: 1px solid rgba(255,255,255,.14); display: grid; place-items: center; color: #cbd5e1; transition: background .2s ease, border-color .2s ease, color .2s ease; }
+.qs-ft__soc a:hover { background: #2F7785; border-color: #2F7785; color: #fff; }
+.qs-ft__soc svg { width: 17px; height: 17px; fill: currentColor; }
+
+.qs-ft__bottom { margin-top: 30px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,.08); font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 13px; text-align: center; }
+
+@media (max-width: 720px) { .qs-ft__top { grid-template-columns: 1fr; gap: 24px; } }
+@media (prefers-reduced-motion: reduce) { .qs-ft__news button, .qs-ft__nav a, .qs-ft__soc a { transition: none; } }
+</style>
+===== FIM ARQUIVO: components/footer/footer-home.vue =====
+
+
+===== INÍCIO ARQUIVO: components/home/home-hero.vue =====
+<template>
+  <section ref="heroEl" class="qs-hero" aria-label="Destaque — Quanta IA" @mouseenter="pauseRotate" @mouseleave="resumeRotate" @focusin="pauseRotate" @focusout="resumeRotate">
+    <span class="qs-hero__orb qs-hero__orb--1" aria-hidden="true"></span>
+    <span class="qs-hero__orb qs-hero__orb--2" aria-hidden="true"></span>
+    <QsLogo tone="white" :size="540" class="qs-hero__wm" aria-hidden="true" />
+
+    <div class="container qs-hero__grid">
+      <!-- copy: banners rotativos + composer fixo da Quanta IA -->
+      <div class="qs-hero__copy">
+        <div class="qs-hero__rotate" :class="{ 'is-fading': fading }">
+          <span class="qs-hero__badge"><span class="qs-hero__dot" aria-hidden="true"></span> {{ active.badge }}</span>
+          <h1 class="qs-hero__title" v-html="activeTitle" />
+          <p class="qs-hero__sub">{{ active.sub }}</p>
+          <nuxt-link class="qs-hero__cta" :href="active.href">{{ active.cta }} →</nuxt-link>
+        </div>
+
+        <div class="qs-hero__dots" role="tablist" aria-label="Trocar banner">
+          <button
+            v-for="(b, i) in banners" :key="i" type="button" role="tab"
+            class="qs-hero__dot-btn" :class="{ active: i === index }"
+            :aria-selected="i === index" :aria-label="'Banner ' + (i + 1)"
+            @click="go(i, true)"
+          />
+        </div>
+
+        <p class="qs-hero__composer-label">ou pergunte à <strong>Quanta IA</strong> — busque, cote, consulte saldo</p>
+
+        <form class="qs-hero__composer" role="search" @submit.prevent="submitQuery">
+          <span class="qs-hero__ai" aria-hidden="true">
+            <QsLogo tone="color" :size="20" />
+            Quanta IA
+          </span>
+          <input
+            ref="composerInput"
+            v-model="query" type="text" class="qs-hero__input"
+            aria-label="Buscar produtos, lojas ou perguntar à Quanta IA"
+            :placeholder="placeholder"
+          />
+          <button type="submit" class="qs-hero__send" aria-label="Enviar para a Quanta IA">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <path d="M22 2 11 13" /><path d="M22 2 15 22l-4-9-9-4z" />
+            </svg>
+          </button>
+        </form>
+
+        <div class="qs-hero__chips" aria-label="Sugestões de busca">
+          <button v-for="(c, i) in chips" :key="i" type="button" class="qs-hero__chip" @click="useChip(c.q)">{{ c.label }}</button>
+        </div>
+      </div>
+
+      <!-- chat ao vivo (fixo) -->
+      <div class="qs-hero__chat" aria-label="Demonstração da Quanta IA">
+        <div class="qs-hero__chat-top">
+          <span class="qs-hero__chat-av" aria-hidden="true"><QsLogo tone="white" :size="26" /></span>
+          <div>
+            <p class="qs-hero__chat-nm">Quanta IA</p>
+            <p class="qs-hero__chat-st"><i aria-hidden="true"></i> online · responde na hora</p>
+          </div>
+        </div>
+        <div ref="chatBody" class="qs-hero__chat-body">
+          <template v-for="(m, i) in visible" :key="i">
+            <div v-if="m.typing" class="qs-hero__typing"><span /><span /><span /></div>
+            <div v-else class="qs-hero__msg" :class="'qs-hero__msg--' + m.who" v-html="m.html" />
+          </template>
+        </div>
+        <button type="button" class="qs-hero__chat-cta" @click="focusComposer">
+          Converse você mesmo com a Quanta IA
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14" /><path d="M13 6l6 6-6 6" /></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+</template>
+
+<script setup lang="ts">
+import { ref, computed, onMounted, onBeforeUnmount, nextTick } from 'vue';
+import { useHomeConfig } from '@/composables/useHomeConfig';
+
+const router = useRouter();
+const { config, loadConfig } = useHomeConfig();
+
+/* respeita prefers-reduced-motion (SPA: só no cliente) */
+const reduceMotion = ref(false);
+const heroEl = ref<HTMLElement | null>(null);
+const composerInput = ref<HTMLInputElement | null>(null);
+let visObserver: IntersectionObserver | null = null;
+let offscreen = false;
+
+/* ---------- banners rotativos (CMS-ready) ---------- */
+interface Banner { badge: string; title: string; sub: string; cta: string; href: string }
+const DEFAULT_BANNERS: Banner[] = [
+  { badge: '+12.000 usuários economizando', title: 'Seu dinheiro <highlight>volta</highlight> a cada compra', sub: 'Compre nas suas lojas favoritas e receba cashback de verdade. Simples, transparente e instantâneo.', cta: 'Criar Conta Grátis', href: '/register' },
+  { badge: 'Simples e rápido', title: 'Transforme cada compra em <highlight>dinheiro de volta</highlight>', sub: 'Ative o cashback com um clique, compre normalmente e veja o saldo crescer automaticamente.', cta: 'Começar Agora', href: '/register' },
+  { badge: 'Rede exclusiva', title: 'As melhores marcas em <highlight>um só lugar</highlight>', sub: 'Nike, Renner, Puma, Casas Bahia e centenas de outras marcas com cashback garantido.', cta: 'Ver Marcas Parceiras', href: '/partners' },
+  { badge: 'Programa de pontos', title: 'Ganhe pontos, <highlight>resgate benefícios</highlight>', sub: 'Cada compra acumula pontos que viram cashback extra, descontos e experiências exclusivas.', cta: 'Conhecer Benefícios', href: '/quanta-amizade' },
+  { badge: 'Quanta Plus ✦', title: 'Ative sua experiência <highlight>Premium</highlight>', sub: 'Cashback turbinado, ofertas antecipadas e benefícios exclusivos para assinantes Quanta Plus.', cta: 'Assinar Quanta Plus', href: '/planos' },
+  { badge: 'Para lojistas', title: 'Aumente vendas com <highlight>tecnologia Quanta</highlight>', sub: 'Fidelize clientes, aumente o ticket médio e ganhe visibilidade na maior rede de cashback do Brasil.', cta: 'Credenciar Minha Loja', href: '/credenciar' },
+];
+const banners = computed<Banner[]>(() => {
+  const cms = (config.value as any)?.heroBanners;
+  return Array.isArray(cms) && cms.length ? cms : DEFAULT_BANNERS;
+});
+
+const index = ref(0);
+const fading = ref(false);
+const active = computed(() => banners.value[index.value]);
+const activeTitle = computed(() =>
+  active.value.title.replace(/<highlight>/g, '<span class="qs-hero__hl">').replace(/<\/highlight>/g, '</span>'),
+);
+let rotTimer: ReturnType<typeof setInterval> | null = null;
+function go(i: number, user = false) {
+  fading.value = true;
+  setTimeout(() => { index.value = i; fading.value = false; }, 420);
+  if (user) restart();
+}
+function restart() {
+  if (rotTimer) clearInterval(rotTimer);
+  if (reduceMotion.value || offscreen) return;
+  rotTimer = setInterval(() => go((index.value + 1) % banners.value.length), 5600);
+}
+function pauseRotate() { if (rotTimer) { clearInterval(rotTimer); rotTimer = null; } }
+function resumeRotate() { restart(); }
+
+/* ---------- busca / composer ---------- */
+const placeholder = 'Ex.: tênis de corrida até R$400 com mais cashback…';
+const chips = [
+  { label: '⌚ Smartwatch com + cashback', q: 'Quero um smartwatch com o maior cashback' },
+  { label: '💰 Meu saldo', q: 'Qual é o meu saldo?' },
+  { label: '📍 Lojas no meu bairro', q: 'Tem padaria com cashback perto de mim?' },
+];
+const query = ref('');
+function submitQuery() {
+  const v = query.value.trim();
+  if (v) router.push(`/partners?nome=${encodeURIComponent(v)}`);
+}
+function useChip(q: string) { query.value = q; composerInput.value?.focus(); }
+function focusComposer() {
+  composerInput.value?.focus();
+  composerInput.value?.scrollIntoView({ behavior: reduceMotion.value ? 'auto' : 'smooth', block: 'center' });
+}
+
+/* ---------- demo de chat ao vivo ---------- */
+type Step = { who?: 'user' | 'bot'; html?: string; typing?: number };
+const SCRIPT: Step[] = [
+  { who: 'user', html: 'Quero um tênis de corrida até R$400 com mais cashback 👟' },
+  { typing: 1100 },
+  { who: 'bot', html:
+      '<span class="qs-hero__lead">Achei a melhor relação cashback perto de você:</span>' +
+      '<div class="qs-hero__pcard"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=160&q=80&auto=format&fit=crop" alt="Tênis de corrida" loading="lazy" />' +
+      '<div><div class="qs-hero__pn">Nike Revolution 7</div><div class="qs-hero__pmeta">Casas Bahia · entrega 2 dias</div>' +
+      '<div class="qs-hero__price">R$ 389,90</div><span class="qs-hero__cb">12% cashback ≈ R$ 46,79 de volta</span></div></div>' },
+  { who: 'user', html: 'Qual é o meu saldo?' },
+  { typing: 900 },
+  { who: 'bot', html:
+      '<span class="qs-hero__lead">Sua carteira Quanta:</span>' +
+      '<div class="qs-hero__scard"><div class="qs-hero__srow"><span class="qs-hero__lbl">Disponível</span><span class="qs-hero__lbl">Reservado</span></div>' +
+      '<div class="qs-hero__srow"><span class="qs-hero__big">R$ 247,30</span><span class="qs-hero__ssub">R$ 88,10 a liberar</span></div>' +
+      '<div class="qs-hero__ssub" style="margin-top:8px">💸 Resgate via PIX em segundos</div></div>' },
+  { who: 'user', html: 'Tem padaria com cashback aqui no bairro?' },
+  { typing: 900 },
+  { who: 'bot', html:
+      '<span class="qs-hero__lead">Pertinho de você:</span>' +
+      '<div class="qs-hero__pcard"><img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=160&q=80&auto=format&fit=crop" alt="Padaria" loading="lazy" />' +
+      '<div><div class="qs-hero__pn">Padaria Real</div><div class="qs-hero__pmeta">Vila Mariana · 600 m</div>' +
+      '<span class="qs-hero__cb">5% cashback · ativa no WhatsApp</span></div></div>' },
+];
+const visible = ref<Step[]>([]);
+const chatBody = ref<HTMLElement | null>(null);
+let chatTimer: ReturnType<typeof setTimeout> | null = null;
+let i = 0;
+async function scrollDown() { await nextTick(); if (chatBody.value) chatBody.value.scrollTop = chatBody.value.scrollHeight; }
+function play() {
+  if (i >= SCRIPT.length) { chatTimer = setTimeout(() => { visible.value = []; i = 0; play(); }, 4200); return; }
+  const it = SCRIPT[i++];
+  if (it.typing) { visible.value.push({ typing: it.typing }); scrollDown(); chatTimer = setTimeout(() => { visible.value.pop(); play(); }, it.typing); return; }
+  visible.value.push(it); scrollDown(); chatTimer = setTimeout(play, it.who === 'user' ? 700 : 1500);
+}
+
+onMounted(async () => {
+  reduceMotion.value = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  await loadConfig();
+
+  if (reduceMotion.value) {
+    // chat estático: mostra a conversa completa sem animação de digitação
+    visible.value = SCRIPT.filter((s) => !s.typing);
+  } else {
+    restart();
+    play();
+    // pausa o autoplay quando o hero sai da viewport
+    if (heroEl.value && 'IntersectionObserver' in window) {
+      visObserver = new IntersectionObserver((es) => {
+        es.forEach((e) => { offscreen = !e.isIntersecting; offscreen ? pauseRotate() : restart(); });
+      }, { threshold: 0 });
+      visObserver.observe(heroEl.value);
+    }
+  }
+});
+onBeforeUnmount(() => {
+  if (rotTimer) clearInterval(rotTimer);
+  if (chatTimer) clearTimeout(chatTimer);
+  if (visObserver) visObserver.disconnect();
+});
+</script>
+
+<style scoped>
+.qs-hero {
+  position: relative; overflow: hidden; isolation: isolate; color: #eaf3f5;
+  background:
+    radial-gradient(1200px 700px at 78% -8%, rgba(58,154,173,.55), transparent 60%),
+    radial-gradient(900px 600px at 8% 110%, rgba(152,199,58,.22), transparent 55%),
+    linear-gradient(160deg, #0f2730 0%, #1a2332 48%, #0c1c24 100%);
+}
+.qs-hero__orb { position: absolute; border-radius: 50%; filter: blur(60px); z-index: 0; opacity: .5; animation: qsFloat 14s ease-in-out infinite; }
+.qs-hero__orb--1 { width: 360px; height: 360px; background: #3A9AAD; top: -80px; right: 18%; }
+.qs-hero__orb--2 { width: 280px; height: 280px; background: #98C73A; bottom: -100px; left: 6%; animation-delay: -5s; }
+.qs-hero__wm { position: absolute; right: -130px; top: 50%; transform: translateY(-50%); opacity: .06; z-index: 1; pointer-events: none; }
+@keyframes qsFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-26px); } }
+
+.qs-hero__grid { position: relative; z-index: 2; display: grid; grid-template-columns: 1.05fr .95fr; gap: 48px; align-items: center; padding: 60px 0 80px; }
+
+.qs-hero__rotate { transition: opacity .45s ease; }
+.qs-hero__rotate.is-fading { opacity: 0; }
+.qs-hero__badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; padding: 7px 14px; font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 13px; font-weight: 600; color: #dff3e0; }
+.qs-hero__dot { width: 8px; height: 8px; border-radius: 50%; background: #98C73A; animation: qsPulse 2s infinite; }
+@keyframes qsPulse { 0% { box-shadow: 0 0 0 0 rgba(152,199,58,.6); } 70% { box-shadow: 0 0 0 10px rgba(152,199,58,0); } 100% { box-shadow: 0 0 0 0 rgba(152,199,58,0); } }
+.qs-hero__title { font-family: 'Bruum FY','Jost','Inter',sans-serif; color: #fff; font-size: clamp(38px, 5vw, 62px); font-weight: 800; line-height: 1.07; letter-spacing: -.02em; margin: 20px 0 16px; min-height: 2.1em; }
+.qs-hero__title :deep(.qs-hero__hl) { color: #98C73A; position: relative; white-space: nowrap; }
+.qs-hero__title :deep(.qs-hero__hl)::after { content: ""; position: absolute; left: 0; right: 0; bottom: 6px; height: 10px; background: rgba(152,199,58,.28); border-radius: 6px; z-index: -1; }
+.qs-hero__sub { font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 18px; line-height: 1.6; color: #c8dde0; max-width: 520px; }
+.qs-hero__cta { display: inline-flex; align-items: center; gap: 8px; margin-top: 22px; font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-weight: 700; font-size: 15px; color: #173a0a; background: linear-gradient(180deg,#98C73A,#7aad1f); border-radius: 999px; padding: 13px 24px; text-decoration: none; box-shadow: 0 10px 28px rgba(152,199,58,.35); transition: transform .2s ease, box-shadow .2s ease; }
+.qs-hero__cta:hover { transform: translateY(-2px); box-shadow: 0 16px 36px rgba(152,199,58,.45); }
+
+.qs-hero__dots { display: flex; gap: 8px; margin-top: 24px; }
+.qs-hero__dot-btn { width: 9px; height: 9px; border-radius: 50%; border: 0; padding: 0; cursor: pointer; background: rgba(255,255,255,.28); transition: .25s; }
+.qs-hero__dot-btn.active { background: #98C73A; width: 26px; border-radius: 5px; }
+
+.qs-hero__composer-label { margin-top: 30px; font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 13px; color: #bcd6da; }
+.qs-hero__composer-label strong { color: #fff; font-weight: 700; }
+
+.qs-hero__composer { margin-top: 12px; background: rgba(255,255,255,.97); border-radius: 20px; padding: 10px 10px 10px 18px; box-shadow: 0 24px 60px rgba(1,15,28,.28); display: flex; align-items: center; gap: 12px; }
+.qs-hero__ai { display: flex; align-items: center; gap: 8px; color: #225F6B; font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-weight: 700; font-size: 13px; white-space: nowrap; border-right: 1px solid #e5e7eb; padding-right: 12px; }
+.qs-hero__input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 16px; color: #1d1d1f; }
+.qs-hero__input::placeholder { color: #9ca3af; }
+.qs-hero__send { flex-shrink: 0; width: 46px; height: 46px; border: 0; border-radius: 14px; cursor: pointer; background: linear-gradient(180deg, #98C73A, #7aad1f); color: #173a0a; display: grid; place-items: center; transition: transform .2s ease; }
+.qs-hero__send:hover { transform: scale(1.05); }
+.qs-hero__send svg { width: 20px; height: 20px; }
+
+.qs-hero__chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.qs-hero__chip { font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 13px; font-weight: 500; color: #dff3e0; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16); border-radius: 999px; padding: 7px 13px; cursor: pointer; transition: all .2s ease; }
+.qs-hero__chip:hover { background: rgba(255,255,255,.18); color: #fff; }
+
+.qs-hero__chat { position: relative; z-index: 2; width: 100%; max-width: 420px; margin-left: auto; background: #0c1a21; border: 1px solid rgba(255,255,255,.1); border-radius: 26px; box-shadow: 0 24px 60px rgba(1,15,28,.4); padding: 16px; }
+.qs-hero__chat-top { display: flex; align-items: center; gap: 12px; padding: 6px 6px 14px; border-bottom: 1px solid rgba(255,255,255,.08); }
+.qs-hero__chat-av { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #3A9AAD, #98C73A); display: grid; place-items: center; }
+.qs-hero__chat-nm { font-family: 'Bruum FY','Jost','Inter',sans-serif; font-weight: 700; color: #fff; font-size: 15px; margin: 0; }
+.qs-hero__chat-st { font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 12px; color: #9fd3a6; margin: 0; display: flex; align-items: center; gap: 6px; }
+.qs-hero__chat-st i { width: 7px; height: 7px; border-radius: 50%; background: #98C73A; display: inline-block; }
+.qs-hero__chat-body { display: flex; flex-direction: column; gap: 10px; padding: 16px 6px 6px; min-height: 360px; max-height: 420px; overflow: hidden; }
+
+.qs-hero__msg { max-width: 86%; font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 14px; line-height: 1.45; padding: 11px 14px; border-radius: 16px; animation: qsPop .5s both; }
+@keyframes qsPop { from { opacity: 0; transform: translateY(10px) scale(.98); } to { opacity: 1; transform: none; } }
+.qs-hero__msg--user { align-self: flex-end; background: linear-gradient(180deg, #2f7785, #266472); color: #eafaff; border-bottom-right-radius: 5px; }
+.qs-hero__msg--bot { align-self: flex-start; background: #15262e; color: #d7e7ea; border: 1px solid rgba(255,255,255,.06); border-bottom-left-radius: 5px; }
+.qs-hero__msg :deep(.qs-hero__lead) { color: #9fd3a6; font-weight: 600; font-size: 12px; display: block; margin-bottom: 8px; }
+.qs-hero__msg :deep(.qs-hero__pcard) { display: flex; gap: 12px; background: #0c1a21; border: 1px solid rgba(255,255,255,.08); border-radius: 14px; padding: 10px; margin-top: 4px; }
+.qs-hero__msg :deep(.qs-hero__pcard img) { width: 62px; height: 62px; border-radius: 10px; object-fit: cover; flex-shrink: 0; }
+.qs-hero__msg :deep(.qs-hero__pn) { font-weight: 700; color: #fff; font-size: 13px; }
+.qs-hero__msg :deep(.qs-hero__pmeta) { font-size: 11px; color: #8fb3b8; margin: 2px 0 6px; }
+.qs-hero__msg :deep(.qs-hero__price) { font-family: 'Bruum FY','Jost','Inter',sans-serif; font-weight: 700; color: #fff; font-size: 15px; }
+.qs-hero__msg :deep(.qs-hero__cb) { display: inline-block; background: rgba(152,199,58,.16); color: #98C73A; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; margin-top: 4px; }
+.qs-hero__msg :deep(.qs-hero__scard) { background: #0c1a21; border: 1px solid rgba(255,255,255,.08); border-radius: 14px; padding: 12px; margin-top: 4px; }
+.qs-hero__msg :deep(.qs-hero__srow) { display: flex; justify-content: space-between; align-items: center; }
+.qs-hero__msg :deep(.qs-hero__lbl) { font-size: 11px; color: #8fb3b8; text-transform: uppercase; letter-spacing: .08em; }
+.qs-hero__msg :deep(.qs-hero__big) { font-family: 'Bruum FY','Jost','Inter',sans-serif; font-weight: 800; color: #98C73A; font-size: 24px; }
+.qs-hero__msg :deep(.qs-hero__ssub) { font-size: 12px; color: #aac4c8; margin-top: 2px; }
+
+.qs-hero__chat-cta { margin-top: 10px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; background: rgba(152,199,58,.14); color: #d4ef9f; border: 1px solid rgba(152,199,58,.3); border-radius: 14px; padding: 12px; font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-weight: 700; font-size: 14px; min-height: 44px; cursor: pointer; transition: background .2s ease; }
+.qs-hero__chat-cta:hover { background: rgba(152,199,58,.22); }
+.qs-hero__chat-cta svg { width: 16px; height: 16px; }
+
+.qs-hero__typing { align-self: flex-start; background: #15262e; border: 1px solid rgba(255,255,255,.06); border-radius: 16px; border-bottom-left-radius: 5px; padding: 14px 16px; display: flex; gap: 5px; }
+.qs-hero__typing span { width: 7px; height: 7px; border-radius: 50%; background: #6f9aa1; animation: qsBlink 1.2s infinite; }
+.qs-hero__typing span:nth-child(2) { animation-delay: .2s; }
+.qs-hero__typing span:nth-child(3) { animation-delay: .4s; }
+@keyframes qsBlink { 0%,60%,100% { opacity: .3; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-3px); } }
+
+@media (max-width: 980px) {
+  .qs-hero__grid { grid-template-columns: 1fr; gap: 36px; padding: 44px 0 60px; }
+  .qs-hero__chat { margin: 0 auto; }
+  .qs-hero__wm { right: -90px; top: 16%; transform: none; }
+  .qs-hero__wm :deep(img) { height: 320px !important; }
+  .qs-hero__title { min-height: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .qs-hero__orb, .qs-hero__dot, .qs-hero__msg, .qs-hero__typing span { animation: none; }
+}
+</style>
+===== FIM ARQUIVO: components/home/home-hero.vue =====
+
+
+===== INÍCIO ARQUIVO: components/home/home-como-funciona.vue =====
+<template>
+  <section class="qs-hiw" aria-labelledby="qs-hiw-title">
+    <div class="container">
+      <div class="qs-hiw__head">
+        <span class="qs-hiw__eyebrow">É simples assim</span>
+        <h2 id="qs-hiw-title" class="qs-hiw__h2">Como funciona</h2>
+        <p class="qs-hiw__lead">Do cadastro ao dinheiro de volta na conta — em três passos.</p>
+      </div>
+
+      <ol class="qs-hiw__steps">
+        <li v-for="(s, i) in steps" :key="i" class="qs-hiw__step">
+          <div class="qs-hiw__num">
+            <span class="qs-hiw__n">{{ s.n }}</span>
+            <span class="qs-hiw__ic" v-html="s.icon" />
+          </div>
+          <h3 class="qs-hiw__title">{{ s.title }}</h3>
+          <p class="qs-hiw__text">{{ s.text }}</p>
+        </li>
+      </ol>
+
+      <div class="qs-hiw__cta">
+        <nuxt-link class="qs-hiw__btn" href="/register">Criar conta grátis →</nuxt-link>
+      </div>
+    </div>
+  </section>
+</template>
+
+<script setup lang="ts">
+interface Step { n: string; title: string; text: string; icon: string }
+
+const steps: Step[] = [
+  {
+    n: '01',
+    title: 'Ative o cashback',
+    text: 'Crie sua conta grátis e ative o cashback nas suas lojas favoritas com um clique.',
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11.5V5a2 2 0 0 1 4 0v6"/><path d="M13 8a2 2 0 0 1 4 0v4"/><path d="M17 9.5a2 2 0 0 1 4 0V15a6 6 0 0 1-6 6h-2a6 6 0 0 1-5.2-3l-2.3-4a2 2 0 0 1 3.4-2L9 12"/></svg>',
+  },
+  {
+    n: '02',
+    title: 'Compre normalmente',
+    text: 'Compre online ou nas lojas parceiras do seu bairro — exatamente como você já faz.',
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>',
+  },
+  {
+    n: '03',
+    title: 'Receba via PIX',
+    text: 'O dinheiro volta automático pra sua carteira Quanta. Saque na hora, via PIX.',
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4z"/></svg>',
+  },
+];
+</script>
+
+<style scoped>
+.qs-hiw { padding: 84px 0; background: #fff; }
+.container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+.qs-hiw__head { text-align: center; max-width: 680px; margin: 0 auto 52px; }
+.qs-hiw__eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: #3A9AAD; }
+.qs-hiw__h2 { font-family: 'Bruum FY','Jost','Inter',sans-serif; font-size: clamp(30px, 3.6vw, 44px); font-weight: 700; color: #225F6B; line-height: 1.08; letter-spacing: -.02em; margin: 12px 0 14px; }
+.qs-hiw__lead { font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 17px; color: #6b7280; }
+
+.qs-hiw__steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; position: relative; }
+.qs-hiw__steps::before { content: ""; position: absolute; top: 46px; left: 17%; right: 17%; height: 2px; background: linear-gradient(90deg, #2F7785, #98C73A); opacity: .35; z-index: 0; }
+.qs-hiw__step { position: relative; z-index: 1; text-align: center; padding: 0 8px; }
+.qs-hiw__num { width: 92px; height: 92px; margin: 0 auto 18px; border-radius: 50%; display: grid; place-items: center; background: #fff; border: 2px solid #e5e7eb; position: relative; box-shadow: 0 2px 8px rgba(1,15,28,.08); }
+.qs-hiw__n { font-family: 'Bruum FY','Jost','Inter',sans-serif; font-weight: 800; font-size: 30px; color: #225F6B; }
+.qs-hiw__ic { position: absolute; right: -6px; bottom: -6px; width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; color: #fff; background: linear-gradient(135deg, #2F7785, #3A9AAD); box-shadow: 0 2px 8px rgba(1,15,28,.08); }
+.qs-hiw__step:nth-child(3) .qs-hiw__ic { background: linear-gradient(135deg, #7aad1f, #98C73A); color: #173a0a; }
+.qs-hiw__ic :deep(svg) { width: 18px; height: 18px; }
+.qs-hiw__title { font-family: 'Bruum FY','Jost','Inter',sans-serif; font-size: 20px; color: #225F6B; margin-bottom: 8px; }
+.qs-hiw__text { font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 15px; color: #6b7280; max-width: 300px; margin: 0 auto; }
+
+.qs-hiw__cta { text-align: center; margin-top: 46px; }
+.qs-hiw__btn { display: inline-flex; align-items: center; gap: 8px; font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-weight: 700; font-size: 15px; color: #173a0a; background: linear-gradient(180deg, #98C73A, #7aad1f); border-radius: 999px; padding: 14px 26px; text-decoration: none; box-shadow: 0 10px 28px rgba(152,199,58,.35); transition: transform .2s ease, box-shadow .2s ease; }
+.qs-hiw__btn:hover { transform: translateY(-2px); box-shadow: 0 16px 36px rgba(152,199,58,.45); }
+
+@media (max-width: 760px) {
+  .qs-hiw__steps { grid-template-columns: 1fr; gap: 34px; }
+  .qs-hiw__steps::before { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .qs-hiw__btn { transition: none; }
+}
+</style>
+===== FIM ARQUIVO: components/home/home-como-funciona.vue =====
+
+
+===== INÍCIO ARQUIVO: components/home/home-capabilities.vue =====
+<template>
+  <section class="qs-cap" aria-labelledby="qs-cap-title">
+    <div class="container">
+      <div class="qs-cap__head">
+        <span class="qs-cap__eyebrow">Tudo pelo chat</span>
+        <h2 id="qs-cap-title" class="qs-cap__h2">Uma conversa resolve</h2>
+        <p class="qs-cap__lead">A Quanta IA reúne busca, carteira e suporte num só lugar — fale como você falaria no WhatsApp.</p>
+      </div>
+
+      <div class="qs-cap__grid">
+        <article v-for="(c, i) in caps" :key="i" class="qs-cap__card">
+          <div class="qs-cap__ic" v-html="c.icon" />
+          <h3 class="qs-cap__title">{{ c.title }}</h3>
+          <p class="qs-cap__text">{{ c.text }}</p>
+        </article>
+      </div>
+    </div>
+  </section>
+</template>
+
+<script setup lang="ts">
+interface Cap { title: string; text: string; icon: string }
+
+const caps: Cap[] = [
+  {
+    title: 'Buscar & cotar',
+    text: 'Encontre produtos e lojas por nome, categoria ou proximidade e receba a cotação com o cashback já calculado.',
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>',
+  },
+  {
+    title: 'Consultar saldo & sacar',
+    text: 'Veja seu saldo disponível e o reservado, acompanhe a rede e resgate via PIX sem sair da conversa.',
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="M2 10h20"/></svg>',
+  },
+  {
+    title: 'Tirar dúvidas 24/7',
+    text: 'Do credenciamento ao primeiro saque: pergunte qualquer coisa e tenha resposta clara, na hora.',
+    icon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a4 4 0 0 1-4 4H8l-5 4V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/></svg>',
+  },
+];
+</script>
+
+<style scoped>
+.qs-cap { padding: 84px 0; background: #f7f8fa; }
+.container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+.qs-cap__head { text-align: center; max-width: 680px; margin: 0 auto 52px; }
+.qs-cap__eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: #3A9AAD; }
+.qs-cap__h2 { font-family: 'Bruum FY','Jost','Inter',sans-serif; font-size: clamp(30px, 3.6vw, 44px); font-weight: 700; color: #225F6B; line-height: 1.08; letter-spacing: -.02em; margin: 12px 0 14px; }
+.qs-cap__lead { font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 17px; color: #6b7280; }
+
+.qs-cap__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.qs-cap__card { background: #fff; border: 1px solid #e5e7eb; border-radius: 20px; padding: 30px; transition: transform .25s ease, box-shadow .25s ease; }
+.qs-cap__card:hover { transform: translateY(-4px); box-shadow: 0 4px 20px rgba(1,15,28,.12); }
+.qs-cap__ic { width: 54px; height: 54px; border-radius: 16px; display: grid; place-items: center; color: #fff; margin-bottom: 18px; background: linear-gradient(135deg, #2F7785, #3A9AAD); }
+.qs-cap__card:nth-child(2) .qs-cap__ic { background: linear-gradient(135deg, #7aad1f, #98C73A); }
+.qs-cap__card:nth-child(3) .qs-cap__ic { background: linear-gradient(135deg, #FFB342, #f59e0b); }
+.qs-cap__ic :deep(svg) { width: 26px; height: 26px; }
+.qs-cap__title { font-family: 'Bruum FY','Jost','Inter',sans-serif; font-size: 20px; color: #225F6B; margin-bottom: 8px; }
+.qs-cap__text { font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 15px; color: #6b7280; }
+
+@media (max-width: 880px) { .qs-cap__grid { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .qs-cap__card { transition: none; } }
+</style>
+===== FIM ARQUIVO: components/home/home-capabilities.vue =====
+
+
+===== INÍCIO ARQUIVO: components/home/home-brand-logos.vue =====
+<template>
+  <section class="qs-bw" aria-label="Marcas parceiras">
+    <div class="container">
+      <p class="qs-bw__label">As maiores marcas confiam na Quanta</p>
+      <div class="qs-bw__grid">
+        <!-- TODO: hospedar logos localmente / partnerStore (hoje via Clearbit) -->
+        <div v-for="(b, i) in brands" :key="i" class="qs-bw__cell" :title="b.name">
+          <img
+            :src="logo(b.domain)" :alt="b.name"
+            width="120" height="48" loading="lazy" decoding="async"
+            @error="onImgError"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+</template>
+
+<script setup lang="ts">
+interface Brand { name: string; domain: string }
+
+const brands: Brand[] = [
+  { name: 'Nike', domain: 'nike.com' },
+  { name: 'Renner', domain: 'lojasrenner.com.br' },
+  { name: 'Puma', domain: 'puma.com' },
+  { name: 'Casas Bahia', domain: 'casasbahia.com.br' },
+  { name: 'Cobasi', domain: 'cobasi.com.br' },
+  { name: 'MadeiraMadeira', domain: 'madeiramadeira.com.br' },
+  { name: 'Dafiti', domain: 'dafiti.com.br' },
+  { name: 'Vivara', domain: 'vivara.com.br' },
+  { name: 'LG', domain: 'lg.com' },
+  { name: 'Motorola', domain: 'motorola.com' },
+  { name: 'Pernambucanas', domain: 'pernambucanas.com.br' },
+  { name: 'Tok&Stok', domain: 'tokstok.com.br' },
+  { name: 'Olympikus', domain: 'olympikus.com.br' },
+  { name: 'Under Armour', domain: 'underarmour.com' },
+  { name: 'Shoptime', domain: 'shoptime.com.br' },
+  { name: 'Mizuno', domain: 'mizuno.com' },
+];
+
+const logo = (domain: string) => `https://logo.clearbit.com/${domain}`;
+function onImgError(e: Event) { (e.target as HTMLImageElement).style.opacity = '0'; }
+</script>
+
+<style scoped>
+.qs-bw { padding: 84px 0; background: #f7f8fa; }
+.container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+.qs-bw__label { text-align: center; font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: #9ca3af; margin-bottom: 30px; }
+.qs-bw__grid { display: grid; grid-template-columns: repeat(8, 1fr); border: 1px solid #eef1f3; border-radius: 12px; overflow: hidden; background: #fff; }
+.qs-bw__cell { min-height: 88px; display: grid; place-items: center; padding: 16px; border-right: 1px solid #f0f4f6; border-bottom: 1px solid #f0f4f6; }
+.qs-bw__cell img { max-width: 96px; max-height: 38px; width: auto; height: auto; object-fit: contain; filter: grayscale(100%) opacity(.6); transition: filter .25s ease; }
+.qs-bw__cell:hover img { filter: grayscale(0) opacity(1); }
+
+@media (max-width: 991px) { .qs-bw__grid { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 560px) { .qs-bw__grid { grid-template-columns: repeat(3, 1fr); } }
+@media (prefers-reduced-motion: reduce) { .qs-bw__cell img { transition: none; } }
+</style>
+===== FIM ARQUIVO: components/home/home-brand-logos.vue =====
+
+
+===== INÍCIO ARQUIVO: components/home/home-ofertas-dia.vue =====
+<template>
+  <section class="qs-ofd" aria-labelledby="qs-ofd-title">
+    <div class="container">
+      <div class="qs-ofd__head">
+        <span class="qs-ofd__eyebrow">Tempo limitado</span>
+        <h2 id="qs-ofd-title" class="qs-ofd__h2">Ofertas do Dia</h2>
+        <p class="qs-ofd__lead">Produtos selecionados com cashback turbinado. Aproveite antes que acabe.</p>
+      </div>
+
+      <div class="qs-ofd__grid">
+        <!-- TODO: hospedar imagens localmente / produtos via API (hoje Unsplash) -->
+        <article v-for="(o, i) in offers" :key="i" class="qs-ofd__card">
+          <div class="qs-ofd__media">
+            <img :src="o.img" :alt="o.name" width="600" height="450" loading="lazy" decoding="async" />
+            <span class="qs-ofd__cb">⚡ {{ o.cb }} cashback</span>
+          </div>
+          <div class="qs-ofd__body">
+            <p class="qs-ofd__brand">{{ o.brand }}</p>
+            <h3 class="qs-ofd__name">{{ o.name }}</h3>
+            <p class="qs-ofd__price">{{ o.price }}</p>
+            <nuxt-link class="qs-ofd__go" :href="o.href">Aproveitar Agora →</nuxt-link>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+</template>
+
+<script setup lang="ts">
+interface Offer { name: string; brand: string; price: string; cb: string; img: string; href: string }
+
+const offers: Offer[] = [
+  { name: 'Tênis Air Max Premium', brand: 'Nike', price: 'R$ 599,90', cb: '12%', img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=80&auto=format&fit=crop', href: '/partners?nome=Tenis%20Air%20Max%20Premium' },
+  { name: 'Bolsa Couro Elegance', brand: 'Vivara', price: 'R$ 349,90', cb: '9%', img: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=600&q=80&auto=format&fit=crop', href: '/partners?nome=Bolsa%20Couro%20Elegance' },
+  { name: 'Smartwatch GT Series', brand: 'Motorola', price: 'R$ 899,90', cb: '10%', img: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=80&auto=format&fit=crop', href: '/partners?nome=Smartwatch%20GT%20Series' },
+  { name: 'Kit Café Gourmet', brand: 'Nescafé', price: 'R$ 89,90', cb: '8%', img: 'https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=600&q=80&auto=format&fit=crop', href: '/partners?nome=Kit%20Cafe%20Gourmet' },
+];
+</script>
+
+<style scoped>
+.qs-ofd { padding: 84px 0; background: #fff; }
+.container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+.qs-ofd__head { text-align: center; max-width: 680px; margin: 0 auto 52px; }
+.qs-ofd__eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: #3A9AAD; }
+.qs-ofd__h2 { font-family: 'Bruum FY','Jost','Inter',sans-serif; font-size: clamp(30px, 3.6vw, 44px); font-weight: 700; color: #225F6B; line-height: 1.08; letter-spacing: -.02em; margin: 12px 0 14px; }
+.qs-ofd__lead { font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 17px; color: #6b7280; }
+
+.qs-ofd__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+.qs-ofd__card { background: #fff; border: 1px solid #e5e7eb; border-radius: 20px; overflow: hidden; transition: transform .25s ease, box-shadow .25s ease; }
+.qs-ofd__card:hover { transform: translateY(-4px); box-shadow: 0 4px 20px rgba(1,15,28,.12); }
+.qs-ofd__media { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: #eef1f3; }
+.qs-ofd__media img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
+.qs-ofd__card:hover .qs-ofd__media img { transform: scale(1.06); }
+.qs-ofd__cb { position: absolute; top: 12px; left: 12px; background: rgba(26,35,50,.86); color: #98C73A; font-size: 12px; font-weight: 700; padding: 5px 11px; border-radius: 999px; backdrop-filter: blur(6px); }
+.qs-ofd__body { padding: 16px 18px 20px; }
+.qs-ofd__brand { font-size: 12px; color: #9ca3af; font-weight: 600; }
+.qs-ofd__name { font-family: 'Bruum FY','Jost','Inter',sans-serif; font-size: 16px; font-weight: 700; color: #1d1d1f; margin: 4px 0 8px; }
+.qs-ofd__price { font-family: 'Bruum FY','Jost','Inter',sans-serif; font-size: 22px; font-weight: 700; color: #225F6B; }
+.qs-ofd__go { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 14px; width: 100%; min-height: 44px; font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-weight: 700; font-size: 15px; color: #173a0a; background: linear-gradient(180deg, #98C73A, #7aad1f); border-radius: 999px; padding: 12px 20px; text-decoration: none; box-shadow: 0 10px 28px rgba(152,199,58,.35); transition: transform .2s ease, box-shadow .2s ease; }
+.qs-ofd__go:hover { transform: translateY(-2px); box-shadow: 0 16px 36px rgba(152,199,58,.45); }
+
+@media (max-width: 991px) { .qs-ofd__grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px) { .qs-ofd__grid { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .qs-ofd__card, .qs-ofd__media img, .qs-ofd__go { transition: none; } }
+</style>
+===== FIM ARQUIVO: components/home/home-ofertas-dia.vue =====
+
+
+===== INÍCIO ARQUIVO: components/home/home-parceiros-online.vue =====
+<template>
+  <section class="qs-pon" aria-labelledby="qs-pon-title">
+    <div class="container">
+      <div class="qs-pon__head">
+        <span class="qs-pon__eyebrow">Parceiros Online</span>
+        <h2 id="qs-pon-title" class="qs-pon__h2">Compre online e receba cashback</h2>
+        <p class="qs-pon__lead">Centenas de marcas com cashback garantido. Ative e compre normalmente.</p>
+      </div>
+
+      <div class="qs-pon__grid">
+        <!-- TODO: hospedar logos localmente / partnerStore (hoje via Clearbit) -->
+        <div v-for="(p, i) in partners" :key="i" class="qs-pon__cell">
+          <img
+            :src="logo(p.domain)" :alt="p.name"
+            width="110" height="34" loading="lazy" decoding="async"
+            @error="onImgError"
+          />
+          <p class="qs-pon__nm">{{ p.name }}</p>
+          <p class="qs-pon__cb">Até {{ p.cb }} de cashback</p>
+          <nuxt-link class="qs-pon__act" href="/login">Ative seu cashback</nuxt-link>
+        </div>
+      </div>
+    </div>
+  </section>
+</template>
+
+<script setup lang="ts">
+interface Partner { name: string; domain: string; cb: string }
+
+const partners: Partner[] = [
+  { name: 'Nike', domain: 'nike.com', cb: '12%' },
+  { name: 'Renner', domain: 'lojasrenner.com.br', cb: '8%' },
+  { name: 'Casas Bahia', domain: 'casasbahia.com.br', cb: '5%' },
+  { name: 'Dafiti', domain: 'dafiti.com.br', cb: '10%' },
+  { name: 'Puma', domain: 'puma.com', cb: '9%' },
+  { name: 'MadeiraMadeira', domain: 'madeiramadeira.com.br', cb: '7%' },
+  { name: 'Pernambucanas', domain: 'pernambucanas.com.br', cb: '6%' },
+  { name: 'Cobasi', domain: 'cobasi.com.br', cb: '8%' },
+];
+
+const logo = (domain: string) => `https://logo.clearbit.com/${domain}`;
+function onImgError(e: Event) { (e.target as HTMLImageElement).style.opacity = '0'; }
+</script>
+
+<style scoped>
+.qs-pon { padding: 84px 0; background: #f7f8fa; }
+.container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+.qs-pon__head { text-align: center; max-width: 680px; margin: 0 auto 52px; }
+.qs-pon__eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: #3A9AAD; }
+.qs-pon__h2 { font-family: 'Bruum FY','Jost','Inter',sans-serif; font-size: clamp(30px, 3.6vw, 44px); font-weight: 700; color: #225F6B; line-height: 1.08; letter-spacing: -.02em; margin: 12px 0 14px; }
+.qs-pon__lead { font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 17px; color: #6b7280; }
+
+.qs-pon__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+.qs-pon__cell { background: #fff; border: 1px solid #e5e7eb; border-radius: 20px; padding: 24px; text-align: center; transition: transform .25s ease, box-shadow .25s ease; }
+.qs-pon__cell:hover { transform: translateY(-4px); box-shadow: 0 4px 20px rgba(1,15,28,.12); }
+.qs-pon__cell img { height: 34px; width: auto; margin: 0 auto 16px; object-fit: contain; filter: grayscale(20%); }
+.qs-pon__nm { font-family: 'Bruum FY','Jost','Inter',sans-serif; font-weight: 700; color: #225F6B; }
+.qs-pon__cb { color: #7aad1f; font-weight: 600; font-size: 14px; margin: 4px 0 14px; }
+.qs-pon__act { display: block; font-size: 13px; font-weight: 700; color: #2F7785; border: 1.5px solid #2F7785; border-radius: 999px; padding: 10px 0; min-height: 44px; text-decoration: none; transition: background .2s ease, color .2s ease; }
+.qs-pon__act:hover { background: #2F7785; color: #fff; }
+
+@media (max-width: 991px) { .qs-pon__grid { grid-template-columns: repeat(2, 1fr); } }
+@media (prefers-reduced-motion: reduce) { .qs-pon__cell, .qs-pon__act { transition: none; } }
+</style>
+===== FIM ARQUIVO: components/home/home-parceiros-online.vue =====
+
+
+===== INÍCIO ARQUIVO: components/home/home-parceiros-locais.vue =====
+<template>
+  <section class="qs-plo" aria-labelledby="qs-plo-title">
+    <div class="container">
+      <div class="qs-plo__head">
+        <span class="qs-plo__eyebrow">Parceiros Locais</span>
+        <h2 id="qs-plo-title" class="qs-plo__h2">Cashback perto de você</h2>
+        <p class="qs-plo__lead">Lojas, restaurantes e serviços no seu bairro com cashback automático.</p>
+      </div>
+
+      <div class="qs-plo__grid">
+        <!-- TODO: hospedar imagens localmente / lojas via API (hoje Unsplash) -->
+        <article v-for="(l, i) in locals" :key="i" class="qs-plo__card">
+          <img class="qs-plo__th" :src="l.img" :alt="l.name" width="64" height="64" loading="lazy" decoding="async" />
+          <div>
+            <h3 class="qs-plo__nm">{{ l.name }}</h3>
+            <p class="qs-plo__cb">Até {{ l.cb }} de cashback</p>
+            <p class="qs-plo__loc">{{ l.loc }}</p>
+            <a class="qs-plo__wa" :href="l.wa" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M.06 24l1.69-6.16a11.87 11.87 0 01-1.6-5.95C.16 5.32 5.5 0 12.06 0a11.8 11.8 0 018.4 3.49 11.76 11.76 0 013.48 8.39c0 6.55-5.34 11.88-11.9 11.88a11.9 11.9 0 01-5.7-1.45L.06 24zm6.6-3.8c1.68.99 3.28 1.59 5.4 1.59 5.45 0 9.9-4.43 9.9-9.88a9.8 9.8 0 00-2.9-7 9.78 9.78 0 00-7-2.9c-5.46 0-9.9 4.43-9.9 9.88 0 2.23.65 3.9 1.74 5.65l-1 3.66 3.76-1zm11.4-5.66c-.07-.12-.27-.2-.57-.35-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51l-.57-.01c-.2 0-.52.07-.8.37-.27.3-1.04 1.02-1.04 2.49 0 1.47 1.07 2.89 1.22 3.09.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.69.62.71.23 1.36.2 1.87.12.57-.08 1.76-.72 2-1.41.25-.7.25-1.29.18-1.42z"/></svg>
+              WhatsApp
+            </a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+</template>
+
+<script setup lang="ts">
+interface Local { name: string; cb: string; loc: string; img: string; wa: string }
+
+const locals: Local[] = [
+  { name: 'Padaria Real', cb: '5%', loc: 'Vila Mariana — São Paulo, SP', img: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=200&q=80&auto=format&fit=crop', wa: 'https://api.whatsapp.com/send/?phone=5511999999999' },
+  { name: 'Restaurante Sabor & Arte', cb: '8%', loc: 'Botafogo — Rio de Janeiro, RJ', img: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=200&q=80&auto=format&fit=crop', wa: 'https://api.whatsapp.com/send/?phone=5521999999999' },
+  { name: 'Studio Bem Estar', cb: '6%', loc: 'Savassi — Belo Horizonte, MG', img: 'https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=200&q=80&auto=format&fit=crop', wa: 'https://api.whatsapp.com/send/?phone=5531999999999' },
+];
+</script>
+
+<style scoped>
+.qs-plo { padding: 84px 0; background: #fff; }
+.container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+.qs-plo__head { text-align: center; max-width: 680px; margin: 0 auto 52px; }
+.qs-plo__eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: #3A9AAD; }
+.qs-plo__h2 { font-family: 'Bruum FY','Jost','Inter',sans-serif; font-size: clamp(30px, 3.6vw, 44px); font-weight: 700; color: #225F6B; line-height: 1.08; letter-spacing: -.02em; margin: 12px 0 14px; }
+.qs-plo__lead { font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 17px; color: #6b7280; }
+
+.qs-plo__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.qs-plo__card { display: flex; gap: 14px; background: #fff; border: 1px solid #e5e7eb; border-radius: 20px; padding: 18px; align-items: center; transition: transform .25s ease, box-shadow .25s ease; }
+.qs-plo__card:hover { transform: translateY(-4px); box-shadow: 0 4px 20px rgba(1,15,28,.12); }
+.qs-plo__th { width: 64px; height: 64px; border-radius: 14px; object-fit: cover; flex-shrink: 0; }
+.qs-plo__nm { font-family: 'Bruum FY','Jost','Inter',sans-serif; font-weight: 700; color: #225F6B; font-size: 16px; }
+.qs-plo__cb { color: #7aad1f; font-weight: 600; font-size: 13px; }
+.qs-plo__loc { font-size: 12px; color: #9ca3af; margin-top: 2px; }
+.qs-plo__wa { margin-top: 8px; display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #16a34a; text-decoration: none; }
+.qs-plo__wa svg { width: 14px; height: 14px; }
+
+@media (max-width: 820px) { .qs-plo__grid { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .qs-plo__card { transition: none; } }
+</style>
+===== FIM ARQUIVO: components/home/home-parceiros-locais.vue =====
+
+
+===== INÍCIO ARQUIVO: components/home/home-lojistas.vue =====
+<template>
+  <section class="qs-biz" aria-labelledby="qs-biz-title">
+    <div class="container qs-biz__row">
+      <div class="qs-biz__media">
+        <!-- TODO: hospedar imagem localmente (hoje Unsplash) -->
+        <img
+          src="https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?w=900&q=80&auto=format&fit=crop"
+          alt="Lojista atendendo no balcão com a Quanta"
+          width="900" height="675" loading="lazy" decoding="async"
+        />
+        <div class="qs-biz__float"><span>Ticket médio</span><b>+27%</b></div>
+      </div>
+
+      <div class="qs-biz__copy">
+        <span class="qs-biz__eyebrow">Para o seu negócio</span>
+        <h2 id="qs-biz-title" class="qs-biz__h2">Aumente vendas com a tecnologia Quanta</h2>
+        <p class="qs-biz__lead">Credencie sua loja e transforme cashback em recompra. Fidelize clientes, ganhe visibilidade na maior rede de cashback do Brasil e gerencie tudo num só painel.</p>
+        <ul class="qs-biz__list">
+          <li v-for="(b, i) in benefits" :key="i">
+            <span class="qs-biz__ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg></span>
+            {{ b }}
+          </li>
+        </ul>
+        <nuxt-link class="qs-biz__btn" href="/credenciar">Credenciar minha loja →</nuxt-link>
+      </div>
+    </div>
+  </section>
+</template>
+
+<script setup lang="ts">
+const benefits: string[] = [
+  'Clientes mais fiéis e maior ticket médio',
+  'Visibilidade na busca e nos hotsites de bairro',
+  'Campanhas próprias e cupons em poucos cliques',
+];
+</script>
+
+<style scoped>
+.qs-biz { padding: 84px 0; background: #f7f8fa; }
+.container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+.qs-biz__row { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+
+.qs-biz__media { position: relative; border-radius: 20px; overflow: hidden; aspect-ratio: 4 / 3; background: #eef1f3; box-shadow: 0 4px 20px rgba(1,15,28,.12); }
+.qs-biz__media img { width: 100%; height: 100%; object-fit: cover; }
+.qs-biz__float { position: absolute; left: 18px; bottom: 18px; background: rgba(26,35,50,.82); color: #fff; border-radius: 14px; padding: 12px 16px; backdrop-filter: blur(8px); display: flex; gap: 10px; align-items: center; font-size: 13px; }
+.qs-biz__float b { font-family: 'Bruum FY','Jost','Inter',sans-serif; color: #98C73A; font-size: 18px; }
+
+.qs-biz__eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: #3A9AAD; }
+.qs-biz__h2 { font-family: 'Bruum FY','Jost','Inter',sans-serif; font-size: clamp(28px, 3.4vw, 40px); font-weight: 700; color: #225F6B; line-height: 1.08; letter-spacing: -.02em; margin: 12px 0 16px; }
+.qs-biz__lead { font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 16px; color: #6b7280; margin-bottom: 20px; max-width: 520px; }
+.qs-biz__list { list-style: none; margin: 0 0 26px; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.qs-biz__list li { display: flex; gap: 12px; align-items: flex-start; font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 15px; color: #374151; }
+.qs-biz__ck { flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%; background: rgba(152,199,58,.16); color: #7aad1f; display: grid; place-items: center; margin-top: 1px; }
+.qs-biz__ck svg { width: 14px; height: 14px; }
+.qs-biz__btn { display: inline-flex; align-items: center; gap: 8px; font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-weight: 700; font-size: 15px; color: #173a0a; background: linear-gradient(180deg, #98C73A, #7aad1f); border-radius: 999px; padding: 14px 26px; text-decoration: none; box-shadow: 0 10px 28px rgba(152,199,58,.35); transition: transform .2s ease, box-shadow .2s ease; }
+.qs-biz__btn:hover { transform: translateY(-2px); box-shadow: 0 16px 36px rgba(152,199,58,.45); }
+
+@media (max-width: 820px) {
+  .qs-biz__row { grid-template-columns: 1fr; gap: 30px; }
+  .qs-biz__media { order: -1; }
+}
+@media (prefers-reduced-motion: reduce) { .qs-biz__btn { transition: none; } }
+</style>
+===== FIM ARQUIVO: components/home/home-lojistas.vue =====
+
+
+===== INÍCIO ARQUIVO: components/home/home-testimonials.vue =====
+<template>
+  <section class="qs-tst" aria-labelledby="qs-tst-title">
+    <div class="container">
+      <div class="qs-tst__head">
+        <span class="qs-tst__eyebrow">Histórias reais</span>
+        <h2 id="qs-tst-title" class="qs-tst__h2">Testemunhos de usuários reais</h2>
+        <p class="qs-tst__lead">Veja quanto nossos usuários já economizaram.</p>
+      </div>
+
+      <div class="qs-tst__grid">
+        <figure v-for="(t, i) in testimonials" :key="i" class="qs-tst__card">
+          <div class="qs-tst__stars" aria-label="5 de 5 estrelas">
+            <svg v-for="n in 5" :key="n" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z" /></svg>
+          </div>
+          <blockquote class="qs-tst__quote"><b>{{ t.highlight }}</b>{{ t.rest }}</blockquote>
+          <figcaption class="qs-tst__who">
+            <span class="qs-tst__ini" aria-hidden="true">{{ t.initials }}</span>
+            <span>
+              <b class="qs-tst__name">{{ t.name }}</b>
+              <span class="qs-tst__meta">{{ t.meta }}</span>
+            </span>
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+</template>
+
+<script setup lang="ts">
+interface Testimonial { initials: string; name: string; meta: string; highlight: string; rest: string }
+
+const testimonials: Testimonial[] = [
+  { initials: 'MC', name: 'Marina Costa', meta: 'Usuária há 8 meses', highlight: 'Já recebi mais de R$ 1.240 de cashback', rest: ' em apenas 6 meses. Nunca mais compro sem a Quanta!' },
+  { initials: 'RO', name: 'Rafael Oliveira', meta: 'Usuário há 1 ano', highlight: 'A cada compra, o dinheiro volta.', rest: ' Já acumulei R$ 890 sem nenhum esforço extra. Recomendo demais.' },
+  { initials: 'JS', name: 'Juliana Santos', meta: 'Usuária há 1 ano', highlight: 'Minha família economizou R$ 2.100 no último ano.', rest: ' É dinheiro de verdade voltando pro bolso.' },
+];
+</script>
+
+<style scoped>
+.qs-tst { padding: 84px 0; background: #f7f8fa; }
+.container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+.qs-tst__head { text-align: center; max-width: 680px; margin: 0 auto 52px; }
+.qs-tst__eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: #3A9AAD; }
+.qs-tst__h2 { font-family: 'Bruum FY','Jost','Inter',sans-serif; font-size: clamp(30px, 3.6vw, 44px); font-weight: 700; color: #225F6B; line-height: 1.08; letter-spacing: -.02em; margin: 12px 0 14px; }
+.qs-tst__lead { font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 17px; color: #6b7280; }
+
+.qs-tst__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.qs-tst__card { background: #fff; border: 1px solid #e5e7eb; border-radius: 20px; padding: 28px; margin: 0; }
+.qs-tst__stars { display: flex; gap: 3px; margin-bottom: 14px; }
+.qs-tst__stars svg { width: 16px; height: 16px; fill: #FFB342; }
+.qs-tst__quote { font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 15px; color: #374151; margin: 0; }
+.qs-tst__quote b { color: #225F6B; }
+.qs-tst__who { display: flex; align-items: center; gap: 12px; margin-top: 18px; }
+.qs-tst__ini { width: 44px; height: 44px; border-radius: 50%; background: #2F7785; color: #fff; display: grid; place-items: center; font-weight: 700; font-family: 'Bruum FY','Jost','Inter',sans-serif; }
+.qs-tst__name { display: block; color: #1d1d1f; }
+.qs-tst__meta { font-size: 13px; color: #9ca3af; }
+
+@media (max-width: 880px) { .qs-tst__grid { grid-template-columns: 1fr; } }
+</style>
+===== FIM ARQUIVO: components/home/home-testimonials.vue =====
+
+
+===== INÍCIO ARQUIVO: components/home/home-blog.vue =====
+<template>
+  <section class="qs-blg" aria-labelledby="qs-blg-title">
+    <div class="container">
+      <div class="qs-blg__head">
+        <span class="qs-blg__eyebrow">Sempre conectado</span>
+        <h2 id="qs-blg-title" class="qs-blg__h2">Quanta em tempo real</h2>
+        <p class="qs-blg__lead">Fique por dentro das últimas novidades, promoções e conteúdos exclusivos.</p>
+      </div>
+
+      <div class="qs-blg__grid">
+        <!-- TODO: hospedar imagens localmente / posts via API (hoje Unsplash) -->
+        <article v-for="(p, i) in posts" :key="i" class="qs-blg__card">
+          <div class="qs-blg__media">
+            <img :src="p.img" :alt="p.title" width="600" height="375" loading="lazy" decoding="async" />
+            <span class="qs-blg__tag" :class="'qs-blg__tag--' + p.kind">● {{ labels[p.kind] }}</span>
+          </div>
+          <div class="qs-blg__body">
+            <p class="qs-blg__date">{{ p.date }}</p>
+            <h3 class="qs-blg__title">{{ p.title }}</h3>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+</template>
+
+<script setup lang="ts">
+type Kind = 'instagram' | 'youtube' | 'blog';
+interface Post { kind: Kind; date: string; title: string; img: string }
+
+const labels: Record<Kind, string> = { instagram: 'Instagram', youtube: 'YouTube', blog: 'Blog' };
+
+const posts: Post[] = [
+  { kind: 'instagram', date: '22 Mar 2025', title: 'Cashback de verdade! Veja como funciona na prática 💰', img: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&q=80&auto=format&fit=crop' },
+  { kind: 'youtube', date: '20 Mar 2025', title: 'Tutorial: ative seu cashback em 3 passos', img: 'https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=600&q=80&auto=format&fit=crop' },
+  { kind: 'blog', date: '18 Mar 2025', title: '5 dicas para maximizar seu cashback online', img: 'https://images.unsplash.com/photo-1563986768494-4dee2763ff3f?w=600&q=80&auto=format&fit=crop' },
+  { kind: 'instagram', date: '15 Mar 2025', title: 'Novas marcas parceiras chegando! 🚀', img: 'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&q=80&auto=format&fit=crop' },
+];
+</script>
+
+<style scoped>
+.qs-blg { padding: 84px 0; background: #fff; }
+.container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+.qs-blg__head { text-align: center; max-width: 680px; margin: 0 auto 52px; }
+.qs-blg__eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: #3A9AAD; }
+.qs-blg__h2 { font-family: 'Bruum FY','Jost','Inter',sans-serif; font-size: clamp(30px, 3.6vw, 44px); font-weight: 700; color: #225F6B; line-height: 1.08; letter-spacing: -.02em; margin: 12px 0 14px; }
+.qs-blg__lead { font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 17px; color: #6b7280; }
+
+.qs-blg__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+.qs-blg__card { background: #fff; border: 1px solid #e5e7eb; border-radius: 20px; overflow: hidden; transition: transform .25s ease, box-shadow .25s ease; }
+.qs-blg__card:hover { transform: translateY(-4px); box-shadow: 0 4px 20px rgba(1,15,28,.12); }
+.qs-blg__media { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: #eef1f3; }
+.qs-blg__media img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
+.qs-blg__card:hover .qs-blg__media img { transform: scale(1.06); }
+.qs-blg__tag { position: absolute; top: 10px; left: 10px; font-size: 11px; font-weight: 700; color: #fff; padding: 4px 10px; border-radius: 999px; display: flex; align-items: center; gap: 5px; }
+.qs-blg__tag--instagram { background: linear-gradient(135deg, #f09433, #dc2743, #bc1888); }
+.qs-blg__tag--youtube { background: #ff0000; }
+.qs-blg__tag--blog { background: #2F7785; }
+.qs-blg__body { padding: 16px 18px 20px; }
+.qs-blg__date { font-size: 12px; color: #9ca3af; }
+.qs-blg__title { font-family: 'Bruum FY','Jost','Inter',sans-serif; font-size: 15px; font-weight: 700; color: #1d1d1f; margin: 6px 0 0; line-height: 1.35; }
+
+@media (max-width: 991px) { .qs-blg__grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 520px) { .qs-blg__grid { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .qs-blg__card, .qs-blg__media img { transition: none; } }
+</style>
+===== FIM ARQUIVO: components/home/home-blog.vue =====
+
+
+===== INÍCIO ARQUIVO: components/home/home-faq.vue =====
+<template>
+  <section class="qs-faq" aria-labelledby="qs-faq-title">
+    <div class="container">
+      <div class="qs-faq__head">
+        <span class="qs-faq__eyebrow">Dúvidas frequentes</span>
+        <h2 id="qs-faq-title" class="qs-faq__h2">Perguntas e respostas</h2>
+        <p class="qs-faq__lead">O essencial pra você começar com confiança.</p>
+      </div>
+
+      <div class="qs-faq__list">
+        <details v-for="(f, i) in items" :key="i" class="qs-faq__item" :open="i === 0">
+          <summary class="qs-faq__q">
+            {{ f.q }}
+            <span class="qs-faq__pl" aria-hidden="true">+</span>
+          </summary>
+          <div class="qs-faq__a">{{ f.a }}</div>
+        </details>
+      </div>
+    </div>
+  </section>
+</template>
+
+<script setup lang="ts">
+interface Faq { q: string; a: string }
+
+const items: Faq[] = [
+  { q: 'O que é a Quanta Shop?', a: 'É uma plataforma de cashback em rede: você compra nas suas lojas favoritas e recebe dinheiro de volta, podendo ainda ganhar com a sua rede de consumo.' },
+  { q: 'Como funciona a Quanta IA?', a: 'Pelo chat você busca e cota produtos e lojas, consulta seu saldo de cashback e tira qualquer dúvida — a mesma praticidade de uma conversa no WhatsApp.' },
+  { q: 'O cashback é dinheiro de verdade?', a: 'Sim. O valor acumulado pode ser sacado via PIX, de forma transparente e instantânea.' },
+  { q: 'Quanto custa para usar?', a: 'Criar conta e receber cashback é grátis. Há um plano opcional (Quanta Plus) com cashback turbinado e benefícios exclusivos.' },
+  { q: 'Como recebo e saco meu cashback?', a: 'O cashback cai automaticamente na sua carteira Quanta após a compra confirmada. O saque é via PIX, direto pela plataforma.' },
+];
+</script>
+
+<style scoped>
+.qs-faq { padding: 84px 0; background: #fff; }
+.container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+.qs-faq__head { text-align: center; max-width: 680px; margin: 0 auto 52px; }
+.qs-faq__eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: #3A9AAD; }
+.qs-faq__h2 { font-family: 'Bruum FY','Jost','Inter',sans-serif; font-size: clamp(30px, 3.6vw, 44px); font-weight: 700; color: #225F6B; line-height: 1.08; letter-spacing: -.02em; margin: 12px 0 14px; }
+.qs-faq__lead { font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 17px; color: #6b7280; }
+
+.qs-faq__list { max-width: 780px; margin: 0 auto; }
+.qs-faq__item { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; margin-bottom: 12px; overflow: hidden; }
+.qs-faq__q { list-style: none; cursor: pointer; padding: 18px 22px; min-height: 44px; font-family: 'Bruum FY','Jost','Inter',sans-serif; font-weight: 600; font-size: 17px; color: #225F6B; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.qs-faq__q::-webkit-details-marker { display: none; }
+.qs-faq__pl { flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%; background: rgba(47,119,133,.1); color: #2F7785; display: grid; place-items: center; font-size: 18px; line-height: 1; transition: transform .25s ease, background .25s ease, color .25s ease; }
+.qs-faq__item[open] .qs-faq__pl { transform: rotate(45deg); background: #2F7785; color: #fff; }
+.qs-faq__a { padding: 0 22px 20px; font-family: 'Kiye Sans','Inter','Jost',sans-serif; color: #6b7280; font-size: 15px; line-height: 1.65; }
+
+@media (prefers-reduced-motion: reduce) { .qs-faq__pl { transition: none; } }
+</style>
+===== FIM ARQUIVO: components/home/home-faq.vue =====
+
+
+===== INÍCIO ARQUIVO: components/home/home-ceo.vue =====
+<template>
+  <section class="qs-ceo-sec" aria-labelledby="qs-ceo-title">
+    <div class="container">
+      <div class="qs-ceo">
+        <div class="qs-ceo__film" aria-hidden="true"></div>
+
+        <div class="qs-ceo__in">
+          <span class="qs-ceo__tag"><span class="qs-ceo__d" aria-hidden="true"></span> CEO &amp; Founder</span>
+          <p class="qs-ceo__pre">FALE COM O CEO</p>
+          <h2 id="qs-ceo-title" class="qs-ceo__h2">Mauro Triumph</h2>
+          <p class="qs-ceo__text">Clareza estratégica sem rodeios, sem burocracia, sem perda de tempo. Converse com a IA do CEO e leve sua parceria adiante.</p>
+          <div class="qs-ceo__cta-row">
+            <nuxt-link class="qs-ceo__btn qs-ceo__btn--primary" href="#main">Iniciar Conversa com IA</nuxt-link>
+            <a class="qs-ceo__btn qs-ceo__btn--ghost" href="https://api.whatsapp.com/send/?phone=552140404866" target="_blank" rel="noopener">Falar no WhatsApp</a>
+          </div>
+          <div class="qs-ceo__stats qs-ceo__stats--inline">
+            <div><b>Em até 24h</b><span>RESPOSTAS</span></div>
+            <div><b>+200</b><span>PARCERIAS FECHADAS</span></div>
+          </div>
+        </div>
+
+        <div class="qs-ceo__photo">
+          <img
+            src="/img/team/mauro-cutout.png"
+            alt="Mauro Triumph, CEO e fundador da Quanta Shop"
+            width="700" height="665" loading="lazy" decoding="async"
+          />
+          <div class="qs-ceo__card qs-ceo__card--1">
+            <span class="qs-ceo__card-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a4 4 0 0 1-4 4H8l-5 4V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z" /></svg></span>
+            <div><span class="qs-ceo__card-lbl">RESPOSTAS</span><b>Em até 24h</b></div>
+          </div>
+          <div class="qs-ceo__card qs-ceo__card--2">
+            <span class="qs-ceo__card-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 17l6-6 4 4 7-7" /><path d="M17 8h4v4" /></svg></span>
+            <div><span class="qs-ceo__card-lbl">PARCERIAS</span><b>+200 fechadas</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</template>
+
+<script setup lang="ts"></script>
+
+<style scoped>
+.qs-ceo-sec { padding: 84px 0; background: #f7f8fa; }
+.container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+.qs-ceo { position: relative; display: grid; grid-template-columns: 1.05fr .95fr; align-items: end; border-radius: 20px; overflow: hidden; color: #fff; min-height: 470px; background: linear-gradient(135deg, #225F6B, #163038); }
+.qs-ceo__film { position: absolute; inset: 0; z-index: 2; pointer-events: none; background: linear-gradient(115deg, rgba(20,48,56,.92) 0%, rgba(26,74,84,.66) 42%, rgba(47,119,133,.48) 66%, rgba(152,199,58,.28) 100%); }
+
+.qs-ceo__in { position: relative; z-index: 3; padding: 56px; align-self: center; }
+.qs-ceo__tag { display: inline-flex; align-items: center; gap: 7px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.22); border-radius: 999px; padding: 6px 13px; font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 12px; font-weight: 700; letter-spacing: .06em; color: #fff; }
+.qs-ceo__d { width: 7px; height: 7px; border-radius: 50%; background: #98C73A; }
+.qs-ceo__pre { font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 14px; letter-spacing: .22em; margin-top: 18px; color: #cfe6ea; }
+.qs-ceo__h2 { font-family: 'Bruum FY','Jost','Inter',sans-serif; font-size: clamp(34px, 4.6vw, 54px); font-weight: 800; text-transform: uppercase; letter-spacing: -.01em; margin: 4px 0 14px; background: linear-gradient(92deg, #ffffff 0%, #e6fff0 36%, #98C73A 100%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; text-shadow: 0 2px 30px rgba(152,199,58,.22); }
+.qs-ceo__text { font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 17px; color: #e8f3f4; max-width: 430px; text-shadow: 0 1px 12px rgba(0,0,0,.3); }
+.qs-ceo__cta-row { display: flex; gap: 12px; margin-top: 26px; flex-wrap: wrap; }
+.qs-ceo__btn { display: inline-flex; align-items: center; gap: 8px; font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-weight: 700; font-size: 15px; border-radius: 999px; padding: 14px 26px; min-height: 44px; text-decoration: none; border: 1.5px solid transparent; transition: transform .2s ease, box-shadow .2s ease, background .2s ease; }
+.qs-ceo__btn--primary { background: linear-gradient(180deg, #98C73A, #7aad1f); color: #173a0a; box-shadow: 0 10px 28px rgba(152,199,58,.35); }
+.qs-ceo__btn--primary:hover { transform: translateY(-2px); box-shadow: 0 16px 36px rgba(152,199,58,.45); }
+.qs-ceo__btn--ghost { background: rgba(255,255,255,.08); color: #fff; border-color: rgba(255,255,255,.35); }
+.qs-ceo__btn--ghost:hover { background: rgba(255,255,255,.16); }
+
+.qs-ceo__stats { display: flex; gap: 30px; margin-top: 28px; }
+.qs-ceo__stats b { display: block; font-family: 'Bruum FY','Jost','Inter',sans-serif; font-size: 20px; color: #98C73A; }
+.qs-ceo__stats span { font-size: 12px; color: #bcd6da; letter-spacing: .08em; }
+.qs-ceo__stats--inline { display: none; }
+
+.qs-ceo__photo { position: relative; z-index: 1; align-self: end; justify-self: center; display: flex; align-items: flex-end; height: 100%; }
+.qs-ceo__photo img { max-height: 480px; width: auto; display: block; }
+
+.qs-ceo__card { position: absolute; z-index: 4; display: flex; align-items: center; gap: 11px; background: rgba(12,26,33,.5); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,.16); border-radius: 16px; padding: 12px 16px; box-shadow: 0 4px 20px rgba(1,15,28,.12); }
+.qs-ceo__card--1 { top: 8%; right: 0; }
+.qs-ceo__card--2 { bottom: 18%; left: -14%; }
+.qs-ceo__card-ic { width: 38px; height: 38px; border-radius: 11px; display: grid; place-items: center; background: linear-gradient(135deg, #7aad1f, #98C73A); color: #0c1a21; flex-shrink: 0; }
+.qs-ceo__card--2 .qs-ceo__card-ic { background: linear-gradient(135deg, #2F7785, #3A9AAD); color: #fff; }
+.qs-ceo__card-ic svg { width: 19px; height: 19px; }
+.qs-ceo__card-lbl { display: block; font-size: 11px; letter-spacing: .07em; color: #bcd6da; text-transform: uppercase; }
+.qs-ceo__card b { font-family: 'Bruum FY','Jost','Inter',sans-serif; font-size: 17px; color: #fff; }
+
+@media (max-width: 880px) {
+  .qs-ceo { grid-template-columns: 1fr; text-align: center; min-height: 0; }
+  .qs-ceo__in { padding: 40px 24px 0; }
+  .qs-ceo__photo { justify-self: center; }
+  .qs-ceo__photo img { max-height: 340px; }
+  .qs-ceo__film { background: linear-gradient(0deg, rgba(20,48,56,.93) 35%, rgba(26,74,84,.55) 70%, rgba(152,199,58,.18) 100%); }
+  .qs-ceo__card { display: none; }
+  .qs-ceo__stats--inline { display: flex; justify-content: center; }
+}
+@media (prefers-reduced-motion: reduce) { .qs-ceo__btn { transition: none; } }
+</style>
+===== FIM ARQUIVO: components/home/home-ceo.vue =====
+
+
+===== INÍCIO ARQUIVO: components/home/home-footer-cta.vue =====
+<template>
+  <section class="qs-fcta" aria-labelledby="qs-fcta-title">
+    <QsLogo tone="white" :size="62" class="qs-fcta__ic" aria-hidden="true" />
+    <h2 id="qs-fcta-title" class="qs-fcta__h2">Pronto para começar a economizar?</h2>
+    <p class="qs-fcta__lead">Cadastre-se gratuitamente e aproveite cashback em milhares de lojas.</p>
+    <div class="qs-fcta__row">
+      <nuxt-link class="qs-fcta__btn qs-fcta__btn--primary" href="/register">Cadastrar Agora →</nuxt-link>
+      <nuxt-link class="qs-fcta__btn qs-fcta__btn--ghost" href="/login">Já tenho conta</nuxt-link>
+    </div>
+  </section>
+</template>
+
+<script setup lang="ts"></script>
+
+<style scoped>
+.qs-fcta { background: radial-gradient(900px 500px at 50% -20%, rgba(58,154,173,.5), transparent 60%), linear-gradient(160deg, #225F6B, #143038); color: #fff; text-align: center; padding: 88px 24px; }
+.qs-fcta__ic { margin: 0 auto 20px; display: block; }
+.qs-fcta__h2 { font-family: 'Bruum FY','Jost','Inter',sans-serif; color: #fff; font-size: clamp(32px, 4vw, 48px); font-weight: 800; line-height: 1.08; letter-spacing: -.02em; }
+.qs-fcta__lead { font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 18px; color: #cfe6ea; margin: 14px 0 30px; }
+.qs-fcta__row { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+.qs-fcta__btn { display: inline-flex; align-items: center; gap: 8px; font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-weight: 700; font-size: 15px; border-radius: 999px; padding: 14px 26px; min-height: 44px; text-decoration: none; border: 1.5px solid transparent; transition: transform .2s ease, box-shadow .2s ease, background .2s ease; }
+.qs-fcta__btn--primary { background: linear-gradient(180deg, #98C73A, #7aad1f); color: #173a0a; box-shadow: 0 10px 28px rgba(152,199,58,.35); }
+.qs-fcta__btn--primary:hover { transform: translateY(-2px); box-shadow: 0 16px 36px rgba(152,199,58,.45); }
+.qs-fcta__btn--ghost { background: rgba(255,255,255,.08); color: #fff; border-color: rgba(255,255,255,.35); }
+.qs-fcta__btn--ghost:hover { background: rgba(255,255,255,.16); }
+
+@media (prefers-reduced-motion: reduce) { .qs-fcta__btn { transition: none; } }
+</style>
+===== FIM ARQUIVO: components/home/home-footer-cta.vue =====
+
+
+===== INÍCIO ARQUIVO: pages/index.vue =====
+<template>
+  <div>
+    <home-hero />
+    <home-como-funciona />
+    <home-capabilities />
+    <home-brand-logos />
+    <home-ofertas-dia />
+    <home-parceiros-online />
+    <home-parceiros-locais />
+    <home-lojistas />
+    <home-testimonials />
+    <home-blog />
+    <home-faq />
+    <home-ceo />
+    <home-footer-cta />
+  </div>
+</template>
+
+<script setup lang="ts">
+definePageMeta({ layout: 'layout-home' });
+
+const SITE = 'https://quantashop.com.br';
+
+/* ---------- SEO / discoverability ---------- */
+useSeoMeta({
+  title: 'Quanta Shop — Cashback real e a Quanta IA que busca, cota e responde por você',
+  description:
+    'A Quanta Shop devolve dinheiro a cada compra nas maiores lojas do Brasil. Busque, cote produtos e lojas, consulte seu saldo e tire dúvidas pela Quanta IA — direto no chat, como no WhatsApp.',
+  ogTitle: 'Quanta Shop — Cashback real com a Quanta IA',
+  ogDescription:
+    'Busque, cote, consulte saldo e tire dúvidas pelo chat. Cashback de verdade nas maiores marcas.',
+  ogType: 'website',
+  ogUrl: SITE + '/',
+  ogImage: SITE + '/og-cover.jpg',
+  ogLocale: 'pt_BR',
+  ogSiteName: 'Quanta Shop',
+  twitterCard: 'summary_large_image',
+  twitterTitle: 'Quanta Shop — Cashback real com a Quanta IA',
+  twitterDescription:
+    'Busque, cote, consulte saldo e tire dúvidas pelo chat. Cashback de verdade nas maiores marcas.',
+  twitterImage: SITE + '/og-cover.jpg',
+});
+
+/* JSON-LD: Organization + WebSite (SearchAction p/ sitelinks searchbox) + FAQ */
+useHead({
+  htmlAttrs: { lang: 'pt-BR' },
+  link: [{ rel: 'canonical', href: SITE + '/' }],
+  meta: [{ name: 'robots', content: 'index, follow, max-image-preview:large' }],
+  script: [
+    {
+      type: 'application/ld+json',
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@graph': [
+          {
+            '@type': 'Organization',
+            '@id': SITE + '/#org',
+            name: 'Quanta Shop',
+            url: SITE + '/',
+            logo: SITE + '/logo.png',
+            description: 'Plataforma brasileira de consumo inteligente com cashback em rede.',
+            sameAs: [
+              'https://www.instagram.com/quantashop',
+              'https://www.facebook.com/quantashop',
+              'https://www.youtube.com/@quantashop',
+            ],
+          },
+          {
+            '@type': 'WebSite',
+            '@id': SITE + '/#website',
+            url: SITE + '/',
+            name: 'Quanta Shop',
+            inLanguage: 'pt-BR',
+            publisher: { '@id': SITE + '/#org' },
+            potentialAction: {
+              '@type': 'SearchAction',
+              target: {
+                '@type': 'EntryPoint',
+                urlTemplate: SITE + '/partners?nome={search_term_string}',
+              },
+              'query-input': 'required name=search_term_string',
+            },
+          },
+          {
+            '@type': 'FAQPage',
+            '@id': SITE + '/#faq',
+            mainEntity: [
+              {
+                '@type': 'Question',
+                name: 'O que é a Quanta Shop?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'É uma plataforma de cashback em rede: você compra nas suas lojas favoritas e recebe dinheiro de volta, podendo ainda ganhar com a sua rede de consumo.',
+                },
+              },
+              {
+                '@type': 'Question',
+                name: 'Como funciona a Quanta IA?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'Pelo chat você busca e cota produtos e lojas, consulta seu saldo de cashback e tira qualquer dúvida — a mesma praticidade de uma conversa no WhatsApp.',
+                },
+              },
+              {
+                '@type': 'Question',
+                name: 'O cashback é dinheiro de verdade?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'Sim. O valor acumulado pode ser sacado via PIX, de forma transparente e instantânea.',
+                },
+              },
+              {
+                '@type': 'Question',
+                name: 'Quanto custa para usar?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'Criar conta e receber cashback é grátis. Há um plano opcional (Quanta Plus) com cashback turbinado e benefícios exclusivos.',
+                },
+              },
+              {
+                '@type': 'Question',
+                name: 'Como recebo e saco meu cashback?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'O cashback cai automaticamente na sua carteira Quanta após a compra confirmada. O saque é via PIX, direto pela plataforma.',
+                },
+              },
+            ],
+          },
+          {
+            '@type': 'ItemList',
+            '@id': SITE + '/#ofertas',
+            name: 'Ofertas do Dia — Quanta Shop',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, item: { '@type': 'Product', name: 'Tênis Air Max Premium', brand: 'Nike', offers: { '@type': 'Offer', price: '599.90', priceCurrency: 'BRL', availability: 'https://schema.org/InStock' } } },
+              { '@type': 'ListItem', position: 2, item: { '@type': 'Product', name: 'Bolsa Couro Elegance', brand: 'Vivara', offers: { '@type': 'Offer', price: '349.90', priceCurrency: 'BRL', availability: 'https://schema.org/InStock' } } },
+              { '@type': 'ListItem', position: 3, item: { '@type': 'Product', name: 'Smartwatch GT Series', brand: 'Motorola', offers: { '@type': 'Offer', price: '899.90', priceCurrency: 'BRL', availability: 'https://schema.org/InStock' } } },
+              { '@type': 'ListItem', position: 4, item: { '@type': 'Product', name: 'Kit Café Gourmet', brand: 'Nescafé', offers: { '@type': 'Offer', price: '89.90', priceCurrency: 'BRL', availability: 'https://schema.org/InStock' } } },
+            ],
+          },
+        ],
+      }),
+    },
+  ],
+});
+</script>
+===== FIM ARQUIVO: pages/index.vue =====
+
+
+===== INÍCIO ARQUIVO: pages/como-funciona.vue =====
+<template>
+  <div>
+    <home-como-funciona />
+    <home-capabilities />
+    <home-faq />
+    <home-footer-cta />
+  </div>
+</template>
+
+<script setup lang="ts">
+definePageMeta({ layout: 'layout-home' });
+
+const SITE = 'https://quantashop.com.br';
+
+useSeoMeta({
+  title: 'Como funciona a Quanta Shop — Ative, compre e receba cashback via PIX',
+  description:
+    'Em três passos: ative o cashback, compre normalmente nas lojas parceiras e receba o dinheiro de volta via PIX. Entenda como a Quanta Shop devolve dinheiro a cada compra.',
+  ogTitle: 'Como funciona a Quanta Shop',
+  ogDescription: 'Ative o cashback, compre normalmente e receba via PIX. Simples, transparente e instantâneo.',
+  ogType: 'website',
+  ogUrl: SITE + '/como-funciona',
+  ogImage: SITE + '/og-cover.jpg',
+  ogLocale: 'pt_BR',
+  ogSiteName: 'Quanta Shop',
+  twitterCard: 'summary_large_image',
+  twitterTitle: 'Como funciona a Quanta Shop',
+  twitterDescription: 'Ative o cashback, compre normalmente e receba via PIX.',
+  twitterImage: SITE + '/og-cover.jpg',
+});
+
+useHead({
+  htmlAttrs: { lang: 'pt-BR' },
+  link: [{ rel: 'canonical', href: SITE + '/como-funciona' }],
+  meta: [{ name: 'robots', content: 'index, follow, max-image-preview:large' }],
+  script: [
+    {
+      type: 'application/ld+json',
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'HowTo',
+        name: 'Como funciona a Quanta Shop',
+        description: 'Receba cashback em três passos: ative, compre e receba via PIX.',
+        step: [
+          { '@type': 'HowToStep', position: 1, name: 'Ative o cashback', text: 'Crie sua conta grátis e ative o cashback nas suas lojas favoritas com um clique.' },
+          { '@type': 'HowToStep', position: 2, name: 'Compre normalmente', text: 'Compre online ou nas lojas parceiras do seu bairro — exatamente como você já faz.' },
+          { '@type': 'HowToStep', position: 3, name: 'Receba via PIX', text: 'O dinheiro volta automático pra sua carteira Quanta. Saque na hora, via PIX.' },
+        ],
+      }),
+    },
+  ],
+});
+</script>
+===== FIM ARQUIVO: pages/como-funciona.vue =====
+
+
+===== IMAGENS A SUBIR (o usuário faz, arrastando para public/) =====
+public/img/logo/quanta-logo.png  (logo colorida — header)
+public/img/logo/quanta-logo-whitegreen.png  (logo branca+verde — footer)
+public/img/logo/quanta-icon.png  e  quanta-icon-white.png  (ícone bq)
+public/img/team/mauro-cutout.png  (foto do CEO recortada)
+public/og-cover.jpg  e  public/favicon.png
