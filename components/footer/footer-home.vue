@@ -4,7 +4,7 @@
       <div class="qs-ft__top">
         <div class="qs-ft__brand-col">
           <nuxt-link class="qs-ft__brand" href="/" aria-label="Quanta Shop">
-            <img class="qs-ft__logo" src="/img/logo/logo-white.png" width="128" height="42" alt="Quanta Shop" decoding="async" />
+            <img class="qs-ft__logo" src="/img/logo/quanta-logo-whitegreen.png" width="128" height="42" alt="Quanta Shop" decoding="async" />
           </nuxt-link>
           <div class="qs-ft__seals">
             <span class="qs-ft__seal"><b>PIX</b> saque instantâneo</span>
