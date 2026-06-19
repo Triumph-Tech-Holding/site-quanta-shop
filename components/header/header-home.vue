@@ -52,6 +52,7 @@ const links = [
   { label: 'Como funciona', href: '/como-funciona' },
   { label: 'Para Você', href: '/para-voce' },
   { label: 'Para sua Empresa', href: '/para-sua-empresa' },
+  { label: 'Cupons', href: '/cupons' },
   { label: 'Seja um Agente', href: '/seja-um-agente' },
   { label: 'Quanta Amizade', href: '/quanta-amizade' },
   { label: 'Blog', href: '/blog' },

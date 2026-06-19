@@ -5,6 +5,7 @@
     <home-capabilities />
     <home-brand-logos />
     <home-ofertas-dia />
+    <home-cupons />
     <home-parceiros-online />
     <home-parceiros-locais />
     <home-lojistas />
