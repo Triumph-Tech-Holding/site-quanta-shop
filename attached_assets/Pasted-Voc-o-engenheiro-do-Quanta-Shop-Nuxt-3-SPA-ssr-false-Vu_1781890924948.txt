@@ -1,0 +1,501 @@
+Você é o engenheiro do Quanta Shop (Nuxt 3 SPA, ssr:false, Vue 3 <script setup lang="ts">, CSS scoped, design system qs-*, sem Bootstrap/Tailwind). Adicione a feature de Cupons sem tocar no backend.
+
+Faça nesta ordem:
+
+
+Crie os 4 arquivos abaixo, com o conteúdo exato (seções 1 a 4).
+Edite pages/index.vue para renderizar <home-cupons /> (seção 5).
+Edite o menu components/header/header-home.vue para incluir o item "Cupons" → /cupons (seção 6).
+Valide (seção 7).
+
+
+Restrições: porta dev 5000, allowedHosts: true, nada de localhost hardcoded, nada de base64, CSS scoped por componente. Não alterar autenticação/negócio.
+
+
+1. composables/useCupons.ts (novo)
+
+ts/**
+ * useCupons — fonte de cupons/promoções da Quanta Shop.
+ *
+ * Hoje retorna dados FICTÍCIOS no MESMO formato da Awin Promotions API,
+ * para validarmos o visual das seções/página antes da integração.
+ *
+ * Quando o backend expuser o feed real (ex.: GET /api/cupons que encapsula
+ * a Awin Promotions API), basta trocar o corpo de `loadCupons()` por:
+ *   const { data } = await useFetch('/api/cupons'); cupons.value = (data.value ?? []).map(normalize);
+ * O resto (componentes, filtros, SEO) não muda — todos consomem o tipo `Cupom`.
+ */
+
+export interface Cupom {
+  /** promotionId na Awin */
+  id: string | number;
+  /** 'voucher' = tem código | 'promotion' = oferta sem código */
+  type: 'voucher' | 'promotion';
+  store: { slug: string; name: string; logo: string };
+  category: string;
+  title: string;
+  /** desconto exibido em destaque, ex.: '20% OFF', 'R$ 50 OFF', 'Frete grátis' */
+  discount: string;
+  /**
+   * Cashback MÁXIMO exibido (teto), ex.: '8%'. A UI sempre mostra "até X%".
+   * O valor final varia: a Quanta retém parte da comissão da Awin e o
+   * percentual depende do momento e do tipo de usuário — assinante Quanta Plus
+   * recebe o dobro. Aqui guardamos o teto (caso assinante). null = sem cashback.
+   */
+  cashback: string | null;
+  /** código do voucher (null quando type = 'promotion') */
+  code: string | null;
+  description: string;
+  terms?: string;
+  /** cupom exclusivo Quanta (Awin: voucher.exclusive) */
+  exclusive?: boolean;
+  /** ISO date — Awin: endDate. Usado para expirar automaticamente. */
+  expiresAt: string;
+  /** deeplink de rastreio da Awin (mock = '#') */
+  url: string;
+}
+
+/** Categorias para os filtros da página /cupons */
+export const CUPOM_CATEGORIES = [
+  'Todos',
+  'Moda',
+  'Casa & Eletro',
+  'Mercado',
+  'Saúde & Beleza',
+  'Tech',
+  'Viagem',
+  'Bebidas',
+] as const;
+
+const LOGO = (slug: string) => `/img/brands/${slug}.png`;
+
+/* ---------- MOCK no formato Awin (lojas reais do partners.json) ---------- */
+const MOCK: Cupom[] = [
+  { id: 'qs-001', type: 'voucher', store: { slug: 'carrefour', name: 'Carrefour', logo: LOGO('carrefour') }, category: 'Mercado', title: 'R$ 30 OFF em compras acima de R$ 200', discount: 'R$ 30 OFF', cashback: '4%', code: 'QUANTA30', description: 'Desconto no mercado online + cashback Quanta na mesma compra.', terms: 'Válido para a primeira compra do app. Não cumulativo com outros cupons.', exclusive: true, expiresAt: '2026-07-15', url: '#' },
+  { id: 'qs-002', type: 'voucher', store: { slug: 'casas-bahia', name: 'Casas Bahia', logo: LOGO('casas-bahia') }, category: 'Casa & Eletro', title: '15% OFF em móveis e eletro selecionados', discount: '15% OFF', cashback: '6%', code: 'CASA15', description: 'Renove a casa com desconto e ainda receba cashback de verdade.', terms: 'Sujeito a estoque. Confira produtos participantes.', expiresAt: '2026-06-30', url: '#' },
+  { id: 'qs-003', type: 'voucher', store: { slug: 'lacoste', name: 'Lacoste', logo: LOGO('lacoste') }, category: 'Moda', title: '20% OFF em toda a coleção', discount: '20% OFF', cashback: '8%', code: 'LACOSTE20', description: 'Estilo com desconto e o melhor cashback de moda da Quanta.', exclusive: true, expiresAt: '2026-07-05', url: '#' },
+  { id: 'qs-004', type: 'promotion', store: { slug: 'lg', name: 'LG', logo: LOGO('lg') }, category: 'Tech', title: 'Até R$ 800 OFF em TVs e monitores', discount: 'Até R$ 800 OFF', cashback: '5%', code: null, description: 'Promoção relâmpago em eletrônicos LG com cashback Quanta.', expiresAt: '2026-06-28', url: '#' },
+  { id: 'qs-005', type: 'voucher', store: { slug: 'drogaria-venancio', name: 'Drogaria Venancio', logo: LOGO('drogaria-venancio') }, category: 'Saúde & Beleza', title: '12% OFF em dermocosméticos', discount: '12% OFF', cashback: '7%', code: 'PELE12', description: 'Cuide da pele economizando duas vezes.', expiresAt: '2026-07-10', url: '#' },
+  { id: 'qs-006', type: 'voucher', store: { slug: 'ze-delivery', name: 'Zé Delivery', logo: LOGO('ze-delivery') }, category: 'Bebidas', title: 'R$ 15 OFF no primeiro pedido', discount: 'R$ 15 OFF', cashback: '10%', code: 'ZEQUANTA', description: 'Bebida gelada na porta com desconto e cashback.', exclusive: true, expiresAt: '2026-06-25', url: '#' },
+  { id: 'qs-007', type: 'voucher', store: { slug: 'diesel', name: 'Diesel', logo: LOGO('diesel') }, category: 'Moda', title: '25% OFF em jeans selecionados', discount: '25% OFF', cashback: '8%', code: 'DENIM25', description: 'A coleção de jeans com o maior desconto da temporada.', expiresAt: '2026-07-20', url: '#' },
+  { id: 'qs-008', type: 'promotion', store: { slug: 'electrolux', name: 'Electrolux', logo: LOGO('electrolux') }, category: 'Casa & Eletro', title: 'Frete grátis + cashback turbinado', discount: 'Frete grátis', cashback: '6%', code: null, description: 'Eletrodomésticos com frete grátis e cashback dobrado para Plus.', expiresAt: '2026-07-01', url: '#' },
+  { id: 'qs-009', type: 'voucher', store: { slug: 'intimissimi', name: 'Intimissimi', logo: LOGO('intimissimi') }, category: 'Moda', title: '18% OFF em lingerie e pijamas', discount: '18% OFF', cashback: '9%', code: 'INTIMI18', description: 'Conforto e estilo com desconto exclusivo.', expiresAt: '2026-07-12', url: '#' },
+  { id: 'qs-010', type: 'voucher', store: { slug: 'panasonic', name: 'Panasonic', logo: LOGO('panasonic') }, category: 'Tech', title: '10% OFF em áudio e câmeras', discount: '10% OFF', cashback: '5%', code: 'PANA10', description: 'Tecnologia Panasonic com desconto e cashback Quanta.', expiresAt: '2026-06-29', url: '#' },
+  { id: 'qs-011', type: 'voucher', store: { slug: 'quero-passagem', name: 'Quero Passagem', logo: LOGO('quero-passagem') }, category: 'Viagem', title: 'R$ 60 OFF em passagens nacionais', discount: 'R$ 60 OFF', cashback: '3%', code: 'VIAJA60', description: 'Viaje pagando menos e ainda receba cashback.', exclusive: true, expiresAt: '2026-07-31', url: '#' },
+  { id: 'qs-012', type: 'voucher', store: { slug: 'cafe-l-or', name: "Café L'or", logo: LOGO('cafe-l-or') }, category: 'Mercado', title: '22% OFF em cápsulas de café', discount: '22% OFF', cashback: '7%', code: 'LOR22', description: 'O café que você ama com desconto e cashback.', expiresAt: '2026-07-08', url: '#' },
+];
+
+const cupons = useState<Cupom[]>('qs-cupons', () => []);
+const loaded = useState<boolean>('qs-cupons-loaded', () => false);
+
+/**
+ * Filtra o que a UI pode mostrar:
+ * - remove cupons expirados (a Awin manda endDate; nunca mostrar cupom morto);
+ * - mantém apenas lojas COM cashback (posicionamento Quanta: "cashback de verdade").
+ */
+function ativos(list: Cupom[]): Cupom[] {
+  const hoje = new Date();
+  hoje.setHours(0, 0, 0, 0);
+  return list.filter((c) => !!c.cashback && new Date(c.expiresAt) >= hoje);
+}
+
+export function useCupons() {
+  async function loadCupons() {
+    if (loaded.value) return;
+    // TODO(integração Awin): trocar por useFetch('/api/cupons')
+    cupons.value = ativos(MOCK);
+    loaded.value = true;
+  }
+
+  /** dias restantes até expirar (para o selo "expira em X dias") */
+  function diasRestantes(c: Cupom): number {
+    const ms = new Date(c.expiresAt).getTime() - Date.now();
+    return Math.max(0, Math.ceil(ms / 86400000));
+  }
+
+  return { cupons, loadCupons, diasRestantes, categories: CUPOM_CATEGORIES };
+}
+
+
+2. components/qs/qs-cupom-card.vue (novo)
+
+vue<template>
+  <article class="qs-cup" :class="{ 'qs-cup--exclusive': cupom.exclusive }">
+    <span v-if="cupom.exclusive" class="qs-cup__flag">Exclusivo Quanta</span>
+
+    <div class="qs-cup__logo">
+      <img
+        v-if="!logoFailed" :src="cupom.store.logo" :alt="cupom.store.name"
+        width="120" height="120" loading="lazy" decoding="async" @error="logoFailed = true"
+      />
+      <span v-else class="qs-cup__logo-fallback">{{ initials }}</span>
+    </div>
+
+    <p class="qs-cup__store">{{ cupom.store.name }}</p>
+
+    <p class="qs-cup__discount">{{ cupom.discount }}</p>
+    <p v-if="cupom.cashback" class="qs-cup__cb">até {{ cupom.cashback }} cashback</p>
+
+    <span class="qs-cup__exp" :class="{ 'is-soon': diasRestantes <= 3 }">⏱ {{ expiraLabel }}</span>
+
+    <!-- estado fechado: revela no clique (e dispara o deeplink Awin) -->
+    <button v-if="!revealed" type="button" class="qs-cup__reveal" @click="reveal">
+      {{ cupom.type === 'voucher' ? 'Ver cupom' : 'Ativar oferta' }} →
+    </button>
+
+    <!-- estado aberto -->
+    <template v-else>
+      <button v-if="cupom.type === 'voucher'" type="button" class="qs-cup__code" :class="{ 'is-copied': copied }" @click="copy">
+        <span class="qs-cup__code-val">{{ copied ? 'Copiado!' : cupom.code }}</span>
+        <span class="qs-cup__code-act">
+          <svg v-if="!copied" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2" /><path d="M5 15V5a2 2 0 0 1 2-2h10" /></svg>
+          <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg>
+        </span>
+      </button>
+      <a class="qs-cup__go" :href="cupom.url" target="_blank" rel="noopener">Ir para a loja →</a>
+    </template>
+  </article>
+</template>
+
+<script setup lang="ts">
+import { ref, computed } from 'vue';
+import type { Cupom } from '@/composables/useCupons';
+
+const props = defineProps<{ cupom: Cupom; diasRestantes: number }>();
+
+const revealed = ref(false);
+const copied = ref(false);
+const logoFailed = ref(false);
+
+const initials = computed(() =>
+  props.cupom.store.name.split(' ').slice(0, 2).map((w) => w[0]).join('').toUpperCase(),
+);
+const expiraLabel = computed(() => {
+  const d = props.diasRestantes;
+  if (d <= 0) return 'expira hoje';
+  if (d === 1) return 'expira amanhã';
+  return `expira em ${d} dias`;
+});
+
+function reveal() {
+  revealed.value = true;
+  // dispara o deeplink de rastreio da Awin (em produção registra a venda)
+  if (props.cupom.url && props.cupom.url !== '#') {
+    window.open(props.cupom.url, '_blank', 'noopener');
+  }
+}
+
+async function copy() {
+  if (!props.cupom.code) return;
+  try { await navigator.clipboard.writeText(props.cupom.code); } catch { /* noop */ }
+  copied.value = true;
+  setTimeout(() => (copied.value = false), 2000);
+}
+</script>
+
+<style scoped>
+.qs-cup {
+  position: relative; display: flex; flex-direction: column; align-items: center; text-align: center;
+  background: #fff; border: 1px solid #e8eef0; border-radius: 18px; padding: 22px 18px 18px;
+  box-shadow: 0 6px 20px rgba(15, 39, 48, .06); transition: transform .2s ease, box-shadow .2s ease;
+}
+.qs-cup:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(15, 39, 48, .12); }
+.qs-cup--exclusive { border-color: rgba(152, 199, 58, .55); }
+
+.qs-cup__flag {
+  position: absolute; top: 13px; right: -34px; transform: rotate(45deg);
+  background: linear-gradient(180deg, #98C73A, #7aad1f); color: #173a0a;
+  font-family: 'Kiye Sans', 'Inter', 'Jost', sans-serif; font-size: 10px; font-weight: 800;
+  letter-spacing: .04em; padding: 4px 40px; box-shadow: 0 4px 10px rgba(122, 173, 31, .35);
+}
+
+.qs-cup__logo {
+  width: 84px; height: 84px; border-radius: 50%; background: #fff; border: 1px solid #eef2f3;
+  display: grid; place-items: center; overflow: hidden; box-shadow: 0 4px 14px rgba(15, 39, 48, .07); margin-bottom: 14px;
+}
+.qs-cup__logo img { width: 60px; height: 60px; object-fit: contain; }
+.qs-cup__logo-fallback { font-family: 'Bruum FY', 'Jost', 'Inter', sans-serif; font-weight: 800; font-size: 24px; color: #225F6B; }
+
+.qs-cup__store { font-family: 'Kiye Sans', 'Inter', 'Jost', sans-serif; font-size: 13px; font-weight: 600; color: #8a9ba0; margin: 0 0 8px; }
+.qs-cup__discount { font-family: 'Bruum FY', 'Jost', 'Inter', sans-serif; font-weight: 800; line-height: 1.05; color: #1a2332; font-size: clamp(20px, 4vw, 26px); margin: 0; }
+.qs-cup__cb { font-family: 'Kiye Sans', 'Inter', 'Jost', sans-serif; font-size: 13px; font-weight: 700; color: #2F7785; margin: 6px 0 0; }
+.qs-cup__exp { font-family: 'Kiye Sans', 'Inter', 'Jost', sans-serif; font-size: 11.5px; color: #9aa9ae; margin: 10px 0 14px; }
+.qs-cup__exp.is-soon { color: #d97706; font-weight: 700; }
+
+.qs-cup__reveal {
+  margin-top: auto; width: 100%; min-height: 44px; cursor: pointer; border: 0; border-radius: 12px;
+  background: linear-gradient(180deg, #98C73A, #7aad1f); color: #173a0a;
+  font-family: 'Kiye Sans', 'Inter', 'Jost', sans-serif; font-weight: 700; font-size: 14px;
+  transition: transform .15s ease, box-shadow .2s ease;
+}
+.qs-cup__reveal:hover { transform: translateY(-1px); box-shadow: 0 10px 22px rgba(152, 199, 58, .35); }
+
+.qs-cup__code {
+  margin-top: auto; display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%;
+  border: 1.5px dashed #b9d36a; background: rgba(152, 199, 58, .08); border-radius: 12px;
+  padding: 11px 14px; cursor: pointer; min-height: 44px; transition: background .2s ease, border-color .2s ease;
+}
+.qs-cup__code:hover { background: rgba(152, 199, 58, .16); }
+.qs-cup__code.is-copied { border-color: #2F7785; background: rgba(47, 119, 133, .1); }
+.qs-cup__code-val { font-family: 'Kiye Sans', 'Inter', 'Jost', sans-serif; font-weight: 800; letter-spacing: .06em; color: #225F6B; font-size: 15px; text-transform: uppercase; }
+.qs-cup__code-act { display: inline-flex; align-items: center; color: #7aad1f; }
+.qs-cup__code-act svg { width: 16px; height: 16px; }
+.qs-cup__code.is-copied .qs-cup__code-act { color: #2F7785; }
+
+.qs-cup__go { margin-top: 8px; font-family: 'Kiye Sans', 'Inter', 'Jost', sans-serif; font-size: 12px; font-weight: 700; color: #2F7785; text-decoration: none; }
+.qs-cup__go:hover { text-decoration: underline; }
+</style>
+
+
+3. components/home/home-cupons.vue (novo)
+
+vue<template>
+  <section class="qs-cps" aria-labelledby="qs-cps-title">
+    <div class="container qs-cps__wrap">
+      <header class="qs-cps__head">
+        <div>
+          <span class="qs-cps__eyebrow">🎟️ Atualizado todo dia</span>
+          <h2 id="qs-cps-title" class="qs-cps__title">Cupons do dia <span class="qs-cps__hl">com cashback por cima</span></h2>
+          <p class="qs-cps__sub">Use o cupom e ainda receba cashback de verdade na mesma compra — até o dobro para assinantes Quanta Plus.</p>
+        </div>
+        <nuxt-link class="qs-cps__all" to="/cupons">Ver todos os cupons →</nuxt-link>
+      </header>
+
+      <div class="qs-cps__rail" role="list">
+        <div v-for="c in destaque" :key="c.id" class="qs-cps__item" role="listitem">
+          <qs-cupom-card :cupom="c" :dias-restantes="diasRestantes(c)" />
+        </div>
+      </div>
+
+      <nuxt-link class="qs-cps__all qs-cps__all--mobile" to="/cupons">Ver todos os cupons →</nuxt-link>
+    </div>
+  </section>
+</template>
+
+<script setup lang="ts">
+import { computed, onMounted } from 'vue';
+import { useCupons } from '@/composables/useCupons';
+
+const { cupons, loadCupons, diasRestantes } = useCupons();
+const destaque = computed(() => cupons.value.slice(0, 8));
+
+onMounted(loadCupons);
+</script>
+
+<style scoped>
+.qs-cps { --qs-cup-bg: #f4f6f7; background: #f4f6f7; padding: 84px 0; }
+.qs-cps__head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 28px; }
+.qs-cps__eyebrow { font-family: 'Kiye Sans', 'Inter', 'Jost', sans-serif; font-size: 13px; font-weight: 700; color: #2F7785; }
+.qs-cps__title { font-family: 'Bruum FY', 'Jost', 'Inter', sans-serif; font-weight: 800; color: #1a2332; font-size: clamp(26px, 3.6vw, 40px); line-height: 1.1; letter-spacing: -.02em; margin: 8px 0 8px; }
+.qs-cps__hl { color: #7aad1f; }
+.qs-cps__sub { font-family: 'Kiye Sans', 'Inter', 'Jost', sans-serif; font-size: 16px; color: #4a5b60; max-width: 560px; margin: 0; }
+.qs-cps__all { flex-shrink: 0; font-family: 'Kiye Sans', 'Inter', 'Jost', sans-serif; font-weight: 700; font-size: 14px; color: #225F6B; text-decoration: none; border: 1.5px solid #cdd9dc; border-radius: 999px; padding: 11px 20px; min-height: 44px; display: inline-flex; align-items: center; transition: all .2s ease; }
+.qs-cps__all:hover { background: #225F6B; color: #fff; border-color: #225F6B; }
+.qs-cps__all--mobile { display: none; margin: 24px auto 0; }
+
+.qs-cps__rail {
+  display: grid; grid-auto-flow: column; grid-auto-columns: minmax(280px, 1fr);
+  gap: 20px; overflow-x: auto; padding: 6px 4px 18px; scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch; scrollbar-width: thin;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 18px, #000 calc(100% - 18px), transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 18px, #000 calc(100% - 18px), transparent 100%);
+}
+.qs-cps__item { scroll-snap-align: start; }
+
+/* desktop: mostra 4 por vez, sem máscara apertada */
+@media (min-width: 1100px) {
+  .qs-cps__rail { grid-auto-columns: minmax(0, 1fr); grid-template-columns: repeat(4, 1fr); grid-auto-flow: row; overflow: visible; -webkit-mask-image: none; mask-image: none; }
+}
+
+@media (max-width: 720px) {
+  .qs-cps { padding: 56px 0; }
+  .qs-cps__head { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .qs-cps__all { display: none; }
+  .qs-cps__all--mobile { display: inline-flex; justify-content: center; }
+}
+</style>
+
+
+4. pages/cupons/index.vue (novo)
+
+
+Atenção (pitfall Nuxt): crie como pages/cupons/index.vue (pasta cupons/ + index.vue),
+não como pages/cupons.vue — isso evita conflito quando criarmos cupons/[loja].vue no futuro.
+
+
+
+vue<template>
+  <div class="qs-cpg">
+    <!-- hero / busca -->
+    <section class="qs-cpg__hero">
+      <div class="container">
+        <span class="qs-cpg__eyebrow">🎟️ Cupons Quanta Shop</span>
+        <h1 class="qs-cpg__h1">Cupons e promoções <span class="qs-cpg__hl">com cashback de verdade</span></h1>
+        <p class="qs-cpg__lead">Os melhores códigos de desconto das suas lojas favoritas — e você ainda recebe cashback por cima, sacável via PIX.</p>
+
+        <form class="qs-cpg__search" role="search" @submit.prevent>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m21 21-4.3-4.3" /></svg>
+          <input v-model="q" type="search" class="qs-cpg__input" aria-label="Buscar cupom por loja ou oferta" placeholder="Buscar por loja ou oferta (ex.: Carrefour, jeans, frete grátis)" />
+        </form>
+
+        <div class="qs-cpg__chips" role="tablist" aria-label="Filtrar por categoria">
+          <button
+            v-for="cat in categories" :key="cat" type="button" role="tab"
+            class="qs-cpg__chip" :class="{ active: cat === categoria }"
+            :aria-selected="cat === categoria" @click="categoria = cat"
+          >{{ cat }}</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- grade -->
+    <section class="qs-cpg__list">
+      <div class="container">
+        <p class="qs-cpg__count">{{ filtrados.length }} {{ filtrados.length === 1 ? 'cupom encontrado' : 'cupons encontrados' }}<span v-if="categoria !== 'Todos'"> em {{ categoria }}</span></p>
+
+        <div v-if="filtrados.length" class="qs-cpg__grid">
+          <qs-cupom-card v-for="c in filtrados" :key="c.id" :cupom="c" :dias-restantes="diasRestantes(c)" />
+        </div>
+        <div v-else class="qs-cpg__empty">
+          <p>Nenhum cupom para esse filtro agora. 😕</p>
+          <button type="button" class="qs-cpg__reset" @click="resetar">Limpar filtros</button>
+        </div>
+
+        <p class="qs-cpg__note">* "Até X% cashback" indica o teto: o percentual varia conforme o momento e o tipo de conta — assinantes Quanta Plus recebem o dobro. Cupom e cashback acumulam quando a loja permite. Validade e regras conforme cada oferta; a lista atualiza automaticamente.</p>
+      </div>
+    </section>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue';
+import { useCupons } from '@/composables/useCupons';
+
+definePageMeta({ layout: 'layout-home' });
+
+const { cupons, loadCupons, diasRestantes, categories } = useCupons();
+const q = ref('');
+const categoria = ref<string>('Todos');
+
+onMounted(loadCupons);
+
+const filtrados = computed(() => {
+  const term = q.value.trim().toLowerCase();
+  return cupons.value.filter((c) => {
+    const okCat = categoria.value === 'Todos' || c.category === categoria.value;
+    const okTerm = !term || `${c.store.name} ${c.title} ${c.discount} ${c.category}`.toLowerCase().includes(term);
+    return okCat && okTerm;
+  });
+});
+
+function resetar() { q.value = ''; categoria.value = 'Todos'; }
+
+const SITE = 'https://site-quanta-shop.replit.app';
+useSeoMeta({
+  title: 'Cupons de desconto com cashback | Quanta Shop',
+  description: 'Cupons e promoções das melhores lojas com cashback de verdade por cima — sacável via PIX. Atualizados todos os dias na Quanta Shop.',
+  ogTitle: 'Cupons de desconto com cashback | Quanta Shop',
+  ogDescription: 'Use o cupom e ainda receba cashback. Veja os códigos do dia das suas lojas favoritas.',
+  ogImage: `${SITE}/og-cover.jpg`,
+  ogType: 'website',
+});
+useHead({
+  link: [{ rel: 'canonical', href: `${SITE}/cupons` }],
+  script: [{
+    type: 'application/ld+json',
+    innerHTML: JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      name: 'Cupons e promoções — Quanta Shop',
+      itemListElement: cupons.value.slice(0, 20).map((c, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        item: {
+          '@type': 'Offer',
+          name: `${c.discount} em ${c.store.name}`,
+          description: c.title,
+          category: c.category,
+          ...(c.code ? { priceSpecification: { '@type': 'UnitPriceSpecification' } } : {}),
+          availabilityEnds: c.expiresAt,
+          seller: { '@type': 'Organization', name: c.store.name },
+        },
+      })),
+    }),
+  }],
+});
+</script>
+
+<style scoped>
+.qs-cpg__hero {
+  color: #eaf3f5; padding: clamp(48px, 7vw, 84px) 0 clamp(36px, 5vw, 56px);
+  background:
+    radial-gradient(900px 500px at 80% -10%, rgba(58, 154, 173, .5), transparent 60%),
+    linear-gradient(160deg, #0f2730 0%, #1a2332 55%, #0c1c24 100%);
+}
+.qs-cpg__eyebrow { font-family: 'Kiye Sans', 'Inter', 'Jost', sans-serif; font-size: 13px; font-weight: 700; color: #9fd3a6; }
+.qs-cpg__h1 { font-family: 'Bruum FY', 'Jost', 'Inter', sans-serif; font-weight: 800; color: #fff; font-size: clamp(28px, 5vw, 50px); line-height: 1.08; letter-spacing: -.02em; margin: 10px 0 12px; }
+.qs-cpg__hl { color: #98C73A; }
+.qs-cpg__lead { font-family: 'Kiye Sans', 'Inter', 'Jost', sans-serif; font-size: clamp(15px, 2vw, 18px); line-height: 1.55; color: #c8dde0; max-width: 620px; margin: 0 0 26px; }
+
+.qs-cpg__search { display: flex; align-items: center; gap: 10px; background: #fff; border-radius: 16px; padding: 4px 6px 4px 16px; max-width: 620px; box-shadow: 0 18px 44px rgba(1, 15, 28, .28); }
+.qs-cpg__search svg { width: 20px; height: 20px; color: #6b7c81; flex-shrink: 0; }
+.qs-cpg__input { flex: 1; min-width: 0; border: 0; outline: 0; background: transparent; font-family: 'Kiye Sans', 'Inter', 'Jost', sans-serif; font-size: 16px; color: #1a2332; padding: 13px 8px; }
+.qs-cpg__input::placeholder { color: #9ca3af; }
+
+.qs-cpg__chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+.qs-cpg__chip { font-family: 'Kiye Sans', 'Inter', 'Jost', sans-serif; font-size: 13px; font-weight: 600; color: #dff3e0; background: rgba(255, 255, 255, .08); border: 1px solid rgba(255, 255, 255, .18); border-radius: 999px; padding: 8px 15px; min-height: 38px; cursor: pointer; transition: all .2s ease; }
+.qs-cpg__chip:hover { background: rgba(255, 255, 255, .16); }
+.qs-cpg__chip.active { background: #98C73A; border-color: #98C73A; color: #173a0a; font-weight: 700; }
+
+.qs-cpg__list { background: #f4f6f7; padding: clamp(36px, 5vw, 64px) 0 clamp(56px, 7vw, 88px); --qs-cup-bg: #f4f6f7; }
+.qs-cpg__count { font-family: 'Kiye Sans', 'Inter', 'Jost', sans-serif; font-size: 14px; color: #4a5b60; margin: 0 0 20px; }
+.qs-cpg__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 22px; }
+
+.qs-cpg__empty { text-align: center; padding: 48px 0; font-family: 'Kiye Sans', 'Inter', 'Jost', sans-serif; color: #4a5b60; }
+.qs-cpg__reset { margin-top: 12px; border: 0; cursor: pointer; background: #225F6B; color: #fff; border-radius: 999px; padding: 11px 22px; font-family: 'Kiye Sans', 'Inter', 'Jost', sans-serif; font-weight: 700; font-size: 14px; min-height: 44px; }
+
+.qs-cpg__note { margin: 28px 0 0; font-family: 'Kiye Sans', 'Inter', 'Jost', sans-serif; font-size: 12px; color: #8a9ba0; line-height: 1.5; }
+</style>
+
+
+5. pages/index.vue (editar) — inserir a seção
+
+Adicione <home-cupons /> logo depois de <home-ofertas-dia />:
+
+vue    <home-ofertas-dia />
+    <home-cupons />
+    <home-parceiros-online />
+
+
+6. components/header/header-home.vue (editar) — item no menu
+
+Inclua um item de navegação "Cupons" apontando para /cupons, no mesmo padrão dos outros
+itens do menu (mesma classe/estrutura). Sugestão de posição: logo após "Para sua Empresa".
+Exemplo do link (use o nuxt-link no padrão do seu header):
+
+vue<nuxt-link to="/cupons" class="qs-hdr__link">Cupons</nuxt-link>
+
+Garanta que ele apareça também no menu hambúrguer mobile.
+
+
+7. Validar (faça e me reporte)
+
+
+npm run build:nuxt → 0 erros.
+Abrir /: a seção "Cupons do dia" aparece depois das ofertas, com logos das lojas nos cards (de /img/brands/<slug>.png), botão "Ver cupom" que revela o código.
+Abrir /cupons: busca e filtros por categoria funcionando; só aparecem lojas com cashback; card mostra "até X% cashback".
+Mobile 360–414px: sem overflow horizontal; o trilho de cupons rola na horizontal; menu hambúrguer mostra "Cupons".
+Conferir que /img/brands/*.png retornam 200 (se algum faltar, o card cai nas iniciais — sem quebrar).
+
+
+Ao terminar, liste os arquivos criados/editados e qualquer ajuste que precisou fazer.
+
+
+Quando a Awin de cupons estiver configurada (integração futura)
+
+
+Trocar o corpo de loadCupons() em composables/useCupons.ts por uma chamada ao endpoint real
+(ex.: useFetch('/api/cupons')) que encapsula a Awin Promotions API, mapeando para o tipo Cupom.
+Preencher url com o deeplink de rastreio real de cada cupom (hoje é '#').
+Conferir as regras do anunciante na Awin: alguns proíbem cupom/voucher ou reduzem comissão —
+exibir só os permitidos. O filtro de "só com cashback" e de expiração já está pronto.
