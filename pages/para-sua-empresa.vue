@@ -2,7 +2,12 @@
   <main class="pe-page">
     <!-- HERO -->
     <section class="hero">
-      <div class="hero__scene"><svg viewBox="0 0 1440 340" class="emp-scene" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMax meet">
+      <div class="hero__top"><div class="wrap">
+        <span class="eyebrow">Para sua Empresa</span>
+        <h1>Bem-vindo ao Futuro do <span class="hl">Comércio Local</span></h1>
+        <p class="hero__tag">Transforme conexões em renda.</p>
+      </div></div>
+      <div class="hero__scene"><svg viewBox="0 0 1440 340" class="emp-scene" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMax slice">
         <defs>
           <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b1a22"/><stop offset="100%" stop-color="#10303a"/></linearGradient>
           <radialGradient id="dusk" cx="50%" cy="55%" r="42%"><stop offset="0" stop-color="#1f6b7d" stop-opacity=".5"/><stop offset="100%" stop-color="#0c1c24" stop-opacity="0"/></radialGradient>
@@ -104,19 +109,21 @@
         <circle cx="1250" cy="221" r="4.4" fill="#d6f580" filter="url(#glP)"><animate attributeName="opacity" values=".5;1;.5" dur="2.6s" repeatCount="indefinite"/></circle>
         <circle cx="1380" cy="215" r="4.4" fill="#d6f580" filter="url(#glP)"><animate attributeName="opacity" values=".5;1;.5" dur="3.0s" repeatCount="indefinite"/></circle>
         <rect width="1440" height="120" fill="url(#fadeT)"/>
-      </svg></div>
-      <div class="wrap hero__in">
-        <span class="eyebrow">Para sua Empresa</span>
-        <h1>Bem-vindo ao Futuro do <span class="hl">Comércio Local</span></h1>
-        <p class="hero__tag">Transforme conexões em renda.</p>
-        <div class="hero__eq">Mais Vendas <span class="eq">=</span> Mais Empregos <span class="eq">=</span> <em>Mais Renda por Minuto</em></div>
-        <p class="hero__sub">A tecnologia das Big Techs democratizada para gerar prosperidade no seu bairro — uma revolução baseada em colaboração, ciência de dados e consumo inteligente.</p>
+      </svg><div class="hero__eq-wrap">
+        <div class="eq-col">Mais<br><span class="eq-hl">Vendas</span></div>
+        <span class="eq-sign">=</span>
+        <div class="eq-col">Mais<br><span class="eq-hl">Empregos</span></div>
+        <span class="eq-sign">=</span>
+        <div class="eq-col">Mais <span class="eq-hl">Renda<br>por Minuto</span></div>
+      </div></div>
+      <div class="hero__foot"><div class="wrap">
+        <p class="hero__sub">Descubra como a tecnologia das Big Techs foi democratizada para gerar prosperidade no seu bairro. Uma revolução econômica baseada em colaboração, ciência de dados e consumo inteligente.</p>
         <div class="hero__cta">
           <a class="btn btn-lime" href="/credenciar"><i class="ti ti-building-store"></i> Credenciar minha empresa</a>
-          <a class="btn btn-ghost" href="#conta">Ver o potencial</a>
+          <a class="btn btn-ghost-dark" href="#conta">Ver o potencial</a>
         </div>
         <p class="hero__mini">Crédito de R$ 450 para começar · Rede proprietária da loja · Tecnologia Quanta</p>
-      </div>
+      </div></div>
     </section>
 
     <!-- MARQUEE -->
@@ -344,25 +351,29 @@ h1, h2, h3 { font-family: 'Jost', 'Inter', sans-serif; letter-spacing: -.02em; l
 .reveal.in { opacity: 1; transform: none; }
 
 /* HERO */
-.hero { position: relative; overflow: hidden; background: linear-gradient(180deg, #0b1a22, #0c1c24); color: #eef6f7; min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-start; }
-.hero__scene { position: absolute; left: 0; right: 0; bottom: 0; z-index: 0; pointer-events: none; }
-.emp-scene { width: 100%; height: auto; display: block; }
+.hero { overflow: hidden; color: #eef6f7; }
+.hero__top { background: linear-gradient(180deg, #0b1a22 0%, #0f2530 100%); text-align: center; padding: clamp(40px,6vh,70px) 16px clamp(28px,4vh,46px); }
+.hero .eyebrow { color: #9fe0b0; }
+.hero h1 { color: #fff; font-size: clamp(28px,4.8vw,58px); font-weight: 800; margin: 10px 0 0; line-height: 1.06; }
+.hero h1 .hl { color: var(--lime); }
+.hero__tag { font-size: clamp(15px,1.8vw,20px); color: #cfe2e5; margin-top: 8px; font-weight: 600; }
+.hero__scene { position: relative; width: 100%; height: clamp(200px,28vw,340px); overflow: hidden; background: #07141b; }
+.emp-scene { position: absolute; left: 0; bottom: 0; width: 100%; height: 100%; }
+.hero__eq-wrap { position: absolute; inset: 0; z-index: 3; display: flex; align-items: center; justify-content: center; gap: clamp(8px,2.5vw,38px); padding: 0 16px; pointer-events: none; }
+.eq-col { text-align: center; font-family: 'Jost','Inter',sans-serif; font-weight: 800; font-size: clamp(17px,2.8vw,38px); color: #fff; line-height: 1.1; text-shadow: 0 2px 16px rgba(0,0,0,.85); }
+.eq-hl { color: var(--lime); display: block; }
+.eq-sign { font-family: 'Jost','Inter',sans-serif; font-weight: 800; font-size: clamp(20px,3.2vw,44px); color: var(--lime); text-shadow: 0 2px 16px rgba(0,0,0,.85); flex-shrink: 0; }
+.hero__foot { background: #fff; text-align: center; padding: clamp(28px,4vh,46px) 16px clamp(32px,5vh,56px); }
+.hero__sub { font-size: clamp(14px,1.5vw,16px); color: #2a4a52; max-width: 680px; margin: 0 auto; line-height: 1.65; }
+.hero__cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 22px; }
+.hero__mini { margin-top: 14px; font-size: 12.5px; color: #6a8a90; }
+.btn-ghost-dark { background: transparent; border: 1.8px solid #2a4a52; color: #2a4a52; border-radius: 999px; padding: 15px 28px; font-weight: 700; font-size: 15px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: background .2s; cursor: pointer; }
+.btn-ghost-dark:hover { background: rgba(42,74,82,.08); }
 .hero__orb { position: absolute; border-radius: 50%; filter: blur(70px); z-index: 1; opacity: .5; animation: float 16s ease-in-out infinite; }
 .hero__orb--1 { width: 380px; height: 380px; background: #3A9AAD; top: -90px; right: 14%; }
 .hero__orb--2 { width: 300px; height: 300px; background: #98C73A; bottom: -110px; left: 6%; opacity: .3; animation-delay: -6s; }
 @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-30px); } }
-.hero__in { position: relative; z-index: 2; text-align: center; padding: clamp(64px, 10vh, 110px) 0 44px; }
-.hero .eyebrow { color: #9fe0b0; }
-.hero h1 { color: #fff; font-size: clamp(38px, 5.8vw, 72px); font-weight: 800; margin: 12px 0 0; line-height: 1.04; }
-.hero h1 .hl { color: var(--lime); }
-.hero__tag { font-size: clamp(16px, 2vw, 22px); color: #cfe2e5; margin-top: 10px; font-weight: 600; }
-.hero__eq { margin: clamp(18px, 3.5vh, 34px) auto 0; font-family: 'Jost', 'Inter', sans-serif; font-weight: 800; font-size: clamp(20px, 3.6vw, 44px); line-height: 1.12; color: #fff; text-shadow: 0 3px 20px rgba(0, 0, 0, .6); max-width: 1100px; padding: 0 16px; }
-.hero__eq .eq { color: var(--lime); margin: 0 .16em; }
-.hero__eq em { color: var(--lime); font-style: normal; }
-.hero__sub { font-size: clamp(14px, 1.7vw, 17px); color: #bcd6da; max-width: 720px; margin: clamp(14px, 2.5vh, 24px) auto 0; line-height: 1.55; }
-.hero__cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
-.hero__mini { margin-top: 14px; font-size: 12.5px; color: #9fb6bb; }
-@media (max-width: 600px) { .hero { min-height: auto; padding-bottom: 30px; } .hero__scene { position: relative; margin-top: 18px; } }
+@media (max-width:600px) { .hero__scene { height: clamp(160px,50vw,240px); } .hero__eq-wrap { gap: 6px; } .eq-col { font-size: clamp(14px,4.5vw,22px); } .eq-sign { font-size: clamp(16px,5vw,26px); } }
 
 /* MARQUEE */
 .mq { background: #0c1c24; color: #9fb6bb; padding: 26px 0; overflow: hidden; border-top: 1px solid rgba(255, 255, 255, .06); }
