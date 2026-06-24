@@ -343,24 +343,29 @@ useHead({
 
 onMounted(() => {
   const brands = [
-    { name: 'Carrefour',    slug: 'carrefour' },
-    { name: 'Magalu',       slug: 'magalu' },
-    { name: 'Casas Bahia',  slug: 'casas-bahia' },
-    { name: 'iFood',        slug: 'ifood' },
-    { name: 'Americanas',   slug: 'americanas' },
-    { name: 'Renner',       slug: 'renner' },
-    { name: 'Riachuelo',    slug: 'riachuelo' },
-    { name: 'Netshoes',     slug: 'netshoes' },
-    { name: 'Centauro',     slug: 'centauro' },
-    { name: 'Cobasi',       slug: 'cobasi' },
-    { name: 'Droga Raia',   slug: 'droga-raia' },
-    { name: 'Leroy Merlin', slug: 'leroy-merlin' },
-    { name: 'Samsung',      slug: 'samsung' },
-    { name: 'LG',           slug: 'lg' },
-    { name: 'Vivara',       slug: 'vivara' },
+    { name: 'Carrefour',    slug: 'carrefour',    domain: 'carrefour.com.br',      local: true  },
+    { name: 'Magalu',       slug: 'magalu',        domain: 'magazineluiza.com.br',  local: false },
+    { name: 'Casas Bahia',  slug: 'casas-bahia',   domain: 'casasbahia.com.br',     local: false },
+    { name: 'iFood',        slug: 'ifood',         domain: 'ifood.com.br',          local: true  },
+    { name: 'Americanas',   slug: 'americanas',    domain: 'americanas.com.br',     local: false },
+    { name: 'Renner',       slug: 'renner',        domain: 'lojasrenner.com.br',    local: false },
+    { name: 'Riachuelo',    slug: 'riachuelo',     domain: 'riachuelo.com.br',      local: false },
+    { name: 'Netshoes',     slug: 'netshoes',      domain: 'netshoes.com.br',       local: false },
+    { name: 'Centauro',     slug: 'centauro',      domain: 'centauro.com.br',       local: false },
+    { name: 'Cobasi',       slug: 'cobasi',        domain: 'cobasi.com.br',         local: false },
+    { name: 'Droga Raia',   slug: 'droga-raia',    domain: 'drogaraia.com.br',      local: false },
+    { name: 'Leroy Merlin', slug: 'leroy-merlin',  domain: 'leroymerlin.com.br',    local: false },
+    { name: 'Samsung',      slug: 'samsung',       domain: 'samsung.com',           local: true  },
+    { name: 'LG',           slug: 'lg',            domain: 'lg.com',                local: true  },
+    { name: 'Vivara',       slug: 'vivara',        domain: 'vivara.com.br',         local: false },
   ]
   const onerr = `onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'mq__name',textContent:this.alt}))"`
-  const mk = () => brands.map(b => `<div class="mq__chip"><img src="/img/parceiros/${b.slug}.svg" alt="${b.name}" loading="lazy" ${onerr}></div>`).join('')
+  const mk = () => brands.map(b => {
+    const src = b.local
+      ? `/img/parceiros/${b.slug}.svg`
+      : `https://www.google.com/s2/favicons?sz=128&domain=${b.domain}`
+    return `<div class="mq__chip"><img src="${src}" alt="${b.name}" loading="lazy" ${onerr}></div>`
+  }).join('')
   const mqEl = document.getElementById('mq')
   if (mqEl) mqEl.innerHTML = mk() + mk()
 

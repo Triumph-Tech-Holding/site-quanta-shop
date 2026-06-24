@@ -1,0 +1,45 @@
+Hoje só 4 marcas têm SVG local; o resto cai para texto. Quero as logos aparecendo para todas, de forma confiável. O Clearbit foi descontinuado — use a cadeia abaixo.
+
+Fonte da imagem de cada chip — prioridade (3 níveis)
+
+
+SVG local se existir: /img/parceiros/<slug>.svg (já temos carrefour, ifood, lg, samsung).
+Senão, ícone real da marca via Google (confiável, é o favicon/ícone oficial servido pela própria marca):
+https://www.google.com/s2/favicons?sz=128&domain=<dominio>
+Senão, texto (nome da marca) como rede de segurança.
+
+
+Implementação no chip (exemplo para uma marca SEM svg local):
+
+html<div class="mq__chip">
+  <img src="https://www.google.com/s2/favicons?sz=128&domain=magazineluiza.com.br"
+       alt="Magalu" loading="lazy"
+       onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'mq__name',textContent:this.alt}))">
+</div>
+
+Para as 4 que já têm SVG local, manter src="/img/parceiros/<slug>.svg" (com o mesmo onerror de texto).
+
+Domínios:
+
+Carrefour carrefour.com.br · Magalu magazineluiza.com.br · Casas Bahia casasbahia.com.br
+iFood ifood.com.br · Americanas americanas.com.br · Renner lojasrenner.com.br
+Riachuelo riachuelo.com.br · Netshoes netshoes.com.br · Centauro centauro.com.br
+Cobasi cobasi.com.br · Droga Raia drogaraia.com.br · Leroy Merlin leroymerlin.com.br
+Samsung samsung.com · LG lg.com · Vivara vivara.com.br
+
+Garantir que o CHIP fique sempre branco e legível
+
+Pelo print, os nomes estão soltos no fundo escuro (sem o chip branco). Corrija:
+
+
+.mq__chip sempre branco, 56px de altura, cantos 12px, display:grid; place-items:center; — vale tanto pra <img> quanto pro texto fallback.
+.mq__name{ color:#0f3a43; font-family:'Jost'; font-weight:800; font-size:15px; } (texto escuro sobre o chip branco, nunca claro sobre o escuro).
+.mq__chip img{ height:30px; width:auto; max-width:120px; object-fit:contain; }
+
+
+RECOMENDADO (premium de verdade): logos oficiais locais
+
+O favicon é o ícone da marca (quadradinho), resolve a confiabilidade mas não é a logo completa. Para ficar impecável, baixe os SVGs/PNG oficiais das marcas parceiras e salve em public/img/parceiros/<slug>.svg. Assim que o arquivo existir, o chip já usa ele no lugar do favicon, sem mudar código. Slugs sugeridos:
+carrefour, magalu, casas-bahia, ifood, americanas, renner, riachuelo, netshoes, centauro, cobasi, droga-raia, leroy-merlin, samsung, lg, vivara.
+
+Validar no preview: todas as marcas com ícone/logo no chip branco (texto só se tudo falhar), rolando 34s e pausando no hover.
