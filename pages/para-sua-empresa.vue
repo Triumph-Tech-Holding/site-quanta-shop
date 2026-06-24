@@ -8,8 +8,10 @@
           <h1>Bem-vindo ao Futuro do <span class="hl">Comércio Local</span></h1>
           <p class="hero__tag">Transforme conexões em renda.</p>
         </div>
-        <div class="hero__base">
+        <div class="hero__mid">
           <div class="hero__eq">Mais Vendas <span class="eq">=</span> Mais Empregos <span class="eq">=</span> <em>Mais Renda por Minuto</em></div>
+        </div>
+        <div class="hero__base">
           <p class="hero__sub">A tecnologia das Big Techs democratizada para gerar prosperidade no seu bairro — uma revolução baseada em colaboração, ciência de dados e consumo inteligente.</p>
           <div class="hero__cta">
             <a class="btn btn-lime" href="/credenciar"><i class="ti ti-building-store"></i> Credenciar minha empresa</a>
@@ -394,7 +396,8 @@ h1, h2, h3 { font-family: 'Jost', 'Inter', sans-serif; letter-spacing: -.02em; l
 .hero { position: relative; overflow: hidden; min-height: 100svh; display: flex; flex-direction: column; background: linear-gradient(180deg,#0b1a22,#0c1c24); color: #eef6f7; text-align: center; }
 .hero__in { position: relative; z-index: 2; display: flex; flex-direction: column; flex: 1; min-height: 100svh; justify-content: space-between; padding-bottom: clamp(180px,28vh,300px); }
 .hero__top { padding: clamp(36px,5vh,70px) 16px 0; }
-.hero__base { padding: 0 16px clamp(28px,4vh,52px); }
+.hero__mid { padding: 0 16px; border-top: 1px solid rgba(255,255,255,0.07); padding-top: clamp(18px,2.5vh,30px); }
+.hero__base { padding: 0 16px clamp(28px,4vh,52px); border-top: 1px solid rgba(255,255,255,0.07); padding-top: clamp(18px,2.5vh,30px); }
 .hero__scene { position: absolute; left: 0; right: 0; bottom: 0; z-index: 0; pointer-events: none; }
 .emp-scene { width: 100%; height: auto; display: block; }
 .hero .eyebrow { color: #9fe0b0; }
