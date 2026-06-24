@@ -1,0 +1,229 @@
+<template>
+  <main class="qf-page">
+    <section class="hero"><img class="hero__wm" alt="" aria-hidden="true" src="/img/logo/quanta-icon-white.png" /><div class="wrap hero__in">
+      <span class="eyebrow"><i class="ti ti-robot"></i> Quanta Flow</span>
+      <h1>O fim do trabalho manual.<br>Sua rede no <span class="hl">piloto automático</span>.</h1>
+      <p class="hero__sub">Automação 24/7 e Agentes de IA que prospectam, conduzem adesões e ajudam sua rede a duplicar — enquanto você vive a sua vida. O esforço vira resultado no automático.</p>
+      <div class="hero__cta">
+        <a class="btn btn-lime" href="/register"><i class="ti ti-bolt"></i> Ativar o Quanta Flow</a>
+        <a class="btn btn-ghost" href="#como">Ver como funciona</a>
+      </div>
+      <p class="hero__mini">Incluso na agência digital premium (Vision Plus) · Trabalha 24 horas por dia</p>
+    </div></section>
+
+    <!-- TURN -->
+    <section class="turn"><div class="wrap reveal">
+      <h2>Você não precisa estar online 24 horas. <span class="hl">O Flow está.</span></h2>
+      <p>A maior parte das redes trava porque o trabalho é manual: prospectar, responder, lembrar, acompanhar. O Quanta Flow assume essa parte repetitiva e mantém o movimento acontecendo — inclusive enquanto você dorme.</p>
+    </div></section>
+
+    <!-- O QUE FAZ -->
+    <section class="sec sec--dark"><div class="wrap reveal">
+      <div class="sec__head"><span class="eyebrow">Agentes de IA a seu favor</span><h2>O que o Quanta Flow faz por você</h2><p>Quatro frentes de automação trabalhando juntas, sem parar.</p></div>
+      <div class="feat">
+        <div class="fcard" style="background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.1);"><div class="ic" style="background:rgba(152,199,58,.14);color:var(--lime)"><i class="ti ti-message-chatbot"></i></div><h3 style="color:#fff">Prospecção com IA</h3><p style="color:#aac4c8">Aborda e qualifica contatos pelo WhatsApp com a Quanta IA, no tom certo, na hora certa.</p></div>
+        <div class="fcard" style="background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.1);"><div class="ic" style="background:rgba(152,199,58,.14);color:var(--lime)"><i class="ti ti-user-plus"></i></div><h3 style="color:#fff">Onboarding automático</h3><p style="color:#aac4c8">Conduz a adesão do consumidor e do lojista do início ao fim, sem você precisar acompanhar cada passo.</p></div>
+        <div class="fcard" style="background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.1);"><div class="ic" style="background:rgba(152,199,58,.14);color:var(--lime)"><i class="ti ti-refresh"></i></div><h3 style="color:#fff">Duplicação guiada</h3><p style="color:#aac4c8">Lembra e ajuda a sua rede a fazer o movimento da semana — a indicação que mantém a duplicação viva.</p></div>
+        <div class="fcard" style="background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.1);"><div class="ic" style="background:rgba(152,199,58,.14);color:var(--lime)"><i class="ti ti-gauge"></i></div><h3 style="color:#fff">Meta Minuto ao vivo</h3><p style="color:#aac4c8">Acompanha seus resultados em tempo real e sugere o próximo passo pra você bater a meta por minuto.</p></div>
+      </div>
+    </div></section>
+
+    <!-- PIPELINE -->
+    <section class="sec sec--dark" style="padding-top:0;"><div class="wrap reveal">
+      <div class="sec__head"><span class="eyebrow">No piloto automático</span><h2>O fluxo que roda sozinho</h2></div>
+      <div class="pipe">
+        <div class="pnode"><div class="dot"><i class="ti ti-address-book"></i></div><h4>Contato</h4><span>sua lista</span></div>
+        <div class="pnode"><div class="dot"><i class="ti ti-message-chatbot"></i></div><h4>IA aborda</h4><span>WhatsApp</span></div>
+        <div class="pnode"><div class="dot"><i class="ti ti-filter"></i></div><h4>Qualifica</h4><span>interesse</span></div>
+        <div class="pnode"><div class="dot"><i class="ti ti-user-check"></i></div><h4>Adesão</h4><span>digital</span></div>
+        <div class="pnode"><div class="dot"><i class="ti ti-bell"></i></div><h4>Acompanha</h4><span>nudges</span></div>
+        <div class="pnode"><div class="dot"><i class="ti ti-refresh"></i></div><h4>Duplica</h4><span>a rede</span></div>
+      </div>
+    </div></section>
+
+    <!-- COMO FUNCIONA -->
+    <section class="sec" id="como"><div class="wrap reveal">
+      <div class="sec__head"><span class="eyebrow">Simples de ativar</span><h2>Em 3 passos</h2></div>
+      <div class="steps">
+        <div class="step"><div class="step__n"><i class="ti ti-settings"></i></div><h3>Configure uma vez</h3><p>Conecte sua lista e escolha as mensagens. Leva minutos, dentro da agência digital.</p></div>
+        <div class="step"><div class="step__n"><i class="ti ti-robot"></i></div><h3>O Flow age 24/7</h3><p>A IA prospecta, responde, conduz adesões e mantém a rede em movimento — sem parar.</p></div>
+        <div class="step"><div class="step__n"><i class="ti ti-chart-arcs"></i></div><h3>Você acompanha e colhe</h3><p>Veja a Meta Minuto avançar em tempo real e foque só nas decisões importantes.</p></div>
+      </div>
+    </div></section>
+
+    <!-- ANTES x DEPOIS -->
+    <section class="sec sec--alt"><div class="wrap reveal">
+      <div class="sec__head"><span class="eyebrow">A diferença</span><h2>Esforço manual × piloto automático</h2></div>
+      <div class="cmp">
+        <div class="col col--old">
+          <h3><i class="ti ti-mood-sad"></i> Sem o Flow</h3>
+          <ul>
+            <li><i class="ti ti-x"></i> Você corre atrás de cada contato.</li>
+            <li><i class="ti ti-x"></i> Esquece o follow-up e perde adesões.</li>
+            <li><i class="ti ti-x"></i> A rede para quando você para.</li>
+            <li><i class="ti ti-x"></i> Trabalho repetitivo o dia todo.</li>
+          </ul>
+        </div>
+        <div class="col col--new">
+          <h3><i class="ti ti-rocket"></i> Com o Quanta Flow</h3>
+          <ul>
+            <li><i class="ti ti-check"></i> A IA aborda e qualifica por você.</li>
+            <li><i class="ti ti-check"></i> Follow-up automático — nada se perde.</li>
+            <li><i class="ti ti-check"></i> A rede segue em movimento 24/7.</li>
+            <li><i class="ti ti-check"></i> Você foca no que importa e na vida.</li>
+          </ul>
+        </div>
+      </div>
+    </div></section>
+
+    <!-- INTEGRAÇÃO -->
+    <section class="sec"><div class="wrap integ reveal">
+      <div>
+        <span class="eyebrow" style="color:var(--teal)">Onde ele vive</span>
+        <h2>Dentro da sua <span class="hl">Agência Digital</span></h2>
+        <p>O Quanta Flow é a camada de automação da sua central de comando. Tudo conectado: rede, indicações, credenciamento e Meta Minuto — agora no automático.</p>
+        <span class="pill"><i class="ti ti-crown"></i> Incluso no Vision Plus (agência premium)</span>
+      </div>
+      <div class="panel">
+        <div class="ttl">Quanta Flow · Automação</div>
+        <div class="tool"><i class="ti ti-message-chatbot"></i> Prospecção com IA <span class="d">ativo</span></div>
+        <div class="tool"><i class="ti ti-user-plus"></i> Onboarding automático <span class="d">ativo</span></div>
+        <div class="tool"><i class="ti ti-bell"></i> Follow-up e nudges <span class="d">ativo</span></div>
+        <div class="tool"><i class="ti ti-refresh"></i> Duplicação guiada <span class="d">ativo</span></div>
+        <div class="tool"><i class="ti ti-gauge"></i> Meta Minuto ao vivo <span class="d">ativo</span></div>
+      </div>
+    </div></section>
+
+    <!-- CTA -->
+    <section class="cta"><div class="wrap reveal">
+      <h2>Pare de correr atrás. <span class="hl">Deixe o Flow trabalhar.</span></h2>
+      <p>Ative o Quanta Flow na sua agência digital e coloque a sua rede no piloto automático.</p>
+      <a class="btn btn-lime" href="/register"><i class="ti ti-bolt"></i> Ativar o Quanta Flow</a>
+    </div></section>
+  </main>
+</template>
+
+<script setup lang="ts">
+definePageMeta({ layout: 'layout-home' })
+useSeoMeta({
+  title: 'Quanta Flow — automação 24/7 com IA | Quanta Shop',
+  description: 'O Quanta Flow trabalha por você 24 horas por dia: automação inteligente e IA que cuidam da sua rede e do seu cashback enquanto você vive sua vida.',
+})
+useHead({
+  link: [
+    { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.11.0/dist/tabler-icons.min.css' },
+  ],
+})
+
+onMounted(() => {
+  const io = new IntersectionObserver((es) => {
+    es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target) } })
+  }, { threshold: .15 })
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el))
+})
+</script>
+
+<style scoped>
+.qf-page { --teal: #2F7785; --teal-d: #225F6B; --lime: #98C73A; --lime-d: #7aad1f; --ink: #1a2332; --bg: #f4f6f7; --gold: #FFB342; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+.qf-page { font-family: 'Inter', 'Jost', sans-serif; color: var(--ink); background: #fff; -webkit-font-smoothing: antialiased; }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+h1, h2, h3 { font-family: 'Jost', 'Inter', sans-serif; letter-spacing: -.02em; line-height: 1.05; }
+.eyebrow { font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.btn { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 15px; border-radius: 999px; padding: 14px 26px; text-decoration: none; cursor: pointer; border: 0; transition: .2s; }
+.btn-lime { background: linear-gradient(180deg, var(--lime), var(--lime-d)); color: #173a0a; box-shadow: 0 12px 30px rgba(152, 199, 58, .35); }
+.btn-lime:hover { transform: translateY(-2px); box-shadow: 0 18px 40px rgba(152, 199, 58, .45); }
+.btn-ghost { background: transparent; border: 1.5px solid rgba(255, 255, 255, .35); color: #fff; }
+.btn-ghost:hover { background: rgba(255, 255, 255, .1); }
+.reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s ease; }
+.reveal.in { opacity: 1; transform: none; }
+
+/* HERO */
+.hero { position: relative; overflow: hidden; color: #eaf3f5; background: radial-gradient(900px 520px at 82% -10%, rgba(58, 154, 173, .5), transparent 60%), radial-gradient(700px 500px at 5% 110%, rgba(152, 199, 58, .18), transparent 55%), linear-gradient(160deg, #0f2730 0%, #1a2332 55%, #0c1c24 100%); }
+.hero__wm { position: absolute; right: -90px; top: 50%; transform: translateY(-50%); width: 520px; max-width: 56%; opacity: .07; z-index: 0; pointer-events: none; animation: float 14s ease-in-out infinite; }
+@keyframes float { 0%, 100% { transform: translateY(-50%); } 50% { transform: translateY(calc(-50% - 18px)); } }
+.hero__in { position: relative; z-index: 1; padding: 88px 0 76px; }
+.hero .eyebrow { color: #9fd3a6; display: inline-flex; align-items: center; gap: 8px; }
+.hero h1 { color: #fff; font-size: clamp(34px, 6vw, 64px); font-weight: 800; margin: 14px 0 0; }
+.hero h1 .hl { color: var(--lime); }
+.hero__sub { font-size: clamp(16px, 2.2vw, 20px); color: #c8dde0; max-width: 660px; margin: 20px 0 0; line-height: 1.55; }
+.hero__cta { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 32px; }
+.hero__mini { margin-top: 24px; font-size: 13px; color: #9fb6bb; }
+
+/* TURN */
+.turn { padding: 78px 0; text-align: center; background: var(--bg); }
+.turn h2 { font-size: clamp(26px, 4vw, 42px); font-weight: 800; max-width: 840px; margin: 0 auto; }
+.turn h2 .hl { color: var(--lime-d); }
+.turn p { color: #4a5b60; font-size: 17px; max-width: 640px; margin: 16px auto 0; line-height: 1.6; }
+
+/* SECTIONS */
+.sec { padding: 80px 0; }
+.sec--alt { background: var(--bg); }
+.sec--dark { background: linear-gradient(160deg, #0f2730, #0c1c24); color: #eaf3f5; }
+.sec__head { text-align: center; max-width: 740px; margin: 0 auto 44px; }
+.sec__head .eyebrow { color: var(--teal); }
+.sec--dark .sec__head .eyebrow { color: #9fd3a6; }
+.sec__head h2 { font-size: clamp(26px, 4vw, 40px); font-weight: 800; margin: 10px 0; color: inherit; }
+.sec--dark .sec__head h2 { color: #fff; }
+.sec__head p { color: #4a5b60; font-size: 17px; }
+.sec--dark .sec__head p { color: #aac4c8; }
+
+/* FEAT CARDS */
+.feat { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; max-width: 880px; margin: 0 auto; }
+.fcard { background: #fff; border: 1px solid #e8eef0; border-radius: 18px; padding: 26px; transition: transform .2s, box-shadow .2s; }
+.fcard:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(15, 39, 48, .1); }
+.fcard .ic { width: 50px; height: 50px; border-radius: 14px; display: grid; place-items: center; background: rgba(47, 119, 133, .1); color: var(--teal); font-size: 26px; margin-bottom: 12px; }
+.fcard h3 { font-size: 18px; font-weight: 800; }
+.fcard p { color: #4a5b60; font-size: 14px; line-height: 1.55; margin-top: 6px; }
+
+/* PIPELINE */
+.pipe { display: flex; align-items: stretch; justify-content: center; gap: 0; flex-wrap: wrap; max-width: 980px; margin: 0 auto; }
+.pnode { flex: 1 1 120px; min-width: 120px; text-align: center; position: relative; padding: 0 6px; }
+.pnode .dot { width: 56px; height: 56px; margin: 0 auto 10px; border-radius: 16px; display: grid; place-items: center; background: rgba(255, 255, 255, .06); border: 1px solid rgba(255, 255, 255, .14); color: var(--lime); font-size: 26px; animation: pulse 2.6s ease-in-out infinite; }
+.pnode:nth-child(2) .dot { animation-delay: .4s } .pnode:nth-child(3) .dot { animation-delay: .8s } .pnode:nth-child(4) .dot { animation-delay: 1.2s } .pnode:nth-child(5) .dot { animation-delay: 1.6s } .pnode:nth-child(6) .dot { animation-delay: 2s }
+@keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(152, 199, 58, 0); } 50% { box-shadow: 0 0 0 8px rgba(152, 199, 58, .12); } }
+.pnode h4 { font-size: 13px; color: #fff; font-weight: 700; }
+.pnode span { font-size: 11.5px; color: #9fb6bb; display: block; margin-top: 2px; }
+.pnode::after { content: '\2192'; position: absolute; right: -8px; top: 18px; color: rgba(159, 211, 166, .5); font-size: 20px; }
+.pnode:last-child::after { display: none; }
+@media (max-width: 720px) { .pnode::after { display: none; } .pnode { flex: 1 1 45%; margin-bottom: 18px; } }
+
+/* STEPS */
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.step { background: #fff; border: 1px solid #e8eef0; border-radius: 18px; padding: 28px 22px; }
+.step__n { width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center; color: #173a0a; background: var(--lime); margin-bottom: 14px; font-size: 24px; }
+.step h3 { font-size: 18px; font-weight: 800; }
+.step p { color: #4a5b60; font-size: 14px; line-height: 1.5; margin-top: 6px; }
+
+/* COMPARE */
+.cmp { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; max-width: 900px; margin: 0 auto; }
+.col { border-radius: 18px; padding: 28px; }
+.col--old { background: #fff; border: 1px solid #e8eef0; }
+.col--new { background: linear-gradient(160deg, #102a32, #0c1c24); color: #eaf3f5; border: 1px solid rgba(152, 199, 58, .3); }
+.col h3 { font-size: 18px; font-weight: 800; display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+.col--old h3 { color: #8a9ba0; } .col--new h3 { color: #fff; }
+.col ul { list-style: none; display: flex; flex-direction: column; gap: 11px; }
+.col li { font-size: 14.5px; display: flex; gap: 10px; align-items: flex-start; }
+.col--old li { color: #6b7c81; } .col--new li { color: #dbe9eb; }
+.col--old li .ti { color: #c0392b; } .col--new li .ti { color: var(--lime); }
+
+/* INTEGRAÇÃO */
+.integ { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; max-width: 980px; margin: 0 auto; }
+.integ h2 { font-size: clamp(24px, 3.4vw, 36px); font-weight: 800; }
+.integ h2 .hl { color: var(--lime-d); }
+.integ p { color: #4a5b60; font-size: 16px; margin: 14px 0; line-height: 1.6; }
+.integ .pill { display: inline-flex; align-items: center; gap: 8px; background: rgba(152, 199, 58, .14); color: #3b5a0a; border: 1px solid rgba(152, 199, 58, .34); border-radius: 999px; padding: 8px 16px; font-size: 13px; font-weight: 700; }
+.panel { background: linear-gradient(160deg, #102a32, #0c1c24); border-radius: 22px; padding: 26px; color: #eaf3f5; }
+.panel .ttl { font-size: 13px; color: #9fd3a6; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 14px; }
+.tool { display: flex; align-items: center; gap: 11px; background: rgba(255, 255, 255, .05); border: 1px solid rgba(255, 255, 255, .08); border-radius: 12px; padding: 11px 14px; margin-bottom: 9px; font-size: 14px; color: #dbe9eb; }
+.tool .ti { font-size: 19px; color: var(--lime); } .tool .d { margin-left: auto; font-size: 11px; color: #9fd3a6; }
+
+/* CTA */
+.cta { background: radial-gradient(700px 400px at 80% 0, rgba(58, 154, 173, .5), transparent 60%), linear-gradient(160deg, #0f2730, #0c1c24); color: #fff; padding: 84px 0; text-align: center; }
+.cta h2 { font-size: clamp(28px, 4.5vw, 46px); font-weight: 800; color: #fff; }
+.cta h2 .hl { color: var(--lime); }
+.cta p { color: #c8dde0; margin: 16px 0 30px; font-size: 17px; }
+
+@media (max-width: 860px) { .feat, .cmp, .integ, .steps { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; } .reveal { opacity: 1; transform: none; transition: none; } }
+</style>
