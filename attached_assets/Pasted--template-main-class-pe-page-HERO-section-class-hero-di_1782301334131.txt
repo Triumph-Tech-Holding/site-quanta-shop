@@ -1,0 +1,374 @@
+<template>
+  <main class="pe-page">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero__scene"><svg viewBox="0 0 1440 340" class="emp-scene" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMax meet">
+      <defs>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b1a22"/><stop offset="100%" stop-color="#10303a"/></linearGradient>
+        <radialGradient id="dusk" cx="50%" cy="55%" r="42%"><stop offset="0" stop-color="#1f6b7d" stop-opacity=".5"/><stop offset="100%" stop-color="#0c1c24" stop-opacity="0"/></radialGradient>
+        <linearGradient id="netG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#aee05a"/><stop offset="100%" stop-color="#3A9AAD"/></linearGradient>
+        <radialGradient id="beam" cx="50%" cy="60%" r="50%"><stop offset="0" stop-color="#98C73A" stop-opacity=".28"/><stop offset="100%" stop-color="#98C73A" stop-opacity="0"/></radialGradient>
+        <linearGradient id="cone" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#aee05a" stop-opacity=".5"/><stop offset="100%" stop-color="#aee05a" stop-opacity="0"/></linearGradient>
+        <linearGradient id="screen" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d6f580"/><stop offset="100%" stop-color="#7aad1f"/></linearGradient>
+        <linearGradient id="fadeT" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b1a22"/><stop offset="100%" stop-color="#0b1a22" stop-opacity="0"/></linearGradient>
+        <filter id="glH" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="2.4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="glP" x="-150%" y="-150%" width="400%" height="400%"><feGaussianBlur stdDeviation="2"/></filter>
+        <filter id="glBig" x="-90%" y="-90%" width="280%" height="280%"><feGaussianBlur stdDeviation="13"/></filter>
+      </defs>
+      <rect width="1440" height="340" fill="url(#sky)"/>
+      <rect width="1440" height="340" fill="url(#dusk)"/>
+      <circle cx="150" cy="60" r="1.3" fill="#bfe8ef"><animate attributeName="opacity" values=".1;.7;.1" dur="3.4s" begin="-0s" repeatCount="indefinite"/></circle><circle cx="420" cy="44" r="1.5" fill="#bfe8ef"><animate attributeName="opacity" values=".1;.7;.1" dur="4s" begin="-1s" repeatCount="indefinite"/></circle><circle cx="720" cy="38" r="1.6" fill="#bfe8ef"><animate attributeName="opacity" values=".1;.7;.1" dur="3.9s" begin="-1.5s" repeatCount="indefinite"/></circle><circle cx="1020" cy="46" r="1.2" fill="#bfe8ef"><animate attributeName="opacity" values=".1;.7;.1" dur="3.7s" begin="-2s" repeatCount="indefinite"/></circle><circle cx="1300" cy="64" r="1.4" fill="#bfe8ef"><animate attributeName="opacity" values=".1;.7;.1" dur="4.3s" begin="-3s" repeatCount="indefinite"/></circle><circle cx="290" cy="90" r="1.1" fill="#bfe8ef"><animate attributeName="opacity" values=".1;.7;.1" dur="4.4s" begin="-2.5s" repeatCount="indefinite"/></circle><circle cx="1160" cy="92" r="1.2" fill="#bfe8ef"><animate attributeName="opacity" values=".1;.7;.1" dur="4.1s" begin="-0.5s" repeatCount="indefinite"/></circle>
+      <rect x="0" y="328" width="1440" height="12" fill="#06121a"/>
+      <rect x="0" y="325" width="1440" height="4" fill="#98C73A" opacity=".12"/>
+      <path d="M60,209 Q125,187 190,223" fill="none" stroke="url(#netG)" stroke-width="1" opacity=".20"/><path d="M190,223 Q255,179 320,201" fill="none" stroke="url(#netG)" stroke-width="1" opacity=".20"/><path d="M320,201 Q385,179 450,227" fill="none" stroke="url(#netG)" stroke-width="1" opacity=".20"/><path d="M450,227 Q515,193 580,215" fill="none" stroke="url(#netG)" stroke-width="1" opacity=".20"/><path d="M580,215 Q720,193 860,215" fill="none" stroke="url(#netG)" stroke-width="1" opacity=".20"/><path d="M860,215 Q925,193 990,225" fill="none" stroke="url(#netG)" stroke-width="1" opacity=".20"/><path d="M990,225 Q1055,181 1120,203" fill="none" stroke="url(#netG)" stroke-width="1" opacity=".20"/><path d="M1120,203 Q1185,181 1250,221" fill="none" stroke="url(#netG)" stroke-width="1" opacity=".20"/><path d="M1250,221 Q1315,189 1380,211" fill="none" stroke="url(#netG)" stroke-width="1" opacity=".20"/><path id="net0" d="M60,209 Q390,104 720,158" fill="none" stroke="url(#netG)" stroke-width="1.5" opacity=".4"/><path id="net1" d="M190,223 Q455,104 720,158" fill="none" stroke="url(#netG)" stroke-width="1.5" opacity=".4"/><path id="net2" d="M320,201 Q520,104 720,158" fill="none" stroke="url(#netG)" stroke-width="1.5" opacity=".4"/><path id="net3" d="M450,227 Q585,104 720,158" fill="none" stroke="url(#netG)" stroke-width="1.5" opacity=".4"/><path id="net4" d="M580,215 Q650,104 720,158" fill="none" stroke="url(#netG)" stroke-width="1.5" opacity=".4"/><path id="net5" d="M860,215 Q790,104 720,158" fill="none" stroke="url(#netG)" stroke-width="1.5" opacity=".4"/><path id="net6" d="M990,225 Q855,104 720,158" fill="none" stroke="url(#netG)" stroke-width="1.5" opacity=".4"/><path id="net7" d="M1120,203 Q920,104 720,158" fill="none" stroke="url(#netG)" stroke-width="1.5" opacity=".4"/><path id="net8" d="M1250,221 Q985,104 720,158" fill="none" stroke="url(#netG)" stroke-width="1.5" opacity=".4"/><path id="net9" d="M1380,211 Q1050,104 720,158" fill="none" stroke="url(#netG)" stroke-width="1.5" opacity=".4"/><rect x="-1" y="222" width="122" height="118" fill="#0a1822" stroke="rgba(255,255,255,.05)"/><rect x="-5" y="217" width="130" height="14" rx="3" fill="#2F7785"/><rect x="-5" y="217" width="130" height="4" rx="2" fill="#fff" opacity=".18"/><rect x="47" y="298" width="26" height="42" rx="3" fill="#06121a"/><rect x="129" y="236" width="122" height="104" fill="#0a1822" stroke="rgba(255,255,255,.05)"/><rect x="125" y="231" width="130" height="14" rx="3" fill="#98C73A"/><rect x="125" y="231" width="130" height="4" rx="2" fill="#fff" opacity=".18"/><rect x="177" y="298" width="26" height="42" rx="3" fill="#06121a"/><rect x="259" y="214" width="122" height="126" fill="#0a1822" stroke="rgba(255,255,255,.05)"/><rect x="255" y="209" width="130" height="14" rx="3" fill="#FFB342"/><rect x="255" y="209" width="130" height="4" rx="2" fill="#fff" opacity=".18"/><rect x="307" y="298" width="26" height="42" rx="3" fill="#06121a"/><rect x="389" y="240" width="122" height="100" fill="#0a1822" stroke="rgba(255,255,255,.05)"/><rect x="385" y="235" width="130" height="14" rx="3" fill="#3A9AAD"/><rect x="385" y="235" width="130" height="4" rx="2" fill="#fff" opacity=".18"/><rect x="437" y="298" width="26" height="42" rx="3" fill="#06121a"/><rect x="519" y="228" width="122" height="112" fill="#0a1822" stroke="rgba(255,255,255,.05)"/><rect x="515" y="223" width="130" height="14" rx="3" fill="#98C73A"/><rect x="515" y="223" width="130" height="4" rx="2" fill="#fff" opacity=".18"/><rect x="567" y="298" width="26" height="42" rx="3" fill="#06121a"/><rect x="799" y="228" width="122" height="112" fill="#0a1822" stroke="rgba(255,255,255,.05)"/><rect x="795" y="223" width="130" height="14" rx="3" fill="#FFB342"/><rect x="795" y="223" width="130" height="4" rx="2" fill="#fff" opacity=".18"/><rect x="847" y="298" width="26" height="42" rx="3" fill="#06121a"/><rect x="929" y="238" width="122" height="102" fill="#0a1822" stroke="rgba(255,255,255,.05)"/><rect x="925" y="233" width="130" height="14" rx="3" fill="#2F7785"/><rect x="925" y="233" width="130" height="4" rx="2" fill="#fff" opacity=".18"/><rect x="977" y="298" width="26" height="42" rx="3" fill="#06121a"/><rect x="1059" y="216" width="122" height="124" fill="#0a1822" stroke="rgba(255,255,255,.05)"/><rect x="1055" y="211" width="130" height="14" rx="3" fill="#3A9AAD"/><rect x="1055" y="211" width="130" height="4" rx="2" fill="#fff" opacity=".18"/><rect x="1107" y="298" width="26" height="42" rx="3" fill="#06121a"/><rect x="1189" y="234" width="122" height="106" fill="#0a1822" stroke="rgba(255,255,255,.05)"/><rect x="1185" y="229" width="130" height="14" rx="3" fill="#98C73A"/><rect x="1185" y="229" width="130" height="4" rx="2" fill="#fff" opacity=".18"/><rect x="1237" y="298" width="26" height="42" rx="3" fill="#06121a"/><rect x="1319" y="224" width="122" height="116" fill="#0a1822" stroke="rgba(255,255,255,.05)"/><rect x="1315" y="219" width="130" height="14" rx="3" fill="#FFB342"/><rect x="1315" y="219" width="130" height="4" rx="2" fill="#fff" opacity=".18"/><rect x="1367" y="298" width="26" height="42" rx="3" fill="#06121a"/><rect x="22" y="244" width="28" height="30" rx="3" fill="#ffd27a" opacity=".82" filter="url(#glH)"/><rect x="70" y="244" width="28" height="30" rx="3" fill="#ffd27a" opacity=".82" filter="url(#glH)"/><rect x="152" y="258" width="28" height="30" rx="3" fill="#ffd27a" opacity=".82" filter="url(#glH)"/><rect x="200" y="258" width="28" height="30" rx="3" fill="#ffd27a" opacity=".82" filter="url(#glH)"/><rect x="282" y="236" width="28" height="30" rx="3" fill="#ffd27a" opacity=".82" filter="url(#glH)"/><rect x="330" y="236" width="28" height="30" rx="3" fill="#ffd27a" opacity=".82" filter="url(#glH)"/><rect x="412" y="262" width="28" height="30" rx="3" fill="#ffd27a" opacity=".82" filter="url(#glH)"/><rect x="460" y="262" width="28" height="30" rx="3" fill="#ffd27a" opacity=".82" filter="url(#glH)"/><rect x="542" y="250" width="28" height="30" rx="3" fill="#ffd27a" opacity=".82" filter="url(#glH)"/><rect x="590" y="250" width="28" height="30" rx="3" fill="#ffd27a" opacity=".82" filter="url(#glH)"/><rect x="822" y="250" width="28" height="30" rx="3" fill="#ffd27a" opacity=".82" filter="url(#glH)"/><rect x="870" y="250" width="28" height="30" rx="3" fill="#ffd27a" opacity=".82" filter="url(#glH)"/><rect x="952" y="260" width="28" height="30" rx="3" fill="#ffd27a" opacity=".82" filter="url(#glH)"/><rect x="1000" y="260" width="28" height="30" rx="3" fill="#ffd27a" opacity=".82" filter="url(#glH)"/><rect x="1082" y="238" width="28" height="30" rx="3" fill="#ffd27a" opacity=".82" filter="url(#glH)"/><rect x="1130" y="238" width="28" height="30" rx="3" fill="#ffd27a" opacity=".82" filter="url(#glH)"/><rect x="1212" y="256" width="28" height="30" rx="3" fill="#ffd27a" opacity=".82" filter="url(#glH)"/><rect x="1260" y="256" width="28" height="30" rx="3" fill="#ffd27a" opacity=".82" filter="url(#glH)"/><rect x="1342" y="246" width="28" height="30" rx="3" fill="#ffd27a" opacity=".82" filter="url(#glH)"/><rect x="1390" y="246" width="28" height="30" rx="3" fill="#ffd27a" opacity=".82" filter="url(#glH)"/>
+      <ellipse cx="720" cy="212" rx="180" ry="118" fill="url(#beam)"/>
+      <circle cx="720" cy="176" r="78" fill="#98C73A" filter="url(#glBig)" opacity=".26"><animate attributeName="opacity" values=".16;.32;.16" dur="4s" repeatCount="indefinite"/></circle>
+      <polygon points="713,152 727,152 762,32 678,32" fill="url(#cone)" opacity=".5"/>
+      <g filter="url(#glH)"><rect x="695" y="150" width="50" height="110" rx="12" fill="#0a1c23" stroke="url(#netG)" stroke-width="2"/></g>
+      <rect x="700" y="156" width="40" height="98" rx="8" fill="url(#screen)"/>
+      <g stroke="#0f2a10" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity=".85"><path d="M710 208 l10 -10 l10 10"/><path d="M710 195 l10 -10 l10 10"/></g>
+      <text x="720" y="236" text-anchor="middle" font-family="Jost,sans-serif" font-weight="800" font-size="12" fill="#143a02">R$</text><circle cx="60" cy="209" r="4.4" fill="#d6f580" filter="url(#glP)"><animate attributeName="opacity" values=".5;1;.5" dur="2.6s" repeatCount="indefinite"/></circle><circle cx="190" cy="223" r="4.4" fill="#d6f580" filter="url(#glP)"><animate attributeName="opacity" values=".5;1;.5" dur="2.8s" repeatCount="indefinite"/></circle><circle cx="320" cy="201" r="4.4" fill="#d6f580" filter="url(#glP)"><animate attributeName="opacity" values=".5;1;.5" dur="3.0s" repeatCount="indefinite"/></circle><circle cx="450" cy="227" r="4.4" fill="#d6f580" filter="url(#glP)"><animate attributeName="opacity" values=".5;1;.5" dur="3.1s" repeatCount="indefinite"/></circle><circle cx="580" cy="215" r="4.4" fill="#d6f580" filter="url(#glP)"><animate attributeName="opacity" values=".5;1;.5" dur="3.3s" repeatCount="indefinite"/></circle><circle cx="860" cy="215" r="4.4" fill="#d6f580" filter="url(#glP)"><animate attributeName="opacity" values=".5;1;.5" dur="3.5s" repeatCount="indefinite"/></circle><circle cx="990" cy="225" r="4.4" fill="#d6f580" filter="url(#glP)"><animate attributeName="opacity" values=".5;1;.5" dur="3.7s" repeatCount="indefinite"/></circle><circle cx="1120" cy="203" r="4.4" fill="#d6f580" filter="url(#glP)"><animate attributeName="opacity" values=".5;1;.5" dur="3.9s" repeatCount="indefinite"/></circle><circle cx="1250" cy="221" r="4.4" fill="#d6f580" filter="url(#glP)"><animate attributeName="opacity" values=".5;1;.5" dur="4.0s" repeatCount="indefinite"/></circle><circle cx="1380" cy="211" r="4.4" fill="#d6f580" filter="url(#glP)"><animate attributeName="opacity" values=".5;1;.5" dur="4.2s" repeatCount="indefinite"/></circle><circle r="2.5" fill="#d6f580" filter="url(#glP)"><animateMotion dur="4.6s" begin="0s" repeatCount="indefinite"><mpath href="#net0"/></animateMotion></circle><circle r="2.5" fill="#d6f580" filter="url(#glP)"><animateMotion dur="4.6s" begin="-2.3s" repeatCount="indefinite"><mpath href="#net0"/></animateMotion></circle><circle r="2.5" fill="#d6f580" filter="url(#glP)"><animateMotion dur="4.6s" begin="0s" repeatCount="indefinite"><mpath href="#net1"/></animateMotion></circle><circle r="2.5" fill="#d6f580" filter="url(#glP)"><animateMotion dur="4.6s" begin="-2.3s" repeatCount="indefinite"><mpath href="#net1"/></animateMotion></circle><circle r="2.5" fill="#d6f580" filter="url(#glP)"><animateMotion dur="4.6s" begin="0s" repeatCount="indefinite"><mpath href="#net2"/></animateMotion></circle><circle r="2.5" fill="#d6f580" filter="url(#glP)"><animateMotion dur="4.6s" begin="-2.3s" repeatCount="indefinite"><mpath href="#net2"/></animateMotion></circle><circle r="2.5" fill="#d6f580" filter="url(#glP)"><animateMotion dur="4.6s" begin="0s" repeatCount="indefinite"><mpath href="#net3"/></animateMotion></circle><circle r="2.5" fill="#d6f580" filter="url(#glP)"><animateMotion dur="4.6s" begin="-2.3s" repeatCount="indefinite"><mpath href="#net3"/></animateMotion></circle><circle r="2.5" fill="#d6f580" filter="url(#glP)"><animateMotion dur="4.6s" begin="0s" repeatCount="indefinite"><mpath href="#net4"/></animateMotion></circle><circle r="2.5" fill="#d6f580" filter="url(#glP)"><animateMotion dur="4.6s" begin="-2.3s" repeatCount="indefinite"><mpath href="#net4"/></animateMotion></circle><circle r="2.5" fill="#d6f580" filter="url(#glP)"><animateMotion dur="4.6s" begin="0s" repeatCount="indefinite"><mpath href="#net5"/></animateMotion></circle><circle r="2.5" fill="#d6f580" filter="url(#glP)"><animateMotion dur="4.6s" begin="-2.3s" repeatCount="indefinite"><mpath href="#net5"/></animateMotion></circle><circle r="2.5" fill="#d6f580" filter="url(#glP)"><animateMotion dur="4.6s" begin="0s" repeatCount="indefinite"><mpath href="#net6"/></animateMotion></circle><circle r="2.5" fill="#d6f580" filter="url(#glP)"><animateMotion dur="4.6s" begin="-2.3s" repeatCount="indefinite"><mpath href="#net6"/></animateMotion></circle><circle r="2.5" fill="#d6f580" filter="url(#glP)"><animateMotion dur="4.6s" begin="0s" repeatCount="indefinite"><mpath href="#net7"/></animateMotion></circle><circle r="2.5" fill="#d6f580" filter="url(#glP)"><animateMotion dur="4.6s" begin="-2.3s" repeatCount="indefinite"><mpath href="#net7"/></animateMotion></circle><circle r="2.5" fill="#d6f580" filter="url(#glP)"><animateMotion dur="4.6s" begin="0s" repeatCount="indefinite"><mpath href="#net8"/></animateMotion></circle><circle r="2.5" fill="#d6f580" filter="url(#glP)"><animateMotion dur="4.6s" begin="-2.3s" repeatCount="indefinite"><mpath href="#net8"/></animateMotion></circle><circle r="2.5" fill="#d6f580" filter="url(#glP)"><animateMotion dur="4.6s" begin="0s" repeatCount="indefinite"><mpath href="#net9"/></animateMotion></circle><circle r="2.5" fill="#d6f580" filter="url(#glP)"><animateMotion dur="4.6s" begin="-2.3s" repeatCount="indefinite"><mpath href="#net9"/></animateMotion></circle>
+      <rect width="1440" height="120" fill="url(#fadeT)"/>
+    </svg></div>
+      <div class="wrap hero__in">
+        <span class="eyebrow">Para sua Empresa</span>
+        <h1>Bem-vindo ao Futuro do <span class="hl">Comércio Local</span></h1>
+        <p class="hero__tag">Transforme conexões em renda.</p>
+        <div class="hero__eq">Mais Vendas <span class="eq">=</span> Mais Empregos <span class="eq">=</span> <em>Mais Renda por Minuto</em></div>
+        <p class="hero__sub">A tecnologia das Big Techs democratizada para gerar prosperidade no seu bairro — uma revolução baseada em colaboração, ciência de dados e consumo inteligente.</p>
+        <div class="hero__cta">
+          <a class="btn btn-lime" href="/credenciar"><i class="ti ti-building-store"></i> Credenciar minha empresa</a>
+          <a class="btn btn-ghost" href="#conta">Ver o potencial</a>
+        </div>
+        <p class="hero__mini">Crédito de R$ 450 para começar · Rede proprietária da loja · Tecnologia Quanta</p>
+      </div>
+    </section>
+
+    <!-- MARQUEE -->
+    <div class="mq"><div class="mq__l">Centenas de parceiros, milhares de produtos com cashback</div>
+      <div class="mq__track" id="mq"></div>
+    </div>
+
+    <!-- COST OF INACTION -->
+    <section class="turn"><div class="wrap reveal">
+      <h2>Todo dia, a renda do seu bairro <span class="hl">escorre pro celular</span>.</h2>
+      <p>As famílias têm um valor fixo pra gastar por mês. Sem um ecossistema seu, esse dinheiro vai para as grandes plataformas. A Quanta inverte o jogo: a renda fica circulando na sua rede — começando por você.</p>
+    </div></section>
+
+    <!-- STAT BAND -->
+    <section class="sec sec--dark"><span class="hero__orb hero__orb--1" style="opacity:.18"></span><div class="wrap reveal" style="position:relative;z-index:2;">
+      <div class="sec__head"><span class="eyebrow">O que está em jogo</span><h2>Enquanto você espera, o mercado se move</h2></div>
+      <div class="stt">
+        <div class="s"><div class="n" data-count="77" data-suffix="%">77%</div><div class="l">das compras já acontecem pelo celular</div></div>
+        <div class="s"><div class="n" data-count="26" data-prefix="até " data-suffix="%">até 26%</div><div class="l">é o que as grandes plataformas cobram do lojista em taxas</div></div>
+        <div class="s"><div class="n">4/min</div><div class="l">empresas fecham por minuto no Brasil</div></div>
+        <div class="s"><div class="n" data-count="7" data-suffix="×">7×</div><div class="l">o dinheiro circula mais numa comunidade com ecossistema próprio</div></div>
+      </div>
+      <p style="text-align:center;color:#aac4c8;margin-top:26px;font-size:15px;position:relative;z-index:2;">Em vez de pagar pedágio às plataformas, construa o <b style="color:#fff">seu</b> ecossistema.</p>
+    </div></section>
+
+    <!-- BIG TECH -->
+    <section class="sec"><div class="wrap big reveal">
+      <div>
+        <span class="eyebrow" style="color:var(--teal)">A jogada das gigantes</span>
+        <h2>A mesma estratégia das <span class="hl">big techs</span> — agora sua.</h2>
+        <p>As gigantes não vendem só: elas têm um ecossistema próprio onde as pessoas compram e voltam. Com a Quanta, a sua loja ganha a própria Rede Proprietária — você compra e vende dentro dela, e cada movimento gera retorno.</p>
+        <ul class="big__list">
+          <li><i class="ti ti-users"></i> Rede de clientes exclusiva e fiel da sua loja.</li>
+          <li><i class="ti ti-arrows-exchange"></i> Você ganha comprando E vendendo dentro da rede.</li>
+          <li><i class="ti ti-building-store"></i> Você ganha quando o cliente compra em outra loja.</li>
+          <li><i class="ti ti-businessplan"></i> Uma nova fonte de receita, além das vendas do balcão.</li>
+          <li><i class="ti ti-lock"></i> Carteira de clientes que é sua — fidelização de verdade.</li>
+        </ul>
+        <div class="princ"><span>Rede Proprietária</span><span>Expansão Viral</span><span>Captura Estratégica</span><span>Proteção de Mercado</span></div>
+      </div>
+      <div class="big__media">
+        <div class="eco"><svg viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="ringE" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#aee05a"/><stop offset="100%" stop-color="#3A9AAD"/></linearGradient>
+        <radialGradient id="nodeE" cx="40%" cy="32%" r="85%"><stop offset="0" stop-color="#143b46"/><stop offset="100%" stop-color="#0a1b22"/></radialGradient>
+        <radialGradient id="coreE" cx="40%" cy="32%" r="78%"><stop offset="0" stop-color="#cdef7a"/><stop offset="55%" stop-color="#98C73A"/><stop offset="100%" stop-color="#5f9e1f"/></radialGradient>
+        <filter id="glE" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        <filter id="glpE" x="-150%" y="-150%" width="400%" height="400%"><feGaussianBlur stdDeviation="1.8"/></filter>
+      </defs>
+      <g class="eco__lines" stroke="url(#ringE)" stroke-width="2.2" stroke-dasharray="3 7" fill="none" opacity=".5"><line x1="210" y1="210" x2="360" y2="210"/><line x1="210" y1="210" x2="316" y2="316"/><line x1="210" y1="210" x2="210" y2="360"/><line x1="210" y1="210" x2="104" y2="316"/><line x1="210" y1="210" x2="60" y2="210"/><line x1="210" y1="210" x2="104" y2="104"/><line x1="210" y1="210" x2="210" y2="60"/><line x1="210" y1="210" x2="316" y2="104"/></g>
+      <circle class="eco__ring" cx="210" cy="210" r="150" fill="none" stroke="rgba(152,199,58,.3)" stroke-width="1.5" stroke-dasharray="4 9"/>
+      <g class="eco__flow"><circle r="2.6" fill="#d6f580" filter="url(#glpE)"><animate attributeName="cx" values="360;210" dur="2.8s" begin="-0.00s" repeatCount="indefinite"/><animate attributeName="cy" values="210;210" dur="2.8s" begin="-0.00s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.15;.7;1" dur="2.8s" begin="-0.00s" repeatCount="indefinite"/></circle><circle r="2.6" fill="#d6f580" filter="url(#glpE)"><animate attributeName="cx" values="316;210" dur="2.8s" begin="-0.32s" repeatCount="indefinite"/><animate attributeName="cy" values="316;210" dur="2.8s" begin="-0.32s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.15;.7;1" dur="2.8s" begin="-0.32s" repeatCount="indefinite"/></circle><circle r="2.6" fill="#d6f580" filter="url(#glpE)"><animate attributeName="cx" values="210;210" dur="2.8s" begin="-0.64s" repeatCount="indefinite"/><animate attributeName="cy" values="360;210" dur="2.8s" begin="-0.64s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.15;.7;1" dur="2.8s" begin="-0.64s" repeatCount="indefinite"/></circle><circle r="2.6" fill="#d6f580" filter="url(#glpE)"><animate attributeName="cx" values="104;210" dur="2.8s" begin="-0.96s" repeatCount="indefinite"/><animate attributeName="cy" values="316;210" dur="2.8s" begin="-0.96s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.15;.7;1" dur="2.8s" begin="-0.96s" repeatCount="indefinite"/></circle><circle r="2.6" fill="#d6f580" filter="url(#glpE)"><animate attributeName="cx" values="60;210" dur="2.8s" begin="-1.28s" repeatCount="indefinite"/><animate attributeName="cy" values="210;210" dur="2.8s" begin="-1.28s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.15;.7;1" dur="2.8s" begin="-1.28s" repeatCount="indefinite"/></circle><circle r="2.6" fill="#d6f580" filter="url(#glpE)"><animate attributeName="cx" values="104;210" dur="2.8s" begin="-1.60s" repeatCount="indefinite"/><animate attributeName="cy" values="104;210" dur="2.8s" begin="-1.60s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.15;.7;1" dur="2.8s" begin="-1.60s" repeatCount="indefinite"/></circle><circle r="2.6" fill="#d6f580" filter="url(#glpE)"><animate attributeName="cx" values="210;210" dur="2.8s" begin="-1.92s" repeatCount="indefinite"/><animate attributeName="cy" values="60;210" dur="2.8s" begin="-1.92s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.15;.7;1" dur="2.8s" begin="-1.92s" repeatCount="indefinite"/></circle><circle r="2.6" fill="#d6f580" filter="url(#glpE)"><animate attributeName="cx" values="316;210" dur="2.8s" begin="-2.24s" repeatCount="indefinite"/><animate attributeName="cy" values="104;210" dur="2.8s" begin="-2.24s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.15;.7;1" dur="2.8s" begin="-2.24s" repeatCount="indefinite"/></circle></g>
+      <g class="eco__nodes" filter="url(#glE)"><g><circle cx="360" cy="210" r="26" fill="url(#nodeE)" stroke="url(#ringE)" stroke-width="2"/><g transform="translate(360,210)" stroke="#d4ef83" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M-12 -7 h4 l3 15 h12 l3 -10 h-15"/><circle cx="-3" cy="11" r="1.8" fill="#d4ef83" stroke="none"/><circle cx="7" cy="11" r="1.8" fill="#d4ef83" stroke="none"/></g></g><g><circle cx="316" cy="316" r="26" fill="url(#nodeE)" stroke="url(#ringE)" stroke-width="2"/><g transform="translate(316,316)" stroke="#d4ef83" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M-12 -5 h24 M-12 -5 l2 -6 h20 l2 6 M-10 -5 v15 h20 v-15 M-3 10 v-7 h6 v7"/></g></g><g><circle cx="210" cy="360" r="26" fill="url(#nodeE)" stroke="url(#ringE)" stroke-width="2"/><g transform="translate(210,360)" stroke="#d4ef83" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="-5" cy="-5" r="3.4"/><circle cx="5" cy="-5" r="3.4"/><path d="M-12 9 c0-5 3.2-7 7-7 M12 9 c0-5 -3.2-7 -7-7 M-7 10 c0-5 3-7 7-7 s7 2 7 7"/></g></g><g><circle cx="104" cy="316" r="26" fill="url(#nodeE)" stroke="url(#ringE)" stroke-width="2"/><g transform="translate(104,316)" stroke="#d4ef83" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M-8 -2 h16 l-1.4 13 h-13.2 z"/><path d="M-4.6 -2 a4.6 4.6 0 0 1 9.2 0"/></g></g><g><circle cx="60" cy="210" r="26" fill="url(#nodeE)" stroke="url(#ringE)" stroke-width="2"/><g transform="translate(60,210)" stroke="#d4ef83" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="0" cy="-5" r="4.6"/><path d="M-8 10 c0-6 3.6-9 8-9 s8 3 8 9"/></g></g><g><circle cx="104" cy="104" r="26" fill="url(#nodeE)" stroke="url(#ringE)" stroke-width="2"/><g transform="translate(104,104)" stroke="#d4ef83" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M-12 -5 h24 M-12 -5 l2 -6 h20 l2 6 M-10 -5 v15 h20 v-15 M-3 10 v-7 h6 v7"/></g></g><g><circle cx="210" cy="60" r="26" fill="url(#nodeE)" stroke="url(#ringE)" stroke-width="2"/><g transform="translate(210,60)" stroke="#d4ef83" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="0" cy="-5" r="4.6"/><path d="M-8 10 c0-6 3.6-9 8-9 s8 3 8 9"/></g></g><g><circle cx="316" cy="104" r="26" fill="url(#nodeE)" stroke="url(#ringE)" stroke-width="2"/><g transform="translate(316,104)" stroke="#d4ef83" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M-12 -7 h4 l3 15 h12 l3 -10 h-15"/><circle cx="-3" cy="11" r="1.8" fill="#d4ef83" stroke="none"/><circle cx="7" cy="11" r="1.8" fill="#d4ef83" stroke="none"/></g></g></g>
+      <circle cx="210" cy="210" r="62" fill="#98C73A" filter="url(#glE)" opacity=".22"><animate attributeName="opacity" values=".14;.3;.14" dur="4s" repeatCount="indefinite"/></circle>
+      <circle cx="210" cy="210" r="52" fill="url(#coreE)"/>
+      <circle cx="210" cy="210" r="52" fill="none" stroke="#fff" stroke-opacity=".25" stroke-width="2"/>
+      <g transform="translate(210,210)" stroke="#0f3a06" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M-15 -5 h30 M-15 -5 l2.5 -8 h25 l2.5 8 M-12 -5 v16 h24 v-16 M-4 11 v-8 h8 v8"/>
+      </g>
+    </svg></div>
+        <div class="big__badge"><div class="b" style="font-size:25px;">60 clientes <span style="color:var(--lime)">→</span> 10 mil</div><div class="s2">a base da sua loja vira milhares de compradores na rede · ganha quem compra <b>e</b> quem vende</div></div>
+      </div>
+    </div></section>
+
+    <!-- CALC -->
+    <section class="sec sec--alt" id="conta"><div class="wrap reveal">
+      <div class="sec__head"><span class="eyebrow">Faça a conta</span><h2>Quanto da renda das famílias você pode reter?</h2><p>Arraste pelo número de famílias fidelizadas e veja o consumo que pode circular no seu ecossistema.</p></div>
+      <div class="calc__card">
+        <div>
+          <div class="calc__label">Famílias fidelizadas na sua rede</div>
+          <div class="calc__v" id="fam">100</div>
+          <input type="range" id="range" min="10" max="1000" step="10" value="100" />
+          <div class="calc__hint">Considerando um consumo médio de R$ 700/mês por família.</div>
+        </div>
+        <div class="calc__res">
+          <div class="calc__rl">Consumo no seu ecossistema</div>
+          <div class="calc__big" id="month">R$ 70.000</div>
+          <div class="calc__sub" id="year">R$ 840.000 por ano em movimento</div>
+          <div style="margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.12);font-size:14px;color:#dff3e0;">Renda que <b style="color:#fff">fica na sua rede</b> — em vez de ir pro celular em outro lugar.</div>
+        </div>
+      </div>
+      <p class="calc__disc">Simulação ilustrativa de consumo potencial; não é promessa de faturamento. Depende do consumo real das famílias da sua rede.</p>
+    </div></section>
+
+    <!-- 3 PASSOS -->
+    <section class="sec"><div class="wrap reveal">
+      <div class="sec__head"><span class="eyebrow">Simples de começar</span><h2>Em 3 passos</h2></div>
+      <div class="steps">
+        <div class="step"><div class="step__ill step__ill--1"><i class="ti ti-building-store"></i></div><div class="step__b"><div class="step__n">1</div><h3>Credencie sua loja</h3><p>Ative a tecnologia Quanta (Plus PJ) e comece com R$ 450 de crédito para os primeiros cashbacks.</p></div></div>
+        <div class="step"><div class="step__ill step__ill--2"><i class="ti ti-heart-handshake"></i></div><div class="step__b"><div class="step__n">2</div><h3>Seus clientes ganham e voltam</h3><p>O cashback fideliza: o cliente volta mais, gasta mais e indica a sua loja.</p></div></div>
+        <div class="step"><div class="step__ill step__ill--3"><i class="ti ti-affiliate"></i></div><div class="step__b"><div class="step__n">3</div><h3>Construa sua rede e ganhe</h3><p>Sua Rede Proprietária cresce e você ganha em novas frentes — comprando, vendendo e credenciando.</p></div></div>
+      </div>
+    </div></section>
+
+    <!-- BENEFICIOS -->
+    <section class="sec sec--alt"><div class="wrap reveal">
+      <div class="sec__head"><span class="eyebrow">O que você leva</span><h2>Benefícios para a sua empresa</h2></div>
+      <div class="earn">
+        <div class="ecard"><div class="ic"><i class="ti ti-affiliate"></i></div><h3>Rede Proprietária</h3><p>Uma rede de clientes exclusiva da loja, com ganhos em níveis dentro do ecossistema.</p></div>
+        <div class="ecard"><div class="ic"><i class="ti ti-gift"></i></div><h3>R$ 450 de crédito</h3><p>R$ 150/mês por 3 meses para pagar o cashback dos seus clientes e acelerar a fidelização.</p></div>
+        <div class="ecard"><div class="ic"><i class="ti ti-businessplan"></i></div><h3>Nova fonte de receita</h3><p>Você ganha comprando e vendendo na rede — além do caixa do balcão.</p></div>
+        <div class="ecard"><div class="ic"><i class="ti ti-heart-handshake"></i></div><h3>Fidelização real</h3><p>Cashback que faz o cliente voltar — e uma carteira que é sua.</p></div>
+        <div class="ecard"><div class="ic"><i class="ti ti-building-store"></i></div><h3>Credencie outras empresas</h3><p>Ganhe bônus de credenciamento e Bônus Stone trazendo novos parceiros.</p></div>
+        <div class="ecard"><div class="ic"><i class="ti ti-device-mobile"></i></div><h3>Tecnologia Quanta</h3><p>Plataforma (SaaS) + Quanta IA para gerir sua rede, tudo pelo celular.</p></div>
+      </div>
+    </div></section>
+
+    <!-- CREDITO -->
+    <section class="credit"><div class="credit__bg"></div><div class="wrap credit__in reveal">
+      <span class="eyebrow">Comece com a Quanta pagando por você</span>
+      <h2>R$ 450 de crédito para os <span class="hl">primeiros cashbacks</span></h2>
+      <div class="v">R$ 150 <span style="font-size:.38em;color:#cfe2e5;">/mês × 3 meses</span></div>
+      <p>A Quanta entra com o crédito para você dar cashback aos seus clientes desde o primeiro dia e acelerar a construção da sua rede. (Campanha por tempo limitado; uso em até 90 dias.)</p>
+    </div></section>
+
+    <!-- CTA -->
+    <section class="cta"><div class="cta__bg"></div><div class="wrap cta__in reveal">
+      <h2>Pare de entregar seus clientes <span class="hl">à concorrência online</span>.</h2>
+      <p>Credencie sua empresa, construa a sua rede proprietária e retenha a renda das famílias no seu ecossistema.</p>
+      <a class="btn btn-lime" href="/credenciar"><i class="ti ti-building-store"></i> Credenciar minha empresa</a>
+    </div></section>
+  </main>
+</template>
+
+<script setup lang="ts">
+definePageMeta({ layout: 'layout-home' })
+useSeoMeta({
+  title: "Para sua Empresa \u2014 rede propriet\u00e1ria | Quanta Shop",
+  description: "A estrat\u00e9gia das big techs, agora sua: atraia e fidelize clientes, ganhe quando algu\u00e9m compra e quando algu\u00e9m vende, e crie a sua Zona Econ\u00f4mica Digital.",
+})
+useHead({
+  link: [
+    { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+    { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
+    { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Jost:wght@400;500;600;700;800;900&display=swap' },
+    { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.11.0/dist/tabler-icons.min.css' },
+  ],
+})
+
+onMounted(() => {
+    const L='https://ui.awin.com/images/upload/merchant/profile/';
+    const ids=['17665','17629','112756','33061','112634','17846','78382','47165','19672'];
+    const names=['Carrefour','Casas Bahia','Lacoste','LG','Zé Delivery','Diesel','Panasonic','Drogaria Venancio',"Café L'or"];
+    const mk=()=>ids.map((id,i)=>`<div class="mq__chip"><img src="${L}${id}.png" alt="${names[i]}" onerror="this.parentElement.style.display='none'"></div>`).join('');
+    document.getElementById('mq').innerHTML=mk()+mk();
+
+    const fmt=n=>'R$ '+Math.round(n).toLocaleString('pt-BR');
+    const range=document.getElementById('range');
+    function upd(){const v=+range.value,pct=(v-10)/(1000-10)*100;range.style.background=`linear-gradient(90deg,var(--lime) 0%,var(--lime) ${pct}%,#dfe6e8 ${pct}%)`;document.getElementById('fam').textContent=v.toLocaleString('pt-BR');const m=v*700;document.getElementById('month').textContent=fmt(m);document.getElementById('year').textContent=fmt(m*12)+' por ano em movimento';}
+    range.addEventListener('input',upd);upd();
+
+    const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');
+     e.target.querySelectorAll('[data-count]').forEach(el=>{const to=+el.getAttribute('data-count');const pre=el.getAttribute('data-prefix')||'';const suf=el.getAttribute('data-suffix')||'';const t0=performance.now();(function st(t){const p=Math.min(1,(t-t0)/900);el.textContent=pre+Math.round(to*(1-Math.pow(1-p,3)))+suf;if(p<1)requestAnimationFrame(st);})(t0);});
+     io.unobserve(e.target);}});},{threshold:.16});
+    document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+})
+</script>
+
+<style scoped>
+.pe-page{--teal:#2F7785;--teal-d:#225F6B;--lime:#98C73A;--lime-d:#7aad1f;--ink:#13212a;--bg:#f4f6f7;--gold:#FFB342;}
+  *{box-sizing:border-box;margin:0;padding:0;} .pe-page{font-family:'Inter','Jost',sans-serif;color:var(--ink);background:#fff;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 24px;}
+  h1,h2,h3{font-family:'Jost','Inter',sans-serif;letter-spacing:-.02em;line-height:1.04;}
+  .eyebrow{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;}
+  .btn{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:15px;border-radius:999px;padding:15px 28px;text-decoration:none;cursor:pointer;border:0;transition:transform .2s,box-shadow .2s;}
+  .btn-lime{background:linear-gradient(180deg,var(--lime),var(--lime-d));color:#173a0a;box-shadow:0 14px 34px rgba(152,199,58,.4);}
+  .btn-lime:hover{transform:translateY(-3px);box-shadow:0 20px 44px rgba(152,199,58,.5);}
+  .btn-ghost{background:rgba(255,255,255,.06);border:1.5px solid rgba(255,255,255,.4);color:#fff;backdrop-filter:blur(6px);}
+  .btn-ghost:hover{background:rgba(255,255,255,.14);}
+
+  /* grão global */
+  body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;opacity:.05;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");}
+
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1);}
+  .reveal.in{opacity:1;transform:none;}
+  .ph{position:relative;overflow:hidden;background:linear-gradient(150deg,#1a4651,#0f2730);}
+  .ph img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .9s cubic-bezier(.2,.7,.2,1);}
+  .ph:hover img{transform:scale(1.06);}
+  .duo img{filter:grayscale(100%) contrast(1.05);}
+  .duo::after{content:'';position:absolute;inset:0;background:var(--teal);mix-blend-mode:multiply;opacity:.55;pointer-events:none;z-index:1;}
+  .duo::before{content:'';position:absolute;inset:0;background:var(--lime);mix-blend-mode:screen;opacity:.10;pointer-events:none;z-index:2;}
+
+  /* HERO */
+  .hero{position:relative;overflow:hidden;color:#eef6f7;}
+  .hero__bg{position:absolute;inset:0;z-index:0;background:linear-gradient(150deg,#13343d,#0c1c24);}
+  .hero__bg img{width:100%;height:100%;object-fit:cover;animation:ken 22s ease-in-out infinite alternate;opacity:.5;filter:grayscale(100%);}
+  @keyframes ken{from{transform:scale(1.05) translateY(0);}to{transform:scale(1.18) translateY(-2%);}}
+  .hero__ov{position:absolute;inset:0;z-index:1;background:radial-gradient(900px 600px at 78% 12%,rgba(58,154,173,.45),transparent 60%),linear-gradient(110deg,#0c1c24 18%,rgba(12,28,36,.78) 48%,rgba(12,28,36,.35) 100%);}
+  .hero__orb{position:absolute;border-radius:50%;filter:blur(70px);z-index:1;opacity:.5;animation:float 16s ease-in-out infinite;}
+  .hero__orb--1{width:380px;height:380px;background:#3A9AAD;top:-90px;right:14%;}
+  .hero__orb--2{width:300px;height:300px;background:#98C73A;bottom:-110px;left:6%;opacity:.3;animation-delay:-6s;}
+  @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-30px);}}
+  .hero__wm{position:absolute;right:-110px;top:50%;transform:translateY(-50%);width:560px;max-width:52%;opacity:.06;z-index:1;}
+  .hero__in{position:relative;z-index:2;padding:96px 0 88px;}
+  .hero .eyebrow{color:#9fe0b0;opacity:0;animation:up .7s .1s forwards;}
+  .hero h1{color:#fff;font-size:clamp(34px,5.2vw,62px);font-weight:800;margin:16px 0 0;}
+  .hero h1 span{display:block;opacity:0;animation:up .8s forwards;}
+  .hero h1 .l1{animation-delay:.18s;} .hero h1 .l2{animation-delay:.32s;} .hero h1 .hl{color:var(--lime);animation-delay:.46s;}
+  @keyframes up{from{opacity:0;transform:translateY(26px);}to{opacity:1;transform:none;}}
+  .hero__sub{font-size:clamp(16px,2.1vw,21px);color:#cfe2e5;max-width:600px;margin:24px 0 0;line-height:1.55;opacity:0;animation:up .8s .6s forwards;}
+  .hero__cta{display:flex;gap:14px;flex-wrap:wrap;margin-top:32px;opacity:0;animation:up .8s .74s forwards;}
+  .hero__mini{margin-top:26px;font-size:13px;color:#9fb6bb;opacity:0;animation:up .8s .88s forwards;}
+
+  /* MARQUEE parceiros */
+  .mq{background:#0c1c24;color:#9fb6bb;padding:26px 0;overflow:hidden;border-top:1px solid rgba(255,255,255,.06);}
+  .mq__l{text-align:center;font-size:12px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:16px;}
+  .mq__track{display:flex;gap:22px;width:max-content;animation:scroll 34s linear infinite;align-items:center;}
+  .mq:hover .mq__track{animation-play-state:paused;}
+  @keyframes scroll{to{transform:translateX(-50%);}}
+  .mq__chip{flex:0 0 auto;background:#fff;border-radius:12px;height:56px;min-width:124px;display:grid;place-items:center;padding:10px 18px;box-shadow:0 6px 16px rgba(0,0,0,.22);transition:transform .3s;}
+  .mq__chip:hover{transform:translateY(-3px);}
+  .mq__chip img{height:30px;width:auto;max-width:120px;object-fit:contain;}
+
+  .sec{padding:96px 0;}
+  .sec--alt{background:var(--bg);}
+  .sec--dark{background:linear-gradient(160deg,#0f2730,#0a1820);color:#eef6f7;position:relative;overflow:hidden;}
+  .sec__head{text-align:center;max-width:780px;margin:0 auto 50px;}
+  .sec__head .eyebrow{color:var(--teal);}
+  .sec--dark .sec__head .eyebrow{color:#9fe0b0;}
+  .sec__head h2{font-size:clamp(28px,4.2vw,46px);font-weight:800;margin:12px 0;}
+  .sec--dark .sec__head h2{color:#fff;}
+  .sec__head p{color:#4a5b60;font-size:17px;}
+  .sec--dark .sec__head p{color:#aac4c8;}
+
+  .turn{padding:96px 0;text-align:center;background:var(--bg);}
+  .turn h2{font-size:clamp(28px,4.4vw,46px);font-weight:800;max-width:900px;margin:0 auto;}
+  .turn h2 .hl{color:var(--lime-d);position:relative;}
+  .turn p{color:#4a5b60;font-size:18px;max-width:680px;margin:18px auto 0;line-height:1.6;}
+
+  .stt{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;}
+  .s{text-align:center;padding:24px 12px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);}
+  .s .n{font-family:'Jost',sans-serif;font-weight:800;font-size:clamp(30px,4.4vw,46px);color:var(--lime);}
+  .s .l{font-size:12.5px;color:#aac4c8;margin-top:6px;line-height:1.45;}
+
+  .big{display:grid;grid-template-columns:.95fr 1.05fr;gap:54px;align-items:center;}
+  .big h2{font-size:clamp(28px,3.8vw,42px);font-weight:800;}
+  .big h2 .hl{color:var(--lime-d);}
+  .big p{color:#4a5b60;font-size:16.5px;margin:16px 0;line-height:1.65;}
+  .big__list{list-style:none;display:flex;flex-direction:column;gap:12px;}
+  .big__list li{display:flex;gap:11px;align-items:flex-start;font-size:15.5px;color:#33454a;}
+  .big__list li .ti{color:var(--lime-d);font-size:21px;margin-top:1px;}
+  .princ{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px;}
+  .princ span{font-size:12px;font-weight:700;color:var(--teal-d);background:rgba(47,119,133,.08);border:1px solid rgba(47,119,133,.18);border-radius:999px;padding:7px 13px;}
+  .big__media{position:relative;}
+  .big__img{border-radius:24px;aspect-ratio:4/4.4;box-shadow:0 30px 70px rgba(15,39,48,.22);}
+  .big__badge{position:absolute;left:-22px;bottom:30px;background:#fff;border-radius:18px;padding:18px 22px;box-shadow:0 20px 44px rgba(15,39,48,.18);}
+  .big__badge .b{font-family:'Jost',sans-serif;font-weight:800;font-size:30px;color:var(--lime-d);line-height:1;}
+  .big__badge .s2{font-size:12px;color:#6b7c81;margin-top:4px;}
+
+  .calc__card{background:#fff;border:1px solid #e8eef0;border-radius:26px;box-shadow:0 26px 60px rgba(15,39,48,.1);padding:40px;max-width:880px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:38px;align-items:center;}
+  .calc__label{font-size:14px;color:#6b7c81;font-weight:600;}
+  .calc__v{font-family:'Jost',sans-serif;font-weight:800;font-size:42px;color:var(--ink);margin:6px 0 18px;}
+  input[type=range]{width:100%;height:6px;border-radius:999px;-webkit-appearance:none;appearance:none;background:#dfe6e8;outline:none;}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;background:#fff;border:5px solid var(--lime-d);cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,.18);}
+  .calc__hint{font-size:12px;color:#9aa9ae;margin-top:10px;}
+  .calc__res{background:linear-gradient(160deg,#13343d,#0c1c24);border-radius:20px;padding:30px;color:#eef6f7;text-align:center;}
+  .calc__rl{font-size:13px;color:#9fe0b0;font-weight:700;text-transform:uppercase;letter-spacing:.06em;}
+  .calc__big{font-family:'Jost',sans-serif;font-weight:800;font-size:clamp(38px,7vw,56px);color:var(--lime);margin:8px 0;line-height:1;}
+  .calc__sub{font-size:14px;color:#cfe2e5;}
+  .calc__disc{font-size:12px;color:#9aa9ae;text-align:center;margin-top:16px;}
+
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+  .step{background:#fff;border:1px solid #e8eef0;border-radius:20px;overflow:hidden;transition:transform .25s,box-shadow .25s;}
+  .step:hover{transform:translateY(-6px);box-shadow:0 24px 50px rgba(15,39,48,.13);}
+  .step__img{aspect-ratio:16/9;}
+  .step__b{padding:24px 22px;}
+  .step__n{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:10px;color:#173a0a;background:var(--lime);font-family:'Jost',sans-serif;font-weight:800;margin-bottom:10px;}
+  .step h3{font-size:18px;font-weight:800;}
+  .step p{color:#4a5b60;font-size:14px;line-height:1.5;margin-top:6px;}
+
+  .earn{display:flex;flex-wrap:wrap;justify-content:center;gap:18px;}
+  .ecard{flex:1 1 300px;max-width:344px;background:#fff;border:1px solid #e8eef0;border-radius:18px;padding:26px;transition:transform .25s,box-shadow .25s;}
+  .ecard:hover{transform:translateY(-5px);box-shadow:0 20px 44px rgba(15,39,48,.12);}
+  .ecard .ic{width:52px;height:52px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(150deg,rgba(47,119,133,.14),rgba(152,199,58,.14));color:var(--teal);font-size:26px;margin-bottom:13px;}
+  .ecard h3{font-size:16px;font-weight:800;}
+  .ecard p{color:#4a5b60;font-size:13.5px;line-height:1.55;margin-top:6px;}
+
+  .eco{position:relative;aspect-ratio:1/1.05;border-radius:24px;display:grid;place-items:center;background:radial-gradient(circle at 50% 45%,rgba(47,119,133,.20),rgba(15,39,48,.02) 70%);box-shadow:0 30px 70px rgba(15,39,48,.18);overflow:hidden;}
+  .eco svg{width:100%;max-width:460px;}
+  .eco__lines line{animation:flow 2.4s linear infinite;}
+  @keyframes flow{to{stroke-dashoffset:-20;}}
+  .eco__ring{animation:spin 32s linear infinite;transform-origin:210px 210px;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .eco__nodes>g{transform-box:fill-box;transform-origin:center;animation:nodp 3.2s ease-in-out infinite;}
+  .eco__nodes>g:nth-child(2){animation-delay:.3s}.eco__nodes>g:nth-child(3){animation-delay:.6s}.eco__nodes>g:nth-child(4){animation-delay:.9s}.eco__nodes>g:nth-child(5){animation-delay:1.2s}.eco__nodes>g:nth-child(6){animation-delay:1.5s}.eco__nodes>g:nth-child(7){animation-delay:1.8s}.eco__nodes>g:nth-child(8){animation-delay:2.1s}
+  @keyframes nodp{0%,100%{opacity:.8}50%{opacity:1}}
+  .step__ill{aspect-ratio:16/9;display:grid;place-items:center;position:relative;overflow:hidden;}
+  .step__ill i{font-size:64px;color:#fff;position:relative;z-index:1;}
+  .step__ill--1{background:linear-gradient(150deg,#2F7785,#1a4651);}
+  .step__ill--2{background:linear-gradient(150deg,#3A9AAD,#225F6B);}
+  .step__ill--3{background:linear-gradient(150deg,#7aad1f,#2F7785);}
+  .step__ill::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 70% 20%,rgba(255,255,255,.18),transparent 55%);}
+  .credit{position:relative;overflow:hidden;color:#eef6f7;padding:96px 0;text-align:center;}
+  .credit__bg{position:absolute;inset:0;z-index:0;background:linear-gradient(160deg,#13343d,#0a1820);}
+  .credit__bg img{width:100%;height:100%;object-fit:cover;opacity:.22;}
+  .credit__in{position:relative;z-index:1;}
+  .credit .eyebrow{color:var(--gold);}
+  .credit h2{color:#fff;font-size:clamp(28px,4.2vw,44px);font-weight:800;margin:12px 0;}
+  .credit h2 .hl{color:var(--lime);}
+  .credit .v{font-family:'Jost',sans-serif;font-weight:800;font-size:clamp(44px,8vw,72px);color:var(--lime);line-height:1;margin:8px 0;}
+  .credit p{color:#cfe2e5;max-width:640px;margin:10px auto 0;font-size:15px;}
+
+  .cta{position:relative;overflow:hidden;color:#fff;padding:104px 0;text-align:center;}
+  .cta__bg{position:absolute;inset:0;z-index:0;background:radial-gradient(700px 400px at 80% 0,rgba(58,154,173,.5),transparent 60%),linear-gradient(160deg,#0f2730,#0a1820);}
+  .cta__in{position:relative;z-index:1;}
+  .cta h2{font-size:clamp(30px,4.6vw,50px);font-weight:800;}
+  .cta h2 .hl{color:var(--lime);}
+  .cta p{color:#cfe2e5;margin:18px 0 32px;font-size:17px;}
+
+  .note{background:#fff7e6;border:1px solid #ffe1a8;color:#7a5300;font-size:13px;padding:10px 16px;text-align:center;}
+  @media(max-width:880px){.big,.calc__card,.steps,.stt{grid-template-columns:1fr;}.stt{grid-template-columns:repeat(2,1fr);}.big__badge{left:14px;}}
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;}.reveal{opacity:1;transform:none;transition:none;}.hero .eyebrow,.hero h1 span,.hero__sub,.hero__cta,.hero__mini{opacity:1;animation:none;}}
+
+  /* ===== Empresa hero (Futuro do Comércio Local) ===== */
+  .hero{position:relative;overflow:hidden;background:linear-gradient(180deg,#0b1a22,#0c1c24);color:#eef6f7;min-height:100svh;display:flex;flex-direction:column;justify-content:flex-start;}
+  .hero__scene{position:absolute;left:0;right:0;bottom:0;z-index:0;pointer-events:none;}
+  .emp-scene{width:100%;height:auto;display:block;}
+  .hero__in{position:relative;z-index:2;text-align:center;padding:clamp(26px,5.5vh,52px) 0 30px;}
+  .hero .eyebrow{color:#9fe0b0;}
+  .hero h1{color:#fff;font-size:clamp(26px,4.6vw,52px);font-weight:800;margin:10px 0 0;line-height:1.04;}
+  .hero h1 .hl{color:var(--lime);}
+  .hero__tag{font-size:clamp(15px,2vw,20px);color:#cfe2e5;margin-top:8px;font-weight:600;}
+  .hero__eq{margin:clamp(14px,3vh,28px) auto 0;font-family:'Jost','Inter',sans-serif;font-weight:800;font-size:clamp(18px,3vw,34px);line-height:1.12;color:#fff;text-shadow:0 3px 20px rgba(0,0,0,.6);max-width:1000px;padding:0 16px;}
+  .hero__eq .eq{color:var(--lime);margin:0 .16em;}
+  .hero__eq em{color:var(--lime);font-style:normal;}
+  .hero__sub{font-size:clamp(14px,1.7vw,17px);color:#bcd6da;max-width:720px;margin:clamp(12px,2.2vh,20px) auto 0;line-height:1.55;}
+  .hero__cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:20px;}
+  .hero__mini{margin-top:14px;font-size:12.5px;color:#9fb6bb;}
+  @media(max-width:600px){.hero{min-height:auto;padding-bottom:30px;}.hero__scene{position:relative;margin-top:18px;}}
+</style>
