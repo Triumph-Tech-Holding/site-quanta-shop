@@ -383,7 +383,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px;
 
 /* cta */
 .cta { background: radial-gradient(700px 400px at 80% 0, rgba(58,154,173,.5), transparent 60%), linear-gradient(160deg, #0f2730, #0c1c24); color: #fff; padding: 84px 0; text-align: center; }
-.cta h2 { font-size: clamp(28px, 4.5vw, 46px); font-weight: 800; }
+.cta h2 { font-size: clamp(28px, 4.5vw, 46px); font-weight: 800; color: #eaf3f5; }
 .cta h2 .hl { color: var(--lime); }
 .cta p { color: #c8dde0; margin: 16px 0 30px; font-size: 17px; }
 
