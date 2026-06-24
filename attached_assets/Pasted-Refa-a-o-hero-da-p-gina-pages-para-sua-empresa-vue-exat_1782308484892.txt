@@ -1,0 +1,60 @@
+Refaça o hero da página pages/para-sua-empresa.vue exatamente com esta composição (não altere o resto da página). Stack: Nuxt 3 SPA, <script setup lang="ts">, CSS scoped, layout layout-home. Não use Bootstrap nem Tailwind. Animações só com CSS/SMIL. Todo o CSS namespeado sob .pe-page (o :root/body do design viram .pe-page).
+
+Tokens e fontes
+
+
+Cores: teal #2F7785, teal-escuro #225F6B, lime #98C73A, fundo #0c1c24/#0b1a22.
+Fontes: Jost (display, títulos) + Inter (corpo). Carregar via useHead (Google Fonts).
+
+
+Estrutura do hero (3 camadas verticais)
+
+<section class="hero"> com position:relative; overflow:hidden; min-height:100svh; display:flex; flex-direction:column; background:linear-gradient(180deg,#0b1a22,#0c1c24); color:#eef6f7; text-align:center;
+
+
+Topo (texto, z-index 2):
+
+eyebrow lime PARA SUA EMPRESA (uppercase, letter-spacing).
+<h1> Jost 800, clamp(26px,4.6vw,52px): "Bem-vindo ao Futuro do " em branco + "Comércio Local" em lime (#98C73A).
+tagline #cfe2e5: "Transforme conexões em renda."
+
+
+
+Cena (SVG full-bleed, z-index 0) — position:absolute; left:0; right:0; bottom:0; width:100%. SVG viewBox="0 0 1440 340", preserveAspectRatio="xMidYMax meet", width:100%; height:auto. Conteúdo:
+
+Céu em gradiente escuro + glow radial teal/dusk ao centro.
+~10 fachadas de loja de uma borda à outra (1440 de largura): retângulos escuros #0a1822, toldos coloridos alternando teal/lime/gold, 2 janelas acesas (cor quente #ffd27a) e uma portinha em cada.
+Em cima de cada loja, um nó luminoso lime (pulsando).
+Arcos verdes (gradiente lime→teal) ligando os nós e convergindo para um celular central (x=720). O celular tem mini-dashboard: cabeçalho "Agência", "R$" grande, "renda da rede", 3 barras em tendência de alta + seta; um cone de luz e glow pulsante atrás.
+Partículas lime percorrendo cada arco em direção ao celular (<animateMotion> com <mpath> no path do arco, begins escalonados).
+Estrelas piscando no céu + linha de chão com leve glow lime.
+Retângulo de fade no topo (gradiente do fundo → transparente) pra fundir a cena no <section>.
+
+
+
+Base (texto, z-index 2):
+
+Equação (sobreposta, position:absolute; top:30% da cena, z-index 2, centralizada, text-shadow): em Jost 800, clamp(18px,3vw,34px):
+Mais Vendas (branco) = (lime) Mais Empregos (branco) = (lime) Mais Renda por Minuto (lime).
+descrição #bcd6da, max-width:780px: "A tecnologia das Big Techs democratizada para gerar prosperidade no seu bairro — uma revolução baseada em colaboração, ciência de dados e consumo inteligente."
+2 CTAs centralizados: Credenciar minha empresa (botão lime, ícone ti ti-building-store) + Ver o potencial (botão ghost, âncora #conta).
+linha mini: Crédito de R$ 450 para começar · Rede proprietária da loja · Tecnologia Quanta.
+
+
+
+
+
+Comportamento / responsivo
+
+
+Tudo deve caber na primeira dobra com os botões visíveis (por isso min-height:100svh com a cena ancorada no rodapé e o texto compacto em cima).
+Mobile (≤600px): a cena passa a position:relative (abaixo do texto) pra não espremer; reduzir tamanhos com clamp().
+A arte deve encostar nas duas laterais (full-bleed), sem faixa central com vazios.
+Ícones Tabler: incluir https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.11.0/dist/tabler-icons.min.css no useHead.
+
+
+SEO
+
+useSeoMeta({ title: 'Para sua Empresa — rede proprietária | Quanta Shop', description: 'A estratégia das big techs, agora sua: atraia e fidelize clientes, ganhe quando alguém compra e quando alguém vende, e crie a sua Zona Econômica Digital.' })
+
+Mantenha o restante da página intacto. Valide no preview ($REPLIT_DEV_DOMAIN) em desktop e em 375px, sem overflow horizontal e com as animações rodando.
