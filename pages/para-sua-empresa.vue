@@ -301,15 +301,15 @@ h1, h2, h3 { font-family: 'Jost', 'Inter', sans-serif; letter-spacing: -.02em; l
 .hero__orb--1 { width: 380px; height: 380px; background: #3A9AAD; top: -90px; right: 14%; }
 .hero__orb--2 { width: 300px; height: 300px; background: #98C73A; bottom: -110px; left: 6%; opacity: .3; animation-delay: -6s; }
 @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-30px); } }
-.hero__in { position: relative; z-index: 2; text-align: center; padding: clamp(26px, 5.5vh, 52px) 0 30px; }
+.hero__in { position: relative; z-index: 2; text-align: center; padding: clamp(64px, 10vh, 110px) 0 44px; }
 .hero .eyebrow { color: #9fe0b0; }
-.hero h1 { color: #fff; font-size: clamp(26px, 4.6vw, 52px); font-weight: 800; margin: 10px 0 0; line-height: 1.04; }
+.hero h1 { color: #fff; font-size: clamp(38px, 5.8vw, 72px); font-weight: 800; margin: 12px 0 0; line-height: 1.04; }
 .hero h1 .hl { color: var(--lime); }
-.hero__tag { font-size: clamp(15px, 2vw, 20px); color: #cfe2e5; margin-top: 8px; font-weight: 600; }
-.hero__eq { margin: clamp(14px, 3vh, 28px) auto 0; font-family: 'Jost', 'Inter', sans-serif; font-weight: 800; font-size: clamp(18px, 3vw, 34px); line-height: 1.12; color: #fff; text-shadow: 0 3px 20px rgba(0, 0, 0, .6); max-width: 1000px; padding: 0 16px; }
+.hero__tag { font-size: clamp(16px, 2vw, 22px); color: #cfe2e5; margin-top: 10px; font-weight: 600; }
+.hero__eq { margin: clamp(18px, 3.5vh, 34px) auto 0; font-family: 'Jost', 'Inter', sans-serif; font-weight: 800; font-size: clamp(20px, 3.6vw, 44px); line-height: 1.12; color: #fff; text-shadow: 0 3px 20px rgba(0, 0, 0, .6); max-width: 1100px; padding: 0 16px; }
 .hero__eq .eq { color: var(--lime); margin: 0 .16em; }
 .hero__eq em { color: var(--lime); font-style: normal; }
-.hero__sub { font-size: clamp(14px, 1.7vw, 17px); color: #bcd6da; max-width: 720px; margin: clamp(12px, 2.2vh, 20px) auto 0; line-height: 1.55; }
+.hero__sub { font-size: clamp(14px, 1.7vw, 17px); color: #bcd6da; max-width: 720px; margin: clamp(14px, 2.5vh, 24px) auto 0; line-height: 1.55; }
 .hero__cta { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
 .hero__mini { margin-top: 14px; font-size: 12.5px; color: #9fb6bb; }
 @media (max-width: 600px) { .hero { min-height: auto; padding-bottom: 30px; } .hero__scene { position: relative; margin-top: 18px; } }
