@@ -1,0 +1,31 @@
+O favicon do Google deixou os chips desiguais (cada marca com um iconezinho de tamanho/estilo diferente, alguns com fundo colorido). Remova o favicon. O que dá o padrão é o chip branco uniforme; dentro dele vai a logo oficial (se existir como arquivo local) OU o nome da marca como wordmark — todos idênticos.
+
+Regras do chip (uniformidade total)
+
+
+.mq__chip: SEMPRE branco, height:56px; min-width:140px; border-radius:12px; display:grid; place-items:center; padding:10px 20px; box-shadow:0 6px 16px rgba(0,0,0,.22); — mesmo tamanho para todos.
+Conteúdo de cada chip, nesta ordem:
+
+SVG local se existir: <img src="/img/parceiros/<slug>.svg" alt="<Marca>" loading="lazy" onerror="...texto..."> (altura fixa 30px, object-fit:contain).
+Senão, nome em wordmark: <span class="mq__name">Marca</span>.
+
+
+
+NÃO usar google.com/s2/favicons nem Clearbit.
+.mq__chip img{ height:30px; width:auto; max-width:130px; object-fit:contain; }
+.mq__name{ font-family:'Jost',sans-serif; font-weight:800; font-size:16px; color:#0f3a43; white-space:nowrap; }
+onerror do <img> continua trocando por <span class="mq__name"> (texto = alt).
+
+
+Hoje já existem 4 SVGs locais (carrefour, ifood, lg, samsung) → esses mostram logo; os demais mostram o nome no MESMO chip branco. Fica uniforme e elegante (não fica nome solto no escuro).
+
+Para ficar 100% com LOGOS (igual ao original) — hospedar os oficiais
+
+Logo de marca de terceiro a gente não gera/embute. O caminho certo: pegar os SVGs oficiais das parceiras (press kit / material da parceria) e salvar em public/img/parceiros/<slug>.svg. Assim que o arquivo existir, o chip troca o texto pela logo automaticamente, sem mexer no código. Slugs:
+carrefour, magalu, casas-bahia, ifood, americanas, renner, riachuelo, netshoes, centauro, cobasi, droga-raia, leroy-merlin, samsung, lg, vivara.
+
+Dica de consistência das logos locais
+
+Padronize cada SVG num “canvas” de proporção parecida (ex.: caixa de 120×40, logo centralizada com respiro), pra todas ocuparem visualmente o mesmo espaço no chip de 30px de altura.
+
+Validar no preview: todos os chips do mesmo tamanho, brancos, rolando 34s e pausando no hover; logo onde há arquivo, nome estilizado onde não há — nada de favicon.

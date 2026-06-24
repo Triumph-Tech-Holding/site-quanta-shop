@@ -360,12 +360,10 @@ onMounted(() => {
     { name: 'Vivara',       slug: 'vivara',        domain: 'vivara.com.br',         local: false },
   ]
   const onerr = `onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'mq__name',textContent:this.alt}))"`
-  const mk = () => brands.map(b => {
-    const src = b.local
-      ? `/img/parceiros/${b.slug}.svg`
-      : `https://www.google.com/s2/favicons?sz=128&domain=${b.domain}`
-    return `<div class="mq__chip"><img src="${src}" alt="${b.name}" loading="lazy" ${onerr}></div>`
-  }).join('')
+  const mk = () => brands.map(b => b.local
+    ? `<div class="mq__chip"><img src="/img/parceiros/${b.slug}.svg" alt="${b.name}" loading="lazy" ${onerr}></div>`
+    : `<div class="mq__chip"><span class="mq__name">${b.name}</span></div>`
+  ).join('')
   const mqEl = document.getElementById('mq')
   if (mqEl) mqEl.innerHTML = mk() + mk()
 
@@ -454,10 +452,10 @@ h1, h2, h3 { font-family: 'Jost', 'Inter', sans-serif; letter-spacing: -.02em; l
 .mq__track { display: flex; gap: 22px; width: max-content; animation: scroll 34s linear infinite; align-items: center; }
 .mq:hover .mq__track { animation-play-state: paused; }
 @keyframes scroll { to { transform: translateX(-50%); } }
-.mq__chip { flex: 0 0 auto; background: #fff; border-radius: 12px; height: 56px; min-width: 124px; display: grid; place-items: center; padding: 10px 18px; box-shadow: 0 6px 16px rgba(0, 0, 0, .22); transition: transform .3s; }
+.mq__chip { flex: 0 0 auto; background: #fff; border-radius: 12px; height: 56px; min-width: 140px; display: grid; place-items: center; padding: 10px 20px; box-shadow: 0 6px 16px rgba(0, 0, 0, .22); transition: transform .3s; }
 .mq__chip:hover { transform: translateY(-3px); }
-.mq__chip img { height: 30px; width: auto; max-width: 120px; object-fit: contain; }
-.mq__name { font-family: 'Jost', sans-serif; font-weight: 800; font-size: 15px; color: #0f3a43; white-space: nowrap; letter-spacing: .01em; }
+.mq__chip img { height: 30px; width: auto; max-width: 130px; object-fit: contain; }
+.mq__name { font-family: 'Jost', sans-serif; font-weight: 800; font-size: 16px; color: #0f3a43; white-space: nowrap; }
 
 .sec { padding: 96px 0; }
 .sec--alt { background: var(--bg); }
