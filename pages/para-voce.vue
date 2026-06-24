@@ -373,21 +373,22 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px;
 .chat__cta:hover { background: rgba(152, 199, 58, .22); }
 .chat__cta svg { width: 16px; height: 16px; }
 .chat__body { padding: 16px 4px 4px; display: flex; flex-direction: column; gap: 10px; min-height: 300px; max-height: 360px; overflow: hidden; }
-.msg { max-width: 86%; font-size: 14px; line-height: 1.45; padding: 11px 14px; border-radius: 16px; opacity: 0; transform: translateY(10px) scale(.98); animation: pop .5s forwards; }
-.msg--u { align-self: flex-end; background: linear-gradient(180deg, #2f7785, #266472); color: #eafaff; border-bottom-right-radius: 5px; }
-.msg--b { align-self: flex-start; background: #15262e; color: #d7e7ea; border: 1px solid rgba(255, 255, 255, .06); border-bottom-left-radius: 5px; }
 @keyframes pop { to { opacity: 1; transform: none; } }
-.typing { align-self: flex-start; background: #15262e; border: 1px solid rgba(255, 255, 255, .06); border-radius: 16px; border-bottom-left-radius: 5px; padding: 14px 16px; display: flex; gap: 5px; }
-.typing span { width: 7px; height: 7px; border-radius: 50%; background: #6f9aa1; animation: blink 1.2s infinite; }
-.typing span:nth-child(2) { animation-delay: .2s; } .typing span:nth-child(3) { animation-delay: .4s; }
 @keyframes blink { 0%, 60%, 100% { opacity: .3; transform: translateY(0) } 30% { opacity: 1; transform: translateY(-3px) } }
-.msg small { display: block; color: #9fd3a6; font-weight: 600; font-size: 12px; margin-bottom: 8px; }
-.pcard { display: flex; gap: 12px; background: #0c1a21; border: 1px solid rgba(255, 255, 255, .08); border-radius: 14px; padding: 10px; margin-top: 6px; }
-.pcard img { width: 62px; height: 62px; border-radius: 10px; object-fit: cover; flex-shrink: 0; background: #15262e; }
-.pcard .pn { font-weight: 700; color: #fff; font-size: 13px; }
-.pcard .pmeta { font-size: 11px; color: #8fb3b8; margin: 2px 0 6px; }
-.pcard .price { font-family: 'Jost', 'Inter', sans-serif; font-weight: 700; color: #fff; font-size: 15px; }
-.pcard .cb { display: inline-block; background: rgba(152, 199, 58, .16); color: #98C73A; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; margin-top: 4px; }
+.chat__body :deep(.msg) { max-width: 86%; font-size: 14px; line-height: 1.45; padding: 11px 14px; border-radius: 16px; opacity: 0; transform: translateY(10px) scale(.98); animation: pop .5s forwards; }
+.chat__body :deep(.msg--u) { align-self: flex-end; background: linear-gradient(180deg, #2f7785, #266472); color: #eafaff; border-bottom-right-radius: 5px; }
+.chat__body :deep(.msg--b) { align-self: flex-start; background: #15262e; color: #d7e7ea; border: 1px solid rgba(255, 255, 255, .06); border-bottom-left-radius: 5px; }
+.chat__body :deep(.typing) { align-self: flex-start; background: #15262e; border: 1px solid rgba(255, 255, 255, .06); border-radius: 16px; border-bottom-left-radius: 5px; padding: 14px 16px; display: flex; gap: 5px; }
+.chat__body :deep(.typing span) { width: 7px; height: 7px; border-radius: 50%; background: #6f9aa1; animation: blink 1.2s infinite; }
+.chat__body :deep(.typing span:nth-child(2)) { animation-delay: .2s; }
+.chat__body :deep(.typing span:nth-child(3)) { animation-delay: .4s; }
+.chat__body :deep(.msg small) { display: block; color: #9fd3a6; font-weight: 600; font-size: 12px; margin-bottom: 8px; }
+.chat__body :deep(.pcard) { display: flex; gap: 12px; background: #0c1a21; border: 1px solid rgba(255, 255, 255, .08); border-radius: 14px; padding: 10px; margin-top: 6px; }
+.chat__body :deep(.pcard img) { width: 62px; height: 62px; border-radius: 10px; object-fit: cover; flex-shrink: 0; background: #15262e; }
+.chat__body :deep(.pcard .pn) { font-weight: 700; color: #fff; font-size: 13px; }
+.chat__body :deep(.pcard .pmeta) { font-size: 11px; color: #8fb3b8; margin: 2px 0 6px; }
+.chat__body :deep(.pcard .price) { font-family: 'Jost', 'Inter', sans-serif; font-weight: 700; color: #fff; font-size: 15px; }
+.chat__body :deep(.pcard .cb) { display: inline-block; background: rgba(152, 199, 58, .16); color: #98C73A; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; margin-top: 4px; }
 
 /* PLUS */
 .plus { background: linear-gradient(160deg, #102a32, #0c1c24); color: #eaf3f5; border-radius: 26px; padding: 44px; text-align: center; max-width: 860px; margin: 0 auto; }
