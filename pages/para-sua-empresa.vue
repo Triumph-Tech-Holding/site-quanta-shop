@@ -394,10 +394,10 @@ h1, h2, h3 { font-family: 'Jost', 'Inter', sans-serif; letter-spacing: -.02em; l
 
 /* HERO */
 .hero { position: relative; overflow: hidden; min-height: 100svh; display: flex; flex-direction: column; background: linear-gradient(180deg,#0b1a22,#0c1c24); color: #eef6f7; text-align: center; }
-.hero__in { position: relative; z-index: 2; display: flex; flex-direction: column; flex: 1; min-height: 100svh; justify-content: space-between; padding-bottom: clamp(180px,28vh,300px); }
+.hero__in { position: relative; z-index: 2; display: flex; flex-direction: column; flex: 1; min-height: 100svh; justify-content: space-between; padding-bottom: clamp(120px,18vh,220px); }
 .hero__top { padding: clamp(36px,5vh,70px) 16px 0; }
-.hero__mid { padding: 0 16px; border-top: 1px solid rgba(255,255,255,0.07); padding-top: clamp(18px,2.5vh,30px); }
-.hero__base { padding: 0 16px clamp(28px,4vh,52px); border-top: 1px solid rgba(255,255,255,0.07); padding-top: clamp(18px,2.5vh,30px); }
+.hero__mid { padding: 0 16px; }
+.hero__base { padding: 0 16px clamp(28px,4vh,52px); }
 .hero__scene { position: absolute; left: 0; right: 0; bottom: 0; z-index: 0; pointer-events: none; }
 .emp-scene { width: 100%; height: auto; display: block; }
 .hero .eyebrow { color: #9fe0b0; }
