@@ -1,0 +1,55 @@
+<template>
+  <section class="qs-ceostrip">
+    <div class="strip">
+      <div class="strip__photo">
+        <img src="/img/team/mauro-cutout.png" alt="Mauro Triumph, fundador e CEO da Quanta Shop" width="92" height="92" loading="lazy" decoding="async" />
+      </div>
+      <div class="strip__txt">
+        <span class="strip__tag"><span class="d"></span> Linha Direta com o CEO</span>
+        <div class="strip__name">Mauro Triumph <span>Fundador &amp; CEO</span></div>
+        <p class="strip__hook">"Descobri um segredo de <b>US$ 1,14 trilhão</b> sobre o Brasil — e aposto que você está ignorando." Leia a minha tese econômica.</p>
+      </div>
+      <div class="strip__cta">
+        <NuxtLink class="btn btn--neon" to="/manifesto">Ler a tese ↗</NuxtLink>
+        <a class="btn btn--ghost" href="https://wa.me/5500000000000" target="_blank" rel="noopener">Falar no WhatsApp</a>
+      </div>
+    </div>
+  </section>
+</template>
+
+<script setup lang="ts"></script>
+
+<style scoped>
+.qs-ceostrip{padding:48px 24px;}
+.strip{--neon:#A3E635;--line:rgba(255,255,255,.10);
+  position:relative;overflow:hidden;max-width:1120px;margin:0 auto;border-radius:20px;
+  display:flex;align-items:center;gap:24px;padding:22px 28px;
+  background:radial-gradient(420px 200px at 92% 50%,rgba(58,154,173,.20),transparent 65%),linear-gradient(100deg,#0B0F17,#0e1722 60%,#13262d);
+  border:1px solid var(--line);box-shadow:0 24px 60px rgba(0,0,0,.4);font-family:'Inter',sans-serif;color:#e7ebf0;}
+.strip *{box-sizing:border-box;}
+.strip__photo{flex:0 0 auto;width:92px;height:92px;border-radius:50%;overflow:hidden;position:relative;
+  background:radial-gradient(circle at 50% 35%,#1c4a55,#0e2027);
+  border:2px solid rgba(163,230,53,.6);box-shadow:0 0 0 4px rgba(163,230,53,.10),0 10px 24px rgba(0,0,0,.4);}
+.strip__photo img{width:100%;height:100%;object-fit:cover;object-position:center 12%;display:block;}
+.strip__txt{flex:1 1 auto;min-width:0;}
+.strip__tag{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#cdeb9b;}
+.strip__tag .d{width:7px;height:7px;border-radius:50%;background:var(--neon);box-shadow:0 0 9px rgba(163,230,53,.9);}
+.strip__name{font-family:'Jost','Inter',sans-serif;font-weight:800;color:#fff;font-size:20px;margin:4px 0 0;line-height:1;}
+.strip__name span{font-family:'Inter',sans-serif;font-weight:600;font-size:12.5px;color:var(--neon);letter-spacing:.02em;margin-left:8px;}
+.strip__hook{color:#c4cdd9;font-size:14.5px;margin-top:7px;line-height:1.4;max-width:62ch;}
+.strip__hook b{color:#fff;font-weight:600;}
+.strip__cta{flex:0 0 auto;display:flex;flex-direction:column;gap:9px;align-items:stretch;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-family:'Jost','Inter',sans-serif;font-weight:800;font-size:14px;border-radius:999px;padding:12px 22px;text-decoration:none;cursor:pointer;border:0;transition:.25s;white-space:nowrap;}
+.btn--neon{background:var(--neon);color:#0B0F17;box-shadow:0 0 18px rgba(163,230,53,.45);animation:qscsglow 2.8s infinite ease-in-out;}
+.btn--neon:hover{transform:translateY(-2px);box-shadow:0 0 32px rgba(163,230,53,.8);}
+@keyframes qscsglow{0%,100%{box-shadow:0 0 14px rgba(163,230,53,.35)}50%{box-shadow:0 0 26px rgba(163,230,53,.7)}}
+.btn--ghost{background:transparent;border:1.4px solid rgba(159,182,187,.4);color:#cfd6df;font-weight:700;font-size:12.5px;padding:9px 18px;}
+.btn--ghost:hover{border-color:rgba(159,182,187,.8);color:#fff;}
+@media(max-width:780px){
+  .strip{flex-direction:column;text-align:center;padding:26px 22px;gap:16px;}
+  .strip__hook{margin-left:auto;margin-right:auto;}
+  .strip__tag{justify-content:center;}
+  .strip__cta{flex-direction:row;width:100%;justify-content:center;}
+}
+@media (prefers-reduced-motion: reduce){.btn--neon{animation:none;}}
+</style>

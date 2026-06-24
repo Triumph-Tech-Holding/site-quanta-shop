@@ -12,7 +12,7 @@
     <home-testimonials />
     <home-blog />
     <home-faq />
-    <home-ceo />
+    <QsCeoStrip />
     <home-footer-cta />
   </div>
 </template>
