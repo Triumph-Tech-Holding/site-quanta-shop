@@ -1,0 +1,49 @@
+Na página pages/para-sua-empresa.vue ajuste dois pontos. Mantenha Nuxt 3 SPA, <script setup>, CSS scoped namespeado sob .pe-page, sem Bootstrap/Tailwind.
+
+1) Faixa de parceiros — transformar em MARQUEE de chips uniformes (elegante)
+
+Hoje as logos aparecem em caixas brancas grandes e desalinhadas. Troque por um carrossel horizontal automático de chips uniformes:
+
+
+Container .mq: background:#0c1c24; padding:26px 0; overflow:hidden; border-top:1px solid rgba(255,255,255,.06);
+Rótulo centralizado .mq__l: font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:#9fb6bb; margin-bottom:16px; → texto: "CENTENAS DE PARCEIROS, MILHARES DE PRODUTOS COM CASHBACK".
+Trilho .mq__track: display:flex; gap:22px; width:max-content; align-items:center; animation:scroll 34s linear infinite;
+
+.mq:hover .mq__track{ animation-play-state:paused; }
+@keyframes scroll{ to{ transform:translateX(-50%); } }
+
+
+
+Chip .mq__chip: flex:0 0 auto; background:#fff; border-radius:12px; height:56px; min-width:124px; display:grid; place-items:center; padding:10px 18px; box-shadow:0 6px 16px rgba(0,0,0,.22); transition:transform .3s;
+
+.mq__chip:hover{ transform:translateY(-3px); }
+
+
+
+Logo .mq__chip img: height:30px; width:auto; max-width:120px; object-fit:contain; — TODAS com a MESMA altura (30px). Adicionar onerror="this.parentElement.style.display='none'" pra esconder chip de logo quebrada.
+Importante: renderizar a lista de logos DUAS vezes seguidas dentro do .mq__track (loop contínuo sem “salto”). Use as logos via Clearbit (https://logo.clearbit.com/<dominio>.png) ou os assets que já existirem.
+
+
+Resultado: todos os logos do mesmo tamanho, em chips brancos arredondados, rolando suavemente e pausando no hover. Nada de caixas gigantes/desiguais.
+
+2) Celular da cena de conexões — AUMENTAR e dar mais qualidade
+
+No SVG do hero (a cena noturna com as lojas), o celular central está pequeno. Aumente e refine, mantendo-o centralizado em x=720 (viewBox 0 0 1440 340):
+
+
+Corpo (bezel): retângulo rx=16, width ≈ 84, height ≈ 156 (era ~50×110), fill:#0a1c23, borda com gradiente lime→teal stroke-width:2.5. Cantos nítidos (sem blur no aparelho).
+Tela: retângulo interno com gradiente escuro; dentro:
+
+barra de topo com leve tom lime + texto "Agência";
+"R$" grande em lime (~22–24px) + legenda "renda da rede";
+3 barras em tendência de alta + seta diagonal lime;
+um reflexo diagonal (faixa branca translúcida ~8% opacidade) cruzando a tela, pra dar acabamento premium.
+
+
+
+Luz: holofote/cone de luz e glow lime maiores atrás do celular (com feGaussianBlur só no glow, nunca no aparelho), pulsando suave.
+As linhas da rede continuam convergindo para o topo do celular, com as partículas lime fluindo para ele.
+Garanta que o celular fique nítido em telas retina (é vetor — só ajustar proporções; não rasterizar).
+
+
+Valide no preview ($REPLIT_DEV_DOMAIN) em desktop e 375px: marquee rolando e pausando no hover, logos do mesmo tamanho, e o celular maior, nítido e bem iluminado no centro da cena.

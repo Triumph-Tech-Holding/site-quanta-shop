@@ -30,6 +30,8 @@
             <radialGradient id="phoneGlow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#98C73A" stop-opacity=".38"/><stop offset="1" stop-color="#98C73A" stop-opacity="0"/></radialGradient>
             <linearGradient id="cone" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#98C73A" stop-opacity=".55"/><stop offset="1" stop-color="#98C73A" stop-opacity="0"/></linearGradient>
             <linearGradient id="screen" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d6f580"/><stop offset="1" stop-color="#7aad1f"/></linearGradient>
+            <linearGradient id="screenBg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b2a08"/><stop offset="1" stop-color="#143d10"/></linearGradient>
+            <linearGradient id="phoneBorder" x1="720" y1="70" x2="720" y2="240" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#98C73A"/><stop offset="1" stop-color="#3A9AAD"/></linearGradient>
             <filter id="glH" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
             <filter id="glP" x="-120%" y="-120%" width="340%" height="340%"><feGaussianBlur stdDeviation="1.5"/></filter>
             <filter id="glBig" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="12"/></filter>
@@ -136,21 +138,30 @@
           <circle cx="1068" cy="118" r="5" fill="#d6f580" filter="url(#glP)"><animate attributeName="opacity" values=".4;1;.4" dur="2.6s" begin="-1.8s" repeatCount="indefinite"/></circle>
           <circle cx="1211" cy="135" r="5" fill="#d6f580" filter="url(#glP)"><animate attributeName="opacity" values=".4;1;.4" dur="3.2s" begin="-0.3s" repeatCount="indefinite"/></circle>
           <circle cx="1363" cy="128" r="5" fill="#d6f580" filter="url(#glP)"><animate attributeName="opacity" values=".4;1;.4" dur="2.9s" begin="-2.2s" repeatCount="indefinite"/></circle>
-          <!-- PHONE (enlarged — 76px wide, teal border, notch, home bar) -->
-          <ellipse cx="720" cy="192" rx="132" ry="108" fill="url(#phoneGlow)"/>
-          <ellipse cx="720" cy="192" rx="82" ry="70" fill="#98C73A" filter="url(#glBig)" opacity=".22"><animate attributeName="opacity" values=".15;.30;.15" dur="3.8s" repeatCount="indefinite"/></ellipse>
-          <polygon points="703,240 737,240 816,340 624,340" fill="url(#cone)" opacity=".38"/>
-          <rect x="682" y="72" width="76" height="168" rx="14" fill="#081828" stroke="#4ab8c8" stroke-width="2.5" filter="url(#glH)"/>
-          <rect x="688" y="80" width="64" height="152" rx="9" fill="url(#screen)"/>
-          <rect x="688" y="80" width="64" height="19" rx="9" fill="#0f2800"/>
-          <circle cx="720" cy="86" r="3" fill="#1a3a05"/>
-          <text x="720" y="97" text-anchor="middle" font-family="Jost,sans-serif" font-size="8" font-weight="700" fill="#d6f580">Agência</text>
-          <text x="720" y="122" text-anchor="middle" font-family="Jost,sans-serif" font-size="16" font-weight="800" fill="#0d2a00">R$</text>
-          <text x="720" y="135" text-anchor="middle" font-family="Jost,sans-serif" font-size="8.5" font-weight="600" fill="#1a5010">renda da rede</text>
-          <rect x="697" y="158" width="11" height="24" rx="2" fill="#4a8c18"/><rect x="712" y="146" width="11" height="36" rx="2" fill="#6aad22"/><rect x="727" y="134" width="11" height="48" rx="2" fill="#8fcf30"/>
-          <path d="M742 172 l5 -10 l5 10" fill="none" stroke="#98C73A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <text x="720" y="218" text-anchor="middle" font-family="Jost,sans-serif" font-size="12" font-weight="800" fill="#0d2a00">R$ ↑</text>
-          <rect x="706" y="228" width="28" height="4" rx="2" fill="#1a4010" opacity=".75"/>
+          <!-- PHONE (premium — 84×170, lime→teal border, crisp, clipped screen) -->
+          <ellipse cx="720" cy="198" rx="148" ry="122" fill="url(#phoneGlow)"/>
+          <ellipse cx="720" cy="198" rx="94" ry="80" fill="#98C73A" filter="url(#glBig)" opacity=".22"><animate attributeName="opacity" values=".13;.31;.13" dur="4s" repeatCount="indefinite"/></ellipse>
+          <polygon points="704,242 736,242 832,340 608,340" fill="url(#cone)" opacity=".40"/>
+          <rect x="678" y="70" width="84" height="170" rx="16" fill="#0a1c23" stroke="url(#phoneBorder)" stroke-width="2.5"/>
+          <clipPath id="scr"><rect x="685" y="79" width="70" height="153" rx="9"/></clipPath>
+          <g clip-path="url(#scr)">
+            <rect x="685" y="79" width="70" height="153" rx="9" fill="url(#screenBg)"/>
+            <rect x="685" y="79" width="70" height="21" fill="rgba(0,40,0,.55)"/>
+            <circle cx="720" cy="86" r="3.5" fill="#091a09"/>
+            <text x="720" y="97" text-anchor="middle" font-family="Jost,sans-serif" font-size="9" font-weight="700" fill="#c8f060">Agência</text>
+            <text x="720" y="127" text-anchor="middle" font-family="Jost,sans-serif" font-size="24" font-weight="900" fill="#b8e84a">R$</text>
+            <text x="720" y="140" text-anchor="middle" font-family="Jost,sans-serif" font-size="9" font-weight="500" fill="rgba(180,240,130,.65)">renda da rede</text>
+            <rect x="697" y="163" width="12" height="22" rx="2" fill="#3a7c10"/>
+            <rect x="713" y="151" width="12" height="34" rx="2" fill="#5aad18"/>
+            <rect x="729" y="138" width="12" height="47" rx="2" fill="#7fcf28"/>
+            <path d="M744 178 l6 -13 l6 13" fill="none" stroke="#98C73A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+            <text x="720" y="218" text-anchor="middle" font-family="Jost,sans-serif" font-size="14" font-weight="800" fill="#a8e040">R$ ↑</text>
+            <rect x="703" y="227" width="34" height="4" rx="2" fill="rgba(120,200,40,.35)"/>
+            <polygon points="685,79 710,79 685,195" fill="rgba(255,255,255,.06)"/>
+          </g>
+          <rect x="676" y="108" width="3" height="18" rx="1.5" fill="#1a3a46"/>
+          <rect x="676" y="132" width="3" height="26" rx="1.5" fill="#1a3a46"/>
+          <rect x="762" y="120" width="3" height="24" rx="1.5" fill="#1a3a46"/>
           <!-- PARTICLES -->
           <circle r="2.8" fill="#d6f580" filter="url(#glP)"><animateMotion dur="2.4s" begin="0s" repeatCount="indefinite"><mpath href="#arc1"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.1;.8;1" dur="2.4s" begin="0s" repeatCount="indefinite"/></circle>
           <circle r="2.8" fill="#d6f580" filter="url(#glP)"><animateMotion dur="2.6s" begin="-0.4s" repeatCount="indefinite"><mpath href="#arc2"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.1;.8;1" dur="2.6s" begin="-0.4s" repeatCount="indefinite"/></circle>
@@ -331,10 +342,24 @@ useHead({
 })
 
 onMounted(() => {
-  const L = 'https://ui.awin.com/images/upload/merchant/profile/'
-  const ids = ['17665', '17629', '112756', '33061', '112634', '17846', '78382', '47165', '19672']
-  const names = ['Carrefour', 'Casas Bahia', 'Lacoste', 'LG', 'Zé Delivery', 'Diesel', 'Panasonic', 'Drogaria Venancio', "Café L'or"]
-  const mk = () => ids.map((id, i) => `<div class="mq__chip"><img src="${L}${id}.png" alt="${names[i]}" onerror="this.parentElement.style.display='none'"></div>`).join('')
+  const brands = [
+    { name: 'Carrefour', d: 'carrefour.com.br' },
+    { name: 'Americanas', d: 'americanas.com.br' },
+    { name: 'iFood', d: 'ifood.com.br' },
+    { name: 'Magalu', d: 'magazineluiza.com.br' },
+    { name: 'Casas Bahia', d: 'casasbahia.com.br' },
+    { name: 'Netshoes', d: 'netshoes.com.br' },
+    { name: 'Riachuelo', d: 'riachuelo.com.br' },
+    { name: 'Renner', d: 'lojasrenner.com.br' },
+    { name: 'Cobasi', d: 'cobasi.com.br' },
+    { name: 'Droga Raia', d: 'drogaraia.com.br' },
+    { name: 'Centauro', d: 'centauro.com.br' },
+    { name: 'Leroy Merlin', d: 'leroymerlin.com.br' },
+    { name: 'Samsung', d: 'samsung.com' },
+    { name: 'LG', d: 'lg.com' },
+    { name: 'Vivara', d: 'vivara.com.br' },
+  ]
+  const mk = () => brands.map(b => `<div class="mq__chip"><img src="https://logo.clearbit.com/${b.d}" alt="${b.name}" onerror="this.parentElement.style.display='none'"></div>`).join('')
   const mqEl = document.getElementById('mq')
   if (mqEl) mqEl.innerHTML = mk() + mk()
 
