@@ -620,15 +620,16 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 28px;
 .phone__nm { font-weight: 700; font-size: 14px; line-height: 1.1; }
 .phone__st { font-size: 11px; color: #cfe7ea; }
 .phone__chat { padding: 16px 12px; display: flex; flex-direction: column; gap: 9px; height: 360px; overflow: hidden; }
-.bub { max-width: 82%; font-size: 12.5px; line-height: 1.4; padding: 9px 12px; border-radius: 14px; animation: pop .35s ease both; }
-.bub--in { align-self: flex-start; background: #fff; color: #1d2b2f; border-bottom-left-radius: 5px; }
-.bub--out { align-self: flex-end; background: #dcf6c4; color: #1f3a0a; border-bottom-right-radius: 5px; }
-.bub--sys { align-self: center; background: rgba(47, 119, 133, .12); color: var(--teal-d); font-weight: 700; text-align: center; font-size: 12px; border-radius: 10px; }
 @keyframes pop { from { opacity: 0; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: none; } }
-.typing { align-self: flex-start; background: #fff; border-radius: 14px; border-bottom-left-radius: 5px; padding: 11px 13px; display: flex; gap: 4px; animation: pop .35s ease both; }
-.typing span { width: 6px; height: 6px; border-radius: 50%; background: #9aa9ae; animation: blink 1.2s infinite; }
-.typing span:nth-child(2) { animation-delay: .2s } .typing span:nth-child(3) { animation-delay: .4s }
 @keyframes blink { 0%, 60%, 100% { opacity: .3 } 30% { opacity: 1 } }
+.phone__chat :deep(.bub) { max-width: 82%; font-size: 12.5px; line-height: 1.4; padding: 9px 12px; border-radius: 14px; animation: pop .35s ease both; }
+.phone__chat :deep(.bub--in) { align-self: flex-start; background: #fff; color: #1d2b2f; border-bottom-left-radius: 5px; }
+.phone__chat :deep(.bub--out) { align-self: flex-end; background: #dcf6c4; color: #1f3a0a; border-bottom-right-radius: 5px; }
+.phone__chat :deep(.bub--sys) { align-self: center; background: rgba(47, 119, 133, .12); color: var(--teal-d); font-weight: 700; text-align: center; font-size: 12px; border-radius: 10px; }
+.phone__chat :deep(.typing) { align-self: flex-start; background: #fff; border-radius: 14px; border-bottom-left-radius: 5px; padding: 11px 13px; display: flex; gap: 4px; animation: pop .35s ease both; }
+.phone__chat :deep(.typing span) { width: 6px; height: 6px; border-radius: 50%; background: #9aa9ae; animation: blink 1.2s infinite; }
+.phone__chat :deep(.typing span:nth-child(2)) { animation-delay: .2s; }
+.phone__chat :deep(.typing span:nth-child(3)) { animation-delay: .4s; }
 @media (max-width: 860px) { .cel { grid-template-columns: 1fr; } }
 
 .cta { background: radial-gradient(700px 400px at 80% 0, rgba(58, 154, 173, .5), transparent 60%), linear-gradient(160deg, #0f2730, #0c1c24); color: #fff; padding: 84px 0; text-align: center; }
