@@ -1,0 +1,47 @@
+Problema: o marquee de parceiros está vazio. As logos usam https://logo.clearbit.com/<dominio>.png e o onerror esconde o chip quando a imagem falha. Como (a) a URL do Clearbit não leva .png no fim e (b) a API gratuita do Clearbit está instável/descontinuada, todas falham e somem.
+
+Faça estas correções na seção .mq:
+
+1) O chip NUNCA pode sumir — fallback para o NOME da marca
+
+Em vez de esconder o chip na falha, troque a <img> quebrada pelo nome da marca em texto dentro do mesmo chip. Assim o marquee sempre mostra algo (logo onde carrega, nome onde não carrega).
+
+
+<img> de cada chip:
+onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'mq__name',textContent:this.alt}))"
+Novo estilo:
+.mq__name{ font-family:'Jost',sans-serif; font-weight:800; font-size:15px; color:#0f3a43; white-space:nowrap; letter-spacing:.01em; }
+Garanta que cada <img> tenha o alt com o nome da marca (é ele que vira o texto fallback).
+
+
+2) Corrigir a URL do Clearbit (sem .png) e usar os domínios certos
+
+Formato correto: https://logo.clearbit.com/<dominio> (SEM .png). Domínios:
+
+Carrefour      carrefour.com.br
+Magalu         magazineluiza.com.br
+Casas Bahia    casasbahia.com.br
+iFood          ifood.com.br
+Americanas     americanas.com.br
+Renner         lojasrenner.com.br
+Riachuelo      riachuelo.com.br
+Netshoes       netshoes.com.br
+Centauro       centauro.com.br
+Cobasi         cobasi.com.br
+Droga Raia     drogaraia.com.br
+Leroy Merlin   leroymerlin.com.br
+Samsung        samsung.com
+LG             lg.com
+Vivara         vivara.com.br
+
+Renderizar a lista duas vezes no .mq__track (loop contínuo).
+
+3) RECOMENDADO p/ produção — hospedar as logos localmente (não depender de API externa)
+
+O Clearbit pode cair a qualquer momento. O ideal é salvar as logos oficiais (preferência SVG) em public/img/parceiros/ e referenciar local:
+
+public/img/parceiros/carrefour.svg, magalu.svg, casas-bahia.svg, ifood.svg, ...
+
+e no chip: <img src="/img/parceiros/<marca>.svg" alt="<Marca>" loading="lazy"> — mantendo o onerror de texto como rede de segurança. Logos locais = sempre nítidas, sem rede, sem quebrar.
+
+Resultado esperado: marquee sempre preenchido (logo ou nome), chips brancos uniformes de 56px rolando e pausando no hover. Validar no preview ($REPLIT_DEV_DOMAIN).
