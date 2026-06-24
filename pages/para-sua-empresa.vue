@@ -33,16 +33,16 @@
             <filter id="glH" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
             <filter id="glP" x="-120%" y="-120%" width="340%" height="340%"><feGaussianBlur stdDeviation="1.5"/></filter>
             <filter id="glBig" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="12"/></filter>
-            <path id="arc1" fill="none" stroke="none" d="M67,145 Q250,32 720,82"/>
-            <path id="arc2" fill="none" stroke="none" d="M210,128 Q360,26 720,82"/>
-            <path id="arc3" fill="none" stroke="none" d="M353,135 Q480,20 720,82"/>
-            <path id="arc4" fill="none" stroke="none" d="M496,118 Q574,16 720,82"/>
-            <path id="arc5" fill="none" stroke="none" d="M639,125 Q664,52 720,82"/>
-            <path id="arc6" fill="none" stroke="none" d="M782,105 Q778,52 720,82"/>
-            <path id="arc7" fill="none" stroke="none" d="M925,105 Q878,16 720,82"/>
-            <path id="arc8" fill="none" stroke="none" d="M1068,118 Q872,16 720,82"/>
-            <path id="arc9" fill="none" stroke="none" d="M1211,135 Q960,20 720,82"/>
-            <path id="arc10" fill="none" stroke="none" d="M1363,128 Q1100,28 720,82"/>
+            <path id="arc1" fill="none" stroke="none" d="M67,145 Q250,32 720,92"/>
+            <path id="arc2" fill="none" stroke="none" d="M210,128 Q360,26 720,92"/>
+            <path id="arc3" fill="none" stroke="none" d="M353,135 Q480,20 720,92"/>
+            <path id="arc4" fill="none" stroke="none" d="M496,118 Q574,16 720,92"/>
+            <path id="arc5" fill="none" stroke="none" d="M639,125 Q664,52 720,92"/>
+            <path id="arc6" fill="none" stroke="none" d="M782,105 Q778,52 720,92"/>
+            <path id="arc7" fill="none" stroke="none" d="M925,105 Q878,16 720,92"/>
+            <path id="arc8" fill="none" stroke="none" d="M1068,118 Q872,16 720,92"/>
+            <path id="arc9" fill="none" stroke="none" d="M1211,135 Q960,20 720,92"/>
+            <path id="arc10" fill="none" stroke="none" d="M1363,128 Q1100,28 720,92"/>
           </defs>
           <rect width="1440" height="340" fill="url(#sky)"/>
           <rect width="1440" height="340" fill="url(#dusk)"/>
@@ -115,16 +115,16 @@
           <rect x="1332" y="187" width="24" height="22" rx="2" fill="#0c2030" opacity=".4"/>
           <rect x="1333" y="267" width="28" height="73" rx="2" fill="#071019"/>
           <!-- NETWORK ARCS -->
-          <use href="#arc1" stroke="url(#netG)" stroke-width="1.2" fill="none" opacity=".38"/>
-          <use href="#arc2" stroke="url(#netG)" stroke-width="1.2" fill="none" opacity=".38"/>
-          <use href="#arc3" stroke="url(#netG)" stroke-width="1.2" fill="none" opacity=".38"/>
-          <use href="#arc4" stroke="url(#netG)" stroke-width="1.2" fill="none" opacity=".38"/>
-          <use href="#arc5" stroke="url(#netG)" stroke-width="1.2" fill="none" opacity=".38"/>
-          <use href="#arc6" stroke="url(#netG)" stroke-width="1.2" fill="none" opacity=".38"/>
-          <use href="#arc7" stroke="url(#netG)" stroke-width="1.2" fill="none" opacity=".38"/>
-          <use href="#arc8" stroke="url(#netG)" stroke-width="1.2" fill="none" opacity=".38"/>
-          <use href="#arc9" stroke="url(#netG)" stroke-width="1.2" fill="none" opacity=".38"/>
-          <use href="#arc10" stroke="url(#netG)" stroke-width="1.2" fill="none" opacity=".38"/>
+          <use href="#arc1" stroke="url(#netG)" stroke-width="1.6" fill="none" opacity=".48"/>
+          <use href="#arc2" stroke="url(#netG)" stroke-width="1.6" fill="none" opacity=".48"/>
+          <use href="#arc3" stroke="url(#netG)" stroke-width="1.6" fill="none" opacity=".48"/>
+          <use href="#arc4" stroke="url(#netG)" stroke-width="1.6" fill="none" opacity=".48"/>
+          <use href="#arc5" stroke="url(#netG)" stroke-width="1.6" fill="none" opacity=".48"/>
+          <use href="#arc6" stroke="url(#netG)" stroke-width="1.6" fill="none" opacity=".48"/>
+          <use href="#arc7" stroke="url(#netG)" stroke-width="1.6" fill="none" opacity=".48"/>
+          <use href="#arc8" stroke="url(#netG)" stroke-width="1.6" fill="none" opacity=".48"/>
+          <use href="#arc9" stroke="url(#netG)" stroke-width="1.6" fill="none" opacity=".48"/>
+          <use href="#arc10" stroke="url(#netG)" stroke-width="1.6" fill="none" opacity=".48"/>
           <!-- BUILDING NODES -->
           <circle cx="67" cy="145" r="5" fill="#d6f580" filter="url(#glP)"><animate attributeName="opacity" values=".4;1;.4" dur="2.6s" begin="0s" repeatCount="indefinite"/></circle>
           <circle cx="210" cy="128" r="5" fill="#d6f580" filter="url(#glP)"><animate attributeName="opacity" values=".4;1;.4" dur="2.9s" begin="-0.5s" repeatCount="indefinite"/></circle>
@@ -136,20 +136,21 @@
           <circle cx="1068" cy="118" r="5" fill="#d6f580" filter="url(#glP)"><animate attributeName="opacity" values=".4;1;.4" dur="2.6s" begin="-1.8s" repeatCount="indefinite"/></circle>
           <circle cx="1211" cy="135" r="5" fill="#d6f580" filter="url(#glP)"><animate attributeName="opacity" values=".4;1;.4" dur="3.2s" begin="-0.3s" repeatCount="indefinite"/></circle>
           <circle cx="1363" cy="128" r="5" fill="#d6f580" filter="url(#glP)"><animate attributeName="opacity" values=".4;1;.4" dur="2.9s" begin="-2.2s" repeatCount="indefinite"/></circle>
-          <!-- PHONE -->
-          <ellipse cx="720" cy="178" rx="92" ry="82" fill="url(#phoneGlow)"/>
-          <ellipse cx="720" cy="178" rx="58" ry="50" fill="#98C73A" filter="url(#glBig)" opacity=".22"><animate attributeName="opacity" values=".15;.28;.15" dur="3.8s" repeatCount="indefinite"/></ellipse>
-          <polygon points="707,240 733,240 786,340 654,340" fill="url(#cone)" opacity=".35"/>
-          <rect x="694" y="82" width="52" height="158" rx="10" fill="#081420" stroke="#3A9AAD" stroke-width="1.5" filter="url(#glH)"/>
-          <rect x="699" y="88" width="42" height="146" rx="6" fill="url(#screen)"/>
-          <rect x="699" y="88" width="42" height="13" rx="6" fill="#173a02"/>
-          <text x="720" y="97" text-anchor="middle" font-family="Jost,sans-serif" font-size="7" font-weight="700" fill="#d6f580">Agência</text>
-          <text x="720" y="116" text-anchor="middle" font-family="Jost,sans-serif" font-size="12" font-weight="800" fill="#143a02">R$</text>
-          <text x="720" y="127" text-anchor="middle" font-family="Jost,sans-serif" font-size="7.5" font-weight="600" fill="#1a5010">renda da rede</text>
-          <rect x="705" y="150" width="8" height="18" rx="2" fill="#4a8c18"/><rect x="716" y="140" width="8" height="28" rx="2" fill="#6aad22"/><rect x="727" y="130" width="8" height="38" rx="2" fill="#8fcf30"/>
-          <path d="M738 162 l4 -7 l4 7" fill="none" stroke="#98C73A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <text x="720" y="198" text-anchor="middle" font-family="Jost,sans-serif" font-size="10" font-weight="800" fill="#143a02">R$ ↑</text>
-          <circle cx="720" cy="224" r="4" fill="#2a6010" opacity=".6"/>
+          <!-- PHONE (enlarged — 76px wide, teal border, notch, home bar) -->
+          <ellipse cx="720" cy="192" rx="132" ry="108" fill="url(#phoneGlow)"/>
+          <ellipse cx="720" cy="192" rx="82" ry="70" fill="#98C73A" filter="url(#glBig)" opacity=".22"><animate attributeName="opacity" values=".15;.30;.15" dur="3.8s" repeatCount="indefinite"/></ellipse>
+          <polygon points="703,240 737,240 816,340 624,340" fill="url(#cone)" opacity=".38"/>
+          <rect x="682" y="72" width="76" height="168" rx="14" fill="#081828" stroke="#4ab8c8" stroke-width="2.5" filter="url(#glH)"/>
+          <rect x="688" y="80" width="64" height="152" rx="9" fill="url(#screen)"/>
+          <rect x="688" y="80" width="64" height="19" rx="9" fill="#0f2800"/>
+          <circle cx="720" cy="86" r="3" fill="#1a3a05"/>
+          <text x="720" y="97" text-anchor="middle" font-family="Jost,sans-serif" font-size="8" font-weight="700" fill="#d6f580">Agência</text>
+          <text x="720" y="122" text-anchor="middle" font-family="Jost,sans-serif" font-size="16" font-weight="800" fill="#0d2a00">R$</text>
+          <text x="720" y="135" text-anchor="middle" font-family="Jost,sans-serif" font-size="8.5" font-weight="600" fill="#1a5010">renda da rede</text>
+          <rect x="697" y="158" width="11" height="24" rx="2" fill="#4a8c18"/><rect x="712" y="146" width="11" height="36" rx="2" fill="#6aad22"/><rect x="727" y="134" width="11" height="48" rx="2" fill="#8fcf30"/>
+          <path d="M742 172 l5 -10 l5 10" fill="none" stroke="#98C73A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <text x="720" y="218" text-anchor="middle" font-family="Jost,sans-serif" font-size="12" font-weight="800" fill="#0d2a00">R$ ↑</text>
+          <rect x="706" y="228" width="28" height="4" rx="2" fill="#1a4010" opacity=".75"/>
           <!-- PARTICLES -->
           <circle r="2.8" fill="#d6f580" filter="url(#glP)"><animateMotion dur="2.4s" begin="0s" repeatCount="indefinite"><mpath href="#arc1"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.1;.8;1" dur="2.4s" begin="0s" repeatCount="indefinite"/></circle>
           <circle r="2.8" fill="#d6f580" filter="url(#glP)"><animateMotion dur="2.6s" begin="-0.4s" repeatCount="indefinite"><mpath href="#arc2"/></animateMotion><animate attributeName="opacity" values="0;1;1;0" keyTimes="0;.1;.8;1" dur="2.6s" begin="-0.4s" repeatCount="indefinite"/></circle>
