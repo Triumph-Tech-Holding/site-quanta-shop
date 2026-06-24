@@ -276,7 +276,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px;
 .flow__t { color: #eaf3f5; font-size: 14px; font-weight: 700; line-height: 1.18; }
 .flow__t span { display: block; font-weight: 500; color: #9fb6bb; font-size: 11.5px; margin-top: 2px; }
 .flow__arr { color: var(--lime); font-size: 22px; font-weight: 800; }
-.quote { border-left: 3px solid var(--lime); padding: 8px 0 8px 18px; color: #dff3e0; font-size: 16px; line-height: 1.55; font-style: italic; }
+.quote { background: transparent; border-left: 3px solid var(--lime); padding: 8px 0 8px 18px; color: #dff3e0; font-size: 16px; line-height: 1.55; font-style: italic; }
 .quote b { color: #fff; font-style: normal; }
 .quote cite { display: block; font-style: normal; color: #8fb0b6; font-size: 12.5px; margin-top: 6px; }
 
