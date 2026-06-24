@@ -414,7 +414,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 28px;
 .cta { position: relative; overflow: hidden; color: #fff; padding: 104px 0; text-align: center; }
 .cta__bg { position: absolute; inset: 0; z-index: 0; background: radial-gradient(700px 400px at 80% 0, rgba(58, 154, 173, .5), transparent 60%), linear-gradient(160deg, #0f2730, #0a1820); }
 .cta__in { position: relative; z-index: 1; }
-.cta h2 { font-size: clamp(30px, 4.6vw, 50px); font-weight: 800; }
+.cta h2 { font-size: clamp(30px, 4.6vw, 50px); font-weight: 800; color: #fff; }
 .cta h2 .hl { color: var(--lime); }
 .cta p { color: #cfe2e5; margin: 18px 0 32px; font-size: 17px; }
 
