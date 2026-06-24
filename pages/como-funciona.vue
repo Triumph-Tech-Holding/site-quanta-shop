@@ -2,7 +2,7 @@
   <main class="cf-page">
     <!-- HERO -->
     <section class="hero"><img class="hero__wm" alt="" aria-hidden="true" src="/img/logo/quanta-icon-white.png" /><div class="wrap hero__in">
-      <span class="eyebrow">Consumo inteligente</span>
+      <span class="eyebrow">Como funciona</span>
       <h1>Você já gasta todos os meses.<br>E recebe <span class="hl">R$ 0</span> de volta.</h1>
       <p class="hero__sub">Cada compra que você faz alimenta o caixa de alguém. A Quanta Shop vira esse jogo: o dinheiro volta pra você — e ainda constrói uma renda com a sua rede.</p>
       <div class="hero__cta">
@@ -317,7 +317,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px;
 
 /* CTA */
 .cta { background: radial-gradient(700px 400px at 80% 0, rgba(58, 154, 173, .5), transparent 60%), linear-gradient(160deg, #0f2730, #0c1c24); color: #fff; padding: 84px 0; text-align: center; }
-.cta h2 { font-size: clamp(28px, 4.5vw, 48px); font-weight: 800; }
+.cta h2 { font-size: clamp(28px, 4.5vw, 48px); font-weight: 800; color: #fff; }
 .cta h2 .hl { color: var(--lime); }
 .cta p { color: #c8dde0; margin: 16px 0 30px; font-size: 17px; }
 
