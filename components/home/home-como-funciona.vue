@@ -20,6 +20,7 @@
 
       <div class="qs-hiw__cta">
         <nuxt-link class="qs-hiw__btn" href="/agencia/cadastro">Criar conta grátis →</nuxt-link>
+        <nuxt-link class="qs-hiw__link" href="/como-funciona">Ver o passo a passo completo →</nuxt-link>
       </div>
     </div>
   </section>
@@ -70,9 +71,11 @@ const steps: Step[] = [
 .qs-hiw__title { font-family: 'Bruum FY','Jost','Inter',sans-serif; font-size: 20px; color: #225F6B; margin-bottom: 8px; }
 .qs-hiw__text { font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 15px; color: #6b7280; max-width: 300px; margin: 0 auto; }
 
-.qs-hiw__cta { text-align: center; margin-top: 46px; }
+.qs-hiw__cta { text-align: center; margin-top: 46px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
 .qs-hiw__btn { display: inline-flex; align-items: center; gap: 8px; font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-weight: 700; font-size: 15px; color: #173a0a; background: linear-gradient(180deg, #98C73A, #7aad1f); border-radius: 999px; padding: 14px 26px; text-decoration: none; box-shadow: 0 10px 28px rgba(152,199,58,.35); transition: transform .2s ease, box-shadow .2s ease; }
 .qs-hiw__btn:hover { transform: translateY(-2px); box-shadow: 0 16px 36px rgba(152,199,58,.45); }
+.qs-hiw__link { font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-weight: 700; font-size: 14px; color: #2F7785; text-decoration: none; border-bottom: 1px solid rgba(47,119,133,.3); padding-bottom: 2px; transition: color .2s ease, border-color .2s ease; }
+.qs-hiw__link:hover { color: #225F6B; border-color: #2F7785; }
 
 @media (max-width: 760px) {
   .qs-hiw__steps { grid-template-columns: 1fr; gap: 34px; }
