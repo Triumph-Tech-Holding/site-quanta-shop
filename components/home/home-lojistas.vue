@@ -13,14 +13,17 @@
       <div class="qs-biz__copy">
         <span class="qs-biz__eyebrow">Para o seu negócio</span>
         <h2 id="qs-biz-title" class="qs-biz__h2">Aumente vendas com a tecnologia Quanta</h2>
-        <p class="qs-biz__lead">Credencie sua loja e transforme cashback em recompra. Fidelize clientes, ganhe visibilidade na maior rede de cashback do Brasil e gerencie tudo num só painel.</p>
+        <p class="qs-biz__lead">Credencie sua loja, fidelize clientes com cashback e apareça na maior rede do Brasil — tudo num só painel.</p>
         <ul class="qs-biz__list">
           <li v-for="(b, i) in benefits" :key="i">
             <span class="qs-biz__ck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true"><path d="M20 6 9 17l-5-5" /></svg></span>
             {{ b }}
           </li>
         </ul>
-        <nuxt-link class="qs-biz__btn" href="/agencia/credenciar">Credenciar minha loja →</nuxt-link>
+        <div class="qs-biz__cta">
+          <nuxt-link class="qs-biz__btn" href="/agencia/credenciar">Credenciar minha loja →</nuxt-link>
+          <nuxt-link class="qs-biz__link" href="/para-sua-empresa">Saiba mais →</nuxt-link>
+        </div>
       </div>
     </div>
   </section>
@@ -52,8 +55,11 @@ const benefits: string[] = [
 .qs-biz__list li { display: flex; gap: 12px; align-items: flex-start; font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-size: 15px; color: #374151; }
 .qs-biz__ck { flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%; background: rgba(152,199,58,.16); color: #7aad1f; display: grid; place-items: center; margin-top: 1px; }
 .qs-biz__ck svg { width: 14px; height: 14px; }
+.qs-biz__cta { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
 .qs-biz__btn { display: inline-flex; align-items: center; gap: 8px; font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-weight: 700; font-size: 15px; color: #173a0a; background: linear-gradient(180deg, #98C73A, #7aad1f); border-radius: 999px; padding: 14px 26px; text-decoration: none; box-shadow: 0 10px 28px rgba(152,199,58,.35); transition: transform .2s ease, box-shadow .2s ease; }
 .qs-biz__btn:hover { transform: translateY(-2px); box-shadow: 0 16px 36px rgba(152,199,58,.45); }
+.qs-biz__link { font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-weight: 700; font-size: 14px; color: #2F7785; text-decoration: none; border-bottom: 1px solid rgba(47,119,133,.3); padding-bottom: 2px; transition: color .2s ease, border-color .2s ease; }
+.qs-biz__link:hover { color: #225F6B; border-color: #2F7785; }
 
 @media (max-width: 820px) {
   .qs-biz__row { grid-template-columns: 1fr; gap: 30px; }
