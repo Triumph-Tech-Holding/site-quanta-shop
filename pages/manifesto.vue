@@ -14,7 +14,7 @@
     <!-- HERO -->
     <section class="hero" id="chap-hero">
       <div class="hero__art" aria-hidden="true"><div class="hero__grid"></div><div class="hero__glow"></div><div class="hero__disc"></div></div>
-      <div class="hero__ph"><img src="/img/team/mauro-cutout.png" alt="Mauro Triumph, CEO da Quanta Shop" width="700" height="665" loading="eager" decoding="async" /></div>
+      <div class="hero__ph"><img src="/img/team/mauro-cutout.png" alt="Mauro Triumph, CEO da Quanta Shop" width="700" height="665" loading="eager" decoding="async" fetchpriority="high" /></div>
       <div class="hero__in wrap">
         <span class="kick">Manifesto · Mauro Triumph</span>
         <h1>O Brasil é invisível <span class="b2">para os brasileiros.</span></h1>
@@ -268,7 +268,7 @@ onMounted(() => {
         ent.target.querySelectorAll<HTMLElement>('.rk__v[data-to]').forEach(el => countNum(el, parseInt(el.dataset.to || '0', 10), 1300))
       }
       if (ent.target.id === 'chinaSec') {
-        ent.target.querySelectorAll<HTMLElement>('.bar .col').forEach(c => { c.style.height = c.dataset.h || '0' })
+        ent.target.querySelectorAll<HTMLElement>('.bar .col').forEach(c => { c.style.height = (parseFloat(c.dataset.h || '0') * 2.6) + 'px' })
         ent.target.querySelectorAll<HTMLElement>('.vn[data-to]').forEach(el => countBi(el, parseFloat(el.dataset.to || '0'), 1300))
       }
       io.unobserve(ent.target)
@@ -325,6 +325,7 @@ onMounted(() => {
 h1,h2,h3{font-family:'Jost','Inter',sans-serif;letter-spacing:-.02em;line-height:1.04;}
 b{color:#fff;font-weight:600;}
 .neon{color:var(--neon);}
+.note{background:#10202a;border-bottom:1px solid var(--line);color:#7e8aa0;font-size:12.5px;padding:8px 16px;text-align:center;}
 
 .prog{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--neon-d),var(--neon));z-index:60;box-shadow:0 0 12px rgba(163,230,53,.6);transition:width .08s linear;}
 
@@ -348,6 +349,7 @@ b{color:#fff;font-weight:600;}
 
 /* HERO */
 .hero{position:relative;overflow:hidden;min-height:92vh;display:flex;align-items:center;background:radial-gradient(720px 520px at 82% 18%,rgba(58,154,173,.22),transparent 60%),linear-gradient(120deg,#0c1c24 0%,#0e1722 50%,#13262d 100%);}
+.hero__bg{display:none;}
 .hero__art{position:absolute;inset:0;z-index:0;pointer-events:none;}
 .hero__grid{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:26px 26px;-webkit-mask-image:radial-gradient(72% 70% at 82% 32%,#000,transparent 75%);mask-image:radial-gradient(72% 70% at 82% 32%,#000,transparent 75%);opacity:.55;}
 .hero__glow{position:absolute;top:-12%;right:-8%;width:62%;height:82%;background:radial-gradient(circle at 60% 42%,rgba(163,230,53,.22),rgba(163,230,53,.06) 34%,transparent 60%);filter:blur(8px);animation:heroGlow 7s ease-in-out infinite;}
@@ -447,6 +449,7 @@ b{color:#fff;font-weight:600;}
 .rk__bar i{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,#2f7785,#3A9AAD);transition:width 1.3s cubic-bezier(.16,1,.3,1);}
 .rk__bar i.lead{background:linear-gradient(90deg,var(--neon-d),var(--neon));box-shadow:0 0 16px rgba(163,230,53,.4);}
 .rk__v{font-family:'Jost','Inter',sans-serif;font-weight:800;font-size:18px;color:#fff;text-align:right;}
+.pot__total{font-family:'Jost','Inter',sans-serif;}
 @media(max-width:680px){.rk{grid-template-columns:26px 1fr 70px;}.rk__bar{grid-column:1 / -1;order:3;}.rk__v{order:2;}}
 
 /* CAP 05 · TESE */
