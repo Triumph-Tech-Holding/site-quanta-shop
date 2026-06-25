@@ -54,8 +54,8 @@ const links = [
   { label: 'Para sua Empresa', href: '/para-sua-empresa' },
   { label: 'Seja um Agente', href: '/seja-um-agente' },
   { label: 'Quanta Amizade', href: '/quanta-amizade' },
-  { label: 'Blog', href: '/blog' },
   { label: 'Cupons', href: '/cupons' },
+  { label: 'Blog', href: '/blog' },
   { label: 'Atendimento', href: '/contato', wa: true },
 ];
 </script>
