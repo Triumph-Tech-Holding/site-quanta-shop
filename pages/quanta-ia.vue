@@ -83,7 +83,7 @@ onMounted(() => {
     { who: 'user', html: 'Quero um tênis de corrida até R$400 com mais cashback 👟' },
     { typing: 1100 },
     { who: 'bot', html: '<span class="qc__lead">Achei a melhor relação cashback perto de você:</span>'
-      + '<div class="qc__pcard"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=160&q=80&auto=format&fit=crop" alt="Tênis de corrida" loading="lazy" />'
+      + '<div class="qc__pcard"><img src="/img/product/product-1.jpg" alt="Tênis de corrida" />'
       + '<div><div class="qc__pn">Nike Revolution 7</div><div class="qc__pmeta">Casas Bahia · entrega 2 dias</div>'
       + '<div class="qc__price">R$ 389,90</div><span class="qc__cb">12% cashback ≈ R$ 46,79 de volta</span></div></div>' },
     { who: 'user', html: 'Qual é o meu saldo?' },
@@ -95,7 +95,7 @@ onMounted(() => {
     { who: 'user', html: 'Tem padaria com cashback aqui no bairro?' },
     { typing: 900 },
     { who: 'bot', html: '<span class="qc__lead">Pertinho de você:</span>'
-      + '<div class="qc__pcard"><img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=160&q=80&auto=format&fit=crop" alt="Padaria" loading="lazy" />'
+      + '<div class="qc__pcard"><img src="/img/product/product-5.jpg" alt="Padaria" />'
       + '<div><div class="qc__pn">Padaria Real</div><div class="qc__pmeta">Vila Mariana · 600 m</div>'
       + '<span class="qc__cb">5% cashback · ativa no WhatsApp</span></div></div>' },
   ];
@@ -138,7 +138,7 @@ a{text-decoration:none;}
 .hero{position:relative;overflow:hidden;background:radial-gradient(800px 460px at 78% 12%,rgba(58,154,173,.28),transparent 60%),linear-gradient(150deg,#0e2a32,#123038 55%,#16323a);color:#fff;padding:84px 0 92px;}
 .hero__grid{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:26px 26px;-webkit-mask-image:radial-gradient(70% 70% at 80% 20%,#000,transparent 75%);mask-image:radial-gradient(70% 70% at 80% 20%,#000,transparent 75%);}
 .hero__row{position:relative;display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;}
-.hero h1{font-family:'Jost','Inter',sans-serif;font-size:clamp(34px,5vw,58px);font-weight:800;line-height:1.05;margin:14px 0 0;}
+.hero h1{font-family:'Jost','Inter',sans-serif;font-size:clamp(34px,5vw,58px);font-weight:800;line-height:1.05;margin:14px 0 0;color:#fff;}
 .hero h1 .lime{color:var(--lime);}
 .hero__lead{font-size:clamp(16px,2vw,19px);color:#cdd9dd;line-height:1.6;margin:18px 0 28px;max-width:48ch;}
 .hero__cta{display:flex;gap:14px;flex-wrap:wrap;}
@@ -200,6 +200,6 @@ section.block{padding:84px 0;}
 
 /* CTA */
 .cta{background:radial-gradient(700px 400px at 50% 0%,rgba(152,199,58,.18),transparent 60%),linear-gradient(150deg,#0e2a32,#16323a);color:#fff;text-align:center;padding:84px 0;}
-.cta h2{font-family:'Jost','Inter',sans-serif;font-size:clamp(26px,3.4vw,40px);font-weight:800;margin:0 0 14px;}
+.cta h2{font-family:'Jost','Inter',sans-serif;font-size:clamp(26px,3.4vw,40px);font-weight:800;margin:0 0 14px;color:#fff;}
 .cta p{color:#cdd9dd;max-width:54ch;margin:0 auto 26px;}
 </style>
