@@ -141,7 +141,7 @@ const menus: Menu[] = [
     cols: [{ links: [
       { label: 'Blog', href: '/blog', desc: 'Dicas de consumo e renda' },
       { label: 'Tese do CEO', href: '/manifesto', desc: 'O manifesto de Mauro Triumph' },
-      { label: 'Perguntas frequentes', href: '/#faq', desc: 'Tire suas dúvidas' },
+      { label: 'Perguntas frequentes', href: '/faq', desc: 'Tire suas dúvidas' },
     ] }],
   },
 ];
