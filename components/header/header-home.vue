@@ -113,7 +113,7 @@ const menus: Menu[] = [
     feat: { eyebrow: 'Para quem é', title: 'Todo mundo ganha quando a rede cresce.', blurb: 'Consumidor, lojista ou empreendedor — o efeito de rede trabalha a seu favor.', linkLabel: 'Ver o plano de compensação', linkHref: '/como-funciona', badge: 'Consumo inteligente em rede' },
     cols: [{ h: 'Perfis', links: [
       { label: 'Para Você', href: '/para-voce', desc: 'Cashback de verdade em cada compra' },
-      { label: 'Para sua Empresa', href: '/para-empresa', desc: 'Fidelize clientes e venda mais' },
+      { label: 'Para sua Empresa', href: '/para-sua-empresa', desc: 'Fidelize clientes e venda mais' },
       { label: 'Seja um Agente', href: '/seja-um-agente', desc: 'Renda recorrente, sem estoque nem capital' },
     ] }],
   },
