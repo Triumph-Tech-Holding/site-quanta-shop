@@ -455,10 +455,10 @@ b{color:#fff;font-weight:600;}
 /* CAP 03 · CHINA BARS */
 .chart{margin-top:34px;display:flex;align-items:flex-end;gap:clamp(20px,6vw,70px);height:320px;border-bottom:1px solid var(--line);max-width:680px;}
 .bar{flex:1;max-width:180px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;}
-.bar .col{width:100%;border-radius:12px 12px 0 0;height:0;flex-grow:0;flex-shrink:0;position:relative;}
-#chinaSec.in .bar.y23 .col{height:84px;}
-#chinaSec.in .bar.y24 .col{height:178px;}
-#chinaSec.in .bar.y25 .col{height:260px;}
+.bar .col{width:100%;border-radius:12px 12px 0 0;flex:0 0 auto;position:relative;height:0;transition:height 1.2s cubic-bezier(.16,1,.3,1);}
+#chinaSec.in .bar.y23 .col{height:84px!important;}
+#chinaSec.in .bar.y24 .col{height:178px!important;}
+#chinaSec.in .bar.y25 .col{height:260px!important;}
 .bar .v{position:absolute;top:-30px;left:0;right:0;text-align:center;font-family:'Jost',sans-serif;font-weight:800;font-size:clamp(15px,2.2vw,21px);color:#fff;opacity:0;transition:opacity .5s 1s;}
 #chinaSec.in .bar .v{opacity:1;}
 .bar.y23 .col{background:linear-gradient(180deg,#2b3a4a,#1c2733);}
