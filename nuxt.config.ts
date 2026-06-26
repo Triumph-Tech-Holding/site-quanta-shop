@@ -7,6 +7,9 @@ export default defineNuxtConfig({
   nitro: {
     preset: 'node-server',
   },
+  routeRules: {
+    '/para-empresa': { redirect: { to: '/para-sua-empresa', statusCode: 301 } },
+  },
   vite: {
     server: {
       allowedHosts: true,
