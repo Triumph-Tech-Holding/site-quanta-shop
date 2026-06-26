@@ -123,7 +123,7 @@ const menus: Menu[] = [
     cols: [{ h: 'Como funciona', links: [
       { label: 'Como funciona', href: '/como-funciona', desc: 'Do cadastro ao PIX em 3 passos' },
       { label: 'Quanta Flow', href: '/quanta-flow', desc: 'O fluxo do cashback em rede' },
-      { label: 'Quanta IA', href: '/para-voce', desc: 'Busca, cota e responde no chat' },
+      { label: 'Quanta IA', href: '/quanta-ia', desc: 'Busca, cota e responde no chat' },
     ] }],
   },
   {
