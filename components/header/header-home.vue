@@ -131,7 +131,7 @@ const menus: Menu[] = [
     feat: { eyebrow: 'Benefícios', title: 'Quanto mais a rede usa, mais você ganha.', blurb: 'Ganho coletivo e escalável: seu sucesso impulsiona o de quem está na sua rede.', linkLabel: 'Ver todos os ganhos', linkHref: '/como-funciona', badge: 'Distribuição equitativa' },
     cols: [{ h: 'Seus ganhos', links: [
       { label: 'Cashback', href: '/para-voce', desc: 'Dinheiro de volta em cada compra' },
-      { label: 'Cashback Residual', href: '/como-funciona', desc: 'Ganhe quando sua rede consome' },
+      { label: 'Cashback Residual', href: '/cashback-residual', desc: 'Ganhe quando sua rede consome' },
       { label: 'Quanta Amizade', href: '/quanta-amizade', desc: 'R$ 25 por amigo que você indica' },
       { label: 'Cupons do dia', href: '/cupons', desc: 'Ofertas com cashback turbinado' },
     ] }],
