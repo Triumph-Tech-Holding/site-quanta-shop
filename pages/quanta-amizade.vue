@@ -285,14 +285,14 @@ h1, h2, h3 { font-family: 'Jost', 'Inter', sans-serif; letter-spacing: -.02em; l
 .sec--alt { background: var(--bg); }
 .sec__head { text-align: center; max-width: 720px; margin: 0 auto 44px; }
 .sec__head .eyebrow { color: var(--teal); }
-.sec__head h2 { font-size: clamp(26px, 4vw, 42px); font-weight: 800; margin: 10px 0; }
+.sec__head h2 { font-size: clamp(26px, 4vw, 42px); font-weight: 800; margin: 10px 0; color: var(--ink); }
 .sec__head p { color: #4a5b60; font-size: 17px; line-height: 1.5; }
 
 /* steps */
 .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
 .step { background: #fff; border: 1px solid #e8eef0; border-radius: 18px; padding: 28px 22px; }
 .step__n { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; font-family: 'Jost', sans-serif; font-weight: 800; color: #173a0a; background: var(--lime); margin-bottom: 14px; font-size: 18px; }
-.step h3 { font-size: 18px; font-weight: 800; }
+.step h3 { font-size: 18px; font-weight: 800; color: var(--ink); }
 .step p { color: #4a5b60; font-size: 14px; line-height: 1.5; margin-top: 6px; }
 
 /* 25/25 split */

@@ -242,7 +242,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px;
 
 /* TURN */
 .turn { padding: 80px 0; text-align: center; }
-.turn h2 { font-size: clamp(24px, 3.6vw, 38px); font-weight: 800; max-width: 820px; margin: 0 auto; }
+.turn h2 { font-size: clamp(24px, 3.6vw, 38px); font-weight: 800; max-width: 820px; margin: 0 auto; color: var(--ink); }
 .turn h2 .hl { color: var(--lime-d); }
 .turn__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 40px; }
 .turn__c { background: var(--bg); border-radius: 18px; padding: 28px 22px; text-align: left; transition: transform .25s ease, box-shadow .25s ease; }
@@ -250,7 +250,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px;
 .turn__ic { width: 58px; height: 58px; border-radius: 17px; display: grid; place-items: center; margin-bottom: 16px; position: relative; overflow: hidden; background: linear-gradient(150deg, #163f49, #0d2a31); box-shadow: 0 12px 26px rgba(15, 39, 48, .20), inset 0 1px 0 rgba(255, 255, 255, .07); }
 .turn__ic::after { content: ''; position: absolute; inset: 0; background: radial-gradient(70px 46px at 72% -10%, rgba(152, 199, 58, .35), transparent 62%); }
 .turn__ic svg { width: 30px; height: 30px; position: relative; z-index: 1; }
-.turn__c h3 { font-size: 18px; font-weight: 800; }
+.turn__c h3 { font-size: 18px; font-weight: 800; color: var(--ink); }
 .turn__c p { color: #4a5b60; font-size: 14px; line-height: 1.5; margin-top: 6px; }
 
 /* WALLET */
@@ -309,7 +309,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px;
 /* IDEA */
 .idea { padding: 84px 0; text-align: center; }
 .idea .eyebrow { color: var(--teal); }
-.idea h2 { font-size: clamp(26px, 4vw, 44px); font-weight: 800; max-width: 860px; margin: 12px auto 0; }
+.idea h2 { font-size: clamp(26px, 4vw, 44px); font-weight: 800; max-width: 860px; margin: 12px auto 0; color: var(--ink); }
 .idea h2 .hl { color: var(--lime-d); }
 .idea p { color: #4a5b60; font-size: 17px; max-width: 680px; margin: 18px auto 0; line-height: 1.6; }
 .idea__found { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 28px; }

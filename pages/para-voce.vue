@@ -344,19 +344,19 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 26px;
 .sec--alt { background: var(--bg); }
 .sec__head { text-align: center; max-width: 720px; margin: 0 auto 44px; }
 .sec__head .eyebrow { color: var(--teal); }
-.sec__head h2 { font-size: clamp(26px, 4vw, 40px); font-weight: 800; margin: 10px 0; }
+.sec__head h2 { font-size: clamp(26px, 4vw, 40px); font-weight: 800; margin: 10px 0; color: var(--ink); }
 .sec__head p { color: #4a5b60; font-size: 17px; }
 
 /* STEPS */
 .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
 .step { background: #fff; border: 1px solid #e8eef0; border-radius: 18px; padding: 28px 22px; }
 .step__n { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; font-family: 'Jost', sans-serif; font-weight: 800; color: #173a0a; background: var(--lime); margin-bottom: 14px; }
-.step h3 { font-size: 18px; font-weight: 800; }
+.step h3 { font-size: 18px; font-weight: 800; color: var(--ink); }
 .step p { color: #4a5b60; font-size: 14px; line-height: 1.5; margin-top: 6px; }
 
 /* QUANTA IA */
 .ia { display: grid; grid-template-columns: 1.05fr .95fr; gap: 40px; align-items: center; }
-.ia__copy h2 { font-size: clamp(26px, 3.6vw, 38px); font-weight: 800; }
+.ia__copy h2 { font-size: clamp(26px, 3.6vw, 38px); font-weight: 800; color: var(--ink); }
 .ia__copy h2 .hl { color: var(--lime-d); }
 .ia__copy p { color: #4a5b60; font-size: 16px; margin: 14px 0 18px; line-height: 1.55; }
 .ia__list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
