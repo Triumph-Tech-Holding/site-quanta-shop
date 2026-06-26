@@ -273,6 +273,8 @@ onMounted(() => {
         const targets = cols.map(c => parseInt(c.dataset.h || '0', 10))
         const easing = 'cubic-bezier(.16,1,.3,1)'
         cols.forEach(c => {
+          c.style.flexGrow = '0'
+          c.style.flexShrink = '0'
           c.style.transition = 'none'
           c.style.height = '0px'
         })
