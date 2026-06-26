@@ -407,7 +407,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.pe-page { --teal: #2F7785; --teal-d: #225F6B; --lime: #98C73A; --lime-d: #7aad1f; --ink: #13212a; --bg: #f4f6f7; --gold: #FFB342; }
+.pe-page { --teal: #2F7785; --teal-d: #225F6B; --lime: #98C73A; --lime-d: #7aad1f; --ink: #225F6B; --bg: #f4f6f7; --gold: #FFB342; }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 .pe-page { font-family: 'Inter', 'Jost', sans-serif; color: var(--ink); background: #fff; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 .wrap { max-width: 1160px; margin: 0 auto; padding: 0 24px; }

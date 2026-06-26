@@ -437,7 +437,7 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.sa-page { --teal: #2F7785; --teal-d: #225F6B; --lime: #98C73A; --lime-d: #7aad1f; --ink: #1a2332; --bg: #f4f6f7; --gold: #FFB342; }
+.sa-page { --teal: #2F7785; --teal-d: #225F6B; --lime: #98C73A; --lime-d: #7aad1f; --ink: #225F6B; --bg: #f4f6f7; --gold: #FFB342; }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 .sa-page { font-family: 'Inter', 'Jost', sans-serif; color: var(--ink); background: #fff; -webkit-font-smoothing: antialiased; }
 .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }

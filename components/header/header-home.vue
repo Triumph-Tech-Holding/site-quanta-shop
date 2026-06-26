@@ -186,7 +186,7 @@ const menus: Menu[] = [
 .col__h { font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: #9aa3af; margin-bottom: 6px; padding-left: 10px; }
 .mlink { display: block; padding: 9px 10px; border-radius: 10px; text-decoration: none; transition: background .18s ease; }
 .mlink:hover { background: rgba(47,119,133,.06); }
-.mlink b { display: flex; align-items: center; gap: 7px; font-family: 'Kiye Sans','Inter',sans-serif; font-size: 14.5px; font-weight: 600; color: #1f2937; }
+.mlink b { display: flex; align-items: center; gap: 7px; font-family: 'Kiye Sans','Inter',sans-serif; font-size: 14.5px; font-weight: 600; color: #225F6B; }
 .mlink:hover b { color: #2F7785; }
 .mlink .ar { opacity: 0; transform: translateX(-4px); transition: opacity .18s ease, transform .18s ease; color: #2F7785; font-weight: 700; }
 .mlink:hover .ar { opacity: 1; transform: translateX(0); }
