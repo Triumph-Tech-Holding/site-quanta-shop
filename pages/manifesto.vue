@@ -112,9 +112,9 @@
         </svg>
       </div>
       <div class="chart">
-        <div class="bar y23"><div class="col" data-h="32%" style="height:0"><span class="v"><span class="vn" data-to="1.96">US$ 0,00 bi</span></span></div><div class="yr">2023</div><span class="pct">—</span></div>
-        <div class="bar y24"><div class="col" data-h="69%" style="height:0"><span class="v"><span class="vn" data-to="4.18">US$ 0,00 bi</span></span></div><div class="yr">2024</div><span class="pct">+113%</span></div>
-        <div class="bar y25"><div class="col" data-h="100%" style="height:0"><span class="v"><span class="vn" data-to="6.10">US$ 0,00 bi</span> ⚡</span></div><div class="yr">2025</div><span class="pct">+45% · nº1</span></div>
+        <div class="bar y23"><div class="col" data-h="84"><span class="v"><span class="vn" data-to="1.96">US$ 0,00 bi</span></span></div><div class="yr">2023</div><span class="pct">—</span></div>
+        <div class="bar y24"><div class="col" data-h="178"><span class="v"><span class="vn" data-to="4.18">US$ 0,00 bi</span></span></div><div class="yr">2024</div><span class="pct">+113%</span></div>
+        <div class="bar y25"><div class="col" data-h="260"><span class="v"><span class="vn" data-to="6.10">US$ 0,00 bi</span> ⚡</span></div><div class="yr">2025</div><span class="pct">+45% · nº1</span></div>
       </div>
       <div class="sectors">
         <div class="sector"><b>29,5%</b><span>Eletricidade / Energia</span></div>
@@ -269,13 +269,20 @@ onMounted(() => {
       }
       if (ent.target.id === 'chinaSec') {
         ent.target.querySelectorAll<HTMLElement>('.vn[data-to]').forEach(el => countBi(el, parseFloat(el.dataset.to || '0'), 1300))
-        const sec = ent.target as HTMLElement
-        setTimeout(() => {
-          const cols = sec.querySelectorAll<HTMLElement>('.bar .col')
-          console.log('[china-bars] cols.length=', cols.length, 'computed heights before:', Array.from(cols).map(c => getComputedStyle(c).height))
-          ;[84, 178, 260].forEach((h, i) => { if (cols[i]) cols[i].style.height = h + 'px' })
-          console.log('[china-bars] inline styles after:', Array.from(cols).map(c => c.style.height))
-        }, 200)
+        const cols = Array.from(ent.target.querySelectorAll<HTMLElement>('.bar .col'))
+        const targets = cols.map(c => parseInt(c.dataset.h || '0', 10))
+        const easing = 'cubic-bezier(.16,1,.3,1)'
+        cols.forEach(c => {
+          c.style.transition = 'none'
+          c.style.height = '0px'
+        })
+        void cols[0]?.offsetHeight
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          cols.forEach((c, i) => {
+            c.style.transition = `height 1.3s ${easing}`
+            c.style.height = targets[i] + 'px'
+          })
+        }))
       }
       io.unobserve(ent.target)
     })
