@@ -67,7 +67,7 @@ a{text-decoration:none;}
 .hero__grid{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1px);background-size:26px 26px;-webkit-mask-image:radial-gradient(60% 80% at 50% 10%,#000,transparent 75%);mask-image:radial-gradient(60% 80% at 50% 10%,#000,transparent 75%);}
 .hero__in{position:relative;}
 .hero .eyebrow{color:#bfe89a;}
-.hero h1{font-family:'Jost','Inter',sans-serif;font-size:clamp(32px,4.6vw,52px);font-weight:800;margin:14px 0 0;}
+.hero h1{font-family:'Jost','Inter',sans-serif;font-size:clamp(32px,4.6vw,52px);font-weight:800;margin:14px 0 0;color:#fff;}
 .hero p{color:#cdd9dd;font-size:clamp(15px,1.8vw,18px);margin:16px auto 0;max-width:48ch;}
 
 .faq{padding:72px 0;}
