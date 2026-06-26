@@ -268,8 +268,14 @@ onMounted(() => {
         ent.target.querySelectorAll<HTMLElement>('.rk__v[data-to]').forEach(el => countNum(el, parseInt(el.dataset.to || '0', 10), 1300))
       }
       if (ent.target.id === 'chinaSec') {
-        const cols = ent.target.querySelectorAll<HTMLElement>('.bar .col')
-        ;[84, 178, 260].forEach((h, i) => { if (cols[i]) cols[i].style.height = h + 'px' })
+        const sec = ent.target
+        requestAnimationFrame(() => {
+          const cols = sec.querySelectorAll<HTMLElement>('.bar .col')
+          ;[84, 178, 260].forEach((h, i) => { if (cols[i]) { cols[i].style.transition = 'none'; cols[i].style.height = '0'; } })
+          requestAnimationFrame(() => {
+            ;[84, 178, 260].forEach((h, i) => { if (cols[i]) { cols[i].style.transition = ''; cols[i].style.height = h + 'px'; } })
+          })
+        })
         ent.target.querySelectorAll<HTMLElement>('.vn[data-to]').forEach(el => countBi(el, parseFloat(el.dataset.to || '0'), 1300))
       }
       io.unobserve(ent.target)
@@ -452,7 +458,7 @@ b{color:#fff;font-weight:600;}
 .rk__v{font-family:'Jost','Inter',sans-serif;font-weight:800;font-size:18px;color:#fff;text-align:right;}
 .pot__total{font-family:'Jost','Inter',sans-serif;}
 @media(max-width:680px){.rk{grid-template-columns:26px 1fr 70px;}.rk__bar{grid-column:1 / -1;order:3;}.rk__v{order:2;}}
-.bar .col{will-change:height;}#chinaSec.in .bar.y23 .col{height:84px;}#chinaSec.in .bar.y24 .col{height:178px;}#chinaSec.in .bar.y25 .col{height:260px;}
+.bar .col{will-change:height;}
 
 /* CAP 05 · TESE */
 .tese{position:relative;overflow:hidden;background:radial-gradient(640px 480px at 78% 24%,rgba(58,154,173,.16),transparent 60%);border-left:3px solid transparent;}
