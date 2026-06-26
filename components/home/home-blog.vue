@@ -58,7 +58,7 @@ const posts: Post[] = [
 .qs-blg__tag--blog { background: #2F7785; }
 .qs-blg__body { padding: 16px 18px 20px; }
 .qs-blg__date { font-size: 12px; color: #9ca3af; }
-.qs-blg__title { font-family: 'Bruum FY','Jost','Inter',sans-serif; font-size: 15px; font-weight: 700; color: #1d1d1f; margin: 6px 0 0; line-height: 1.35; }
+.qs-blg__title { font-family: 'Bruum FY','Jost','Inter',sans-serif; font-size: 15px; font-weight: 700; color: #225F6B; margin: 6px 0 0; line-height: 1.35; }
 
 @media (max-width: 991px) { .qs-blg__grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 520px) { .qs-blg__grid { grid-template-columns: 1fr; } }

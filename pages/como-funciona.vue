@@ -225,7 +225,7 @@ h1, h2, h3 { font-family: 'Jost', 'Inter', sans-serif; letter-spacing: -.02em; l
 .calc { background: var(--bg); padding: 80px 0; }
 .calc__head { text-align: center; max-width: 680px; margin: 0 auto 36px; }
 .calc__head .eyebrow { color: var(--teal); }
-.calc__head h2 { font-size: clamp(26px, 4vw, 42px); font-weight: 800; margin: 10px 0; }
+.calc__head h2 { font-size: clamp(26px, 4vw, 42px); font-weight: 800; margin: 10px 0; color: #225F6B; }
 .calc__head p { color: #4a5b60; font-size: 17px; }
 .calc__card { background: #fff; border: 1px solid #e8eef0; border-radius: 24px; box-shadow: 0 20px 50px rgba(15, 39, 48, .08); padding: 36px; max-width: 860px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 36px; align-items: center; }
 .calc__label { font-size: 14px; color: #6b7c81; font-weight: 600; }

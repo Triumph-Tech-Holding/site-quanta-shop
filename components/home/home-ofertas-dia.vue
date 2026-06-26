@@ -54,7 +54,7 @@ const offers: Offer[] = [
 .qs-ofd__cb { position: absolute; top: 12px; left: 12px; background: rgba(26,35,50,.86); color: #98C73A; font-size: 12px; font-weight: 700; padding: 5px 11px; border-radius: 999px; backdrop-filter: blur(6px); }
 .qs-ofd__body { padding: 16px 18px 20px; }
 .qs-ofd__brand { font-size: 12px; color: #9ca3af; font-weight: 600; }
-.qs-ofd__name { font-family: 'Bruum FY','Jost','Inter',sans-serif; font-size: 16px; font-weight: 700; color: #1d1d1f; margin: 4px 0 8px; }
+.qs-ofd__name { font-family: 'Bruum FY','Jost','Inter',sans-serif; font-size: 16px; font-weight: 700; color: #225F6B; margin: 4px 0 8px; }
 .qs-ofd__price { font-family: 'Bruum FY','Jost','Inter',sans-serif; font-size: 22px; font-weight: 700; color: #225F6B; }
 .qs-ofd__go { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 14px; width: 100%; min-height: 44px; font-family: 'Kiye Sans','Inter','Jost',sans-serif; font-weight: 700; font-size: 15px; color: #173a0a; background: linear-gradient(180deg, #98C73A, #7aad1f); border-radius: 999px; padding: 12px 20px; text-decoration: none; box-shadow: 0 10px 28px rgba(152,199,58,.35); transition: transform .2s ease, box-shadow .2s ease; }
 .qs-ofd__go:hover { transform: translateY(-2px); box-shadow: 0 16px 36px rgba(152,199,58,.45); }

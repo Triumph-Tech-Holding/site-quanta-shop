@@ -146,7 +146,7 @@ const testimonials: Testimonial[] = [
   gap: 2px;
 }
 .qs-tst__name {
-  color: #1d1d1f;
+  color: #225F6B;
   font-weight: 600;
   font-size: 14px;
   font-family: 'Inter','Jost',sans-serif;

@@ -270,7 +270,7 @@ async function submitForm() {
 .qct-channel-card:hover { border-color: #2F7785; box-shadow: 0 4px 16px rgba(47,119,133,0.1); }
 .qct-channel-card--whatsapp { border-color: #25D366; }
 .qct-channel-card--whatsapp svg { color: #25D366; }
-.qct-channel-card strong { display: block; font-size: 14px; font-weight: 600; color: #111827; margin-bottom: 2px; }
+.qct-channel-card strong { display: block; font-size: 14px; font-weight: 600; color: #225F6B; margin-bottom: 2px; }
 .qct-channel-card span { font-size: 12px; color: #6b7280; }
 
 /* Main */
@@ -279,7 +279,7 @@ async function submitForm() {
 @media (max-width: 900px) { .qct-main__grid { grid-template-columns: 1fr; } }
 
 .qct-form-box { background: #fff; border-radius: 20px; padding: 40px; box-shadow: 0 2px 20px rgba(0,0,0,0.06); }
-.qct-form-box h2 { font-size: 22px; font-weight: 700; color: #111827; margin-bottom: 4px; }
+.qct-form-box h2 { font-size: 22px; font-weight: 700; color: #225F6B; margin-bottom: 4px; }
 .qct-form-box > p { font-size: 14px; color: #6b7280; margin-bottom: 28px; }
 
 .qct-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
@@ -336,12 +336,12 @@ async function submitForm() {
 
 /* Info box */
 .qct-info-box { background: #fff; border-radius: 20px; padding: 36px; box-shadow: 0 2px 20px rgba(0,0,0,0.06); }
-.qct-info-box h3 { font-size: 18px; font-weight: 700; color: #111827; margin-bottom: 24px; }
+.qct-info-box h3 { font-size: 18px; font-weight: 700; color: #225F6B; margin-bottom: 24px; }
 .qct-info-list { list-style: none; padding: 0; margin: 0; }
 .qct-info-list li { display: flex; align-items: flex-start; gap: 14px; padding: 14px 0; border-bottom: 1px solid #f3f4f6; }
 .qct-info-list li:last-child { border-bottom: none; }
 .qct-info-icon { width: 36px; height: 36px; border-radius: 8px; background: rgba(47,119,133,0.08); display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: #2F7785; }
-.qct-info-list strong { display: block; font-size: 13px; font-weight: 600; color: #111827; margin-bottom: 2px; }
+.qct-info-list strong { display: block; font-size: 13px; font-weight: 600; color: #225F6B; margin-bottom: 2px; }
 .qct-info-list span { font-size: 13px; color: #6b7280; }
 
 .qct-map {
