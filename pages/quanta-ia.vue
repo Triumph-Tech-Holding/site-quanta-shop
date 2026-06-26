@@ -95,7 +95,7 @@ const SCRIPT: Step[] = [
   { typing: 1100 },
   { who: 'bot', html:
       '<span class="qc__lead">Achei a melhor relação cashback perto de você:</span>' +
-      '<div class="qc__pcard"><img src="/img/product/product-1.jpg" alt="Tênis de corrida" />' +
+      '<div class="qc__pcard"><img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=160&q=80&auto=format&fit=crop" alt="Tênis de corrida" loading="lazy" />' +
       '<div><div class="qc__pn">Nike Revolution 7</div><div class="qc__pmeta">Casas Bahia · entrega 2 dias</div>' +
       '<div class="qc__price">R$ 389,90</div><span class="qc__cb">12% cashback ≈ R$ 46,79 de volta</span></div></div>' },
   { who: 'user', html: 'Qual é o meu saldo?' },
@@ -109,7 +109,7 @@ const SCRIPT: Step[] = [
   { typing: 900 },
   { who: 'bot', html:
       '<span class="qc__lead">Pertinho de você:</span>' +
-      '<div class="qc__pcard"><img src="/img/product/product-5.jpg" alt="Padaria" />' +
+      '<div class="qc__pcard"><img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=160&q=80&auto=format&fit=crop" alt="Padaria" loading="lazy" />' +
       '<div><div class="qc__pn">Padaria Real</div><div class="qc__pmeta">Vila Mariana · 600 m</div>' +
       '<span class="qc__cb">5% cashback · ativa no WhatsApp</span></div></div>' },
 ]
