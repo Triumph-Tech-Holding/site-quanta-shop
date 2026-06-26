@@ -112,9 +112,9 @@
         </svg>
       </div>
       <div class="chart" id="chinaChart">
-        <div class="bar y23"><div class="col" :style="{ height: barH[0] + 'px' }"><span class="v"><span class="vn" data-to="1.96">US$ 0,00 bi</span></span></div><div class="yr">2023</div><span class="pct">—</span></div>
-        <div class="bar y24"><div class="col" :style="{ height: barH[1] + 'px' }"><span class="v"><span class="vn" data-to="4.18">US$ 0,00 bi</span></span></div><div class="yr">2024</div><span class="pct">+113%</span></div>
-        <div class="bar y25"><div class="col" :style="{ height: barH[2] + 'px' }"><span class="v"><span class="vn" data-to="6.10">US$ 0,00 bi</span> ⚡</span></div><div class="yr">2025</div><span class="pct">+45% · nº1</span></div>
+        <div class="bar y23"><div class="col"><span class="v"><span class="vn" data-to="1.96">US$ 0,00 bi</span></span></div><div class="yr">2023</div><span class="pct">—</span></div>
+        <div class="bar y24"><div class="col"><span class="v"><span class="vn" data-to="4.18">US$ 0,00 bi</span></span></div><div class="yr">2024</div><span class="pct">+113%</span></div>
+        <div class="bar y25"><div class="col"><span class="v"><span class="vn" data-to="6.10">US$ 0,00 bi</span> ⚡</span></div><div class="yr">2025</div><span class="pct">+45% · nº1</span></div>
       </div>
       <div class="sectors">
         <div class="sector"><b>29,5%</b><span>Eletricidade / Energia</span></div>
@@ -185,10 +185,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-
-const barH = ref([0, 0, 0])
-
 definePageMeta({ layout: 'layout-home' })
 useSeoMeta({
   title: 'A Tese do Mauro — O Brasil é invisível para os brasileiros | Quanta Shop',
@@ -282,8 +278,11 @@ onMounted(() => {
   }, { threshold: .15 })
   document.querySelectorAll('.reveal').forEach(el => io.observe(el))
 
-  // DEBUG: set heights immediately to verify reactive ref works
-  barH.value = [84, 178, 260]
+  // Reveal elements already scrolled past (e.g. direct hash navigation to mid-page anchor)
+  document.querySelectorAll<HTMLElement>('.reveal').forEach(el => {
+    if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('in')
+  })
+
 
   const dd = document.getElementById('dd')
   if (dd) {
@@ -432,7 +431,13 @@ b{color:#fff;font-weight:600;}
 /* CAP 03 · CHINA BARS */
 .chart{margin-top:34px;display:flex;align-items:flex-end;gap:clamp(20px,6vw,70px);height:320px;border-bottom:1px solid var(--line);max-width:680px;}
 .bar{flex:1;max-width:180px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;}
-.bar .col{width:100%;border-radius:12px 12px 0 0;height:0;flex-grow:0;flex-shrink:0;transition:none;position:relative;}
+.bar .col{width:100%;border-radius:12px 12px 0 0;height:0;flex-grow:0;flex-shrink:0;position:relative;}
+@keyframes barGrow23{from{height:0}to{height:84px}}
+@keyframes barGrow24{from{height:0}to{height:178px}}
+@keyframes barGrow25{from{height:0}to{height:260px}}
+#chinaSec.in .bar.y23 .col{height:84px;animation:barGrow23 1.3s cubic-bezier(.16,1,.3,1) both;}
+#chinaSec.in .bar.y24 .col{height:178px;animation:barGrow24 1.3s .15s cubic-bezier(.16,1,.3,1) both;}
+#chinaSec.in .bar.y25 .col{height:260px;animation:barGrow25 1.3s .3s cubic-bezier(.16,1,.3,1) both;}
 .bar .v{position:absolute;top:-30px;left:0;right:0;text-align:center;font-family:'Jost',sans-serif;font-weight:800;font-size:clamp(15px,2.2vw,21px);color:#fff;opacity:0;transition:opacity .5s 1s;}
 #chinaSec.in .bar .v{opacity:1;}
 .bar.y23 .col{background:linear-gradient(180deg,#2b3a4a,#1c2733);}
