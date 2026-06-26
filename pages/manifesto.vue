@@ -111,10 +111,10 @@
           <text x="560" y="158" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" fill="#9fb6bb">US$ 6,1 bi · nº 1 do mundo em 2025</text>
         </svg>
       </div>
-      <div class="chart">
-        <div class="bar y23"><div class="col" data-h="84"><span class="v"><span class="vn" data-to="1.96">US$ 0,00 bi</span></span></div><div class="yr">2023</div><span class="pct">—</span></div>
-        <div class="bar y24"><div class="col" data-h="178"><span class="v"><span class="vn" data-to="4.18">US$ 0,00 bi</span></span></div><div class="yr">2024</div><span class="pct">+113%</span></div>
-        <div class="bar y25"><div class="col" data-h="260"><span class="v"><span class="vn" data-to="6.10">US$ 0,00 bi</span> ⚡</span></div><div class="yr">2025</div><span class="pct">+45% · nº1</span></div>
+      <div class="chart" id="chinaChart">
+        <div class="bar y23"><div class="col" :style="{ height: barH[0] + 'px' }"><span class="v"><span class="vn" data-to="1.96">US$ 0,00 bi</span></span></div><div class="yr">2023</div><span class="pct">—</span></div>
+        <div class="bar y24"><div class="col" :style="{ height: barH[1] + 'px' }"><span class="v"><span class="vn" data-to="4.18">US$ 0,00 bi</span></span></div><div class="yr">2024</div><span class="pct">+113%</span></div>
+        <div class="bar y25"><div class="col" :style="{ height: barH[2] + 'px' }"><span class="v"><span class="vn" data-to="6.10">US$ 0,00 bi</span> ⚡</span></div><div class="yr">2025</div><span class="pct">+45% · nº1</span></div>
       </div>
       <div class="sectors">
         <div class="sector"><b>29,5%</b><span>Eletricidade / Energia</span></div>
@@ -185,6 +185,10 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+
+const barH = ref([0, 0, 0])
+
 definePageMeta({ layout: 'layout-home' })
 useSeoMeta({
   title: 'A Tese do Mauro — O Brasil é invisível para os brasileiros | Quanta Shop',
@@ -275,24 +279,11 @@ onMounted(() => {
       }
       io.unobserve(ent.target)
     })
-  }, { threshold: .25 })
+  }, { threshold: .15 })
   document.querySelectorAll('.reveal').forEach(el => io.observe(el))
 
-  // Bar animation — CSS handles height:0 + flex-grow:0 + transition
-  let barsAnimated = false
-  function tryAnimateBars() {
-    if (barsAnimated) return
-    const sec = document.getElementById('chinaSec')
-    if (!sec) return
-    if (sec.getBoundingClientRect().top < window.innerHeight * 0.9) {
-      barsAnimated = true
-      const cols = Array.from(sec.querySelectorAll<HTMLElement>('.bar .col'))
-      cols.forEach(c => { c.style.height = (parseInt(c.dataset.h || '0', 10)) + 'px' })
-    }
-  }
-  window.addEventListener('scroll', tryAnimateBars, { passive: true })
-  tryAnimateBars()
-  setTimeout(tryAnimateBars, 300)
+  // DEBUG: set heights immediately to verify reactive ref works
+  barH.value = [84, 178, 260]
 
   const dd = document.getElementById('dd')
   if (dd) {
@@ -441,7 +432,7 @@ b{color:#fff;font-weight:600;}
 /* CAP 03 · CHINA BARS */
 .chart{margin-top:34px;display:flex;align-items:flex-end;gap:clamp(20px,6vw,70px);height:320px;border-bottom:1px solid var(--line);max-width:680px;}
 .bar{flex:1;max-width:180px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;}
-.bar .col{width:100%;border-radius:12px 12px 0 0;height:0;flex-grow:0;flex-shrink:0;transition:height 1.3s cubic-bezier(.16,1,.3,1);position:relative;}
+.bar .col{width:100%;border-radius:12px 12px 0 0;height:0;flex-grow:0;flex-shrink:0;transition:none;position:relative;}
 .bar .v{position:absolute;top:-30px;left:0;right:0;text-align:center;font-family:'Jost',sans-serif;font-weight:800;font-size:clamp(15px,2.2vw,21px);color:#fff;opacity:0;transition:opacity .5s 1s;}
 #chinaSec.in .bar .v{opacity:1;}
 .bar.y23 .col{background:linear-gradient(180deg,#2b3a4a,#1c2733);}
