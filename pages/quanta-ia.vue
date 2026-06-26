@@ -13,12 +13,25 @@
             <a class="btn btn--ghost" href="#">Criar conta grátis</a>
           </div>
         </div>
+
         <div class="qc" aria-label="Demonstração da Quanta IA">
           <div class="qc__top">
             <span class="qc__av" aria-hidden="true"><img src="/img/logo/quanta-icon-white.png" alt=""></span>
-            <div><p class="qc__nm">Quanta IA</p><p class="qc__st"><i aria-hidden="true"></i> online · responde na hora</p></div>
+            <div>
+              <p class="qc__nm">Quanta IA</p>
+              <p class="qc__st"><i aria-hidden="true"></i> online · responde na hora</p>
+            </div>
           </div>
-          <div class="qc__body" id="qcBody"></div>
+          <div ref="chatBody" class="qc__body">
+            <template v-for="(m, i) in visible" :key="i">
+              <div v-if="m.typing" class="qc__typing"><span /><span /><span /></div>
+              <div v-else class="qc__msg" :class="'qc__msg--' + m.who" v-html="m.html" />
+            </template>
+          </div>
+          <a class="qc__cta" href="#">
+            Converse você mesmo com a Quanta IA
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+          </a>
         </div>
       </div>
     </section>
@@ -60,6 +73,8 @@
 </template>
 
 <script setup lang="ts">
+import { ref, nextTick, onMounted, onBeforeUnmount } from 'vue'
+
 definePageMeta({ layout: 'layout-home' })
 useSeoMeta({
   title: "Quanta IA — busque, cote e resolva pelo chat | Quanta Shop",
@@ -73,51 +88,75 @@ useHead({
   ],
 })
 
-onMounted(() => {
-  var io = new IntersectionObserver(function (es) {
-    es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-  }, { threshold: .18 });
-  document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+type Step = { who?: 'user' | 'bot'; html?: string; typing?: number }
 
-  var SCRIPT = [
-    { who: 'user', html: 'Quero um tênis de corrida até R$400 com mais cashback 👟' },
-    { typing: 1100 },
-    { who: 'bot', html: '<span class="qc__lead">Achei a melhor relação cashback perto de você:</span>'
-      + '<div class="qc__pcard"><img src="/img/product/product-1.jpg" alt="Tênis de corrida" />'
-      + '<div><div class="qc__pn">Nike Revolution 7</div><div class="qc__pmeta">Casas Bahia · entrega 2 dias</div>'
-      + '<div class="qc__price">R$ 389,90</div><span class="qc__cb">12% cashback ≈ R$ 46,79 de volta</span></div></div>' },
-    { who: 'user', html: 'Qual é o meu saldo?' },
-    { typing: 900 },
-    { who: 'bot', html: '<span class="qc__lead">Sua carteira Quanta:</span>'
-      + '<div class="qc__scard"><div class="qc__srow"><span class="qc__lbl">Disponível</span><span class="qc__lbl">Reservado</span></div>'
-      + '<div class="qc__srow"><span class="qc__big">R$ 247,30</span><span class="qc__ssub">R$ 88,10 a liberar</span></div>'
-      + '<div class="qc__ssub" style="margin-top:8px">💸 Resgate via PIX em segundos</div></div>' },
-    { who: 'user', html: 'Tem padaria com cashback aqui no bairro?' },
-    { typing: 900 },
-    { who: 'bot', html: '<span class="qc__lead">Pertinho de você:</span>'
-      + '<div class="qc__pcard"><img src="/img/product/product-5.jpg" alt="Padaria" />'
-      + '<div><div class="qc__pn">Padaria Real</div><div class="qc__pmeta">Vila Mariana · 600 m</div>'
-      + '<span class="qc__cb">5% cashback · ativa no WhatsApp</span></div></div>' },
-  ];
-  var body = document.getElementById('qcBody'), idx = 0, timer: ReturnType<typeof setTimeout> | null = null, typingEl: HTMLElement | null = null;
-  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function mk(cls: string, html: string) { var d = document.createElement('div'); d.className = cls; d.innerHTML = html; return d; }
-  function down() { if (body) body.scrollTop = body.scrollHeight; }
-  function play() {
-    if (idx >= SCRIPT.length) { timer = setTimeout(function () { if (body) body.innerHTML = ''; idx = 0; play(); }, 4500); return; }
-    var it = SCRIPT[idx++] as any;
-    if (it.typing) {
-      typingEl = mk('qc__typing', '<span></span><span></span><span></span>');
-      if (body) body.appendChild(typingEl); down();
-      timer = setTimeout(function () { if (typingEl && body) { body.removeChild(typingEl); typingEl = null; } play(); }, it.typing); return;
-    }
-    if (body) body.appendChild(mk('qc__msg qc__msg--' + it.who, it.html)); down();
-    timer = setTimeout(play, it.who === 'user' ? 700 : 1500);
+const SCRIPT: Step[] = [
+  { who: 'user', html: 'Quero um tênis de corrida até R$400 com mais cashback 👟' },
+  { typing: 1100 },
+  { who: 'bot', html:
+      '<span class="qc__lead">Achei a melhor relação cashback perto de você:</span>' +
+      '<div class="qc__pcard"><img src="/img/product/product-1.jpg" alt="Tênis de corrida" />' +
+      '<div><div class="qc__pn">Nike Revolution 7</div><div class="qc__pmeta">Casas Bahia · entrega 2 dias</div>' +
+      '<div class="qc__price">R$ 389,90</div><span class="qc__cb">12% cashback ≈ R$ 46,79 de volta</span></div></div>' },
+  { who: 'user', html: 'Qual é o meu saldo?' },
+  { typing: 900 },
+  { who: 'bot', html:
+      '<span class="qc__lead">Sua carteira Quanta:</span>' +
+      '<div class="qc__scard"><div class="qc__srow"><span class="qc__lbl">Disponível</span><span class="qc__lbl">Reservado</span></div>' +
+      '<div class="qc__srow"><span class="qc__big">R$ 247,30</span><span class="qc__ssub">R$ 88,10 a liberar</span></div>' +
+      '<div class="qc__ssub" style="margin-top:8px">💸 Resgate via PIX em segundos</div></div>' },
+  { who: 'user', html: 'Tem padaria com cashback aqui no bairro?' },
+  { typing: 900 },
+  { who: 'bot', html:
+      '<span class="qc__lead">Pertinho de você:</span>' +
+      '<div class="qc__pcard"><img src="/img/product/product-5.jpg" alt="Padaria" />' +
+      '<div><div class="qc__pn">Padaria Real</div><div class="qc__pmeta">Vila Mariana · 600 m</div>' +
+      '<span class="qc__cb">5% cashback · ativa no WhatsApp</span></div></div>' },
+]
+
+const visible = ref<Step[]>([])
+const chatBody = ref<HTMLElement | null>(null)
+let chatTimer: ReturnType<typeof setTimeout> | null = null
+let idx = 0
+
+async function scrollDown() {
+  await nextTick()
+  if (chatBody.value) chatBody.value.scrollTop = chatBody.value.scrollHeight
+}
+
+function play() {
+  if (idx >= SCRIPT.length) {
+    chatTimer = setTimeout(() => { visible.value = []; idx = 0; play() }, 4200)
+    return
   }
-  if (reduce) {
-    SCRIPT.filter(function (s: any) { return !s.typing; }).forEach(function (m: any) { if (body) body.appendChild(mk('qc__msg qc__msg--' + m.who, m.html)); });
-  } else { play(); }
+  const it = SCRIPT[idx++]
+  if (it.typing) {
+    visible.value.push({ typing: it.typing })
+    scrollDown()
+    chatTimer = setTimeout(() => { visible.value.pop(); play() }, it.typing)
+    return
+  }
+  visible.value.push(it)
+  scrollDown()
+  chatTimer = setTimeout(play, it.who === 'user' ? 700 : 1500)
+}
+
+onMounted(() => {
+  const reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+
+  const io = new IntersectionObserver((es) => {
+    es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target) } })
+  }, { threshold: .18 })
+  document.querySelectorAll('.reveal').forEach((el) => io.observe(el))
+
+  if (reduceMotion) {
+    visible.value = SCRIPT.filter((s) => !s.typing)
+  } else {
+    play()
+  }
 })
+
+onBeforeUnmount(() => { if (chatTimer) clearTimeout(chatTimer) })
 </script>
 
 <style scoped>
@@ -144,7 +183,7 @@ a{text-decoration:none;}
 .hero__cta{display:flex;gap:14px;flex-wrap:wrap;}
 .hero .eyebrow{color:#bfe89a;}
 
-/* CHAT */
+/* CHAT CARD */
 .qc{width:100%;max-width:420px;margin-left:auto;background:#0c1a21;border:1px solid rgba(255,255,255,.1);border-radius:26px;box-shadow:0 24px 60px rgba(1,15,28,.4);padding:16px;}
 .qc__top{display:flex;align-items:center;gap:12px;padding:6px 6px 14px;border-bottom:1px solid rgba(255,255,255,.08);}
 .qc__av{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#3A9AAD,#98C73A);display:grid;place-items:center;}
@@ -152,27 +191,37 @@ a{text-decoration:none;}
 .qc__nm{font-family:'Jost','Inter',sans-serif;font-weight:700;color:#fff;font-size:15px;margin:0;}
 .qc__st{font-size:12px;color:#9fd3a6;margin:0;display:flex;align-items:center;gap:6px;}
 .qc__st i{width:7px;height:7px;border-radius:50%;background:#98C73A;display:inline-block;}
-.qc__body{display:flex;flex-direction:column;gap:10px;padding:16px 6px 6px;min-height:360px;max-height:430px;overflow:hidden;}
-.qc__msg{max-width:86%;font-size:14px;line-height:1.45;padding:11px 14px;border-radius:16px;animation:qsPop .5s both;}
+.qc__body{display:flex;flex-direction:column;gap:10px;padding:16px 6px 6px;min-height:296px;max-height:360px;overflow:hidden;}
+
+/* MESSAGES — use :deep() so v-html content gets styled */
+.qc__msg{max-width:86%;font-family:'Kiye Sans','Inter',sans-serif;font-size:14px;line-height:1.45;padding:11px 14px;border-radius:16px;animation:qsPop .5s both;}
 @keyframes qsPop{from{opacity:0;transform:translateY(10px) scale(.98);}to{opacity:1;transform:none;}}
 .qc__msg--user{align-self:flex-end;background:linear-gradient(180deg,#2f7785,#266472);color:#eafaff;border-bottom-right-radius:5px;}
 .qc__msg--bot{align-self:flex-start;background:#15262e;color:#d7e7ea;border:1px solid rgba(255,255,255,.06);border-bottom-left-radius:5px;}
-.qc__lead{color:#9fd3a6;font-weight:600;font-size:12px;display:block;margin-bottom:8px;}
-.qc__pcard{display:flex;gap:12px;background:#0c1a21;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:10px;margin-top:4px;}
-.qc__pcard img{width:62px;height:62px;border-radius:10px;object-fit:cover;flex-shrink:0;}
-.qc__pn{font-weight:700;color:#fff;font-size:13px;}
-.qc__pmeta{font-size:11px;color:#8fb3b8;margin:2px 0 6px;}
-.qc__price{font-family:'Jost','Inter',sans-serif;font-weight:700;color:#fff;font-size:15px;}
-.qc__cb{display:inline-block;background:rgba(152,199,58,.16);color:#98C73A;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;margin-top:4px;}
-.qc__scard{background:#0c1a21;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px;margin-top:4px;}
-.qc__srow{display:flex;justify-content:space-between;align-items:center;}
-.qc__lbl{font-size:11px;color:#8fb3b8;text-transform:uppercase;letter-spacing:.08em;}
-.qc__big{font-family:'Jost','Inter',sans-serif;font-weight:800;color:#98C73A;font-size:24px;}
-.qc__ssub{font-size:12px;color:#aac4c8;margin-top:2px;}
+
+.qc__msg :deep(.qc__lead){color:#9fd3a6;font-weight:600;font-size:12px;display:block;margin-bottom:8px;}
+
+.qc__msg :deep(.qc__pcard){display:flex;gap:12px;background:#0c1a21;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:10px;margin-top:4px;}
+.qc__msg :deep(.qc__pcard img){width:62px;height:62px;border-radius:10px;object-fit:cover;flex-shrink:0;}
+.qc__msg :deep(.qc__pn){font-weight:700;color:#fff;font-size:13px;}
+.qc__msg :deep(.qc__pmeta){font-size:11px;color:#8fb3b8;margin:2px 0 6px;}
+.qc__msg :deep(.qc__price){font-family:'Jost','Inter',sans-serif;font-weight:700;color:#fff;font-size:15px;}
+.qc__msg :deep(.qc__cb){display:inline-block;background:rgba(152,199,58,.16);color:#98C73A;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;margin-top:4px;}
+
+.qc__msg :deep(.qc__scard){background:#0c1a21;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px;margin-top:4px;}
+.qc__msg :deep(.qc__srow){display:flex;justify-content:space-between;align-items:center;}
+.qc__msg :deep(.qc__lbl){font-size:11px;color:#8fb3b8;text-transform:uppercase;letter-spacing:.08em;}
+.qc__msg :deep(.qc__big){font-family:'Jost','Inter',sans-serif;font-weight:800;color:#98C73A;font-size:24px;}
+.qc__msg :deep(.qc__ssub){font-size:12px;color:#aac4c8;margin-top:2px;}
+
 .qc__typing{align-self:flex-start;background:#15262e;border:1px solid rgba(255,255,255,.06);border-radius:16px;border-bottom-left-radius:5px;padding:14px 16px;display:flex;gap:5px;}
 .qc__typing span{width:7px;height:7px;border-radius:50%;background:#6f9aa1;animation:qsBlink 1.2s infinite;}
 .qc__typing span:nth-child(2){animation-delay:.2s;} .qc__typing span:nth-child(3){animation-delay:.4s;}
 @keyframes qsBlink{0%,60%,100%{opacity:.3;transform:translateY(0);}30%{opacity:1;transform:translateY(-3px);}}
+
+.qc__cta{margin-top:10px;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(152,199,58,.14);color:#d4ef9f;border:1px solid rgba(152,199,58,.3);border-radius:14px;padding:12px;font-family:'Kiye Sans','Inter',sans-serif;font-weight:700;font-size:14px;min-height:44px;cursor:pointer;transition:background .2s;}
+.qc__cta:hover{background:rgba(152,199,58,.22);}
+.qc__cta svg{width:16px;height:16px;}
 
 /* SECTIONS */
 section.block{padding:84px 0;}
