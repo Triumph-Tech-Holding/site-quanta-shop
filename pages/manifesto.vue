@@ -268,6 +268,8 @@ onMounted(() => {
         ent.target.querySelectorAll<HTMLElement>('.rk__v[data-to]').forEach(el => countNum(el, parseInt(el.dataset.to || '0', 10), 1300))
       }
       if (ent.target.id === 'chinaSec') {
+        const cols = ent.target.querySelectorAll<HTMLElement>('.bar .col')
+        ;[84, 178, 260].forEach((h, i) => { if (cols[i]) cols[i].style.height = h + 'px' })
         ent.target.querySelectorAll<HTMLElement>('.vn[data-to]').forEach(el => countBi(el, parseFloat(el.dataset.to || '0'), 1300))
       }
       io.unobserve(ent.target)
