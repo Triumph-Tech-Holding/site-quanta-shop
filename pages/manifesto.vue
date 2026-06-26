@@ -200,7 +200,6 @@ useHead({
 
 onMounted(() => {
   const easing = 'cubic-bezier(.16,1,.3,1)'
-  const chinaCols = Array.from(document.querySelectorAll<HTMLElement>('#chinaSec .bar .col'))
 
   const prog = document.getElementById('prog')
   function onScroll() {
@@ -272,6 +271,9 @@ onMounted(() => {
       }
       if (ent.target.id === 'chinaSec') {
         ent.target.querySelectorAll<HTMLElement>('.vn[data-to]').forEach(el => countBi(el, parseFloat(el.dataset.to || '0'), 1300))
+        const cols = ent.target.querySelectorAll<HTMLElement>('.bar .col')
+        const hs = [84, 178, 260]
+        cols.forEach((c, i) => { c.style.height = hs[i] + 'px' })
       }
       io.unobserve(ent.target)
     })
@@ -279,9 +281,31 @@ onMounted(() => {
   document.querySelectorAll('.reveal').forEach(el => io.observe(el))
 
   // Reveal elements already scrolled past (e.g. direct hash navigation to mid-page anchor)
-  document.querySelectorAll<HTMLElement>('.reveal').forEach(el => {
-    if (el.getBoundingClientRect().top < window.innerHeight) el.classList.add('in')
-  })
+  function revealVisible() {
+    document.querySelectorAll<HTMLElement>('.reveal').forEach(el => {
+      if (el.getBoundingClientRect().top < window.innerHeight) {
+        el.classList.add('in')
+        if (el.id === 'chinaSec') {
+          const cols = el.querySelectorAll<HTMLElement>('.bar .col')
+          ;[84, 178, 260].forEach((h, i) => { if (cols[i]) cols[i].style.height = h + 'px' })
+        }
+      }
+    })
+  }
+  revealVisible()
+  // Re-check after hash scroll (async — browser scrolls after onMounted)
+  setTimeout(revealVisible, 50)
+  setTimeout(revealVisible, 300)
+
+  // Hash direct link: trigger china bars immediately (hash scroll is async, can't wait for IO)
+  if (window.location.hash === '#chinaChart') {
+    const chinaSec = document.getElementById('chinaSec')
+    if (chinaSec) {
+      chinaSec.classList.add('in')
+      const cols = chinaSec.querySelectorAll<HTMLElement>('.bar .col')
+      ;[84, 178, 260].forEach((h, i) => { if (cols[i]) cols[i].style.height = h + 'px' })
+    }
+  }
 
 
   const dd = document.getElementById('dd')
@@ -432,12 +456,9 @@ b{color:#fff;font-weight:600;}
 .chart{margin-top:34px;display:flex;align-items:flex-end;gap:clamp(20px,6vw,70px);height:320px;border-bottom:1px solid var(--line);max-width:680px;}
 .bar{flex:1;max-width:180px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;}
 .bar .col{width:100%;border-radius:12px 12px 0 0;height:0;flex-grow:0;flex-shrink:0;position:relative;}
-@keyframes barGrow23{from{height:0}to{height:84px}}
-@keyframes barGrow24{from{height:0}to{height:178px}}
-@keyframes barGrow25{from{height:0}to{height:260px}}
-#chinaSec.in .bar.y23 .col{height:84px;animation:barGrow23 1.3s cubic-bezier(.16,1,.3,1) both;}
-#chinaSec.in .bar.y24 .col{height:178px;animation:barGrow24 1.3s .15s cubic-bezier(.16,1,.3,1) both;}
-#chinaSec.in .bar.y25 .col{height:260px;animation:barGrow25 1.3s .3s cubic-bezier(.16,1,.3,1) both;}
+#chinaSec.in .bar.y23 .col{height:84px;}
+#chinaSec.in .bar.y24 .col{height:178px;}
+#chinaSec.in .bar.y25 .col{height:260px;}
 .bar .v{position:absolute;top:-30px;left:0;right:0;text-align:center;font-family:'Jost',sans-serif;font-weight:800;font-size:clamp(15px,2.2vw,21px);color:#fff;opacity:0;transition:opacity .5s 1s;}
 #chinaSec.in .bar .v{opacity:1;}
 .bar.y23 .col{background:linear-gradient(180deg,#2b3a4a,#1c2733);}
