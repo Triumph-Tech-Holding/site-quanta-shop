@@ -199,6 +199,14 @@ useHead({
 })
 
 onMounted(() => {
+  const easing = 'cubic-bezier(.16,1,.3,1)'
+  const chinaCols = Array.from(document.querySelectorAll<HTMLElement>('#chinaSec .bar .col'))
+  chinaCols.forEach(c => {
+    c.style.flexGrow = '0'
+    c.style.flexShrink = '0'
+    c.style.height = '0px'
+  })
+
   const prog = document.getElementById('prog')
   function onScroll() {
     if (!prog) return
@@ -269,22 +277,14 @@ onMounted(() => {
       }
       if (ent.target.id === 'chinaSec') {
         ent.target.querySelectorAll<HTMLElement>('.vn[data-to]').forEach(el => countBi(el, parseFloat(el.dataset.to || '0'), 1300))
-        const cols = Array.from(ent.target.querySelectorAll<HTMLElement>('.bar .col'))
-        const targets = cols.map(c => parseInt(c.dataset.h || '0', 10))
-        const easing = 'cubic-bezier(.16,1,.3,1)'
-        cols.forEach(c => {
-          c.style.flexGrow = '0'
-          c.style.flexShrink = '0'
-          c.style.transition = 'none'
-          c.style.height = '0px'
+        chinaCols.forEach(c => {
+          const h = parseInt(c.dataset.h || '0', 10)
+          const anim = c.animate(
+            [{ height: '0px' }, { height: h + 'px' }],
+            { duration: 1300, easing, fill: 'forwards' }
+          )
+          anim.addEventListener('finish', () => { c.style.height = h + 'px' })
         })
-        void cols[0]?.offsetHeight
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          cols.forEach((c, i) => {
-            c.style.transition = `height 1.3s ${easing}`
-            c.style.height = targets[i] + 'px'
-          })
-        }))
       }
       io.unobserve(ent.target)
     })
