@@ -332,6 +332,117 @@ A Quanta Shop coleta e processa dados pessoais de acordo com a LGPD:
 
 ---
 
+## Padrão Chat Widget — Quanta IA (⚠️ REGRA INVIOLÁVEL)
+
+Todo chat animado da plataforma (home hero, página `/quanta-ia`, futuras telas) **deve** seguir este padrão. Nunca usar `document.createElement` / `innerHTML` direto — o Vue não aplica o escopo de CSS a elementos injetados por DOM manipulation, causando imagens sem tamanho e cards sem estilo.
+
+### Padrão correto: Vue reativo + `:deep()`
+
+```vue
+<!-- TEMPLATE -->
+<div ref="chatBody" class="qc__body">
+  <template v-for="(m, i) in visible" :key="i">
+    <div v-if="m.typing" class="qc__typing"><span /><span /><span /></div>
+    <div v-else class="qc__msg" :class="'qc__msg--' + m.who" v-html="m.html" />
+  </template>
+</div>
+
+<!-- SCRIPT -->
+type Step = { who?: 'user' | 'bot'; html?: string; typing?: number }
+const visible = ref<Step[]>([])
+const chatBody = ref<HTMLElement | null>(null)
+let chatTimer: ReturnType<typeof setTimeout> | null = null
+let idx = 0
+
+async function scrollDown() {
+  await nextTick()
+  if (chatBody.value) chatBody.value.scrollTop = chatBody.value.scrollHeight
+}
+function play() {
+  if (idx >= SCRIPT.length) {
+    chatTimer = setTimeout(() => { visible.value = []; idx = 0; play() }, 4200); return
+  }
+  const it = SCRIPT[idx++]
+  if (it.typing) {
+    visible.value.push({ typing: it.typing }); scrollDown()
+    chatTimer = setTimeout(() => { visible.value.pop(); play() }, it.typing); return
+  }
+  visible.value.push(it); scrollDown()
+  chatTimer = setTimeout(play, it.who === 'user' ? 700 : 1500)
+}
+onMounted(() => { play() })
+onBeforeUnmount(() => { if (chatTimer) clearTimeout(chatTimer) })
+```
+
+### Estilos: usar `:deep()` para conteúdo injetado via `v-html`
+
+```css
+/* Mensagens */
+.qc__msg { max-width: 86%; font-size: 14px; line-height: 1.45; padding: 11px 14px; border-radius: 16px; animation: qsPop .5s both; }
+.qc__msg--user { align-self: flex-end; background: linear-gradient(180deg, #2f7785, #266472); color: #eafaff; border-bottom-right-radius: 5px; }
+.qc__msg--bot  { align-self: flex-start; background: #15262e; color: #d7e7ea; border: 1px solid rgba(255,255,255,.06); border-bottom-left-radius: 5px; }
+
+/* Card de produto — SEMPRE :deep() */
+.qc__msg :deep(.qc__pcard) { display: flex; gap: 12px; background: #0c1a21; border: 1px solid rgba(255,255,255,.08); border-radius: 14px; padding: 10px; margin-top: 4px; }
+.qc__msg :deep(.qc__pcard img) { width: 62px; height: 62px; border-radius: 10px; object-fit: cover; flex-shrink: 0; }
+.qc__msg :deep(.qc__pn)    { font-weight: 700; color: #fff; font-size: 13px; }
+.qc__msg :deep(.qc__pmeta) { font-size: 11px; color: #8fb3b8; margin: 2px 0 6px; }
+.qc__msg :deep(.qc__price) { font-weight: 700; color: #fff; font-size: 15px; }
+.qc__msg :deep(.qc__cb)    { display: inline-block; background: rgba(152,199,58,.16); color: #98C73A; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; margin-top: 4px; }
+
+/* Card de saldo — SEMPRE :deep() */
+.qc__msg :deep(.qc__scard) { background: #0c1a21; border: 1px solid rgba(255,255,255,.08); border-radius: 14px; padding: 12px; margin-top: 4px; }
+.qc__msg :deep(.qc__srow)  { display: flex; justify-content: space-between; align-items: center; }
+.qc__msg :deep(.qc__lbl)   { font-size: 11px; color: #8fb3b8; text-transform: uppercase; letter-spacing: .08em; }
+.qc__msg :deep(.qc__big)   { font-weight: 800; color: #98C73A; font-size: 24px; }
+.qc__msg :deep(.qc__ssub)  { font-size: 12px; color: #aac4c8; margin-top: 2px; }
+
+/* Typing indicator */
+.qc__typing { align-self: flex-start; background: #15262e; border: 1px solid rgba(255,255,255,.06); border-radius: 16px; border-bottom-left-radius: 5px; padding: 14px 16px; display: flex; gap: 5px; }
+.qc__typing span { width: 7px; height: 7px; border-radius: 50%; background: #6f9aa1; animation: qsBlink 1.2s infinite; }
+.qc__typing span:nth-child(2) { animation-delay: .2s; }
+.qc__typing span:nth-child(3) { animation-delay: .4s; }
+@keyframes qsBlink { 0%,60%,100% { opacity: .3; } 30% { opacity: 1; transform: translateY(-3px); } }
+```
+
+### Formato do HTML dos cards (injetado no script como string)
+
+**Card de produto:**
+```js
+'<span class="qc__lead">Texto do lead:</span>' +
+'<div class="qc__pcard">' +
+  '<img src="URL_DA_IMAGEM" alt="descrição" loading="lazy" />' +
+  '<div>' +
+    '<div class="qc__pn">Nome do Produto</div>' +
+    '<div class="qc__pmeta">Loja · detalhe</div>' +
+    '<div class="qc__price">R$ 000,00</div>' +
+    '<span class="qc__cb">X% cashback ≈ R$ 00,00 de volta</span>' +
+  '</div>' +
+'</div>'
+```
+
+**Card de saldo:**
+```js
+'<span class="qc__lead">Sua carteira Quanta:</span>' +
+'<div class="qc__scard">' +
+  '<div class="qc__srow"><span class="qc__lbl">Disponível</span><span class="qc__lbl">Reservado</span></div>' +
+  '<div class="qc__srow"><span class="qc__big">R$ 000,00</span><span class="qc__ssub">R$ 00,00 a liberar</span></div>' +
+  '<div class="qc__ssub" style="margin-top:8px">💸 Resgate via PIX em segundos</div>' +
+'</div>'
+```
+
+### Imagens canônicas para demonstração
+
+| Contexto | URL |
+|---|---|
+| Tênis / produto genérico | `https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=160&q=80&auto=format&fit=crop` |
+| Padaria / alimentos | `https://images.unsplash.com/photo-1509440159596-0249088772ff?w=160&q=80&auto=format&fit=crop` |
+
+> **Tamanho obrigatório:** `width: 62px; height: 62px; object-fit: cover; border-radius: 10px; flex-shrink: 0`
+> **Implementações existentes:** `components/home/home-hero.vue` (referência canônica) · `pages/quanta-ia.vue`
+
+---
+
 ## Convenções de Código
 
 ### Vue / Nuxt
