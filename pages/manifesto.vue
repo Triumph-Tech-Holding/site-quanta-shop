@@ -202,10 +202,12 @@ onMounted(() => {
   const easing = 'cubic-bezier(.16,1,.3,1)'
   const chinaCols = Array.from(document.querySelectorAll<HTMLElement>('#chinaSec .bar .col'))
   chinaCols.forEach(c => {
+    c.style.transition = 'none'
     c.style.flexGrow = '0'
     c.style.flexShrink = '0'
     c.style.height = '0px'
   })
+  void document.body.offsetHeight
 
   const prog = document.getElementById('prog')
   function onScroll() {
@@ -277,14 +279,10 @@ onMounted(() => {
       }
       if (ent.target.id === 'chinaSec') {
         ent.target.querySelectorAll<HTMLElement>('.vn[data-to]').forEach(el => countBi(el, parseFloat(el.dataset.to || '0'), 1300))
-        chinaCols.forEach(c => {
-          const h = parseInt(c.dataset.h || '0', 10)
-          const anim = c.animate(
-            [{ height: '0px' }, { height: h + 'px' }],
-            { duration: 1300, easing, fill: 'forwards' }
-          )
-          anim.addEventListener('finish', () => { c.style.height = h + 'px' })
-        })
+        chinaCols.forEach(c => { c.style.transition = `height 1.3s ${easing}` })
+        setTimeout(() => {
+          chinaCols.forEach(c => { c.style.height = (parseInt(c.dataset.h || '0', 10)) + 'px' })
+        }, 20)
       }
       io.unobserve(ent.target)
     })
