@@ -1,4 +1,25 @@
-<template>
+COMANDO PARA O AGENTE REPLIT — Header com mega-menu
+
+Você vai substituir o conteúdo INTEIRO de um único arquivo. Não faça mais nada.
+
+REGRAS OBRIGATÓRIAS
+
+
+Substitua TODO o conteúdo de components/header/header-home.vue pelo código abaixo. NÃO edite trecho por trecho, NÃO faça merge.
+NÃO crie, renomeie, mova ou apague nenhum outro arquivo.
+NÃO altere rotas, imports, nomes de classe ou estrutura de pastas.
+NÃO "melhore" nem refatore nada por conta própria.
+Os ícones de logo já existem em public/img/logo/ (quanta-logo.png e quanta-icon.png). Não troque os caminhos.
+Ao terminar, rode o build e garanta 0 erros de Vue/TS.
+
+
+Caminho do arquivo
+
+components/header/header-home.vue
+
+Conteúdo completo (cole exatamente isto):
+
+vue<template>
   <header class="qs-hdr">
     <div class="container qs-hdr__row">
       <nuxt-link class="qs-hdr__brand" href="/" aria-label="Quanta Shop">
@@ -230,3 +251,16 @@ const menus: Menu[] = [
   .qs-hdr__burger span, .qs-hdr__login, .qs-hdr__cad, .mm__btn, .mm__panel, .chev, .mlink, .mlink .ar { transition: none; }
 }
 </style>
+
+VALIDAÇÃO (confira depois de colar)
+
+
+A nav mostra 4 grupos com seta: Para quem é · A plataforma · Benefícios · Conteúdo.
+Cada grupo abre um painel (mega-menu) ao passar o mouse, ao clicar e via teclado (foco); fecha no Esc e ao clicar fora.
+"Para quem é", "A plataforma" e "Benefícios" têm a coluna-destaque à esquerda (eyebrow + título + blurb + link + selo com o ícone).
+"Conteúdo" abre alinhado à direita (mm--right).
+No mobile (≤1024px) some a nav e aparece o acordeão com os mesmos grupos + Login/Cadastro.
+Rotas usadas: /para-voce, /para-empresa, /seja-um-agente, /como-funciona, /quanta-flow, /quanta-amizade, /cupons, /blog, /manifesto, /#faq, /contato, /login, /register. Se alguma dessas rotas não existir no projeto, apenas me avise (não invente página) — pode deixar o link como está.
+
+
+NÃO faça mais nada além de substituir esse arquivo.
